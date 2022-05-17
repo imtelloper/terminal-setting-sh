@@ -5,6 +5,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from database.mongoDB import *
 from routers.tempHumidityRouter import router as TempHumidityRouter
 from routers.utilRouter import router as UtilRouter
+from routers.streamRouter import router as StreamRouter
 from dotenv import load_dotenv
 from pathlib import Path
 import os
@@ -12,12 +13,18 @@ import logging
 import logging.config
 import cv2
 
+import traceback
+import warnings
+warnings.filterwarnings( 'ignore' )
+from modules.yolo.detect import detect
+from modules.calculate import *
+
+
 # load_dotenv(dotenv_path=f".{os.getenv('DOT_ENV', 'test')}.env")
 # logging.config.fileConfig("logging.conf", disable_existing_loggers=False)
 logger = logging.getLogger(__name__)
 
 print('app start')
-
 
 def list_ports():
     """
@@ -47,62 +54,85 @@ def list_ports():
 
 # list_ports()
 
-# capture = cv2.VideoCapture(0 + cv2.CAP_DSHOW)
-try:
-    # capture = cv2.VideoCapture(0)
-    # capture = cv2.VideoCapture(0, cv2.CAP_AVFOUNDATION)
-    capture = cv2.VideoCapture(0, 400)
-    # capture = cv2.VideoCapture(0, cv2.CAP_XIAPI)
-    # capture = cv2.VideoCapture(0, cv2.CAP_DSHOW)
-    # capture = cv2.VideoCapture(0, cv2.CAP_ANY)
-    # capture = cv2.VideoCapture(0, cv2.CAP_V4L)
-    # capture = cv2.VideoCapture(0, cv2.CAP_V4L2)
-    # capture = cv2.VideoCapture(0, cv2.CAP_OPENNI)
-    # capture = cv2.VideoCapture(0, cv2.CAP_MSMF)
-    # capture = cv2.VideoCapture(0, cv2.CAP_GSTREAMER)
-    # capture = cv2.VideoCapture(0, cv2.CAP_FFMPEG)
-    # capture = cv2.VideoCapture(0, cv2.CAP_OPENCV_MJPEG)
-except IOError:
-    print('IOError : ',IOError)
-except Exception:
-    print('Exception : ',Exception)
-except EOFError:
-    print('EOFError : ',EOFError)
-except EnvironmentError:
-    print('EnvironmentError : ',EnvironmentError)
+def yoloDetectStart():
+    # W: 256 H: 192
+    capture = cv2.VideoCapture(0)
+    capture.set(cv2.CAP_PROP_FRAME_WIDTH, 640)
+    capture.set(cv2.CAP_PROP_FRAME_HEIGHT, 480)
+    # 사용자 설정
+    pt = "modules/yolo/weights/2_small.pt"
+    device_mode = ""
+    conf = 0.7
+    # 전역 변수
+    # color
+    GREEN = (0,255,0)
+    RED = (255,0,0)
+    BLUE = (0,0,255)
+    img_color = False
+    setting_signal = False
+    rois_history = [] # rois history
+    rois = [] # polygon 영역
+    sub_rois = [] # 다중 polygon을 위한 리스트
+    rois_signal = False # polygon 영역지정 신호
+    btn_rois_signal = 0 # 영역지정 버튼 신호
+    btn_run_signal = 0 # 실행 버튼 신호
+    yolo_cnt = 0
+    cnt = 0 # 트랙킹시 사라진 객체를 프레임수마다 카운팅
+    track_signal = False # 트랙킹 신호 True면 트랙킹한다
+    buzzer_cnt = 0 # 경고음 카운트
+    red_signal = False
+    green_signal = True
+    unit_num = 9 # 사람 영역 분할 계수
+    # tracking api 호출
+    multi_tracker = cv2.MultiTracker_create()
+
+    while cv2.waitKey(33) < 0 :
+        ret, frame = capture.read()
+        img = frame.copy()
+        if ret:
+            humans = []
+            try:
+                if cnt == 0:
+                    print('pt : ', pt)
+                    print('device_mode : ', device_mode)
+                    print('conf : ', conf)
+                    # print('img : ', img)
+                    humans = detect(weights=pt, device=device_mode, conf_thres=conf, source=img)
+                    print('humans : ', humans)
+                    multi_tracker.__init__()
+                    track_signal = False
+                    cnt += 1
+                elif cnt > 0 and cnt < 3:
+                    cnt += 1
+                else:
+                    cnt = 0
+                if humans:
+                    # detection
+                    for bbox in humans:
+                        x1, y1, x2, y2 = tuple([int(_) for _ in bbox])
+                        w, h = x2 - x1, y2 - y1
+                        track_bbox = (x1, y1, w, h)
+                        # tracking signal
+                        multi_tracker.add(cv2.TrackerCSRT_create(), img, track_bbox)
+                        track_signal = True
+                        warn_sig, result_img = calculate_human(img, x1, y1, x2, y2, w, h, unit_num, rois)
+                else:
+                    print("tracking")
+                    if track_signal:
+                        ret, t_bboxes = multi_tracker.update(img)
+                        if ret:
+                            for i, t_bbox in enumerate(t_bboxes):
+                                x1, y1, w, h = tuple([int(_) for _ in t_bbox])
+                                x2, y2 = x1 + w, y1 + h
+                                warn_sig, result_img = calculate_human(img, x1, y1, x2, y2, w, h, unit_num, rois)
+                cv2.imshow("VideoFrame", result_img)
+            except Exception as e:
+                print('예외가 발생했습니다.', e)
+                print(traceback.format_exc())
+    capture.release()
+    cv2.destroyAllWindows()
 
 
-print('capture: '+str(capture))
-# capture1 = cv2.VideoCapture(1)
-# print('capture1: '+str(capture1))
-# capture2 = cv2.VideoCapture(2)
-# print('capture2: '+str(capture2))
-# capture3 = cv2.VideoCapture(3)
-# print('capture3: '+str(capture3))
-# capture4 = cv2.VideoCapture(4)
-# print('capture4: '+str(capture4))
-# capture5 = cv2.VideoCapture(5)
-# print('capture4: '+str(capture5))
-# capture6 = cv2.VideoCapture(6)
-# print('capture4: '+str(capture6))
-# capture7 = cv2.VideoCapture(7)
-# print('capture4: '+str(capture7))
-# capture8 = cv2.VideoCapture(8)
-# print('apture4: '+str(capture8))
-# capture9 = cv2.VideoCapture(9)
-# print('capture4: '+str(capture9))
-capture.set(cv2.CAP_PROP_FRAME_WIDTH, 640)
-capture.set(cv2.CAP_PROP_FRAME_HEIGHT, 480)
-
-
-while cv2.waitKey(33) < 0 :
-    ret, frame = capture.read()
-    print('ret: ', ret)
-    print('frame: ', frame)
-    # cv2.imshow("VideoFrame", frame)
-
-capture.release()
-cv2.destroyAllWindows()
 
 
 def createApp() -> FastAPI:
@@ -130,6 +160,7 @@ app.add_middleware(
 # routers
 app.include_router(TempHumidityRouter, prefix="/api/temperature-humidity")
 app.include_router(UtilRouter, prefix="/api/util")
+app.include_router(StreamRouter, prefix="/api/stream")
 
 
 @app.on_event("startup")
