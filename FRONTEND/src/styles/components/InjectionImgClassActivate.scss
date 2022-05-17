@@ -1,0 +1,301 @@
+div.injectionImgActivateContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  margin-bottom: 24px;
+
+
+  div.injectionImgActivateBox {
+    width: 577.781px;
+    height: 215px;
+    background-color: #fff;
+    justify-content: center;
+    border-radius: 4px;
+    box-shadow: 0 60px 80px rgba(0, 0, 0, 0.16);
+
+    div.injectionImgActivateBoxTop {
+      width: 100%;
+      height: 64px;
+      border-bottom: 1px solid #ececec;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 12px 0 16px;
+      box-sizing: border-box;
+      position: relative;
+
+      div.injectionImgActivateBoxTopCon {
+        display: flex;
+        flex-direction: column;
+        position: relative;
+
+        div.selectBox {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+
+          i {
+            width: 24px;
+            margin-right: 10px;
+            opacity: 0.7;
+          }
+
+          div.selectBoxOption {
+            width: 240px;
+            height: 36px;
+            border: 1px solid #eee;
+            padding-left: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: #7f7f7f;
+            cursor: pointer;
+          }
+        }
+
+        div.selectToggleBox {
+          width: 250px;
+          height: 0;
+          overflow: hidden;
+          background-color: #fff;
+          box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+          border-radius: 0 0 4px 4px;
+          position: absolute;
+          top: 37px;
+          left: 35px;
+          z-index: 2;
+          transition: 0.3s;
+
+          &.visible {
+            height: 250px;
+          }
+
+          div.selectToggleInputBox {
+            width: 100%;
+            padding: 5px;
+            box-sizing: border-box;
+            display: flex;
+
+            input {
+              width: calc(100% - 60px);
+              height: 36px;
+              border: 1px solid #eee;
+              box-sizing: border-box;
+            }
+
+            button {
+              all: unset;
+              width: 60px;
+              height: 36px;
+              background-color: #ffe9d2;
+              color: #ff8000;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+            }
+          }
+
+          ul {
+            width: 100%;
+
+            li {
+              padding: 9px 12px;
+              cursor: pointer;
+              transition: 0.2s;
+
+              &:hover {
+                background-color: #ffe9d2;
+                color: #ff8000;
+              }
+            }
+          }
+        }
+      }
+
+      div.injectionImgActivateBoxTopRight {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 14px;
+        font-weight: 600;
+
+        div.imgClassCount {
+          margin-right: 10px;
+          font-weight: unset;
+          font-size: 12px;
+        }
+
+        span.imgClassSpanColor {
+          color: #ff8800;
+        }
+
+        button {
+          all: unset;
+          height: 40px;
+          padding: 0 16px 0 12px;
+          background-color: #ffe9d2;
+          color: #ff8000;
+          margin-right: 8px;
+          border-radius: 4px;
+          cursor: pointer;
+          display: flex;
+          align-items: center;
+
+          &:last-child {
+            background-color: transparent;
+            margin-right: 0;
+            padding: 0;
+
+            i {
+              color: #7f7f7f;
+            }
+          }
+
+          i {
+            color: #ff8000;
+            font-size: 24px;
+            margin-right: 4px;
+            transition: 0.2s;
+          }
+
+          &:hover {
+            background-color: #ff8000;
+            color: #fff;
+
+            i {
+              background-color: #ff8000;
+              color: #fff;
+            }
+          }
+        }
+
+        button.deActivateIcon {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+        }
+      }
+    }
+
+    div.injectionImgActivateBoxMid {
+      width: 100%;
+      min-height: 104px;
+      max-height: 110px;
+      display: flex;
+      justify-content: space-between;
+      border-bottom: 1px solid #ececec;
+      box-sizing: border-box;
+
+      div.injectionImgActivateBoxMidLeft {
+        display: flex;
+        position: relative;
+        margin: 4px;
+        white-space: nowrap;
+        overflow-x: auto;
+        overflow-y: auto;
+      }
+
+      div.imgClassLeftImg {
+        min-width: 76px;
+        width: 76px;
+        height: 76px;
+        margin: 4px;
+        border: 1px solid #c7c7c7;
+        position: relative;
+        cursor: pointer;
+
+        &.active {
+          border: 4px solid #ff8000;
+        }
+
+        img {
+          width: 100%;
+          height: 100%;
+        }
+
+        div.imgClassHoverEvent {
+          width: 76px;
+          height: 76px;
+          background-color: rgba(0, 0, 0, 0.6);
+          position: absolute;
+          top: 0;
+          left: 0;
+          opacity: 0;
+
+          &:hover {
+            opacity: 1;
+          }
+
+          i {
+            color: #fff;
+            position: absolute;
+
+            &:first-child {
+              top: 4px;
+              right: 4px;
+            }
+
+            &:last-child {
+              bottom: 4px;
+              left: 4px;
+            }
+          }
+        }
+      }
+
+      div.injectionImgActivateBoxMidRight {
+        width: 104px;
+        height: 104px;
+        border-left: 1px solid #ECECEC;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        cursor: pointer;
+
+        div.imgClassRightBtn {
+          width: 88px;
+          height: 88px;
+          background-color: #ececec;
+          border-radius: 4px;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          transition: 0.3s;
+          margin: 0 4px;
+
+          .colorPath {
+            fill: #c5c5c5;
+
+            &.active {
+              fill: #1C2226;
+            }
+          }
+
+          &.active {
+            background-color: #00EE8F;
+
+            &:hover {
+              opacity: 0.7;
+            }
+          }
+        }
+
+      }
+
+    }
+
+    div.injectionImgActivateBoxBottom {
+      width: 100%;
+      height: 46px;
+      background-color: #f6f6f6;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      span {
+        font-size: 12px;
+      }
+    }
+  }
+}

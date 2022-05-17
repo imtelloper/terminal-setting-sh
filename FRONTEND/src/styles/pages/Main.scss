@@ -1,0 +1,700 @@
+@import "../mixins";
+
+div.mainContainer {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+
+  div.topMainBox {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    height: 640px;
+    background-color: #E1E4E5;
+    z-index: 0;
+    padding-top: 60px;
+
+    div.centerTopBox {
+      width: 1336px;
+      display: flex;
+      flex-direction: row;
+
+      div.leftTopBox {
+        width: 100%;
+        height: 640px;
+        padding-left: 20px;
+
+        img.mainLogo {
+          margin-top: 100px;
+          width: 370px;
+          height: 93.25px;
+        }
+
+        div.titleTopLeftBox {
+          margin-top: 70px;
+
+          p {
+            font-family: NanumSquareOTFExtraBold;
+            font-size: 32px;
+            line-height: 10px;
+            //margin: 0 0 15px 0;
+          }
+        }
+
+        div.textTopLeftBox {
+          margin-top: 50px;
+
+          p {
+            font-size: 18px;
+            font-weight: 700;
+            line-height: 10px;
+          }
+        }
+
+        button.startButton {
+          width: 200px;
+          height: 60px;
+          font-size: 18px;
+          font-family: NanumSquareOTFExtraBold;
+          color: #fff;
+          border-radius: 5px;
+          background-color: #ff8000;
+          border: none;
+          margin-top: 30px;
+          transition: 0.2s;
+        }
+      }
+
+      div.rightTopBox {
+        width: 100%;
+        height: 640px;
+        position: relative;
+
+        div {
+          img {
+            width: 364px;
+            height: 361.328px;
+          }
+        }
+
+        @keyframes aibot1 {
+          0% {
+            top: 200px;
+          }
+          20% {
+            top: 30px;
+          }
+          40% {
+            top: 200px;
+          }
+        }
+        @keyframes aibot2 {
+          0% {
+            top: 165px;
+          }
+          20% {
+            top: 165px;
+          }
+          40% {
+            top: 15px;
+          }
+          60% {
+            top: 165px;
+          }
+        }
+
+        @keyframes aibot3 {
+          0% {
+            top: 130px;
+          }
+          40% {
+            top: 130px;
+          }
+          60% {
+            top: 0px;
+          }
+          80% {
+            top: 130px;
+          }
+        }
+
+        div.firstImageTopBox {
+          img.aiBot1 {
+            position: absolute;
+            left: 0px;
+            top: 200px;
+            z-index: 3;
+            animation-name: aibot1;
+            animation-duration: 2s;
+            animation-delay: 0s;
+            animation-direction: normal;
+            animation-iteration-count: infinite;
+            //animation: ease-in-out;
+          }
+        }
+
+        div.secondImageTopBox {
+          img.aiBot2 {
+            position: absolute;
+            left: 200px;
+            top: 165px;
+            z-index: 2;
+            animation-name: aibot2;
+            animation-duration: 2s;
+            animation-delay: 0s;
+            animation-direction: normal;
+            animation-iteration-count: infinite;
+          }
+        }
+
+        div.thridImageTopBox {
+          img.aiBot3 {
+            position: absolute;
+            left: 400px;
+            top: 130px;
+            z-index: 1;
+            animation-name: aibot3;
+            animation-duration: 2s;
+            animation-delay: 0s;
+            animation-direction: normal;
+            animation-iteration-count: infinite;
+          }
+        }
+      }
+    }
+  }
+
+  div.topVideoBox {
+    width: 100%;
+    height: 908px;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    position: relative;
+
+    div.topVideoBoxFixed {
+      position: relative;
+      width: 1500px;
+
+      div.topVideoBoxTitle {
+        font-size: 32px;
+        font-family: NanumSquareOTFExtraBold;
+        margin-top: 118px;
+        margin-bottom: 24px;
+        text-align: center;
+      }
+
+      div.topVideoBoxText {
+        font-size: 18px;
+        font-weight: 700;
+        text-align: center;
+        line-height: 25px;
+      }
+
+      @keyframes aibotsub1 {
+        20% {
+          top: 150px;
+        }
+        40% {
+          top: 180px;
+        }
+        60% {
+          top: 150px;
+        }
+        100% {
+          top: 200px;
+        }
+      }
+
+      div.aiBot1ImageBox {
+        //width: 100%;
+        //max-width: 400px;
+        //height: 451.13px;
+        background-color: #61dafb;
+        //background-attachment: fixed;
+
+      }
+
+      img.aiBotSub1 {
+        position: absolute;
+        top: 200px;
+        right: 0px;
+        width: 400px;
+        height: 451.13px;
+        z-index: 3;
+        animation-name: aibotsub1;
+        animation-duration: 4s;
+        animation-delay: 0s;
+        animation-direction: normal;
+        animation-iteration-count: infinite;
+      }
+
+      div.videoImageBox {
+        width: 100%;
+        position: relative;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        video {
+          margin-top: 100px;
+          width: 1092px;
+          height: 614.25px;
+          z-index: 1;
+          box-shadow: 0px 10px 20px #b0b0b0;
+        }
+      }
+    }
+  }
+
+  div.middleImage {
+    position: relative;
+    width: 1500px;
+    height: 100px;
+    //min-height: 100px;
+    //background-color: #00EE8F;
+
+    @keyframes aibotsub2 {
+      20% {
+        top: -170px;
+      }
+      40% {
+        top: -150px
+      }
+      60% {
+        top: -170px
+      }
+      100% {
+        top: -120px
+      }
+    }
+
+    img.aiBotSub2 {
+      position: absolute;
+      //left: 460px;
+      top: -120px;
+      z-index: 3;
+      width: 400px;
+      height: 468.98px;
+      animation-name: aibotsub2;
+      animation-duration: 4s;
+      animation-delay: 0s;
+      animation-direction: normal;
+      animation-iteration-count: infinite;
+    }
+  }
+
+  div.middleCountBox {
+    width: 100%;
+    height: 600px;
+    background-color: #E1E4E5;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    padding-top: 50px;
+
+    div {
+      width: 668px;
+      height: 300px;
+
+      span {
+        font-size: 24px;
+        font-weight: 700;
+        text-align: center;
+      }
+
+      p {
+        font-size: 56px;
+        font-family: NanumSquareOTFExtraBold;
+        text-align: center;
+      }
+    }
+
+    div.countLeftBox {
+      display: flex;
+      align-items: center;
+      flex-direction: column;
+
+      div.countImageTextBox {
+        height: 34px;
+        margin-top: 10px;
+        margin-bottom: -40px;
+        text-align: center;
+
+        span.countBoxTextColor {
+          color: #ff8000;
+        }
+      }
+    }
+
+    div.countBoxLine {
+      display: flex;
+      justify-content: center;
+      width: 20px;
+      height: 256px;
+      position: relative;
+      top: -150px;
+
+      div.lineCircleTop {
+        position: absolute;
+        top: 80px;
+        z-index: 3;
+        width: 20px;
+        height: 20px;
+        background-color: #ff8000;
+        border-radius: 100px;
+      }
+
+      div.lineCenter {
+        position: absolute;
+        top: 100px;
+        width: 0px;
+        height: 216px;
+        border: 1px solid #b0b0b0;
+      }
+
+      div.lineCircleBottom {
+        position: absolute;
+        top: 316px;
+        width: 20px;
+        height: 20px;
+        background-color: #00EE8F;
+        border-radius: 100px;
+      }
+    }
+
+    div.countRightBox {
+      bbackground-color: #5f9e78;
+      display: flex;
+      align-items: center;
+      flex-direction: column;
+
+      div.countImageTextBox {
+        height: 34px;
+        margin-top: 10px;
+        margin-bottom: -40px;
+        text-align: center;
+
+        span.countBoxTextColor {
+          color: #ff8000;
+        }
+      }
+    }
+  }
+
+  div.middleStartBox {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    height: 1128px;
+    background-color: #E1E4E5;
+
+    div.startContentBox {
+      width: 1500px;
+      height: 1100px;
+      position: relative;
+
+      div.middleStartTitleBox {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        position: relative;
+
+        span.middleStartTitle {
+          position: relative;
+          text-align: center;
+          font-size: 32px;
+          font-family: NanumSquareOTFExtraBold;
+          z-index: 2;
+          padding-bottom: 80px;
+        }
+
+        div {
+          position: absolute;
+          top: 20%;
+          left: 35.5%;
+          z-index: 1;
+          width: 310.984px;
+          height: 8px;
+          background-color: #00EE8F;
+        }
+      }
+
+      @keyframes aibotsub3 {
+        20% {
+          top: -70px;
+        }
+        40% {
+          top: -90px;
+        }
+        60% {
+          top: -110px;
+        }
+        80% {
+          top: -40px;
+        }
+      }
+
+      img.aiBotSub3 {
+        width: 480px;
+        height: 465.062px;
+        position: absolute;
+        top: -150px;
+        right: -100px;
+        animation-name: aibotsub3;
+        animation-duration: 4s;
+        animation-delay: 0s;
+        animation-direction: normal;
+        animation-iteration-count: infinite;
+      }
+
+
+    }
+  }
+
+  div.bottomBox {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-bottom: 80px;
+
+    div.bottomBoxTitle {
+      margin-top: 110px;
+      font-size: 32px;
+      font-family: NanumSquareOTFExtraBold;
+
+      div {
+        width: 110px;
+        height: 10px;
+        background-color: #ff8000;
+      }
+    }
+
+    div.bottomImageBox {
+      display: flex;
+      flex-wrap: wrap;
+      flex-direction: row;
+      align-content: center;
+      width: 100%;
+      max-width: 1336px;
+      margin: 110px 0 30px 0;
+      div {
+        margin-bottom: 60px;
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+
+        img {
+          margin: 0 40px 0 40px;
+        }
+
+        img.iic {
+          width: 111px;
+          height: 60px;
+        }
+
+        img.unist {
+          width: 98px;
+          height: 18px;
+        }
+
+        img.kaist {
+          width: 99px;
+          height: 28px;
+        }
+
+        img.kosmo {
+          width: 94px;
+          height: 34px;
+        }
+
+        img.kamp {
+          width: 100px;
+          height: 34px;
+        }
+
+        img.intree {
+          width: 110px;
+          height: 40px;
+        }
+
+        img.lg {
+          width: 106px;
+          height: 28px;
+        }
+
+        img.youlchon {
+          width: 100px;
+          height: 20px;
+        }
+
+        img.ottogi {
+          width: 120px;
+          height: 30px;
+        }
+
+        img.daesang {
+          width: 108px;
+          height: 28px;
+        }
+
+        img.ckdpharm {
+          width: 108px;
+          height: 30px;
+        }
+
+        img.intops {
+          width: 110px;
+          height: 18px;
+        }
+
+        img.hcarbon {
+          width: 112px;
+          height: 24px;
+        }
+
+        img.kos1 {
+          width: 92px;
+          height: 40px;
+        }
+
+        img.kos2 {
+          width: 76px;
+          height: 38px;
+        }
+
+        img.ehwa {
+          width: 104px;
+          height: 30px;
+        }
+
+        img.myunghwa {
+          width: 125px;
+          height: 40px;
+        }
+
+        img.silryuk {
+          width: 100px;
+          height: 30px;
+        }
+
+        img.kpx {
+          width: 99px;
+          height: 30px;
+        }
+
+        img.hyundairb {
+          width: 134px;
+          height: 24px;
+        }
+
+        img.panasia {
+          width: 109px;
+          height: 20px;
+        }
+
+        img.big {
+          width: 146px;
+          height: 38px;
+        }
+
+        img.erae {
+          width: 108px;
+          height: 24px;
+        }
+
+        img.hkmold {
+          width: 134px;
+          height: 28px;
+        }
+
+        img.evlaser {
+          width: 108px;
+          height: 36px;
+        }
+
+        img.hmo {
+          width: 92px;
+          height: 32px;
+        }
+
+        img.jinhung {
+          width: 125px;
+          height: 30px;
+        }
+      }
+    }
+
+    div.bottomButtonBox {
+      width: 100%;
+      height: 100px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      button {
+        width: 336px;
+        height: 60px;
+        background-color: #ff8800;
+        font-size: 18px;
+        padding: 0 12px 0 12px;
+        border-radius: 4px;
+        border: none;
+        cursor: pointer;
+        transition: 0.2s;
+        a{
+          display: block;
+          width: 100%;
+          height: 100%;
+          color: #fff;
+          font-family: NanumSquareOTFExtraBold;
+          line-height: 60px;
+        }
+      }
+    }
+  }
+
+  footer{
+    width: 100%;
+    min-height: 250px;
+    background-color: #1c2226;
+    padding: 50px 0 0 0px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    ul.footerBoxUl{
+      width: 1336px;
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+
+      li.footerLi{
+        margin: 0 20px 28px 0;
+        font-size: 14px;
+        font-family: NanumSquareOTFExtraBold;
+        color: #fff;
+      }
+    }
+    div.footerTextBox{
+      width: 1336px;
+      color: #fff;
+      font-size: 12px;
+      line-height: 20px;
+      span.footerTextBoxColor{
+        color: #ff8000;
+      }
+    }
+  }
+  button:hover {
+    opacity: 0.8;
+  }
+
+}

@@ -1,0 +1,38 @@
+@import "toggle";
+@import "/src/stylesyles/mixins";
+
+table.checkupLevel {
+  &.veryLow {
+    #veryLow,
+    #low,
+    #mid {
+      @include bgColor(red);
+    }
+  }
+
+  &.low {
+    #low,
+    #mid {
+      @include bgColor(yellow);
+    }
+  }
+
+  &.mid #mid {
+    @include bgColor(green);
+  }
+
+  &.high {
+    #high,
+    #mid {
+      @include bgColor(yellow);
+    }
+  }
+
+  &.veryHigh {
+    #veryHigh,
+    #high,
+    #mid {
+      @include bgColor(red);
+    }
+  }
+}

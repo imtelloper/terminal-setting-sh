@@ -1,0 +1,55 @@
+@import 'src/stylesins';
+table.imageDetailTable{
+  width: 100%;
+  border: 1px solid #195375;
+  border-spacing: 0;
+  color: #195375;
+
+  .imageDetailHead {
+    border: 1px solid #195375;
+    background: #195375;
+    color: white;
+    tr{
+      th{
+        width: auto;
+        max-width: 100px;
+      }
+    }
+  }
+
+  .imageDetailBody {
+    tr {
+      width: 100%;
+      cursor: pointer;
+      &:hover{
+        //background-color: #22C3B2;
+        @include selectGreenBg;
+        td{
+          color: white;
+        }
+      }
+      td {
+        width: auto;
+        font-size: 12px;
+        max-width: 100px;
+        border: 0.3px solid #195375;
+        padding: 0 5px;
+        text-align: center;
+        //color: white;
+        @include navyFont;
+
+        overflow: scroll;
+        scrollbar-base-color: transparent;
+        scrollbar-track-color: transparent;
+        scrollbar-arrow-color: transparent;
+        scrollbar-face-color: transparent;
+      }
+      body{ -ms-overflow-style: none; }
+      ::-webkit-scrollbar { display: none; }
+    }
+  }
+  tr.imageDetailSelected{
+    background-color: #399778;
+    color: white;
+  }
+}

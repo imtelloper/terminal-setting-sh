@@ -1,0 +1,135 @@
+div.imgFileUploaderContainer {
+  //width: 100%;
+  //height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  div.imgFileUploaderBoxTop {
+    display: flex;
+    justify-content: space-between;
+    height: 40px;
+
+    div.imgFileUploaderBoxTitle {
+      font-size: 24px;
+      font-family: NanumSquareOTFBold;
+      margin-bottom: 20px;
+    }
+  }
+
+  div.imgUploaderBox {
+    width: 456px;
+    height: 456px;
+    background-color: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 60px 80px rgba(0, 0, 0, 0.16);
+
+    div.imgUploaderBoxContent {
+      width: 402px;
+      height: 402px;
+      border: 2px dashed #d9d9d9;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+      div.imgUploaderBoxAnimContainer{
+        width: 136px;
+        height: 96px;
+        overflow: hidden;
+        img.oneImgUpload {
+          width: 3262px;
+          height: 96px;
+          //background: url("../images/first_add_img.webp") left center;
+          //background-position: 0px;
+          object-position: 0px;
+          //background-size: 3262px 96px;
+          margin: 0 auto;
+          position: relative;
+          animation-name: first_add_n;
+          animation-duration: 0.3s;
+          animation-timing-function: steps(23);
+          animation-fill-mode: forwards;
+
+          //animation-name: oneImgUpload;
+          //animation-duration: 0.2s;
+          //animation-timing-function: steps(23);
+          //animation-fill-mode: forwards;
+        }
+        img.oneImgUpload:hover {
+          animation-name: first_add;
+          animation-duration: 0.2s;
+          animation-timing-function: steps(23);
+          animation-fill-mode: forwards;
+        }
+      }
+
+      div.imgUploaderTextBox {
+        margin: 20px 0;
+        span {
+          font-size: 18px;
+          text-align: center;
+          font-family: NanumSquareOTFBold;
+        }
+        span.imgUploaderTextColor {
+          color: #ff8000;
+        }
+      }
+      div{
+        font-size: 12px;
+        color: #afafaf;
+        font-family: NanumSquareOTFBold;
+        margin-top: -5px;
+        margin-bottom: 20px;
+      }
+      button{
+        background-color: #ff8000;
+        color: #fff;
+        padding: 0 16px 0 12px;
+        height: 40px;
+        cursor: pointer;
+        border: none;
+        border-radius: 4px;
+        font-size: 14px;
+        font-family: NanumSquareOTFBold;
+        vertical-align: middle;
+        i{
+          vertical-align: middle;
+          color: #fff;
+        }
+      }
+    }
+
+    div.imgUploaderBoxContent:hover {
+      border: 2px dashed #ff8000;
+      //
+      //animation-name: first_add;
+      //animation-duration:  0.2s;
+      //animation-fill-mode: forwards;
+      //animation-timing-function: steps(23);
+    }
+  }
+}
+@keyframes first_add {
+  0% {
+    //background-position: 0px;
+    object-position: 0px;
+  }
+  100% {
+    //background-position: -3126px;
+    object-position: -3126px;
+  }
+}
+
+@keyframes first_add_n {
+  0% {
+    //background-position: -3126px;
+    object-position: -3126px;
+  }
+  100% {
+    //background-position: 0px;
+    object-position: 0px;
+  }
+}

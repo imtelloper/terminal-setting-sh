@@ -1,0 +1,279 @@
+@import "src/stylesmixins";
+#findLoginScreen {
+  width: 100%;
+  height: 100%;
+  min-width: 600px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  align-content: center;
+  flex-direction: column;
+  @include contentBgColor;
+  div.logoBox{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    margin-bottom: 30px;
+    img.logo {
+      width: 60px;
+      height: 60px;
+      margin-right: 20px;
+    }
+    div.logoText{
+      display: flex;
+      flex-direction: column;
+      div:nth-child(1){
+        font-size: 30px;
+        @include navyFont;
+      }
+      div:nth-child(2){
+        font-size: 14px;
+        @include navyFont;
+      }
+    }
+  }
+  div.loginBox{
+    width: 600px !important;
+    height: auto;
+  }
+  div#findScreen{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    //background-color: #093A5B;
+    @include lightgrayBg;
+    border: 1px solid #195375;
+    padding-left: 40px;
+    padding-right: 40px;
+    height: 300px;
+    p.subtitle{
+      margin: 0;
+      @include navyFont;
+    }
+    div.resetPwTopText{
+      margin: 0;
+      @include navyFont;
+      font-size: 20px;
+      margin-bottom: -20px;
+    }
+    div.resetPwSendCodeBox{
+      div.resetPwContainer{
+        display: flex;
+        flex-direction: row;
+        //background-color: #ebab15;
+        justify-content: space-around;
+        align-items: center;
+        img.resetPwImg{
+          width: 120px;
+          height: 120px;
+        }
+        div.resetPwBox{
+          div.resetPwInput{
+            //background-color: #62CDFA;
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            align-items: center;
+            height: 40px;
+            width: 300px;
+            padding: 10px 20px;
+            div{
+              width: 80px;
+              @include navyFont;
+            }
+            input{
+              margin: 0;
+              background-color: white;
+              @include navyFont;
+              padding-left: 10px;
+              border: 1px solid #195375;
+              ::placeholder{
+                color: #eaeaea;
+              }
+            }
+          }
+          div.resetPwBtn{
+            //background-color: #20d4aa;
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            align-items: center;
+            height: 40px;
+            width: 300px;
+            padding: 10px 20px;
+            div{
+              width: 80px;
+            }
+            button{
+
+            }
+          }
+        }
+      }
+      div.resetPwText{
+        font-size: 12px;
+        width: 100%;
+        height: 60px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        @include navyFont;
+      }
+    }
+    div.resetPwEnterCodeBox{
+      display: flex;
+      flex-direction: column;
+      div.resetPwEnterContainer{
+        display: flex;
+        flex-direction: row;
+        //background-color: #ebab15;
+        justify-content: space-around;
+        align-items: center;
+        img.resetPwEnterImg{
+          width: 120px;
+          height: 120px;
+        }
+        div.resetPwEnterBox{
+          div.resetPwEnterInput{
+            //background-color: #62CDFA;
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            align-items: center;
+            height: 40px;
+            width: 300px;
+            padding: 10px 20px;
+            color: black;
+            div{
+              width: 80px;
+              @include navyFont;
+            }
+            input{
+              margin: 0;
+              background-color: white;
+              @include navyFont;
+              padding-left: 10px;
+              border: 1px solid #195375;
+              ::placeholder{
+                color: #eaeaea;
+              }
+            }
+          }
+
+        }
+      }
+      div.resetPwEnterBtn{
+        //background-color: #20d4aa;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        height: 40px;
+        width: 300px;
+        padding: 10px 20px;
+        div{
+          width: 80px;
+        }
+        button{
+
+        }
+      }
+    }
+    div.resetPwChangeCodeBox{
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      div.resetPwChangeContainer{
+        display: flex;
+        flex-direction: row;
+        //background-color: #ebab15;
+        justify-content: flex-start;
+
+        align-items: center;
+        img.resetPwChangeImg{
+          width: 120px;
+          height: 120px;
+        }
+        div.resetPwChangeBox{
+          div.resetPwChangeInput{
+            //background-color: #62CDFA;
+            display: flex;
+            flex-direction: row;
+            justify-content: flex-start;
+            align-items: center;
+            height: 40px;
+            width: 520px;
+            //width: 500px;
+            padding: 10px 10px;
+            color: black;
+            font-size: 14px;
+            div.resetPwChangeInputTitle{
+              width: 280px;
+              @include navyFont;
+              font-size: 14px;
+              display: flex;
+              justify-content: flex-start;
+              flex-direction: row;
+              padding-right: 10px;
+              box-sizing: border-box;
+
+            }
+            div.resetPwChangeInputIcon{
+              background-color: white;
+              border-top: 1px solid #195375;
+              border-right: 1px solid #195375;
+              border-bottom: 1px solid #195375;
+              margin: 0;
+              height: 30px;
+            }
+            div.resetPwChangeInputFoot{
+              width: 250px;
+              @include navyFont;
+              font-size: 12px;
+              display: flex;
+              justify-content: flex-start;
+              flex-direction: row;
+              padding-left: 10px;
+              box-sizing: border-box;
+            }
+            input{
+              margin: 0;
+              height: 30px;
+              background-color: white;
+              @include navyFont;
+              padding-left: 10px;
+              border-top: 1px solid #195375;
+              border-left: 1px solid #195375;
+              border-bottom: 1px solid #195375;
+              ::placeholder{
+                //color: #7a7a7a;
+                color: black;
+              }
+            }
+          }
+
+        }
+      }
+      div.resetPwChangeBtn{
+        //background-color: #20d4aa;
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+        height: 40px;
+        width: 300px;
+        padding: 10px 20px;
+        div{
+          width: 80px;
+        }
+        button{
+
+        }
+      }
+    }
+  }
+
+}

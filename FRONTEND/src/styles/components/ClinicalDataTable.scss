@@ -1,0 +1,64 @@
+@import "src/stylesins";
+table.clinicalDataTable{
+  width: 100%;
+  border: 1px solid #195375;
+  border-spacing: 0;
+  @include navyFont;
+
+  .clinicalDataHead {
+    border: 1px solid #195375;
+    background: #195375;
+    color: white;
+    tr{
+      th{
+        width: auto;
+        max-width: 100px;
+      }
+    }
+  }
+
+  .clinicalDataBody {
+    tr {
+      width: 100%;
+      cursor: pointer;
+      vertical-align: center;
+      &:hover{
+        @include selectGreenBg;
+        td{
+          color: white;
+        }
+      }
+      td {
+        @include navyFont;
+        width: auto;
+        font-size: 12px;
+        max-width: 100px;
+        border: 0.3px solid #195375;
+        padding: 0 5px;
+        text-align: center;
+        overflow: scroll;
+        scrollbar-base-color: transparent;
+        scrollbar-track-color: transparent;
+        scrollbar-arrow-color: transparent;
+        scrollbar-face-color: transparent;
+        div{
+          @include navyFont;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          .biCheckBox{
+            width: 20px;
+            height: 20px;
+            box-sizing: border-box;
+          }
+        }
+      }
+      body{ -ms-overflow-style: none; }
+      ::-webkit-scrollbar { display: none; }
+    }
+  }
+  tr.clinicalDataSelected{
+    background-color: #399778;
+    color: white;
+  }
+}

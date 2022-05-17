@@ -1,0 +1,167 @@
+@import "src/stylesins";
+div.clnclDataContainer{
+  width: 85%;
+  height: 100%;
+  display: flex;
+  justify-content: space-around;
+  position: absolute;
+  @include contentBgColor;
+  /* LEFT */
+  div.leftClnclContent{
+    //background-color: #20d4aa;
+    width: 55%;
+    height: 100%;
+    padding: 30px;
+    overflow: scroll;
+    scrollbar-base-color: transparent;
+    scrollbar-track-color: transparent;
+    scrollbar-arrow-color: transparent;
+    scrollbar-face-color: transparent;
+    div.leftClnclText{
+      font-size: 30px;
+      margin-bottom: 30px;
+      @include navyFont;
+    }
+    div.clnclDataTableBox{
+      /* PAGENATION START*/
+      .paginationUl{
+        width: 100%;
+        list-style: none;
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+        margin: 20px 0;
+        padding: 0;
+      }
+      .pageLabelBtn{
+        cursor: pointer;
+        background-color: #195375;
+        color: white;
+        //@include navyFont;
+        border-radius: 5px;
+        width: 40px;
+        border: 1px solid #195375;
+        text-align: center;
+        a{
+          color: white;
+          //@include navyFont;
+        }
+      }
+      .paginationLi{
+        cursor: pointer;
+        background-color: transparent;
+        border: 1px solid #195375;
+        margin: 0 3px;
+        width: 25px;
+        height: 25px;
+        border-radius: 5px;
+        text-align: center;
+        a{
+          @include navyFont;
+          width: 25px;
+          height: 25px;
+          display: flex;
+          justify-content: center;
+        }
+      }
+      .currentPage{
+        cursor: pointer;
+        background-color: #195375;
+        //background-color: #20d4aa;
+        border: 1px solid #195375;
+        color: white;
+        //@include navyFont;
+        a{
+          //@include navyFont;
+          color: white;
+        }
+      }
+      .paginationDisabled{
+        border: 1px solid #195375;
+        cursor: pointer;
+        background-color: #eaeaea;
+        a{color: #195375}
+      }
+      /* PAGENATION END*/
+    }
+    /* SWIPER START*/
+    .swiper-container{
+      margin-bottom: 100px;
+      padding: 50px;
+      .clnclImgSlide{
+        //height: a00px;
+        height: auto;
+        background-color: #195375;
+        div.clnclImgBox{
+          width: 100%;
+          height: 100%;
+          //background-color: #62CDFA;
+          display: flex;
+          justify-content: space-around;
+          align-items: center;
+          flex-wrap: wrap;
+          img{
+            width: 250px;
+            height: 160px;
+            margin: 10px 0;
+          }
+        }
+      }
+    }
+    /* SWIPER END */
+  }
+  /* RIGHT */
+  div.rightClnclContent{
+    width: 45%;
+    height: 100%;
+    padding-right: 30px;
+    //background-color: #62CDFA;
+    div.rightLoadBtnBox{
+      width: 100%;
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      margin-top: 40px;
+      div{
+        cursor: pointer;
+        width: 100px;
+        height: 50px;
+        //background-color: #62CDFA;
+        @include loadBtnBg;
+        border-radius: 10px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+    }
+
+    div.statusContainer{
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: row;
+      margin-top: 20px;
+      margin-bottom: 40px;
+      div.statusBox{
+        margin: 0 5px;
+        width: 100px;
+        height: 40px;
+        border-radius: 10px;
+        display: grid;
+        place-content: center;
+        padding: 5px;
+        text-align: center;
+        border: 1px solid #195375;
+        cursor: pointer;
+        @include navyFont;
+      }
+      div.currentStatus{
+        background-color: #195375;
+        color: white;
+      }
+    }
+  }
+}
+body{ -ms-overflow-style: none; }
+::-webkit-scrollbar { display: none; }

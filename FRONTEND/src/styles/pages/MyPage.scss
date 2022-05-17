@@ -1,0 +1,135 @@
+div.myPageContainer {
+  width: 100%;
+  min-width: 2504px;
+  height: 960px;
+  background-color: #E1E4E5;
+  display: flex;
+
+  img.mainLogo {
+    width: 308px;
+    height: 78px;
+    margin-top: 38px;
+    margin-left: 38px;
+  }
+
+  div.myPageCenterBox {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-left: 300px;
+    height: 900px;
+
+    div.myPageTitle {
+      width: 100%;
+      height: 38px;
+      font-size: 32px;
+      font-family: NanumSquareOTFExtraBold;
+      //margin-bottom: 32px;
+    }
+
+    div.myPageContentContainer {
+      width: 1000px;
+      height: 350px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+
+      div.myPageContentBox {
+        width: 314px;
+        height: 314px;
+        background-color: #fff;
+        border-radius: 4px;
+        cursor: pointer;
+
+        div.myPageContentBoxTop {
+          width: 314px;
+          height: 147px;
+          background-color: #F7F7F7;
+          border-radius: 4px 4px 0 0;
+
+          img {
+            width: auto;
+            height: 140px;
+          }
+        }
+
+        div.myPageContentBoxBottom {
+          width: 314px;
+          height: 147px;
+          margin: 20px;
+
+          div.myPageBottomTitle {
+            margin-top: 30px;
+            font-size: 20px;
+            font-family: NanumSquareOTFExtraBold;
+          }
+
+          p {
+            width: 270px;
+            font-size: 16px;
+            font-family: NanumSquareOTFBold;
+          }
+        }
+      }
+
+      div.myPageContentBox:hover {
+        transform: scale(1.1);
+        box-shadow: 0px 10px 10px #d9d9d9;
+
+        img {
+          transform: scale(1.0);
+          box-shadow: none;
+        }
+
+        div {
+          transform: scale(1.0);
+          box-shadow: none;
+        }
+      }
+
+      div.myPageBottomTitle:hover {
+        color: #ff8000;
+      }
+    }
+  }
+
+}
+
+footer {
+  width: 100%;
+  min-width: 2504px;
+  min-height: 250px;
+  background-color: #1c2226;
+  padding: 50px 0 0 0px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative !important;
+  transition: bottom;
+
+  ul.footerBoxUl {
+    width: 1336px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+
+    li.footerLi {
+      margin: 0 20px 28px 0;
+      font-size: 14px;
+      font-family: NanumSquareOTFExtraBold;
+      color: #fff;
+    }
+  }
+
+  div.footerTextBox {
+    width: 1336px;
+    color: #fff;
+    font-size: 12px;
+    line-height: 20px;
+
+    span.footerTextBoxColor {
+      color: #ff8000;
+    }
+  }
+}

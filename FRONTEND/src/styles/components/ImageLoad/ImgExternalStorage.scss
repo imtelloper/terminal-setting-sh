@@ -1,0 +1,74 @@
+@import "src/stylesmixins";
+div.imgExtStorContainer{
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  background-color: white;
+
+  div.imgExtStorTitle{
+    width: 100%;
+    font-size: 30px;
+    margin-bottom: 80px;
+    //background-color: #0c4b76;
+    margin-top: 20px;
+    margin-left: 20px;
+    @include navyFont;
+  }
+
+  div.imgExtStorContentBox{
+    width: 100%;
+    max-width: 500px;
+    height: 100%;
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-start;
+    flex-direction: column;
+    //background-color: #4B8CE1;
+    div.imgExtStorContentTitle{
+      font-size: 30px;
+      margin-bottom: 30px;
+      @include navyFont;
+    }
+    div.imgExtStorContent{
+      width: 100%;
+      //background-color: #999999;
+      margin-bottom: 30px;
+      div.imgExtStorContentRow{
+        display: flex;
+        flex-direction: row;
+        width: 100%;
+        //background-color: #20d4aa;
+        div.imgExtStorRowCol{
+          @include navyFont;
+          border: 1px solid #06263C;
+          padding: 10px;
+          width: 100px;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+        }
+      }
+      div.imgExtStorContentBtns{
+        margin-bottom: 30px;
+      }
+    }
+    div.imgExtStorFindBox{
+      width: 100%;
+      display: flex;
+      justify-content: flex-end;
+      div.imgExtStorBtn{
+        width: 100px;
+        height: 40px;
+        background-color: #06263C;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        cursor: pointer;
+      }
+    }
+  }
+}

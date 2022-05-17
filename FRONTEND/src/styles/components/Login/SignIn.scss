@@ -1,0 +1,126 @@
+@import "src/stylesmixins";
+#signinScreen {
+  width: 100%;
+  height: 100%;
+  min-width: 600px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  align-content: center;
+  flex-direction: column;
+  @include contentBgColor;
+  div.logoBox{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    margin-bottom: 30px;
+    img.logo {
+      width: 60px;
+      height: 60px;
+      margin-right: 20px;
+    }
+    div.logoText{
+      display: flex;
+      flex-direction: column;
+      div:nth-child(1){
+        font-size: 30px;
+        @include navyFont;
+      }
+      div:nth-child(2){
+        font-size: 14px;
+        @include navyFont;
+      }
+    }
+  }
+  div.loginBox{
+    width: 600px !important;
+    height: auto;
+  }
+
+  div#signInContainer{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    //background-color: #093A5B;
+    @include lightgrayBg;
+    border: 1px solid #195375;
+    padding-left: 40px;
+    padding-right: 40px;
+    height: 460px;
+    div.signInBox{
+      display: flex;
+      flex-direction: row;
+      justify-content: space-around;
+      align-items: flex-start;
+      img.signInImg{
+        width: 120px;
+        height: 120px;
+      }
+      div.signInRightBox{
+        div.signInTextTitle{
+          font-size: 26px;
+          font-weight: 600;
+          @include selectGreenFont;
+        }
+        div.signInText{
+          font-weight: 400;
+          font-size: 12px;
+          line-height: 16px;
+          margin-top: 10px;
+          margin-bottom: 10px;
+          color: black;
+        }
+        div.signInInput{
+          display: flex;
+          flex-direction: row;
+          justify-content: space-between;
+          align-items: center;
+          height: 40px;
+          width: 300px;
+          padding: 10px 20px;
+          div{
+            width: 80px;
+            color: black;
+          }
+          input{
+            margin: 0;
+            background-color: white;
+            color: #0c4b76;
+            padding-left: 10px;
+            width: 200px;
+            border: 1px solid black;
+          }
+        }
+        div.signInInputCheck{
+          display: flex;
+          flex-direction: row;
+          justify-content: flex-start;
+          align-items: center;
+          margin-bottom: 15px;
+          div{
+            padding-left: 10px;
+            color: black;
+          }
+        }
+        div.signInBtn{
+          //background-color: #20d4aa;
+          display: flex;
+          flex-direction: row;
+          justify-content: space-between;
+          align-items: center;
+          height: 40px;
+          width: 300px;
+          padding: 10px 20px;
+          div{
+            width: 80px;
+          }
+          button{
+
+          }
+        }
+      }
+    }
+  }
+}

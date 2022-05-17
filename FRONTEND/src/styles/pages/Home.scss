@@ -1,0 +1,95 @@
+@keyframes slidein {
+  0% {
+    opacity: 0;
+    transform: translateY(-50px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0%);
+  }
+}
+
+.logo {
+  margin-top: 30%;
+  width: 100%;
+  margin-bottom: 50px;
+
+  #homeScreen & {
+    animation: 2s ease 0s 1 slidein forwards;
+  }
+}
+
+#homeText {
+  animation: 2s ease 0.5s 1 slidein forwards;
+  opacity: 0%;
+  margin-top: 65px;
+  width: 100%;
+  text-align: center;
+  font-size: 28px;
+  font-weight: 100;
+  line-height: 135%;
+}
+
+#startButton {
+  position: relative;
+  opacity: 0%;
+  animation: 2s ease 0.75s 1 slidein forwards;
+  margin-top: 56px;
+}
+
+/* 오상헬스케어 로고용 임시 설정 */
+// #homeText {
+//   color: black;
+// }
+// #startButton {
+//   color: white;
+//   background-color: black;
+// }
+
+//수완 추가
+#findSignIn {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  //justify-content: space-evenly;
+  align-items: center;
+  margin: 10px 0;
+  background-color: rgba(black, 0.2);
+  //li{
+  //  flex-direction: column;
+  //}
+  p {
+    display: inline-block;
+    width: 20%;
+    margin: 0;
+    line-height: 40px;
+    text-align: center;
+  }
+
+  a {
+    width: 50%;
+  }
+
+}
+
+#divider {
+  display: inline-block;
+  height: 100px;
+  border-left: 1px solid rgba(white, 0.55);
+}
+#menu {
+  width: 20px;
+}
+#menu-ver{
+  margin-left: 15px;
+  flex-direction: column;
+}
+
+#view-menu{
+  span {
+    //width: 50%;
+    margin-left: 5px;
+    overflow: hidden;
+  }
+
+}

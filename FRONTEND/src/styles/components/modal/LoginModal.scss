@@ -1,0 +1,210 @@
+div.loginModalContainer {
+  width: 100%;
+  height: 100%;
+  background-color: rgba(226, 229, 230, 0.98);
+  position: fixed;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 100;
+
+  div.loginBox {
+    img {
+      width: 224px;
+      height: 57px;
+      margin: 0 0 12px 12px;
+    }
+
+    div.loginContentBox {
+      width: 358px;
+      height: 100%;
+      background-color: #fff;
+      border-radius: 4px;
+      box-shadow: 0 60px 80px rgba(0,0,0,0.16);
+
+      div.loginContentBoxTop {
+        display: flex;
+        width: 358px;
+        height: 64px;
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: 1px solid #ececec;
+
+        div {
+          margin-left: 12px;
+          font-size: 18px;
+          font-family: NanumSquareOTFExtraBold;
+        }
+
+        button {
+          margin-right: 12px;
+          width: 40px;
+          height: 40px;
+          border: none;
+          background-color: transparent;
+          cursor: pointer;
+          font-size: 24px;
+          font-family: NanumSquareOTFBold;
+          color: #7f7f7f;
+          i.material-icons{
+            color: #7f7f7f;
+          }
+        }
+        button:hover {
+          color: #000;
+          i:hover{
+            color: #000;
+          }
+        }
+      }
+      div.loginContentBoxBottom{
+        //display: flex;
+        //justify-content: center;
+        //align-items: center;
+        width: 358px;
+        padding: 12px;
+
+        //@@@@@ input 글자 잘림 error 발생 @@@@@
+        //input.loginContentInput{
+        //}
+        input{
+          width: 315px;
+          height: 40px;
+          border: 1px solid #ececec;
+          overflow: visible;
+          padding: 0 8px;
+          margin-bottom: 12px;
+          font-size: 16px;
+          font-family: NanumSquareOTFRegular;
+          line-height: 3;
+        }
+        input::placeholder{
+          line-height: 3;
+        }
+        //@@@@@@@@@@
+
+        div{
+          margin-bottom: 10px;
+          input{
+            width: 20px;
+            height: 20px;
+          }
+          label{
+            padding-left: 0px;
+            display: inline-flex;
+            align-items: center;
+            position: relative;
+            cursor: pointer;
+          }
+          label.labelCheckBox{
+            height: 100%;
+            -webkit-user-select: none;
+
+            input[type=checkbox] {
+              //display:none;
+            }
+            input[type=checkbox] + label {
+              cursor: pointer;
+              padding-left: 23px;
+              background-repeat: no-repeat;
+              // @@@@@@ url error 발생 @@@@@
+              //background-image: url('./src/images/check_box_off.svg');
+            }
+            input[type=checkbox]:checked + label {
+              // @@@@@@ url error 발생 @@@@@
+              //background-image: url('./src/images/check_box_on.svg');
+            }
+            span{
+              color: #7f7f7f;
+              font-size: 14px;
+              line-height: 16.1px;
+              font-weight: 700;
+            }
+            span.checkBoxOn{
+              position: relative;
+              z-index: 1;
+              //transform: scale(0, 0);
+              width: 20px;
+              height: 20px;
+              background-size: cover;
+              background-repeat: no-repeat;
+              background-position: center;
+              //background: url("/src/images/check_box_on.svg");
+            }
+            span.checkBoxOff{
+              position: relative;
+              z-index: 3;
+              width: 20px;
+              height: 20px;
+              background-size: cover;
+              background-repeat: no-repeat;
+              background-position: center;
+              //transform: scale(0, 0);
+              //background-image: url("../src/images/check_box_off.svg");
+            }
+            span.checkBoxIcon{
+              padding: 10px;
+              transition: .3s cubic-bezier(1, 0, 0, 1);
+              display: inline-block;
+            }
+
+            span.checkBoxText{
+              margin-left: 5px;
+              margin-right: 15px;
+            }
+          }
+        }
+        button{
+          width: 334px;
+          height: 60px;
+          font-size: 18px;
+          font-family: NanumSquareOTFExtraBold;
+          border: none;
+          border-radius: 4px;
+          padding: 0 12px 0 12px;
+          cursor: pointer;
+        }
+        button.loginButton{
+          background-color: #ff8000;
+          color: #fff;
+          margin-bottom: 12px;
+        }
+        button.signUpButton{
+          background-color: #00EE8F;
+        }
+        button.loginButton:hover{
+          background-color: #FF9C02;
+          transition: 0.2s;
+        }
+        button.signUpButton:hover{
+          background-color: #50FCB7;
+          transition: 0.2s;
+        }
+      }
+      div.loginButtonBox{
+        padding: 12px;
+        background-color: #f6f6f6;
+        display: flex;
+        justify-content: space-between;
+        border-radius: 0 0 4px 4px;
+        border-top: 1px solid #ececec;
+
+        button{
+          width: 161px;
+          height: 40px;
+          background-color: #ccc;
+          color: #7f7f7f;
+          border: none;
+          border-radius: 4px;
+          font-size: 14px;
+          font-family: NanumSquareOTFBold;
+          cursor: pointer;
+        }
+        button:hover{
+          background-color: #dfdfdf;
+          transition: 0.2s;
+        }
+      }
+    }
+  }
+}

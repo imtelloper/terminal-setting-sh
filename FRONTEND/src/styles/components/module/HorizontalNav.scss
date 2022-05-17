@@ -1,0 +1,57 @@
+@import "../../mixins";
+div.horizontalContainer{
+  width: 100%;
+  height: 56px;
+  //background-color: #06263C;
+  @include horizontalNavBg;
+  display: flex;
+  justify-content: space-between;
+  flex-direction: row;
+  align-items: center;
+  //padding-left: 20px;
+  //padding-right: 20px;
+  div.horizontalSlLogo{
+    width: 192px;
+    margin-left: 80px;
+    img{
+      width: 100%;
+    }
+  }
+  div.horizontalIconBox{
+    margin-right: 20px;
+    ul.horizontalLoginMenu{
+      display: flex;
+      align-items: center;
+      li {
+        padding: 10px;
+        font-size: 12px;
+        font-family: NanumSquareOTFBold;
+        cursor: pointer;
+        transition: 0.3s;
+        &:nth-child(3) {
+          padding-right: 10px;
+        }
+        &:hover{
+          color: #ff8800;
+        }
+      }
+      ul.logoImgIcon{
+        width: 80px;
+        position: relative;
+        padding-left: 10px;
+        &:before{
+          content: "";
+          width: 1px;
+          height: 56px;
+          background-color: #d9d9d9;
+          position: absolute;
+          top: -10px;
+          left: 0;
+        }
+        img{
+          width: 100%;
+        }
+      }
+    }
+  }
+}

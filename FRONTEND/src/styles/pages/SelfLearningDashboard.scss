@@ -1,0 +1,67 @@
+div.selfLearningDashboardContainer {
+  width: 100%;
+  min-width: 2504px;
+  height: 1224px;
+  background-color: #E1E4E5;
+  display: flex;
+  //flex-direction: column;
+  //justify-content: center;
+  //align-items: center;
+
+  div.selfLearningDashboardTitle {
+    position: fixed;
+    left: 92px;
+    top: 92px;
+    font-size: 18px;
+    font-weight: 700;
+    img.mainLogo {
+      margin-bottom: 15px;
+    }
+  }
+
+  div.linkDashboardBox {
+    width: 1334px;
+    height: 900px;
+    position: relative;
+    top: 18%;
+    left: 23%;
+
+    div.linkDashboardBoxTitle {
+      font-size: 32px;
+      font-family: NanumSquareOTFExtraBold;
+      margin-bottom: 70px;
+    }
+  }
+}
+footer{
+  width: 100%;
+  min-width: 2504px;
+  min-height: 250px;
+  background-color: #1c2226;
+  padding: 50px 0 0 0px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  ul.footerBoxUl{
+    width: 1336px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+
+    li.footerLi{
+      margin: 0 20px 28px 0;
+      font-size: 14px;
+      font-family: NanumSquareOTFExtraBold;
+      color: #fff;
+    }
+  }
+  div.footerTextBox{
+    width: 1336px;
+    color: #fff;
+    font-size: 12px;
+    line-height: 20px;
+    span.footerTextBoxColor{
+      color: #ff8000;
+    }
+  }
+}

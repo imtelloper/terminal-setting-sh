@@ -1,0 +1,79 @@
+@import "src/stylesmixins";
+div.licenseContainer{
+  //background-color: #A6A6A6;
+  margin-top: 30px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  div.licenseTitle{
+    @include navyFont;
+    //background-color: #9a9a9a;
+    font-size: 40px;
+    margin-bottom: 70px;
+    padding-left: 50px;
+    width: 100%;
+  }
+  div.licenseTextTop{
+    //background-color: #4B8CE1;
+    width: 100%;
+    max-width: 1000px;
+    border-bottom: 1px solid black;
+    padding-bottom: 5px;
+    span:nth-child(1){
+      color: black;
+      font-size: 30px;
+    }
+    span:nth-child(2){
+      color: black;
+      font-size: 30px;
+      font-weight: 300;
+    }
+    span:nth-child(3){
+      @include selectGreenFont;
+    }
+  }
+
+  div.licenseContentBox{
+    display: flex;
+    //justify-content: space-around;
+    justify-content: flex-start;
+    flex-direction: row;
+    //background-color: #20d4aa;
+    width: 100%;
+    max-width: 1000px;
+    border-bottom: 1px solid black;
+
+    margin-top: 30px;
+    padding-bottom: 30px;
+
+    div.licenseContentText1{
+      color: black;
+      //background-color: #e61f19;
+      width: 200px;
+      min-width: 200px;
+      text-align: center;
+      //padding-top: 30px;
+      font-size: 24px;
+    }
+    div.licenseContentBar{
+      width: 1px;
+      height: 150px;
+      background-color: black;
+    }
+    div.licenseContentText2{
+      //background-color: #e61f19;
+      padding-left: 30px;
+      box-sizing: border-box;
+      div{
+        color: black;
+        margin-bottom: 5px;
+      }
+    }
+  }
+  div.licenseContentBox:nth-child(2){
+    border-top: 1px solid black!important;
+    padding-top: 30px;
+    box-sizing: border-box;
+  }
+}

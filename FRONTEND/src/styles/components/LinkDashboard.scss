@@ -1,0 +1,293 @@
+div.dashBoardBox{
+  position: relative;
+  z-index: 1;
+}
+
+div.imageTypeTitle {
+  font-size: 24px;
+  font-weight: 700;
+  margin-bottom: 25px;
+  p{
+    margin: 0;
+  }
+  p.titleLine{
+    border-top: 1px solid rgb(93 93 93 / 0.15);
+    padding-top: 70px;
+  }
+}
+
+div.imageTypeBox {
+  display: flex;
+  flex-direction: row;
+  width: 1434px;
+  padding-bottom: 70px;
+  border-bottom: 1px solid rgb(255 255 255 / 0.3);
+
+  div.new {
+    position: absolute;
+    padding: 0 8px;
+    margin: 4px 0 0 -13px;
+    z-index: 2;
+    background-color: #ff0037;
+    width: 27px;
+    height: 24px;
+    font-weight: 800;
+    font-family: NanumSquareOTFBold;
+    font-size: 12px;
+    color: #fff;
+    border-radius: 4px;
+    display: flex;
+    justify-self: center;
+    align-items: center;
+  }
+
+  div {
+    border-radius: 5px;
+    max-width: 424px;
+    width: 100%;
+    height: 280px;
+    background-color: #fff;
+    padding-left: 20px;
+    margin-right: 50px;
+
+    div {
+      padding: 0;
+      background-color: transparent;
+    }
+  }
+
+  div:hover {
+    transform: scale(1.1);
+    box-shadow: 0px 10px 10px #d9d9d9;
+    p.imageTypeBottomTitle{
+      color: #ff8800;
+    }
+    img {
+      transform: scale(1.0);
+      box-shadow: none;
+    }
+    div {
+      transform: scale(1.0);
+      box-shadow: none;
+    }
+  }
+
+  div.injectionAi {
+    cursor: pointer;
+    div.injectionAiTop {
+      height: 120px;
+
+      img {
+        width: 408px;
+      }
+    }
+
+    div.injectionAiBottom {
+      margin-top: -20px;
+      height: 160px;
+
+      p.imageTypeBottomTitle {
+        margin-top: 20px;
+        font-size: 20px;
+        font-family: NanumSquareOTFExtraBold;
+      }
+
+      p.imageTypeBottomTitle:hover {
+        color: #ff8000;
+      }
+
+      p {
+        font-size: 16px;
+      }
+    }
+  }
+
+  div.notTeachBox {
+    cursor: pointer;
+    div.notTeachTop {
+      width: 424px;
+      height: 120px;
+
+      img {
+        width: 408px;
+      }
+    }
+
+    div.notTeachBottom {
+      margin-top: -20px;
+      height: 160px;
+
+      p.imageTypeBottomTitle {
+        margin-top: 20px;
+        font-size: 20px;
+        font-family: NanumSquareOTFExtraBold;
+      }
+
+      p.imageTypeBottomTitle:hover {
+        color: #ff8000;
+      }
+
+      p {
+        font-size: 16px;
+      }
+    }
+  }
+
+  div.teachBox {
+    cursor: pointer;
+    z-index: 3;
+
+    div.teachTop {
+      width: 424px;
+      height: 120px;
+
+      img {
+        width: 408px;
+      }
+    }
+
+    div.teachBottom {
+      margin-top: -20px;
+      height: 160px;
+      p.imageTypeBottomTitle {
+        margin-top: 20px;
+        font-size: 20px;
+        font-family: NanumSquareOTFExtraBold;
+      }
+      p {
+        font-size: 16px;
+      }
+    }
+  }
+
+}
+
+div.dataTypeBox {
+  display: flex;
+  flex-direction: row;
+
+  div.new {
+    position: absolute;
+    padding: 0 8px;
+    margin: 4px 0 0 -13px;
+    z-index: 2;
+    background-color: #ff0037;
+    width: 27px;
+    height: 24px;
+    font-weight: 800;
+    font-family: NanumSquareOTFBold;
+    font-size: 12px;
+    color: #fff;
+    border-radius: 4px;
+    display: flex;
+    justify-self: center;
+    align-items: center;
+  }
+
+  div {
+    border-radius: 5px;
+    max-width: 424px;
+    width: 100%;
+    height: 280px;
+    background-color: #fff;
+    padding-left: 20px;
+    margin-right: 50px;
+
+    div {
+      padding: 0;
+      background-color: transparent;
+    }
+  }
+
+  div:hover {
+    transform: scale(1.1);
+    p.imageTypeBottomTitle{
+      color: #ff8800;
+    }
+    img {
+      transform: scale(1.0);
+    }
+    div {
+      transform: scale(1.0);
+      //p.imageTypeBottomTitle:hover{
+      //  //background-color: #ff8000;
+      //  color: #ff8000;
+      //}
+    }
+  }
+
+  div.dataClassification {
+    cursor: pointer;
+    div.dataClassificationTop {
+      height: 120px;
+      img {
+        width: 408px;
+      }
+    }
+    div.dataClassificationBottom {
+      margin-top: -20px;
+      height: 160px;
+      p.imageTypeBottomTitle {
+        margin-top: 40px;
+        font-size: 20px;
+        font-family: NanumSquareOTFExtraBold;
+      }
+      p {
+        font-size: 16px;
+      }
+    }
+  }
+
+  div.dataPredictionBox {
+    cursor: pointer;
+    div.dataPredictionTop {
+      width: 424px;
+      height: 120px;
+
+      img {
+        width: 408px;
+      }
+    }
+
+    div.dataPredictionBottom {
+      margin-top: -20px;
+      height: 160px;
+      p.imageTypeBottomTitle {
+        margin-top: 40px;
+        font-size: 20px;
+        font-family: NanumSquareOTFExtraBold;
+      }
+      p {
+        font-size: 16px;
+      }
+    }
+  }
+
+  div.comingSoonBox {
+    display: flex;
+    width: 424px !important;
+    min-width: 424px;
+    height: 280px;
+    background-color: transparent;
+    border: 1px dotted #7f7f7f;
+    padding: 0;
+    div.comingSoonContent {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin: 60px 0 0 0;
+      img {
+        align-items: center;
+        width: 100px;
+        margin-bottom: 10px;
+      }
+      p {
+        color: #7f7f7f;
+        font-size: 14px;
+        font-family: NanumSquareOTFBold;
+        margin: 0;
+        line-height: 20px;
+      }
+    }
+  }
+}

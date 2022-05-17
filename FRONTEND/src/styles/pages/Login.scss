@@ -1,0 +1,186 @@
+@import "src/stylesins";
+
+#loginScreen {
+  width: 100%;
+  //min-width: 500px;
+  height: 100%;
+  min-height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  align-content: center;
+  flex-direction: column;
+  background-color: white;
+
+  div.logoBox {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    margin-bottom: 30px;
+
+    img.logo {
+      width: 60px;
+      height: 60px;
+      margin-right: 20px;
+    }
+
+    div.logoText {
+      display: flex;
+      flex-direction: column;
+
+      div:nth-child(1) {
+        font-size: 30px;
+        @include navyFont;
+      }
+
+      div:nth-child(2) {
+        font-size: 14px;
+        @include navyFont;
+      }
+    }
+  }
+
+
+  div.loginTabBtnBox {
+    //width: 100%;
+    width: 600px;
+    height: 40px;
+    //background: #dc4848;
+    //border: 1px solid #399778;
+    border-bottom: 1px solid #399778;
+    border-left: 1px solid #399778;
+    margin-left: -1px;
+    margin-bottom: -1px;
+    display: flex;
+    flex-direction: row;
+    z-index: 99;
+
+    div.loginTabBtn {
+      width: 170px;
+      height: 40px;
+      @include lightgrayBg;
+      //border-left: 1px solid #399778;
+      border-top: 1px solid #399778;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+      color: #399778;
+    }
+
+    div.loginTabBtn:nth-child(2) {
+      border-left: 1px solid #399778;
+      border-right: 1px solid #399778;
+    }
+
+    div.loginTabBtn:hover {
+      background: #399778;
+      color: white;
+    }
+  }
+
+  div.loginBox {
+    width: 400px;
+    height: auto;
+    //border: 1px solid #399778;
+    border-left: 1px solid #399778;
+    border-right: 1px solid #399778;
+    border-bottom: 1px solid #399778;
+    padding: 30px 100px;
+    @include lightgrayBg;
+
+
+    div.loginInputBox {
+      //background-color: #e61f19;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      align-content: center;
+      //border: 1px solid black;
+      //height: 40px;
+      margin-bottom: 10px;
+
+      span {
+        width: 240px;
+        //background-color: #A6A6A6;
+        height: 30px;
+        color: black;
+      }
+
+      input {
+        height: 30px;
+        margin: 0;
+        background-color: white;
+        border: 1px solid black;
+        color: black;
+      }
+    }
+
+    label {
+      @include navyFont;
+    }
+
+    input[type="checkbox"] {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      border: 0;
+      @include navyFont;
+
+      & + label::before {
+        content: " ";
+        display: inline-block;
+        width: 18px;
+        height: 18px;
+        line-height: 18px;
+        margin: -3px 10px 0 0;
+        text-align: center;
+        vertical-align: middle;
+        //background: rgba(white, 0);
+        //border: 2px solid white;
+        background: rgba(#195375, 0);
+        border: 2px solid #195375;
+        @include navyFont;
+      }
+
+      &:checked + label::before {
+        content: "\25a0";
+        font-size: 15px;
+        @include navyFont;
+      }
+    }
+
+    #findSignIn {
+      width: 100%;
+      display: flex;
+      justify-content: space-evenly;
+      align-items: center;
+      margin: 10px 0;
+      //background-color: rgba(black, 0.2);
+      p {
+        display: inline-block;
+        width: 100%;
+        margin: 0;
+        line-height: 40px;
+        text-align: center;
+        background-color: #195375;
+      }
+
+      a {
+        width: 50%;
+      }
+    }
+
+    #divider {
+      display: inline-block;
+      height: 22px;
+      border-left: 1px solid rgba(white, 0.55);
+    }
+  }
+}

@@ -1,0 +1,55 @@
+div.aITesterReClassifyContainer {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  background-color: rgba(226, 229, 230, 0.9);
+
+  div.aITesterReClassifyBox {
+    width: 454px;
+    box-shadow: 0 60px 80px rgba(0, 0, 0, 0.16);
+
+    div.aITesterReClassifyBoxTop {
+      width: 100%;
+      display: flex;
+      align-items: center;
+
+      div.imgUploaderTitle {
+        width: 50%;
+        font-size: 24px;
+        font-family: NanumSquareOTFExtraBold;
+      }
+    }
+
+    div.imgUploaderButtons {
+      width: 454px;
+      display: flex;
+      justify-content: end;
+      box-sizing: border-box;
+
+      div.imgUploadButton {
+        padding: 0 20px;
+        height: 40px;
+        background-color: #fff;
+        font-size: 14px;
+        font-weight: bold;
+        border-top-left-radius: 10px;
+        border-top-right-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        margin-left: 5px;
+      }
+      div.imgUploadButtonOrange {
+        background-color: #ff8000;
+        color: #fff;
+      }
+      div.imgUploadButtonWhite {
+        background-color: #fff;
+        color: #1C2226;
+      }
+    }
+
+  }
+}
+
