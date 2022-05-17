@@ -1,0 +1,54 @@
+div.dataListContainer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  text-align: center;
+  line-height: 30px;
+}
+
+div.idxContainer {
+  width: 20px;
+  font-weight: normal;
+  font-size: 16px;
+}
+
+div.humiContainer {
+  position: relative;
+}
+
+div.weatherTempContainer {
+  position: relative;
+}
+
+div.weatherContainer {
+  position: relative;
+  width: 65px;
+}
+
+div.locationContainer {
+  position: relative;
+}
+
+div.timeContainer {
+  text-align: left;
+  position: relative;
+}
+
+div.dataListContainer:hover {
+  color: #8665F1;
+  cursor: pointer;
+}
+
+div.spinnerBox {
+  display: flex;
+  align-items: center;
+  margin-top: 10px;
+}
+
+ul {
+  margin: 0;
+  padding-left: 115px;
+  padding-right: 115px;
+}
+
+/*# sourceMappingURL=DataList.css.map */

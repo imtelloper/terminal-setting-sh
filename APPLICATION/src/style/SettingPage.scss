@@ -1,0 +1,195 @@
+div.setting {
+  width: 800px;
+  height: 400px;
+  font-size: 20px;
+  background-color: rgba(255, 255, 255, 0.5);
+  border-radius: 20px;
+  color: #8665F1;
+  padding: 40px;
+  display: flex;
+  box-shadow: 0 20px 20px -4px rgba(0, 0, 0, 0.2);
+  flex-direction: column;
+
+  div.backPage {
+    position: relative;
+    cursor: pointer;
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  span {
+    position: relative;
+    font-size: 25px;
+    font-weight: bold;
+  }
+
+  div.helpCircle {
+    cursor: pointer;
+    position: relative;
+    margin-bottom: -5px;
+  }
+
+  div.helpCircle::before {
+    content: attr(data-tooltip);
+    position: absolute;
+    background-color: rgba(0, 0, 0, 0.4);
+    font-size: 18px;
+    color: #fff;
+    padding: 10px 7px;
+    border-radius: 10px;
+    max-width: 300px;
+    width: 200px;
+    height: 50px;
+    left: 25%;
+    bottom: 100%;
+    opacity: 0;
+    transition: all 0.5s linear;
+  }
+
+  div.helpCircle:hover::before {
+    opacity: 1;
+  }
+
+  div.inputContainer {
+    div.settingTime {
+      position: relative;
+      margin-bottom: -4px;
+      margin-right: 10px;
+    }
+
+    p {
+      width: 300px;
+      position: relative;
+      font-weight: bold;
+    }
+
+    p::before {
+      font-weight: normal;
+      content: attr(data-tooltip);
+      position: absolute;
+      background-color: rgba(0, 0, 0, 0.4);
+      font-size: 18px;
+      color: #fff;
+      padding: 10px 7px;
+      border-radius: 10px;
+      width: 370px;
+      //height: 50px;
+      bottom: 100%;
+      opacity: 0;
+      transition: all 0.5s linear;
+    }
+
+    p:hover::before {
+      opacity: 1;
+      font-weight: normal;
+    }
+
+    p:hover {
+      cursor: pointer;
+    }
+
+    input {
+      width: 200px;
+      height: 30px;
+      border: none;
+      border-radius: 10px;
+    }
+
+    input:focus {
+      outline: 2px solid #8572ff;
+    }
+
+    div.settingTimeInputBox{
+      display: flex;
+      align-items: center;
+      margin-top: 30px;
+
+      div.resetButton {
+        //background-color: #8665F1;
+        background: linear-gradient(
+            200.96deg,
+            #9cccf1 20%,
+            #dabef3 41.77%,
+            #90aef0 120.35%
+        );
+        color: #fff;
+        font-size: 18px;
+        text-align: center;
+        height: 20px;
+        padding: 7px;
+        border-radius: 10px;
+        cursor: pointer;
+        margin-left: 10px;
+      }
+
+      div.resetButton:hover {
+        background: linear-gradient(
+            200.96deg,
+            #66b3ed 20%,
+            #ba81f1 41.77%,
+            #6892e8 120.35%
+        );
+      }
+
+      div.resetButton::before {
+        content: attr(data-tooltip);
+        position: absolute;
+        background-color: rgba(0, 0, 0, 0.4);
+        font-size: 18px;
+        color: #fff;
+        padding: 10px 7px;
+        border-radius: 10px;
+        //max-width: 700px;
+        width: 290px;
+        max-height: 50px;
+        left: 120%;
+        bottom: -50%;
+        opacity: 0;
+        transition: all 0.5s linear;
+      }
+
+      div.resetButton:hover::before {
+        opacity: 1;
+      }
+    }
+
+    div.dataTimeInfo {
+      margin-top: 30px;
+      background: linear-gradient(
+          200.96deg,
+          #9cccf1 20%,
+          #dabef3 41.77%,
+          #90aef0 120.35%
+      );
+      padding: 1px;
+      color: #fff;
+      height: 20px;
+      position: relative;
+    }
+
+    div.dataTimeInfo:hover {
+      cursor: pointer;
+    }
+
+    div.dataTimeInfo::before {
+      content: attr(data-tooltip);
+      position: absolute;
+      background-color: rgba(0, 0, 0, 0.4);
+      font-size: 18px;
+      color: #fff;
+      padding: 10px 7px;
+      border-radius: 10px;
+      width: 200px;
+      max-height: 50px;
+      bottom: -350%;
+      opacity: 0;
+      transition: all 0.5s linear;
+    }
+
+    div.dataTimeInfo:hover::before {
+      opacity: 1;
+    }
+  }
+}

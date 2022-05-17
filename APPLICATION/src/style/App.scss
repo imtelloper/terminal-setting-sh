@@ -1,0 +1,280 @@
+#root {
+  width: 100%;
+  height: 100%;
+  min-width: 1024px;
+  min-height: 800px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-sizing: border-box;
+}
+
+body {
+  position: relative;
+  color: white;
+  /*height: 100vh;*/
+  height: 100vh;
+  background: linear-gradient(-45deg, #9cccf1, #90aef0, #dabef3, #8e7cff);
+  //background: linear-gradient(
+  //    200.96deg,
+  //    #9cccf1 20%,
+  //    #dabef3 41.77%,
+  //    #90aef0 120.35%
+  //);
+  font-family: sans-serif;
+  overflow-y: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 50px;
+  box-sizing: border-box;
+  background-size: 400% 400%;
+  animation: gradient 4s ease infinite;
+
+  @keyframes gradient {
+    0% {
+      background-position: 0% 50%;
+    }
+    50% {
+      background-position: 100% 50%;
+    }
+    100% {
+      background-position: 0% 50%;
+    }
+  }
+}
+
+div.circleContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  max-width: 200px;
+  margin-right: 20px;
+  z-index: 1;
+
+  svg.loader {
+    //max-width: 500px;
+    width: 100%;
+    height: auto;
+    stroke-linecap: round;
+
+    circle {
+      fill: none;
+      stroke-width: 3.5;
+      animation-name: preloader;
+      animation-duration: 3s;
+      animation-iteration-count: infinite;
+      animation-timing-function: ease-in-out;
+      transform-origin: 170px 170px;
+      will-change: transform;
+
+      &:nth-of-type(1) {
+        stroke-dasharray: 550px;
+      }
+
+      &:nth-of-type(2) {
+        stroke-dasharray: 500px;
+      }
+
+      &:nth-of-type(3) {
+        stroke-dasharray: 450px;
+      }
+
+      &:nth-of-type(4) {
+        stroke-dasharray: 300px;
+      }
+
+      @for $i from 1 through 4 {
+        &:nth-of-type(#{$i}) {
+          animation-delay: -#{$i * 0.15}s;
+        }
+      }
+    }
+  }
+
+  @keyframes preloader {
+    50% {
+      transform: rotate(360deg);
+    }
+  }
+}
+
+div.appTitleContainer{
+  span{
+    font-size: 50px;
+    font-weight: normal;
+    z-index: 10;
+  }
+}
+
+html, body {
+  font-size: 62.5%;
+  background-color: #00091B;
+  font-family: 'Muli', Helvetica, sans-serif;
+}
+
+div.appBottomContainer {
+  @import url('https://fonts.googleapis.com/css?family=Muli');
+  $textDur: 1050ms;
+  $waveDur: 2100ms;
+
+  position: absolute;
+  width: 17rem;
+  height: 10rem;
+  left: 50%;
+  top: 90%;
+  transform: translate(-50%, -50%);
+
+  div.coast { // wave: translate-x
+    position: absolute;
+    left: -1rem;
+    bottom: 1.7rem;
+    width: 6.2rem;
+    height: 2.2rem;
+    display: inline-block;
+    animation: coast $waveDur linear infinite;
+    transform: translateZ(0);
+
+    div.waveWrap {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      perspective: 3rem;
+      perspective-origin: 0%;
+
+      div.delay {
+        animation-delay: $waveDur / 8;
+      }
+
+      div.wave { // wave: width && scale && rotate
+        position: absolute;
+        width: 6.2rem;
+        height: 2.2rem;
+        border-radius: 1.1rem;
+        background: radial-gradient(ellipse at center, rgba(116, 241, 252, 1) 0%, rgba(50, 230, 255, 1) 73%, rgba(21, 199, 250, 1) 100%);
+        display: inline-block;
+        animation: wave $waveDur linear infinite;
+        will-change: width;
+        transform: translateZ(0) scale(0);
+
+        div.delay {
+          animation-delay: $waveDur / 8;
+        }
+      }
+    }
+  }
+
+  div.logoText {
+    color: #fff;
+    font-size: 4rem;
+    font-weight: normal;
+    display: inline-block;
+    position: absolute;
+    bottom: 0;
+    animation: logoText $textDur ease-in infinite;
+    transform: translatez(0);
+    animation-delay: $waveDur / 2;
+    &I {
+      left: 0rem;
+      transform: translate3d(0, -4rem, 0);
+      animation: logoTextI $textDur ease-in infinite;
+      //animation-delay: 500ms;
+    }
+    &N {
+      left: 1.5rem;
+      animation-delay: 150ms;
+    }
+    &T {
+      left: 5.5rem;
+      animation-delay: 200ms;
+    }
+    &E {
+      left: 8.8rem;
+      animation-delay: 310ms;
+    }
+    &R {
+      left: 12rem;
+      animation-delay: 410ms;
+    }
+    &X {
+      left: 16rem;
+      animation-delay: 510ms;
+      color: #8665F1;
+    }
+  }
+
+  @keyframes logoText {
+    0% {
+      transform: translate3d(0, 0, 0);
+    }
+    30% {
+      transform: translate3d(0, 0, 0);
+    }
+    45% {
+      transform: translate3d(0, -4rem, 0);
+    }
+    100% {
+      transform: translate3d(0, 0, 0);
+    }
+  }
+
+  @keyframes logoTextI {
+    0% {
+      transform: translate3d(0, -4rem, 0);
+    }
+    38% {
+      transform: translate3d(0, -4rem, 0);
+    }
+    69% {
+      transform: translate3d(0, 0, 0);
+    }
+    100% {
+      transform: translate3d(0, -4rem, 0);
+    }
+  }
+
+  @keyframes coast {
+    0% {
+      transform: translate3d(0, 0, 0);
+    }
+    23% {
+      transform: translate3d(0, 0, 0);
+    }
+    50% {
+      transform: translate3d(20rem, 0, 0);
+    }
+    100% {
+      transform: translate3d(20rem, 0, 0);
+    }
+  }
+
+  @keyframes wave {
+    0% {
+      transform: scale(0);
+      width: 2.2rem;
+    }
+    10% {
+      transform: scale(1);
+    }
+    23% {
+      width: 2.2rem;
+    }
+    32% {
+      width: 6.1rem;
+    }
+    42% {
+      width: 5rem;
+      transform: rotateY(0deg) scale(1, 1);
+    }
+    51% {
+      transform: rotateY(90deg) scale(0.6, 0.2);
+    }
+    52% {
+      transform: rotateY(90deg) scale(0);
+    }
+    100% {
+      transform: rotateY(90deg) scale(0);
+    }
+  }
+}

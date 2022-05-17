@@ -1,0 +1,55 @@
+div.WeatherContainer {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  font-weight: bold;
+  color: #404a54;
+  align-items: center;
+  justify-content: flex-end;
+  font-size: 18px;
+}
+div.WeatherContainer img {
+  margin-right: 10px;
+}
+div.WeatherContainer div.weatherTemp {
+  font-weight: bold;
+  margin-right: 10px;
+}
+div.WeatherContainer div.weatherName {
+  margin-right: 50px;
+}
+
+div.clouds {
+  background-image: url("../../assets/icons/weatherIcons/clouds.png");
+}
+
+div.default {
+  background-image: url("../../assets/icons/weatherIcons/default.png");
+}
+
+div.drizzle {
+  background-image: url("../../assets/icons/weatherIcons/drizzle.png");
+}
+
+div.rain {
+  background-image: url("../../assets/icons/weatherIcons/rain.png");
+}
+
+div.smog {
+  background-image: url("../../assets/icons/weatherIcons/smog.png");
+}
+
+div.snow {
+  background-image: url("../../assets/icons/weatherIcons/snow.png");
+}
+
+div.sun {
+  background-image: url("../../assets/icons/weatherIcons/sun.png");
+}
+
+div.thunderstorm {
+  background-image: url("../../assets/icons/weatherIcons/thunderstorm.png");
+}
+
+/*# sourceMappingURL=Weather.css.map */
