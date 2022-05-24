@@ -1,0 +1,82 @@
+div.craneInfoContainer{
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-items: center;
+  section{
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+  }
+  div.craneBox{
+    border-radius: 10px;
+    padding: 20px;
+    width: 350px;
+    //height: 200px;
+    border: 1px solid #292929;
+    display: flex;
+    flex-direction: column;
+    margin: 10px;
+    h3{
+      margin: 5px;
+    }
+    div.craneContent{
+      display: flex;
+      width: 100%;
+      align-items: center;
+      div.craneImgContent{
+        display: flex;
+        flex-direction: column;
+        justify-items: center;
+        padding: 10px;
+        img{
+          justify-items: center;
+          width: 80px;
+          height: 70px;
+        }
+        div.craneZone{
+          height: 100%;
+          color: white;
+          font-weight: bold;
+          padding: 2px;
+          text-align: center;
+          margin-top: 5px;
+        }
+        div.craneZoneGreen{
+          background-color: #006154;
+        }
+        div.craneZoneYellow{
+          background-color: #ffae00;
+        }
+        div.craneZoneRed{
+          background-color: red;
+        }
+      }
+      div.craneTextContent{
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+        font-weight: bold;
+        padding-left: 20px;
+        p{
+          margin: 0;
+          span{
+            margin-left: 5px;
+            color: green;
+          }
+        }
+        p.camContent{
+          margin-top: 10px;
+          margin-bottom: 5px;
+        }
+        p.confirmColor{
+          color: #ff8000;
+        }
+        p.dangerColor{
+          color: red;
+        }
+      }
+    }
+  }
+}

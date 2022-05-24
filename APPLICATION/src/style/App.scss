@@ -12,21 +12,14 @@
 body {
   position: relative;
   color: white;
-  /*height: 100vh;*/
   height: 100vh;
   background: linear-gradient(-45deg, #9cccf1, #90aef0, #dabef3, #8e7cff);
-  //background: linear-gradient(
-  //    200.96deg,
-  //    #9cccf1 20%,
-  //    #dabef3 41.77%,
-  //    #90aef0 120.35%
-  //);
   font-family: sans-serif;
   overflow-y: hidden;
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 50px;
+  //padding: 50px;
   box-sizing: border-box;
   background-size: 400% 400%;
   animation: gradient 4s ease infinite;

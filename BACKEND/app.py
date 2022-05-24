@@ -6,6 +6,7 @@ from database.mongoDB import *
 from routers.tempHumidityRouter import router as TempHumidityRouter
 from routers.utilRouter import router as UtilRouter
 from routers.streamRouter import router as StreamRouter
+from routers.authRouter import router as AuthRouter
 from dotenv import load_dotenv
 from pathlib import Path
 import os
@@ -16,7 +17,7 @@ import cv2
 import traceback
 import warnings
 warnings.filterwarnings( 'ignore' )
-from modules.yolo.detect import detect
+from modules.yolov5.detect import detect
 from modules.calculate import *
 
 
@@ -52,15 +53,15 @@ def list_ports():
         dev_port +=1
     return available_ports,working_ports,non_working_ports
 
-# list_ports()
+list_ports()
 
-def yoloDetectStart():
+def yoloDetectStart(portNum):
     # W: 256 H: 192
-    capture = cv2.VideoCapture(0)
+    capture = cv2.VideoCapture(portNum)
     capture.set(cv2.CAP_PROP_FRAME_WIDTH, 640)
     capture.set(cv2.CAP_PROP_FRAME_HEIGHT, 480)
     # 사용자 설정
-    pt = "modules/yolo/weights/2_small.pt"
+    pt = "modules/yolov5/weights/2_small.pt"
     device_mode = ""
     conf = 0.7
     # 전역 변수
@@ -132,8 +133,7 @@ def yoloDetectStart():
     capture.release()
     cv2.destroyAllWindows()
 
-
-
+# yoloDetectStart(1)
 
 def createApp() -> FastAPI:
     app = FastAPI()
@@ -161,6 +161,7 @@ app.add_middleware(
 app.include_router(TempHumidityRouter, prefix="/api/temperature-humidity")
 app.include_router(UtilRouter, prefix="/api/util")
 app.include_router(StreamRouter, prefix="/api/stream")
+app.include_router(AuthRouter, prefix="/api/auth")
 
 
 @app.on_event("startup")

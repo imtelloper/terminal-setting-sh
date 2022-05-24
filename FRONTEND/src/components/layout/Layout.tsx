@@ -8,8 +8,7 @@ const Layout = ({children}) => (
     <div id="navContainer">
         <VerticalNav/>
         <div className="rightContentContainer">
-            <div className="horizontalNavContainer"><HorizontalNav/>
-            </div>
+            <div className="horizontalNavContainer"><HorizontalNav/></div>
             <div className="contentContainer">{children}</div>
         </div>
         <Footer/>

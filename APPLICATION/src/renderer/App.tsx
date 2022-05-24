@@ -6,19 +6,20 @@ import {
 } from 'react-router-dom';
 import '../style/App.scss';
 import { useEffect } from 'react';
-import Main from './Main';
-import Setting from './SettingPage';
-import DataGraph from './DataGraph';
-import SWRDevtools from "@jjordy/swr-devtools";
+import MainPage from '../pages/MainPage';
+import SettingPage from '../pages/SettingPage';
+import ObservePage from "../pages/ObservePage";
+import LoginPage from "../pages/LoginPage";
 
 const Hello = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
     setTimeout(() => {
-      navigate('/main');
-    }, 1500);
+      navigate('/login');
+    }, 300);
   }, []);
+
   return (
     <>
       <div className="circleContainer">
@@ -61,15 +62,14 @@ const Hello = () => {
 
 export default function App() {
   return (
-    <SWRDevtools>
-      <Router>
-        <Routes>
-          <Route path="/" element={<Hello />} />
-          <Route path="/main" element={<Main />} />
-          <Route path="/setting" element={<Setting />} />
-          <Route path="/dataGraph" element={<DataGraph />} />
-        </Routes>
-      </Router>
-    </SWRDevtools>
+    <Router>
+      <Routes>
+        <Route path="/" element={<Hello />} />
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/main" element={<MainPage />} />
+        <Route path="/observe" element={<ObservePage />} />
+        <Route path="/setting" element={<SettingPage />} />
+      </Routes>
+    </Router>
   );
 }

@@ -20,7 +20,7 @@ let mainWindow: BrowserWindow | null = null;
 const log = require('electron-log');
 
 const NOTIFICATION_TITLE = 'Basic Notification';
-const NOTIFICATION_BODY = 'Notification from the Main process';
+const NOTIFICATION_BODY = 'Notification from the MainPage process';
 
 function showNotification(text) {
   new Notification({ title: text, body: text }).show();
@@ -42,17 +42,16 @@ ipcMain.handle('ipc-example', async (event, arg) => {
 
 ipcMain.handle('get-ip', async (event, arg) => {
   console.log('get-ip handle!!!!!!!!!!!!!!!!!');
-  const ip:Promise<any> = new Promise((resolve, reject) => {
-      http.get({ 'host': 'api.ipify.org', 'port': 80, 'path': '/' }, (resp) => {
-        resp.on('data', (ip) => {
-          console.log('My public IP address is: ' + ip);
-          resolve(ip.toString());
-        });
+  const ip: Promise<any> = new Promise((resolve, reject) => {
+    http.get({ host: 'api.ipify.org', port: 80, path: '/' }, (resp) => {
+      resp.on('data', (ip) => {
+        console.log(`My public IP address is: ${ip}`);
+        resolve(ip.toString());
       });
     });
+  });
 
-  await ip.then(res => {
-
+  await ip.then((res) => {
     console.log('maybe', res);
   });
   return ip;
@@ -98,16 +97,21 @@ const createWindow = async () => {
     webPreferences: {
       preload: app.isPackaged
         ? path.join(__dirname, 'preload.js')
-        : path.join(__dirname, '../../.erb/dll/preload.js')
-    }
+        : path.join(__dirname, '../../.erb/dll/preload.js'),
+    },
   });
+
+  // mainWindow.maximize();
+  // mainWindow.setFullScreen(!mainWindow.isFullScreen());
+
   mainWindow.loadURL(resolveHtmlPath('index.html'));
   mainWindow.on('ready-to-show', () => {
     if (!mainWindow) throw new Error('"mainWindow" is not defined');
     process.env.START_MINIMIZED ? mainWindow.minimize() : mainWindow.show();
     log.warn('Test Message : Some problem appears');
   });
-  mainWindow.on('closed', () => mainWindow = null);
+
+  mainWindow.on('closed', () => (mainWindow = null));
   const menuBuilder = new MenuBuilder(mainWindow);
   menuBuilder.buildMenu();
   mainWindow.webContents.setWindowOpenHandler((edata) => {

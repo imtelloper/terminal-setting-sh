@@ -1,0 +1,40 @@
+div.observeContainer {
+  width: 100%;
+  height: 100%;
+  border-radius: 20px;
+  display: flex;
+  justify-items: center;
+  flex-direction: column;
+  overflow: hidden;
+  box-shadow: 0 20px 20px -4px rgba(0, 0, 0, 0.2);
+
+  div.iframeContainer{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    align-content: flex-start;
+    flex-direction: row;
+    background-color: #8e7cff;
+
+    div.iframeBox{
+      position: relative;
+      display: flex;
+      border: 5px solid palevioletred;
+      width: 1024px;
+      height: 768px;
+      canvas.polygonCanvas{
+        position: absolute;
+        z-index: 2;
+        border: 4px solid #ffffff;
+      }
+      iframe{
+        position: absolute;
+        border: 1px solid red;
+        z-index: 1;
+        width: 100%;
+        max-width: 1024px;
+        min-height: 768px;
+      }
+    }
+  }
+}

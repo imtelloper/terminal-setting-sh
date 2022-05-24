@@ -5,38 +5,39 @@ import numpy as np
 from shapely.geometry import Point, Polygon
 
 GREEN = (0,255,0)
-RED = (255,0,0)
-BLUE = (0,0,255)
+RED = (0,0,255)
+BLUE = (255,0,0)
 
 
 def calculate_human(cam, x1, y1, x2, y2, w, h, unit_num, rois):
     point_in_poly, human_box = [], []
     # 사람 영역 계산
-    unit_x, unit_y = int(w/unit_num), int(h/unit_num)
-    for ix in range(unit_num+1):
-        for iy in range(unit_num+1):
-            hx, hy = int((unit_x*ix)+x1), int((unit_y*iy)+y1)
-            human_box.append((hx,hy))      
-    
-    # temp = human_temp(cam, x1, y1, x2, y2)
-    if len(rois)>0:
+    unit_x, unit_y = int(w / unit_num), int(h / unit_num)
+    for ix in range(unit_num + 1):
+        for iy in range(unit_num + 1):
+            hx, hy = int((unit_x * ix) + x1), int((unit_y * iy) + y1)
+            human_box.append((hx, hy))
+
+            # temp = human_temp(cam, x1, y1, x2, y2)
+    if rois:
+        rois = list((np.array(rois) / 4).round(0))
         for human_roi in human_box:
             human_point = Point(human_roi)
             for roi in rois:
                 poly = Polygon(roi)
                 point_in_poly.append(human_point.within(poly))
-        # draw rectangle   
+        # draw rectangle
         if True in point_in_poly:
             # cv2.putText(cam, temp, (x1, y1-8), cv2.FONT_HERSHEY_SIMPLEX, 0.7, RED, 2)
-            cv2.rectangle(cam, (x1,y1), (x2,y2), RED, 3)
+            cv2.rectangle(cam, (x1, y1), (x2, y2), RED, 2)
             warning_signal = 1
         else:
             # cv2.putText(cam, temp, (x1, y1-10), cv2.FONT_HERSHEY_SIMPLEX, 0.7, GREEN, 2)
-            cv2.rectangle(cam, (x1,y1), (x2,y2), GREEN, 3)
+            cv2.rectangle(cam, (x1, y1), (x2, y2), GREEN, 2)
             warning_signal = 0
     else:
         # cv2.putText(cam, temp, (x1, y1-10), cv2.FONT_HERSHEY_SIMPLEX, 0.9, GREEN, 2)
-        cv2.rectangle(cam, (x1,y1), (x2,y2), GREEN, 3)
+        cv2.rectangle(cam, (x1, y1), (x2, y2), GREEN, 2)
         warning_signal = 0
 
     return warning_signal, cam

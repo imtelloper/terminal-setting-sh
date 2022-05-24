@@ -21,10 +21,10 @@ import yaml
 from PIL import Image
 from torch.cuda import amp
 
-from modules.yolo.utils.datasets import exif_transpose, letterbox
-from modules.yolo.utils.general import (LOGGER, check_requirements, check_suffix, check_version, colorstr, increment_path, make_divisible, non_max_suppression, scale_coords, xywh2xyxy, xyxy2xywh)
-from modules.yolo.utils.plots import Annotator, colors, save_one_box
-from modules.yolo.utils.torch_utils import copy_attr, time_sync
+from modules.yolov5.utils.datasets import exif_transpose, letterbox
+from modules.yolov5.utils.general import (LOGGER, check_requirements, check_suffix, check_version, colorstr, increment_path, make_divisible, non_max_suppression, scale_coords, xywh2xyxy, xyxy2xywh)
+from modules.yolov5.utils.plots import Annotator, colors, save_one_box
+from modules.yolov5.utils.torch_utils import copy_attr, time_sync
 
 
 def autopad(k, p=None):  # kernel, padding
@@ -289,7 +289,7 @@ class DetectMultiBackend(nn.Module):
         #   TensorFlow GraphDef:            *.pb
         #   TensorFlow Lite:                *.tflite
         #   TensorFlow Edge TPU:            *_edgetpu.tflite
-        from modules.yolo.models.experimental import attempt_download, attempt_load  # scoped to avoid circular import
+        from modules.yolov5.models.experimental import attempt_download, attempt_load  # scoped to avoid circular import
 
         super().__init__()
         w = str(weights[0] if isinstance(weights, list) else weights)
@@ -464,7 +464,7 @@ class DetectMultiBackend(nn.Module):
     @staticmethod
     def model_type(p='path/to/model.pt'):
         # Return model type from model path, i.e. path='path/to/model.onnx' -> type=onnx
-        from modules.yolo.export import export_formats
+        from modules.yolov5.export import export_formats
         suffixes = list(export_formats().Suffix) + ['.xml']  # export suffixes
         check_suffix(p, suffixes)  # checks
         p = Path(p).name  # eliminate trailing separators

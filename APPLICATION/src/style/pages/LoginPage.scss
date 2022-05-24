@@ -1,0 +1,40 @@
+div.loginContainer{
+  width: 1240px;
+  height: 600px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  div.loginBox{
+    padding: 40px;
+    width: 500px;
+    font-size: 30px;
+    font-weight: bold;
+    border: 1px solid #292929;
+    div.inputLoginBox{
+      margin-top: 20px;
+      display: flex;
+      flex-direction: column;
+      input{
+        margin-bottom: 10px;
+      }
+    }
+    div.loginBtnBox{
+      width: 100%;
+      height: 100%;
+      display: flex;
+      justify-content: flex-end;
+      flex-direction: row;
+      margin-top: 30px;
+      button{
+        font-size: 18px;
+        padding: 5px;
+        border-radius: 5px;
+        cursor: pointer;
+        border: none;
+        background-color: #292929;
+        color: white;
+      }
+    }
+  }
+}

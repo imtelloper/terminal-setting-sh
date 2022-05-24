@@ -6,6 +6,10 @@ module.exports = {
     'import/no-unresolved': 'error',
     // Since React 17 and typescript 4.1 you can safely disable the rule
     'react/react-in-jsx-scope': 'off',
+    'react/button-has-type': 'off',
+    '@typescript-eslint/ban-ts-comment': 'off',
+    'no-restricted-syntax': 'off',
+    'no-return-assign': 'off',
   },
   parserOptions: {
     ecmaVersion: 2020,
@@ -25,6 +29,7 @@ module.exports = {
     },
     'import/parsers': {
       '@typescript-eslint/parser': ['.ts', '.tsx'],
+
     },
   },
 };
