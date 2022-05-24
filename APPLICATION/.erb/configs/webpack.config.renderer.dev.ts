@@ -171,7 +171,7 @@ const configuration: webpack.Configuration = {
         .on('close', (code: number) => process.exit(code!))
         .on('error', (spawnError) => console.error(spawnError));
 
-      console.log('Starting Main Process...');
+      console.log('Starting MainPage Process...');
       spawn('npm', ['run', 'start:main'], {
         shell: true,
         stdio: 'inherit',

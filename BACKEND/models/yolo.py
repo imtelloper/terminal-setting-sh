@@ -3,7 +3,7 @@
 YOLO-specific modules
 
 Usage:
-    $ python path/to/models/yolo.py --cfg yolov5s.yaml
+    $ python path/to/models/yolov5.py --cfg yolov5s.yaml
 """
 
 import argparse
@@ -17,12 +17,12 @@ if str(ROOT) not in sys.path:
     sys.path.append(str(ROOT))  # add ROOT to PATH
 # ROOT = ROOT.relative_to(Path.cwd())  # relative
 
-from modules.yolo.models.common import *
-from modules.yolo.models.experimental import *
-from modules.yolo.utils.autoanchor import check_anchor_order
-from modules.yolo.utils.general import LOGGER, check_version, check_yaml, make_divisible, print_args
-from modules.yolo.utils.plots import feature_visualization
-from modules.yolo.utils.torch_utils import fuse_conv_and_bn, initialize_weights, model_info, scale_img, select_device, time_sync
+from modules.yolov5.models.common import *
+from modules.yolov5.models.experimental import *
+from modules.yolov5.utils.autoanchor import check_anchor_order
+from modules.yolov5.utils.general import LOGGER, check_version, check_yaml, make_divisible, print_args
+from modules.yolov5.utils.plots import feature_visualization
+from modules.yolov5.utils.torch_utils import fuse_conv_and_bn, initialize_weights, model_info, scale_img, select_device, time_sync
 
 try:
     import thop  # for FLOPs computation
@@ -299,7 +299,7 @@ if __name__ == '__main__':
     parser.add_argument('--cfg', type=str, default='yolov5s.yaml', help='model.yaml')
     parser.add_argument('--device', default='', help='cuda device, i.e. 0 or 0,1,2,3 or cpu')
     parser.add_argument('--profile', action='store_true', help='profile model speed')
-    parser.add_argument('--test', action='store_true', help='test all yolo*.yaml')
+    parser.add_argument('--test', action='store_true', help='test all yolov5*.yaml')
     opt = parser.parse_args()
     opt.cfg = check_yaml(opt.cfg)  # check YAML
     print_args(FILE.stem, opt)
@@ -316,7 +316,7 @@ if __name__ == '__main__':
 
     # Test all models
     if opt.test:
-        for cfg in Path(ROOT / 'models').rglob('yolo*.yaml'):
+        for cfg in Path(ROOT / 'models').rglob('yolov5*.yaml'):
             try:
                 _ = Model(cfg)
             except Exception as e:
