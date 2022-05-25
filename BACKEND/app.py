@@ -58,7 +58,7 @@ def list_ports():
         dev_port +=1
     return available_ports,working_ports,non_working_ports
 
-list_ports()
+# list_ports()
 
 def yoloDetectStart(portNum):
     # W: 256 H: 192
@@ -152,12 +152,13 @@ def yoloDetectStart(portNum):
 # speak("안녕하세요 호호호")
 
 
-s = gTTS("Sample Text")
-s.save('sample.mp3')
-playsound('sample.mp3')
-
+# s = gTTS("Sample Text")
+# s.save('sample.mp3')
+# playsound('sample.mp3')
+#
 
 # yoloDetectStart(1)
+
 
 def createApp() -> FastAPI:
     app = FastAPI()
@@ -168,7 +169,8 @@ app = createApp()
 
 # origins = [
 #     "http://localhost",
-#     "http://localhost:8080",
+#     "http://127.0.0.1",
+    # "http://localhost:8080",
 # ]
 
 origins = ["*"]

@@ -10,6 +10,9 @@ module.exports = {
     '@typescript-eslint/ban-ts-comment': 'off',
     'no-restricted-syntax': 'off',
     'no-return-assign': 'off',
+    'promise/always-return': 'off',
+    'click-events-have-key-events': 'off',
+    'import/order': 'off',
   },
   parserOptions: {
     ecmaVersion: 2020,

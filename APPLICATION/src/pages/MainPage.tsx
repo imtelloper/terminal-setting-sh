@@ -1,7 +1,7 @@
 import '../style/pages/MainPage.scss';
 import { useNavigate } from 'react-router-dom';
-import CraneInfo from '../components/CraneInfo';
 import CurrentTime from '../components/CurrentTime';
+import AreaInfo from '../components/AreaInfo';
 
 const MainPage = () => {
   const navigate = useNavigate();
@@ -24,7 +24,7 @@ const MainPage = () => {
         </button>
       </div>
       <CurrentTime />
-      <CraneInfo />
+      <AreaInfo />
     </div>
   );
 };

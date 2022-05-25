@@ -28,3 +28,7 @@ starlette~=0.17.1
 config~=0.5.1
 bcrypt~=3.2.0
 jose~=1.0.0
+python-multipart
+SpeechRecognition
+gtts
+playsound

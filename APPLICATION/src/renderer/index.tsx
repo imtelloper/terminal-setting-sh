@@ -1,7 +1,12 @@
-import { render } from 'react-dom';
+import axios from 'axios';
+import * as ReactDOM from 'react-dom/client';
 import App from './App';
 
-render(<App />, document.getElementById('root'));
+axios.defaults.baseURL = 'http://127.0.0.1:8000';
+axios.defaults.withCredentials = true;
+
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(<App />);
 
 /* 3 */
 window.electron.ipcRenderer.once('ipc-example', (arg) => {

@@ -227,6 +227,7 @@
     "webpack-merge": "^5.8.0"
   },
   "dependencies": {
+    "@emotion/react": "^11.9.0",
     "@jjordy/swr-devtools": "^2.2.0",
     "@nivo/core": "^0.79.0",
     "@nivo/line": "^0.79.1",

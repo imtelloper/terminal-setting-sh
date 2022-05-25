@@ -1,7 +1,5 @@
 import '../style/components/CurrentTime.scss';
-import { useEffect } from 'react';
 
-// @ts-ignore
 const CurrentTime = () => {
   const today = new Date();
 
@@ -9,21 +7,15 @@ const CurrentTime = () => {
     year: 'numeric',
     month: 'long',
     day: 'numeric',
+  });
+
+  const todayDay = today.toLocaleDateString('ko-KR', {
+    weekday: 'long',
     hour: '2-digit',
     minute: '2-digit',
     second: '2-digit',
   });
 
-  const todayDay = today.toLocaleDateString('ko-KR', {
-    weekday: 'long',
-  });
-
-  useEffect(() => {
-    setInterval(todayDate, 1000);
-    return () => {
-      setInterval(todayDate, 1000);
-    };
-  }, []);
 
   return (
     <div className="currentTimeContainer">
@@ -34,5 +26,4 @@ const CurrentTime = () => {
   );
 };
 
-// @ts-ignore
 export default CurrentTime;
