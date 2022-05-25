@@ -58,39 +58,28 @@ const LoginPage = () => {
   };
 
   const setUserInfo = () => {
+    if(!sessionStorage.getItem('authToken')) return
     Api.login
       .getUserInfo(sessionStorage.getItem('authToken'))
       .then((res) => {
         console.log('Api.login.getUserInfo', res);
-        setSwrState({ ...swrState, user: { email: res.email } });
+        setSwrState({ ...swrState, user: { email: res?.email } });
       })
       .catch((err) => console.error(err));
   };
 
+  // eslint-disable-next-line consistent-return
   const login = () => {
-    if (!inputState.emailValid) {
-      window.alert('아이디가 올바르지 않습니다.');
-      return;
-    }
-    if (!inputState.pwValid) {
-      window.alert('비밀번호가 올바르지 않습니다.');
-      return;
-    }
-    if (!inputState.email) {
-      alert('이메일을 입력해주세요');
-      return;
-    }
-    if (!inputState.pw) {
-      alert('비밀번호를 입력해주세요');
-    }
+    if (!inputState.emailValid) return alert('아이디가 올바르지 않습니다.');
+    if (!inputState.pwValid) return alert('비밀번호가 올바르지 않습니다.');
+    if (!inputState.email) return alert('이메일을 입력해주세요');
+    if (!inputState.pw) return alert('비밀번호를 입력해주세요');
+
     /* 로그인 */
     Api.login
       .loginAndGetToken(inputState)
       .then((res) => {
-        console.log(res);
         if (res) sessionStorage.setItem('authToken', res.access_token);
-        console.log(sessionStorage.getItem('authToken'));
-
         setUserInfo();
       })
       .catch((err) => console.error(err));
@@ -104,6 +93,7 @@ const LoginPage = () => {
 
   useEffect(() => {
     console.log('swrState', swrState);
+    // eslint-disable-next-line @typescript-eslint/no-unused-expressions
     swrState?.user?.email && navigate('/main');
   }, [swrState]);
 

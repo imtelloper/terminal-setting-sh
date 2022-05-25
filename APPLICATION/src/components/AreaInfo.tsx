@@ -14,6 +14,7 @@ type AreaCard = {
   alrmColor: string;
   alarmMessage: string;
 };
+
 const AreaInfo = () => {
   const navigate = useNavigate();
   const [areaCardsState, setAreaCardsState] = useState<Array<AreaCard>>([
@@ -108,6 +109,7 @@ const AreaInfo = () => {
       alarmMessage: '작업자 위험 반경 진입!',
     },
   ]);
+
   let count = 20;
   window.onscroll = (e) => {
     // console.log(window.innerHeight, window.scrollY, document.body.offsetHeight);
@@ -133,12 +135,14 @@ const AreaInfo = () => {
       }, 1000);
     }
   };
+
   const goObservePage = (e) => {
     const target = e.currentTarget;
     const dType = target.getAttribute('datatype');
     console.log('dType', dType);
     navigate('/observe');
   };
+
   const areaCardsMap = areaCardsState.map((card, idx) => (
     <div
       className="areaCardBox"

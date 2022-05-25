@@ -13,6 +13,7 @@ module.exports = {
     'promise/always-return': 'off',
     'click-events-have-key-events': 'off',
     'import/order': 'off',
+    '@typescript-eslint/no-unused-expressions': 'off',
   },
   parserOptions: {
     ecmaVersion: 2020,
