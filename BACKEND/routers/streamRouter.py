@@ -29,6 +29,5 @@ async def streamVideoAreaSet(coordinate):
 
     print('streamVideoAreaSet 2data :', coordinates)
     return StreamingResponse(service.video_streaming(coordinates), media_type="multipart/x-mixed-replace; boundary=frame")
-    # return 'hi'
 
 

@@ -4,7 +4,7 @@ import '../style/pages/ObservePage.scss';
 
 const ObservePage = () => {
   const [streamUrl, setStreamUrl] = useState(
-    'http://127.0.0.1:8002/api/stream/area/456,307,658,329,536,486,332,469'
+    'http://127.0.0.1:8000/api/stream/area/456,307,658,329,536,486,332,469'
   );
 
   const [pointsState, setPointsState] = useState({
@@ -82,12 +82,12 @@ const ObservePage = () => {
           console.log('test');
           console.log('pointsState', pointsState);
           setStreamUrl(
-            `http://127.0.0.1:8002/api/stream/area/${pointsState.coordinate2.join(
+            `http://127.0.0.1:8000/api/stream/area/${pointsState.coordinate1.join(
               ','
             )}`
           );
           console.log(
-            `http://127.0.0.1:8002/api/stream/area/${pointsState.coordinate2.join(
+            `http://127.0.0.1:8000/api/stream/area/${pointsState.coordinate1.join(
               ','
             )}`
           );
@@ -115,30 +115,30 @@ const ObservePage = () => {
           />
           <iframe
             title="stream1"
-            // src={streamUrl ?? 'http://127.0.0.1:8002/api/stream/area/'}
-            src="http://127.0.0.1:8000/api/stream/"
+            src={streamUrl ?? 'http://127.0.0.1:8000/api/stream/area/'}
+            // src="http://127.0.0.1:8000/api/stream/"
             width={1024}
             height={768}
           />
         </div>
-        <div className="iframeBox">
-          <canvas
-            className="polygonCanvas polygonCanvas2"
-            width={1024}
-            height={768}
-            onClick={canvasClick}
-            typeof="coordinate2"
-          />
-          <iframe
-            title="stream2"
-            src={
-              streamUrl ??
-              'http://127.0.0.1:8002/api/stream/area/456,307,658,329,536,486,332,469'
-            }
-            width={1024}
-            height={768}
-          />
-        </div>
+        {/* <div className="iframeBox"> */}
+        {/*   <canvas */}
+        {/*     className="polygonCanvas polygonCanvas2" */}
+        {/*     width={1024} */}
+        {/*     height={768} */}
+        {/*     onClick={canvasClick} */}
+        {/*     typeof="coordinate2" */}
+        {/*   /> */}
+        {/*   <iframe */}
+        {/*     title="stream2" */}
+        {/*     src={ */}
+        {/*       streamUrl ?? */}
+        {/*       'http://127.0.0.1:8002/api/stream/area/456,307,658,329,536,486,332,469' */}
+        {/*     } */}
+        {/*     width={1024} */}
+        {/*     height={768} */}
+        {/*   /> */}
+        {/* </div> */}
       </div>
     </div>
   );
