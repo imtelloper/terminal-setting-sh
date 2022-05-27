@@ -1,0 +1,7 @@
+# .env 파일 필요
+
+# sample
+MONGO_ADDRESS=
+JWT_SECRET=ABCD1234!
+JWT_ALGORITHM=HS256
+TOKEN_URL=/api-auth/token
