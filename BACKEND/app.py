@@ -1,7 +1,9 @@
+import glob
 from typing import Optional
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
+from buzzer import *
 from database.mongoDB import *
 from routers.tempHumidityRouter import router as TempHumidityRouter
 from routers.utilRouter import router as UtilRouter
@@ -13,7 +15,6 @@ import os
 import logging
 import logging.config
 import cv2
-
 import traceback
 import warnings
 warnings.filterwarnings( 'ignore' )
@@ -24,6 +25,9 @@ from gtts import gTTS
 import os
 import time
 import playsound
+import minimalmodbus as minimalmodbus
+import serial
+
 
 
 # load_dotenv(dotenv_path=f".{os.getenv('DOT_ENV', 'test')}.env")
@@ -159,6 +163,114 @@ def yoloDetectStart(portNum):
 
 # yoloDetectStart(1)
 
+
+# try:
+#     print('########## ser start')
+#     ser = serial.Serial("/dev/ttyS0", 9600)   #specify your port and braudrate
+#     print('ser :',ser)
+#     data = ser.read()                         #read byte from serial device
+#     print('0')
+#     print(data)                               #display the read byte
+# except Exception as e:
+#     print(e)
+# print('ser END')
+print('$port : ', glob.glob('/dev/ttyS0'))
+s = serial.Serial(glob.glob('/dev/ttyS0')[0])
+print('sssssssss : ', s)
+ser_stx = chr(0x02)
+ser_etx = chr(0x03)
+ser_on = chr(0x31)
+ser_off = chr(0x30)
+line = ''
+port = '/dev/ttyS0'
+baud = 9600
+open_serial = serial.Serial(port, baud, timeout = 1)
+def serial_send_on(opend_ser):
+    strcmd = ser_stx + ser_on + ser_etx
+    print('send data = ON[' + strcmd + ']')
+    opend_ser.write(strcmd.encode())
+
+def serial_send_off(opend_ser):
+    strcmd = ser_stx + ser_off + ser_etx
+    print('send data = OFF[' + strcmd + ']')
+    opend_ser.write(strcmd.encode())
+
+serial_send_on(open_serial)
+serial_send_off(open_serial)
+red_buzzer()
+
+
+try:
+    print('########## minimalmodbus start')
+    instrument = minimalmodbus.Instrument("/dev/ttyS0", 1, 'rtu')
+    instrument.serial.baudrate = 9600  # Baud
+    # instrument.serial.bytesize = 8
+    # instrument.serial.parity = serial.PARITY_NONE
+    # instrument.serial.stopbits = 1
+    # instrument.serial.timeout = 1  # seconds
+    # temperature = instrument.read_register(0, 2, functioncode=int('0x04', 16))
+    print('instrument : ',instrument)
+except Exception as e:
+    print(e)
+
+
+
+# instrument = minimalmodbus.Instrument('/dev/ttyUSB0', 1, minimalmodbus.MODE_ASCII)
+# print('instrument : ',instrument)
+
+# instrument = minimalmodbus.Instrument("/dev/tty.usbserial-AQ00WOQH", 1, 'rtu')
+# print('instrument : ',instrument)
+
+# instrument = minimalmodbus.Instrument('/dev/ttyUSB2', 1, minimalmodbus.MODE_ASCII)
+# print('instrument : ',instrument)
+
+# instrument = minimalmodbus.Instrument('/dev/ttyUSB3', 1, minimalmodbus.MODE_ASCII)
+# print('instrument : ',instrument)
+
+# instrument = minimalmodbus.Instrument('/dev/ttyUSB4', 1, minimalmodbus.MODE_ASCII)
+# print('instrument : ',instrument)
+
+
+# instrument.serial.baudrate = 9600  # Baud
+# instrument.serial.bytesize = 8
+# instrument.serial.parity = serial.PARITY_NONE
+# instrument.serial.stopbits = 1
+# instrument.serial.timeout = 1  # seconds
+# temperature = instrument.read_register(0, 2, functioncode=int('0x04', 16))
+# humidity = instrument.read_register(1, 2, functioncode=int('0x04', 16))
+
+def serial_ports():
+    print('#############################################')
+    print('serial_ports')
+    if sys.platform.startswith('win'):
+        print('window')
+        ports = ['COM%s' % (i + 1) for i in range(256)]
+    elif sys.platform.startswith('linux') or sys.platform.startswith('cygwin'):
+        # this excludes your current terminal "/dev/tty"
+        print('linux')
+        ports = glob.glob('/dev/ttyU[A-Za-z]*')
+    elif sys.platform.startswith('darwin'):
+        print('darwin')
+        ports = glob.glob('/dev/tty.*')
+    else:
+        raise EnvironmentError('Unsupported platform')
+
+    result = []
+    print('ports :',ports)
+    for port in ports:
+        try:
+            print('port : ',port)
+            s = serial.Serial(port)
+
+            s.close()
+            result.append(port)
+        except (OSError, serial.SerialException):
+            pass
+
+    print('result :',result)
+    return result
+
+serial_ports()
 
 def createApp() -> FastAPI:
     app = FastAPI()

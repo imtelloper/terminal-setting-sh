@@ -1,5 +1,9 @@
+import time
+
 import cv2
 import traceback
+
+import numpy as np
 
 from modules.calculate import calculate_human
 from modules.yolov5.detect import detect
@@ -7,7 +11,7 @@ from modules.yolov5.detect import detect
 
 class StreamService:
     def __init__(self):
-        self.videoNum = 0
+        self.videoNum = 2
 
     def video_streaming(self, coordinates=[]):
         print('steam video start : ', coordinates)
@@ -51,8 +55,18 @@ class StreamService:
         result_img=""
 
         while cv2.waitKey(33) < 0:
+            time.sleep(0.1)
             ret, frame = capture.read()
+            print('###########################################')
+            # print('frame : ', frame)
+            # print('type frame : ', type(frame))
+            if frame is None: return
             img = frame.copy()
+            # img = img.astype(np.unit8)
+            img = np.array(img) # hoon
+            img = cv2.cvtColor(img, cv2.COLOR_RGB2BGR)
+            img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+
             img = cv2.resize(img, dsize=(256,192), interpolation=cv2.INTER_AREA)
             if ret:
                 humans = []
@@ -88,6 +102,7 @@ class StreamService:
                                     x2, y2 = x1 + w, y1 + h
                                     warn_sig, result_img = calculate_human(img, x1, y1, x2, y2, w, h, unit_num, rois)
 
+                    result_img = np.array(result_img)  # hoon
                     result_img = cv2.resize(result_img, dsize=(1024,768), interpolation=cv2.INTER_CUBIC)
                     ret, buffer = cv2.imencode('.jpg', result_img)
                     # ret, buffer = cv2.imencode('.webp', result_img)
@@ -98,4 +113,4 @@ class StreamService:
 
                 except Exception as e:
                     print('예외가 발생했습니다.', e)
-                    # print(traceback.format_exc())
+                    print(traceback.format_exc())
