@@ -36,33 +36,7 @@ logger = logging.getLogger(__name__)
 
 print('app start')
 
-def list_ports():
-    """
-    Test the ports and returns a tuple with the available ports and the ones that are working.
-    """
-    non_working_ports = []
-    dev_port = 0
-    working_ports = []
-    available_ports = []
-    while len(non_working_ports) < 6: # if there are more than 5 non working ports stop the testing.
-        camera = cv2.VideoCapture(dev_port)
-        if not camera.isOpened():
-            non_working_ports.append(dev_port)
-            print("Port %s is not working." %dev_port)
-        else:
-            is_reading, img = camera.read()
-            w = camera.get(3)
-            h = camera.get(4)
-            if is_reading:
-                print("Port %s is working and reads images (%s x %s)" %(dev_port,h,w))
-                working_ports.append(dev_port)
-            else:
-                print("Port %s for camera ( %s x %s) is present but does not reads." %(dev_port,h,w))
-                available_ports.append(dev_port)
-        dev_port +=1
-    return available_ports,working_ports,non_working_ports
 
-# list_ports()
 
 def yoloDetectStart(portNum):
     # W: 256 H: 192
@@ -174,44 +148,44 @@ def yoloDetectStart(portNum):
 # except Exception as e:
 #     print(e)
 # print('ser END')
-print('$port : ', glob.glob('/dev/ttyS0'))
-s = serial.Serial(glob.glob('/dev/ttyS0')[0])
-print('sssssssss : ', s)
-ser_stx = chr(0x02)
-ser_etx = chr(0x03)
-ser_on = chr(0x31)
-ser_off = chr(0x30)
-line = ''
-port = '/dev/ttyS0'
-baud = 9600
-open_serial = serial.Serial(port, baud, timeout = 1)
-def serial_send_on(opend_ser):
-    strcmd = ser_stx + ser_on + ser_etx
-    print('send data = ON[' + strcmd + ']')
-    opend_ser.write(strcmd.encode())
-
-def serial_send_off(opend_ser):
-    strcmd = ser_stx + ser_off + ser_etx
-    print('send data = OFF[' + strcmd + ']')
-    opend_ser.write(strcmd.encode())
-
-serial_send_on(open_serial)
-serial_send_off(open_serial)
-red_buzzer()
-
-
-try:
-    print('########## minimalmodbus start')
-    instrument = minimalmodbus.Instrument("/dev/ttyS0", 1, 'rtu')
-    instrument.serial.baudrate = 9600  # Baud
-    # instrument.serial.bytesize = 8
-    # instrument.serial.parity = serial.PARITY_NONE
-    # instrument.serial.stopbits = 1
-    # instrument.serial.timeout = 1  # seconds
-    # temperature = instrument.read_register(0, 2, functioncode=int('0x04', 16))
-    print('instrument : ',instrument)
-except Exception as e:
-    print(e)
+# print('$port : ', glob.glob('/dev/ttyS0'))
+# s = serial.Serial(glob.glob('/dev/ttyS0')[0])
+# print('sssssssss : ', s)
+# ser_stx = chr(0x02)
+# ser_etx = chr(0x03)
+# ser_on = chr(0x31)
+# ser_off = chr(0x30)
+# line = ''
+# port = '/dev/ttyS0'
+# baud = 9600
+# open_serial = serial.Serial(port, baud, timeout = 1)
+# def serial_send_on(opend_ser):
+#     strcmd = ser_stx + ser_on + ser_etx
+#     print('send data = ON[' + strcmd + ']')
+#     opend_ser.write(strcmd.encode())
+#
+# def serial_send_off(opend_ser):
+#     strcmd = ser_stx + ser_off + ser_etx
+#     print('send data = OFF[' + strcmd + ']')
+#     opend_ser.write(strcmd.encode())
+#
+# serial_send_on(open_serial)
+# serial_send_off(open_serial)
+# red_buzzer()
+#
+#
+# try:
+#     print('########## minimalmodbus start')
+#     instrument = minimalmodbus.Instrument("/dev/ttyS0", 1, 'rtu')
+#     instrument.serial.baudrate = 9600  # Baud
+#     # instrument.serial.bytesize = 8
+#     # instrument.serial.parity = serial.PARITY_NONE
+#     # instrument.serial.stopbits = 1
+#     # instrument.serial.timeout = 1  # seconds
+#     # temperature = instrument.read_register(0, 2, functioncode=int('0x04', 16))
+#     print('instrument : ',instrument)
+# except Exception as e:
+#     print(e)
 
 
 
@@ -270,7 +244,7 @@ def serial_ports():
     print('result :',result)
     return result
 
-serial_ports()
+# serial_ports()
 
 def createApp() -> FastAPI:
     app = FastAPI()
