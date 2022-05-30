@@ -1,3 +1,4 @@
+import os
 import time
 
 import cv2
@@ -11,7 +12,12 @@ from modules.yolov5.detect import detect
 
 class StreamService:
     def __init__(self):
-        self.videoNum = self.list_ports()[1][0]
+        if self.list_ports()[0]:
+            self.videoNum = self.list_ports()[0][0]
+        elif self.list_ports()[1]:
+            self.videoNum = self.list_ports()[1][0]
+        else:
+            self.videoNum = 0
 
     def list_ports(self):
         """
@@ -21,15 +27,17 @@ class StreamService:
         dev_port = 0
         working_ports = []
         available_ports = []
-        while len(non_working_ports) < 6:  # if there are more than 5 non working ports stop the testing.
+        while len(non_working_ports) < 3:  # if there are more than 5 non working ports stop the testing.
             camera = cv2.VideoCapture(dev_port)
             if not camera.isOpened():
                 non_working_ports.append(dev_port)
                 print("Port %s is not working." % dev_port)
             else:
+                # print('camera.read() : ',camera.read())
                 is_reading, img = camera.read()
                 w = camera.get(3)
                 h = camera.get(4)
+                print('is_reading : ', is_reading)
                 if is_reading:
                     print("Port %s is working and reads images (%s x %s)" % (dev_port, h, w))
                     working_ports.append(dev_port)
@@ -41,9 +49,27 @@ class StreamService:
 
 
     def video_streaming(self, coordinates=[]):
+        # os.system("usb-reset -a")
         print('steam video start : ', coordinates)
+        print('self.list_ports() : ', self.list_ports())
+        print('self.videoNum : ', self.videoNum)
+        if self.list_ports()[1]:
+            print('1111111111111111111')
+            videoNum = self.list_ports()[1][0]
+            print('111111  ================================== videoNum', videoNum)
+        elif self.list_ports()[0]:
+            videoNum = self.list_ports()[0][0]
+        else:
+            print('2222222222222222222')
+            videoNum = self.videoNum
+            print('222222  ================================== videoNum', videoNum)
+
+        print('FINAL videoNum : ', videoNum)
         # W: 256 H: 192
-        capture = cv2.VideoCapture(self.videoNum)
+        capture = cv2.VideoCapture(videoNum)
+        print('capture.isOpened()',capture.isOpened())
+        # if capture.isOpened() == False:
+        #     os.system('uvicorn myapp:app --reload')
         capture.set(cv2.CAP_PROP_FRAME_WIDTH, 640)
         capture.set(cv2.CAP_PROP_FRAME_HEIGHT, 480)
 
