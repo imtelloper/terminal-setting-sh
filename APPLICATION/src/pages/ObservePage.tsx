@@ -3,6 +3,8 @@ import { flushSync } from 'react-dom';
 import '../style/pages/ObservePage.scss';
 
 const ObservePage = () => {
+  const camWidth = 512;
+  const camHeight = 384;
   const [streamUrl, setStreamUrl] = useState(
     'http://127.0.0.1:8000/api/stream/area/456,307,658,329,536,486,332,469'
   );
@@ -108,8 +110,8 @@ const ObservePage = () => {
         <div className="iframeBox">
           <canvas
             className="polygonCanvas polygonCanvas1"
-            width={1024}
-            height={768}
+            width={camWidth}
+            height={camHeight}
             onClick={canvasClick}
             typeof="coordinate1"
           />
@@ -117,28 +119,58 @@ const ObservePage = () => {
             title="stream1"
             src={streamUrl ?? 'http://127.0.0.1:8000/api/stream/area/'}
             // src="http://127.0.0.1:8000/api/stream/"
-            width={1024}
-            height={768}
+            width={camWidth}
+            height={camHeight}
           />
         </div>
-        {/* <div className="iframeBox"> */}
-        {/*   <canvas */}
-        {/*     className="polygonCanvas polygonCanvas2" */}
-        {/*     width={1024} */}
-        {/*     height={768} */}
-        {/*     onClick={canvasClick} */}
-        {/*     typeof="coordinate2" */}
-        {/*   /> */}
-        {/*   <iframe */}
-        {/*     title="stream2" */}
-        {/*     src={ */}
-        {/*       streamUrl ?? */}
-        {/*       'http://127.0.0.1:8002/api/stream/area/456,307,658,329,536,486,332,469' */}
-        {/*     } */}
-        {/*     width={1024} */}
-        {/*     height={768} */}
-        {/*   /> */}
-        {/* </div> */}
+        <div className="iframeBox">
+          <canvas
+            className="polygonCanvas polygonCanvas1"
+            width={camWidth}
+            height={camHeight}
+            onClick={canvasClick}
+            typeof="coordinate1"
+          />
+          <iframe
+            title="stream1"
+            src={streamUrl ?? 'http://127.0.0.1:8000/api/stream/area/'}
+            // src="http://127.0.0.1:8000/api/stream/"
+            width={camWidth}
+            height={camHeight}
+          />
+        </div>
+        <div className="iframeBox">
+          <canvas
+            className="polygonCanvas polygonCanvas1"
+            width={camWidth}
+            height={camHeight}
+            onClick={canvasClick}
+            typeof="coordinate1"
+          />
+          <iframe
+            title="stream1"
+            src={streamUrl ?? 'http://127.0.0.1:8000/api/stream/area/'}
+            // src="http://127.0.0.1:8000/api/stream/"
+            width={camWidth}
+            height={camHeight}
+          />
+        </div>
+        <div className="iframeBox">
+          <canvas
+            className="polygonCanvas polygonCanvas1"
+            width={camWidth}
+            height={camHeight}
+            onClick={canvasClick}
+            typeof="coordinate1"
+          />
+          <iframe
+            title="stream1"
+            src={streamUrl ?? 'http://127.0.0.1:8000/api/stream/area/'}
+            // src="http://127.0.0.1:8000/api/stream/"
+            width={camWidth}
+            height={camHeight}
+          />
+        </div>
       </div>
     </div>
   );

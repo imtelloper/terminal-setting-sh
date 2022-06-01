@@ -14,7 +14,8 @@ DB_ADDRESS = "mongodb://interx:interx%40504@{0}/admin".format("server.interxlab.
 """
 DATABASE KEYWORD
 """
-DB_NAME = "DC4F67F8"
+DB_NAME = "safety"
+# DB_NAME = "DC4F67F8"
 # DB_NAME = "testdb"
 """
 COLLECTION KEYWORD

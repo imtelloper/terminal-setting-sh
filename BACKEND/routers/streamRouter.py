@@ -31,3 +31,4 @@ async def streamVideoAreaSet(coordinate):
     return StreamingResponse(service.video_streaming(coordinates), media_type="multipart/x-mixed-replace; boundary=frame")
 
 
+

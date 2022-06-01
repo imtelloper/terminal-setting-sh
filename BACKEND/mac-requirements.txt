@@ -32,3 +32,5 @@ python-multipart
 SpeechRecognition
 gtts
 playsound
+opencv-contrib-python
+

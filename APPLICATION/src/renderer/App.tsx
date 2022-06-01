@@ -8,8 +8,8 @@ import '../style/App.scss';
 import { useEffect } from 'react';
 import MainPage from '../pages/MainPage';
 import SettingPage from '../pages/SettingPage';
-import ObservePage from "../pages/ObservePage";
-import LoginPage from "../pages/LoginPage";
+import ObservePage from '../pages/ObservePage';
+import LoginPage from '../pages/LoginPage';
 
 const Hello = () => {
   const navigate = useNavigate();

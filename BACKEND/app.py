@@ -36,8 +36,6 @@ logger = logging.getLogger(__name__)
 
 print('app start')
 
-
-
 # def speak(text):
 #     tts = gTTS(text=text, lang='ko')
 #
