@@ -10,9 +10,12 @@ from modules.yolov5.detect import detect
 class StreamService:
     def __init__(self):
         print('##############self.list_ports() : ', self.list_ports())
-        self.video = cv2.VideoCapture(self.list_ports()[1][0])
-        self.video.set(cv2.CAP_PROP_FRAME_WIDTH, 640)
-        self.video.set(cv2.CAP_PROP_FRAME_HEIGHT, 480)
+        if(self.list_ports()[1]):
+            self.video = cv2.VideoCapture(self.list_ports()[1][0])
+            self.video.set(cv2.CAP_PROP_FRAME_WIDTH, 640)
+            self.video.set(cv2.CAP_PROP_FRAME_HEIGHT, 480)
+        else:
+            self.video = cv2.VideoCapture(0)
         self.cameraOnOff = True
 
     def __del__(self):
@@ -131,6 +134,8 @@ class StreamService:
                                     x1, y1, w, h = tuple([int(_) for _ in t_bbox])
                                     x2, y2 = x1 + w, y1 + h
                                     warn_sig, result_img = calculate_human(img, x1, y1, x2, y2, w, h, unit_num, rois)
+                        else:
+                            result_img = img
 
                     print('############## len result_img : ', len(result_img))
                     if len(result_img) <= 0:
