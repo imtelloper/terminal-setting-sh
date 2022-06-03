@@ -1,6 +1,8 @@
+import NavBar from 'components/NavBar';
 import React, { useState } from 'react';
 import { flushSync } from 'react-dom';
 import '../style/pages/ObservePage.scss';
+import { BiDownload, BiExport } from 'react-icons/bi';
 
 const ObservePage = () => {
   const camWidth = 512;
@@ -78,101 +80,242 @@ const ObservePage = () => {
   };
 
   return (
-    <div id="observeContainer" className="observeContainer">
-      <button
-        onClick={() => {
-          console.log('test');
-          console.log('pointsState', pointsState);
-          setStreamUrl(
-            `http://127.0.0.1:8000/api/stream/area/${pointsState.coordinate1.join(
-              ','
-            )}`
-          );
-          console.log(
-            `http://127.0.0.1:8000/api/stream/area/${pointsState.coordinate1.join(
-              ','
-            )}`
-          );
-        }}
-      >
-        page
-      </button>
-      <button
-        onClick={() => {
-          console.log('test');
-          setStreamUrl('http://127.0.0.1:8000/api/stream/');
-        }}
-      >
-        stream
-      </button>
+    <>
+      <NavBar />
+      <div id="observeContainer" className="observeContainer">
+        <div className="leftSafetyBox">
+          <p className="SafetyTitle">H1 공장 크레인</p>
+          <input
+            className="safetyTab"
+            id="safetyTab1"
+            type="radio"
+            name="tabs"
+          />
+          {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
+          <label className="safeLabel" htmlFor="safetyTab1">
+            Cam1
+          </label>
 
-      <div className="iframeContainer">
-        <div className="iframeBox">
-          <canvas
-            className="polygonCanvas polygonCanvas1"
-            width={camWidth}
-            height={camHeight}
-            onClick={canvasClick}
-            typeof="coordinate1"
+          <input
+            className="safetyTab"
+            id="safetyTab2"
+            type="radio"
+            name="tabs"
           />
-          <iframe
-            title="stream1"
-            // src={streamUrl ?? 'http://127.0.0.1:8000/api/stream/area/'}
-            src="http://192.168.0.7:81/"
-            width={camWidth}
-            height={camHeight}
+          {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
+          <label className="safeLabel" htmlFor="safetyTab2">
+            Cam2
+          </label>
+
+          <input
+            className="safetyTab"
+            id="safetyTab3"
+            type="radio"
+            name="tabs"
           />
+          {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
+          <label className="safeLabel" htmlFor="safetyTab3">
+            Cam3
+          </label>
+
+          <input
+            className="safetyTab"
+            id="safetyTab4"
+            type="radio"
+            name="tabs"
+          />
+          {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
+          <label className="safeLabel" htmlFor="safetyTab4">
+            Cam4
+          </label>
+
+          <section id="safetyContent1">
+            <div className="safetyContentBox">
+              <div className="groupBox">
+                <span className="groupName">Group1</span>
+                <span className="saveParameter">
+                  <BiDownload />
+                  파라미터 저장
+                </span>
+                <span className="callParameter">
+                  <BiExport />
+                  파라미터 불러오기
+                </span>
+              </div>
+              <p>
+                Safety Level : <span className="safeLevel">Green</span>
+              </p>
+              <p>감지 수 : 0</p>
+              <div className="safetyBtnBox">
+                <button className="safetyBtn safetyActiveBtn">Active</button>
+                <button className="safetyBtn safetyDeleteBtn">Delete</button>
+                <button className="safetyBtn safetyResetBtn">
+                  Error Reset
+                </button>
+              </div>
+              <div className="bottomBtnBox">
+                <button className="safetyCreateBtn">생성</button>
+              </div>
+            </div>
+          </section>
+          <section id="safetyContent2">
+            <div className="safetyContentBox">
+              <div className="groupBox">
+                <span className="groupName">Group2</span>
+                <span className="saveParameter">
+                  <BiDownload />
+                  파라미터 저장
+                </span>
+                <span className="callParameter">
+                  <BiExport />
+                  파라미터 불러오기
+                </span>
+              </div>
+              <p>
+                Safety Level : <span className="safeLevel">Green</span>
+              </p>
+              <p>감지 수 : 0</p>
+              <div className="safetyBtnBox">
+                <button className="safetyBtn safetyActiveBtn">Active</button>
+                <button className="safetyBtn safetyDeleteBtn">Delete</button>
+                <button className="safetyBtn safetyResetBtn">
+                  Error Reset
+                </button>
+              </div>
+              <div className="bottomBtnBox">
+                <button className="safetyCreateBtn">생성</button>
+              </div>
+            </div>
+          </section>
+          <section id="safetyContent3">
+            <div className="safetyContentBox">
+              <div className="groupBox">
+                <span className="groupName">Group3</span>
+                <span className="saveParameter">
+                  <BiDownload />
+                  파라미터 저장
+                </span>
+                <span className="callParameter">
+                  <BiExport />
+                  파라미터 불러오기
+                </span>
+              </div>
+              <p>
+                Safety Level : <span className="safeLevel">Green</span>
+              </p>
+              <p>감지 수 : 0</p>
+              <div className="safetyBtnBox">
+                <button className="safetyBtn safetyActiveBtn">Active</button>
+                <button className="safetyBtn safetyDeleteBtn">Delete</button>
+                <button className="safetyBtn safetyResetBtn">
+                  Error Reset
+                </button>
+              </div>
+              <div className="bottomBtnBox">
+                <button className="safetyCreateBtn">생성</button>
+              </div>
+            </div>
+          </section>
+          <section id="safetyContent4">
+            <div className="safetyContentBox">
+              <div className="groupBox">
+                <span className="groupName">Group4</span>
+                <span className="saveParameter">
+                  <BiDownload />
+                  파라미터 저장
+                </span>
+                <span className="callParameter">
+                  <BiExport />
+                  파라미터 불러오기
+                </span>
+              </div>
+              <p>
+                Safety Level : <span className="safeLevel">Green</span>
+              </p>
+              <p>감지 수 : 0</p>
+              <div className="safetyBtnBox">
+                <button className="safetyBtn safetyActiveBtn">Active</button>
+                <button className="safetyBtn safetyDeleteBtn">Delete</button>
+                <button className="safetyBtn safetyResetBtn">
+                  Error Reset
+                </button>
+              </div>
+              <div className="bottomBtnBox">
+                <button className="safetyCreateBtn">생성</button>
+              </div>
+            </div>
+          </section>
         </div>
-        <div className="iframeBox">
-          <canvas
-            className="polygonCanvas polygonCanvas1"
-            width={camWidth}
-            height={camHeight}
-            onClick={canvasClick}
-            typeof="coordinate1"
-          />
-          <iframe
-            title="stream1"
-            // src={streamUrl ?? 'http://127.0.0.1:8000/api/stream/area/'}
-            src="http://192.168.0.24:81/"
-            width={camWidth}
-            height={camHeight}
-          />
+        <div className="rightSafetyBox">
+          <div className="iframeContainer">
+            <div className="iframeBox">
+              <canvas
+                className="polygonCanvas polygonCanvas1"
+                width={camWidth}
+                height={camHeight}
+                onClick={canvasClick}
+                typeof="coordinate1"
+              />
+              <iframe
+                title="stream1"
+                // src={streamUrl ?? 'http://127.0.0.1:8000/api/stream/area/'}
+                src="http://192.168.0.7:81/"
+                width={camWidth}
+                height={camHeight}
+              />
+            </div>
+            <div className="iframeBox">
+              <canvas
+                className="polygonCanvas polygonCanvas1"
+                width={camWidth}
+                height={camHeight}
+                onClick={canvasClick}
+                typeof="coordinate1"
+              />
+              <iframe
+                title="stream1"
+                // src={streamUrl ?? 'http://127.0.0.1:8000/api/stream/area/'}
+                src="http://192.168.0.24:81/"
+                width={camWidth}
+                height={camHeight}
+              />
+            </div>
+            {/* <div className="iframeBox"> */}
+            {/*   <canvas */}
+            {/*     className="polygonCanvas polygonCanvas1" */}
+            {/*     width={camWidth} */}
+            {/*     height={camHeight} */}
+            {/*     onClick={canvasClick} */}
+            {/*     typeof="coordinate1" */}
+            {/*   /> */}
+            {/*   <iframe */}
+            {/*     title="stream1" */}
+            {/*     src={streamUrl ?? 'http://127.0.0.1:8000/api/stream/area/'} */}
+            {/*     // src="http://127.0.0.1:8000/api/stream/" */}
+            {/*     width={camWidth} */}
+            {/*     height={camHeight} */}
+            {/*   /> */}
+            {/* </div> */}
+            {/* <div className="iframeBox"> */}
+            {/*   <canvas */}
+            {/*     className="polygonCanvas polygonCanvas1" */}
+            {/*     width={camWidth} */}
+            {/*     height={camHeight} */}
+            {/*     onClick={canvasClick} */}
+            {/*     typeof="coordinate1" */}
+            {/*   /> */}
+            {/*   <iframe */}
+            {/*     title="stream1" */}
+            {/*     src={streamUrl ?? 'http://127.0.0.1:8000/api/stream/area/'} */}
+            {/*     // src="http://127.0.0.1:8000/api/stream/" */}
+            {/*     width={camWidth} */}
+            {/*     height={camHeight} */}
+            {/*   /> */}
+            {/* </div> */}
+          </div>
         </div>
-        {/* <div className="iframeBox"> */}
-        {/*   <canvas */}
-        {/*     className="polygonCanvas polygonCanvas1" */}
-        {/*     width={camWidth} */}
-        {/*     height={camHeight} */}
-        {/*     onClick={canvasClick} */}
-        {/*     typeof="coordinate1" */}
-        {/*   /> */}
-        {/*   <iframe */}
-        {/*     title="stream1" */}
-        {/*     src={streamUrl ?? 'http://127.0.0.1:8000/api/stream/area/'} */}
-        {/*     // src="http://127.0.0.1:8000/api/stream/" */}
-        {/*     width={camWidth} */}
-        {/*     height={camHeight} */}
-        {/*   /> */}
-        {/* </div> */}
-        {/* <div className="iframeBox"> */}
-        {/*   <canvas */}
-        {/*     className="polygonCanvas polygonCanvas1" */}
-        {/*     width={camWidth} */}
-        {/*     height={camHeight} */}
-        {/*     onClick={canvasClick} */}
-        {/*     typeof="coordinate1" */}
-        {/*   /> */}
-        {/*   <iframe */}
-        {/*     title="stream1" */}
-        {/*     src={streamUrl ?? 'http://127.0.0.1:8000/api/stream/area/'} */}
-        {/*     // src="http://127.0.0.1:8000/api/stream/" */}
-        {/*     width={camWidth} */}
-        {/*     height={camHeight} */}
-        {/*   /> */}
-        {/* </div> */}
       </div>
-    </div>
+    </>
   );
 };
 

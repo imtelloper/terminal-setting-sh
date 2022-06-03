@@ -1,58 +1,152 @@
 $camWidth: 512px;
 $camHeight: 384px;
 div.observeContainer {
-  width: 100%;
-  height: 100%;
-  border-radius: 20px;
+  //width: 100%;
+  //height: 100%;
   display: flex;
-  justify-items: center;
-  flex-direction: column;
-  overflow: hidden;
-  box-shadow: 0 20px 20px -4px rgba(0, 0, 0, 0.2);
+  background-color: #9cccf1;
+  div.leftSafetyBox{
+    width: 540px;
+    p.SafetyTitle{
+      font-size: 30px;
+      font-weight: bold;
+    }
+    input.safetyTab{
+      display: none;
+    }
+    label.safeLabel{
+      display: inline-block;
+      margin: 0 0 -1px;
+      padding: 15px 25px;
+      font-weight: 600;
+      text-align: center;
+      color: #bbb;
+      border: 1px solid transparent;
+    }
+    label:hover {
+      color: #5940ff;
+      cursor: pointer;
+    }
+    /*input 클릭시, label 스타일*/
+    input:checked + label {
+      color: #555;
+      border: 1px solid #ddd;
+      border-top: 2px solid #5940ff;
+      border-bottom: 1px solid #ffffff;
+    }
+    section{
+      display: none;
+      div.safetyContentBox{
+        display: flex;
+        flex-direction: column;
+        div.groupBox{
+          span{
+            margin-right: 10px;
+          }
+          span.groupName{
+            font-size: 25px;
+            font-weight: bold;
+            background-color: #74f1fc;
+          }
+          span.saveParameter{
 
-  div.iframeContainer{
-    display: grid;
-    //grid-template-rows: repeat(2, 512px);
-    //grid-template-columns: repeat(2, 512px);
-    grid-template-rows: repeat(2, 1fr);
-    grid-template-columns: repeat(2, 1fr);
-    //flex-wrap: wrap;
-    //justify-content: flex-start;
-    //align-content: flex-start;
-    //flex-direction: row;
-    background-color: #8e7cff;
-    width: $camWidth*2;
-    height: $camHeight*2;
-    box-sizing: border-box;
+          }
+          span.callParameter{
 
-
-    div.iframeBox{
-      //display: flex;
-      //border: 5px solid palevioletred;
-      width: $camWidth;
-      height: $camHeight;
-      background-color: #006154;
-      //padding: 10px;
-      box-sizing: border-box;
-      canvas.polygonCanvas{
-        position: absolute;
-        z-index: 2;
-        border: 4px solid #ffffff;
-        box-sizing: border-box;
-        width: $camWidth;
-        height: $camHeight;
+          }
+        }
+        p{
+          line-height: 0;
+          font-size: 18px;
+          font-weight: bold;
+          span.safeLevel{
+            color: green;
+          }
+        }
+        div.safetyBtnBox{
+          display: flex;
+          margin-bottom: 20px;
+          border-bottom: 1px solid #292929;
+          button.safetyBtn{
+            background-color: white;
+            padding: 5px;
+            margin: 0 10px 10px 0;
+            cursor: pointer;
+          }
+          button.safetyActiveBtn{
+            border: 2px solid #00a000;
+            color: green;
+          }
+          button.safetyDeleteBtn{
+            border: 2px solid #292929;
+          }
+          button.safetyResetBtn{
+            border: 2px solid #ffa600;
+            color: #ffa600;
+            margin-left: 20px;
+          }
+        }
+        div.bottomBtnBox{
+          display: flex;
+          align-content: center;
+          justify-content: center;
+          button.safetyCreateBtn{
+            width: 100px;
+            padding: 5px;
+            cursor: pointer;
+          }
+        }
       }
-      iframe{
-        position: absolute;
-        //border: 1px solid red;
-        z-index: 1;
+    }
+  }
+  div.rightSafetyBox{
+    width: 100%;
+    height: 100%;
+    div.iframeContainer{
+      display: grid;
+      //grid-template-rows: repeat(2, 512px);
+      //grid-template-columns: repeat(2, 512px);
+      grid-template-rows: repeat(2, 1fr);
+      grid-template-columns: repeat(2, 1fr);
+      //flex-wrap: wrap;
+      //justify-content: flex-start;
+      //align-content: flex-start;
+      //flex-direction: row;
+      background-color: #8e7cff;
+      width: $camWidth*2;
+      height: $camHeight*2;
+      box-sizing: border-box;
+
+
+      div.iframeBox{
+        //display: flex;
+        //border: 5px solid palevioletred;
         width: $camWidth;
         height: $camHeight;
-        max-width: $camWidth;
-        min-height: $camHeight;
+        background-color: #006154;
+        //padding: 10px;
         box-sizing: border-box;
-        background-color: #9cccf1;
+        canvas.polygonCanvas{
+          position: absolute;
+          z-index: 2;
+          border: 4px solid #ffffff;
+          box-sizing: border-box;
+          width: $camWidth;
+          height: $camHeight;
+        }
+        iframe{
+          position: absolute;
+          //border: 1px solid red;
+          z-index: 1;
+          width: $camWidth;
+          height: $camHeight;
+          max-width: $camWidth;
+          min-height: $camHeight;
+          box-sizing: border-box;
+          background-color: #9cccf1;
+        }
       }
     }
   }
 }
+

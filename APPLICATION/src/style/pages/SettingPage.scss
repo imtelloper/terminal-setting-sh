@@ -1,0 +1,73 @@
+div.settingMain {
+  color: #555;
+  margin:0;
+  padding: 0;
+  box-sizing: border-box;
+  min-width: 320px;
+  max-width: 800px;
+  background: #ffffff;
+  p.settingTitle{
+    font-size: 30px;
+    font-weight: bold;
+  }
+  input.tabInput{
+    display: none;
+  }
+  label{
+    display: inline-block;
+    margin: 0 0 -1px;
+    padding: 15px 25px;
+    font-weight: 600;
+    text-align: center;
+    color: #bbb;
+    border: 1px solid transparent;
+  }
+  label:hover {
+    color: #5940ff;
+    cursor: pointer;
+  }
+  /*input 클릭시, label 스타일*/
+  input:checked + label {
+    color: #555;
+    border: 1px solid #ddd;
+    border-top: 2px solid #5940ff;
+    border-bottom: 1px solid #ffffff;}
+
+  section{
+    display: none;
+    padding: 20px 0 0;
+    border-top: 1px solid #ddd;
+    p{
+      font-size: 20px;
+      margin-left: 10px;
+      span{
+        margin-left: 10px;
+      }
+      input{
+        margin: 0 10px 0 10px;
+      }
+      select{
+        margin: 0 10px 0 10px;
+      }
+      button{
+        width: 50px;
+        font-size: 15px;
+        background-color: #292929;
+        color: white;
+        border-radius: 5px;
+        cursor: pointer;
+      }
+      button:hover{
+        background-color: white;
+        color: black;
+      }
+    }
+  }
+}
+
+#tab1:checked ~ #content1,
+#tab2:checked ~ #content2,
+#tab3:checked ~ #content3,
+#tab4:checked ~ #content4 {
+  display: block;
+}

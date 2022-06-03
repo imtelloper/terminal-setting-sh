@@ -23,7 +23,16 @@ const MainPage = () => {
         >
           홈
         </button>
-        <button onClick={logout}>로그아웃</button>
+        <div>
+          <button
+            onClick={() => {
+              navigate('/setting');
+            }}
+          >
+            설정
+          </button>
+          <button onClick={logout}>로그아웃</button>
+        </div>
       </div>
       <CurrentTime />
       <AreaInfo />
