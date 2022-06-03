@@ -5,42 +5,44 @@ type SwrStateType = {
     email: string;
   };
   observe: {
-    area: 'H3 공장 크레인';
-    savingPath: '/home/';
-    date: '2022-06-03';
-    camOneCoordinate1: '456,307,658,329,536,486,332,469';
-    camOneCoordinate2: '456,307,658,329,536,486,332,469';
-    camOneSafetyLevel1: 'Green';
-    camOneSafetyLevel2: 'Yellow';
-    camOneSensing1: 5;
-    camOneSensing2: 1;
-
-    camTwoCoordinate1: '456,307,658,329,536,486,332,469';
-    camTwoCoordinate2: '456,307,658,329,536,486,332,469';
-    camTwoSafetyLevel1: 'Red';
-    camTwoSafetyLevel2: '456,307,658,329,536,486,332,469';
-    camTwoSensing1: 2;
-    camTwoSensing2: 3;
-
-    camThreeCoordinate1: '456,307,658,329,536,486,332,469';
-    camThreeCoordinate2: '456,307,658,329,536,486,332,469';
-    camThreeSafetyLevel1: 'Green';
-    camThreeSafetyLevel2: 'Green';
-    camThreeSensing1: 4;
-    camThreeSensing2: 5;
-
-    camFourCoordinate1: '456,307,658,329,536,486,332,469';
-    camFourCoordinate2: '456,307,658,329,536,486,332,469';
-    camFourSafetyLevel1: 'Red';
-    camFourSafetyLevel2: 'Yellow';
-    camFourSensing1: 6;
-    camFourSensing2: 7;
+    area: string;
+    camPort: string;
+    activate: boolean;
+    alarms: '없음' | '작업자 진입 확인' | '작업자 위험 반경 진입!';
+    date: string;
+    computeDevice: string;
+    savingPath: string;
+    camName: string;
+    sensingModel: string;
+    camCoordinate1: string;
+    camCoordinate2: string;
+    camSafetyLevel1: string;
+    camSafetyLevel2: string;
+    camSensing1: number;
+    camSensing2: number;
   };
 };
 
 let state: SwrStateType = {
   user: {
     email: '',
+  },
+  observe: {
+    area: 'H3 공장 크레인',
+    camPort: 'cam1',
+    activate: true,
+    alarms: '없음',
+    date: '2022-06-03',
+    computeDevice: 'cpu',
+    savingPath: '/home/',
+    camName: '3크레인 구역1',
+    sensingModel: 'small',
+    camCoordinate1: '456,307,658,329,536,486,332,469',
+    camCoordinate2: '456,307,658,329,536,486,332,469',
+    camSafetyLevel1: 'Green',
+    camSafetyLevel2: 'Yellow',
+    camSensing1: 5,
+    camSensing2: 1,
   },
 };
 
