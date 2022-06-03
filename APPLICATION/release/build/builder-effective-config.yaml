@@ -2,8 +2,8 @@ directories:
   output: release/build
   buildResources: assets
   app: release/app
-productName: ElectronReact
-appId: org.erb.ElectronReact
+productName: InterCaster
+appId: org.erb.InterCaster
 asar: true
 asarUnpack: '**\*.{node,dll}'
 files:
@@ -35,8 +35,13 @@ win:
   target:
     - nsis
 linux:
+  icon: assets/icon.png
   target:
     - AppImage
+    - deb
+    - rpm
+    - zip
+    - tar.gz
   category: Development
 extraResources:
   - filter:
@@ -45,4 +50,4 @@ publish:
   provider: github
   owner: electron-react-boilerplate
   repo: electron-react-boilerplate
-electronVersion: 16.1.1
+electronVersion: 18.2.3
