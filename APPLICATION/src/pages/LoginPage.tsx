@@ -87,6 +87,7 @@ const LoginPage = () => {
 
   useEffect(() => {
     setUserInfo();
+    navigate('/main');
   }, []);
 
   const handleEnter = (e) => e.key === 'Enter' && login();

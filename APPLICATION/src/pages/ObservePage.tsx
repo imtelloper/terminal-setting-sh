@@ -246,72 +246,54 @@ const ObservePage = () => {
             </div>
           </section>
         </div>
-        <div className="rightSafetyBox">
-          <div className="iframeContainer">
-            <div className="iframeBox">
-              <canvas
-                className="polygonCanvas polygonCanvas1"
-                width={camWidth}
-                height={camHeight}
-                onClick={canvasClick}
-                typeof="coordinate1"
-              />
-              <iframe
-                title="stream1"
-                // src={streamUrl ?? 'http://127.0.0.1:8000/api/stream/area/'}
-                src="http://192.168.0.7:81/"
-                width={camWidth}
-                height={camHeight}
-              />
-            </div>
-            <div className="iframeBox">
-              <canvas
-                className="polygonCanvas polygonCanvas1"
-                width={camWidth}
-                height={camHeight}
-                onClick={canvasClick}
-                typeof="coordinate1"
-              />
-              <iframe
-                title="stream1"
-                // src={streamUrl ?? 'http://127.0.0.1:8000/api/stream/area/'}
-                src="http://192.168.0.24:81/"
-                width={camWidth}
-                height={camHeight}
-              />
-            </div>
-            {/* <div className="iframeBox"> */}
-            {/*   <canvas */}
-            {/*     className="polygonCanvas polygonCanvas1" */}
-            {/*     width={camWidth} */}
-            {/*     height={camHeight} */}
-            {/*     onClick={canvasClick} */}
-            {/*     typeof="coordinate1" */}
-            {/*   /> */}
-            {/*   <iframe */}
-            {/*     title="stream1" */}
-            {/*     src={streamUrl ?? 'http://127.0.0.1:8000/api/stream/area/'} */}
-            {/*     // src="http://127.0.0.1:8000/api/stream/" */}
-            {/*     width={camWidth} */}
-            {/*     height={camHeight} */}
-            {/*   /> */}
-            {/* </div> */}
-            {/* <div className="iframeBox"> */}
-            {/*   <canvas */}
-            {/*     className="polygonCanvas polygonCanvas1" */}
-            {/*     width={camWidth} */}
-            {/*     height={camHeight} */}
-            {/*     onClick={canvasClick} */}
-            {/*     typeof="coordinate1" */}
-            {/*   /> */}
-            {/*   <iframe */}
-            {/*     title="stream1" */}
-            {/*     src={streamUrl ?? 'http://127.0.0.1:8000/api/stream/area/'} */}
-            {/*     // src="http://127.0.0.1:8000/api/stream/" */}
-            {/*     width={camWidth} */}
-            {/*     height={camHeight} */}
-            {/*   /> */}
-            {/* </div> */}
+        <div className="iframeContainer">
+          <div className="iframeBox">
+            <canvas
+              className="polygonCanvas polygonCanvas1"
+              width={camWidth}
+              height={camHeight}
+              onClick={canvasClick}
+              typeof="coordinate1"
+            />
+            <iframe
+              title="stream1"
+              // src={streamUrl ?? 'http://127.0.0.1:8000/api/stream/area/'}
+              src="http://192.168.0.7:81/"
+              width={camWidth}
+              height={camHeight}
+            />
+          </div>
+          <div className="iframeBox">
+            <canvas
+              className="polygonCanvas polygonCanvas2"
+              width={camWidth}
+              height={camHeight}
+              onClick={canvasClick}
+              typeof="coordinate2"
+            />
+            <iframe
+              title="stream1"
+              // src={streamUrl ?? 'http://127.0.0.1:8000/api/stream/area/'}
+              src="http://192.168.0.24:81/"
+              width={camWidth}
+              height={camHeight}
+            />
+          </div>
+          <div className="iframeBox">
+            <canvas
+              className="polygonCanvas polygonCanvas3"
+              width={camWidth}
+              height={camHeight}
+              onClick={canvasClick}
+              typeof="coordinate3"
+            />
+            <iframe
+              title="stream1"
+              // src={streamUrl ?? 'http://127.0.0.1:8000/api/stream/area/'}
+              src="http://192.168.0.30:81/"
+              width={camWidth}
+              height={camHeight}
+            />
           </div>
         </div>
       </div>
