@@ -1,0 +1,51 @@
+from bson import ObjectId
+import config
+from repo.baseRepo import *
+
+
+class ObserveService:
+    def __init__(self):
+        self.dbName = config.DB_NAME
+        self.tableName = config.TABLE_OBSERVE
+
+    def getDataOne(self, id):
+        return findOne(self.dbName, self.tableName, {"_id": ObjectId(id)})
+
+    async def addOneData(self, data: dict) -> dict:
+        resultData = await insertOne(self.dbName, self.tableName, data)
+        newData = await self.getDataOne(resultData.inserted_id)
+        return newData
+
+    async def searchOneData(self, id: str) -> dict:
+        resultData = await self.getDataOne(id)
+        if resultData:
+            return resultData
+
+    async def removeOneData(self, id: str):
+        data = await self.getDataOne(id)
+        if data:
+            removedData = await deleteOne(self.dbName, self.tableName, {"_id": ObjectId(id)})
+            if removedData:
+                return True
+            return False
+
+    async def updateOneData(self, id: str, data: dict):
+        resultData = await self.getDataOne(id)
+        if resultData:
+            updatedData = await updateOne(
+                self.dbName, self.tableName, {"_id": ObjectId(id)}, {"$set": data}
+            )
+            if updatedData:
+                updatedResult = await self.getDataOne(id)
+                return updatedResult
+
+    async def searchRangeData(self, start: int = 0, limit: int = 10) -> dict:
+        dataArr = []
+        foundData = findRange(self.dbName, self.tableName, start, limit)
+        async for data in foundData:
+            dataArr.append(data)
+        return dataArr
+
+    async def getDataCount(self):
+        count = await dataCount(self.dbName, self.tableName)
+        return count

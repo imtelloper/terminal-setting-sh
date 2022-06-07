@@ -3,6 +3,8 @@ import Robot from '../images/robot.png';
 import Crane from '../images/crane.png';
 import '../style/components/AreaInfo.scss';
 import { useNavigate } from 'react-router-dom';
+import useSWR from 'swr';
+import { getFetcher } from '../fetcher/fetcher';
 
 type AreaCard = {
   title: string;
@@ -109,6 +111,13 @@ const AreaInfo = () => {
       alarmMessage: '작업자 위험 반경 진입!',
     },
   ]);
+  const { data: swrObserveData, error } = useSWR<Array<Observe>>(
+    '/api/observe/0/5',
+    getFetcher,
+    {
+      refreshInterval: 1000,
+    }
+  );
 
   let count = 20;
   window.onscroll = (e) => {
@@ -143,25 +152,25 @@ const AreaInfo = () => {
     navigate('/observe');
   };
 
-  const areaCardsMap = areaCardsState.map((card, idx) => (
+  const areaCardsMap = swrObserveData?.map((card, idx) => (
     <div
       className="areaCardBox"
-      key={card.title}
+      key={idx}
       onClick={goObservePage}
       datatype={idx.toString()}
     >
-      <h3>{card.title}</h3>
+      <h3>{card.area}</h3>
       <div className="areaContent">
         <div className="areaImgContent">
-          <img src={card.imgSrc} />
-          <div className={card.zoneColor}>{card.zoneState}</div>
+          <img src={Crane} />
+          <div className="areaZone areaZoneRed">{card.camSafetyLevel1}</div>
         </div>
         <div className="areaTextContent">
           <p className="camContent">
-            {card.camName}:<span>{card.camState}</span>
+            {card.camName}:<span>{card.camSensing1}</span>
           </p>
           <p>Alarms:</p>
-          <p className={card.alrmColor}>{card.alarmMessage}</p>
+          <p className="dangerColor">{card.alarms}</p>
         </div>
       </div>
     </div>

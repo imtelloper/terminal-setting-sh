@@ -9,6 +9,7 @@ from routers.tempHumidityRouter import router as TempHumidityRouter
 from routers.utilRouter import router as UtilRouter
 from routers.streamRouter import router as StreamRouter
 from routers.authRouter import router as AuthRouter
+from routers.observeRouter import router as ObserveRouter
 from dotenv import load_dotenv
 from pathlib import Path
 import os
@@ -17,7 +18,8 @@ import logging.config
 import cv2
 import traceback
 import warnings
-warnings.filterwarnings( 'ignore' )
+
+warnings.filterwarnings('ignore')
 from modules.yolov5.detect import detect
 from modules.calculate import *
 import speech_recognition as sr
@@ -28,13 +30,12 @@ import playsound
 import minimalmodbus as minimalmodbus
 import serial
 
-
-
 # load_dotenv(dotenv_path=f".{os.getenv('DOT_ENV', 'test')}.env")
 # logging.config.fileConfig("logging.conf", disable_existing_loggers=False)
 logger = logging.getLogger(__name__)
 
 print('app start')
+
 
 # def speak(text):
 #     tts = gTTS(text=text, lang='ko')
@@ -63,7 +64,7 @@ app = createApp()
 # origins = [
 #     "http://localhost",
 #     "http://127.0.0.1",
-    # "http://localhost:8080",
+# "http://localhost:8080",
 # ]
 
 origins = ["*"]
@@ -81,6 +82,7 @@ app.include_router(TempHumidityRouter, prefix="/api/temperature-humidity")
 app.include_router(UtilRouter, prefix="/api/util")
 app.include_router(StreamRouter, prefix="/api/stream")
 app.include_router(AuthRouter, prefix="/api/auth")
+app.include_router(ObserveRouter, prefix="/api/observe")
 
 
 @app.on_event("startup")
