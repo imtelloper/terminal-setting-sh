@@ -258,7 +258,7 @@ const ObservePage = () => {
             <iframe
               title="stream1"
               // src={streamUrl ?? 'http://127.0.0.1:8000/api/stream/area/'}
-              src="http://192.168.0.7:81/"
+              src="http://192.168.0.7:81/api/stream/"
               width={camWidth}
               height={camHeight}
             />
@@ -274,7 +274,7 @@ const ObservePage = () => {
             <iframe
               title="stream1"
               // src={streamUrl ?? 'http://127.0.0.1:8000/api/stream/area/'}
-              src="http://192.168.0.24:81/"
+              src="http://192.168.0.24:81/api/stream/"
               width={camWidth}
               height={camHeight}
             />
@@ -290,7 +290,7 @@ const ObservePage = () => {
             <iframe
               title="stream1"
               // src={streamUrl ?? 'http://127.0.0.1:8000/api/stream/area/'}
-              src="http://192.168.0.30:81/"
+              src="http://192.168.0.30:81/api/stream/"
               width={camWidth}
               height={camHeight}
             />
