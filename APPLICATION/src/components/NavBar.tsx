@@ -5,8 +5,8 @@ const NaviBar = () => {
   const navigate = useNavigate();
 
   return (
-    <div>
-      <div className="mainTopContainer" style={{ width: '1240px' }}>
+    <>
+      <div className="mainTopContainer">
         <button
           onClick={() => {
             navigate('/');
@@ -31,7 +31,7 @@ const NaviBar = () => {
           </button>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 

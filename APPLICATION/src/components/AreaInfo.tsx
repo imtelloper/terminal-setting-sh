@@ -13,6 +13,10 @@ type AreaCard = {
   camState: string;
   alrmColor: string;
   alarmMessage: string;
+  firstName: string;
+  firstState: string;
+  secondName: string;
+  secondState: string;
 };
 
 const AreaInfo = () => {
@@ -27,6 +31,10 @@ const AreaInfo = () => {
       camState: 'Active',
       alrmColor: '',
       alarmMessage: '없음',
+      firstName: '1차 감지',
+      firstState: '0',
+      secondName: '2차 감지',
+      secondState: '0',
     },
     {
       title: 'H2 공장 크레인',
@@ -37,6 +45,10 @@ const AreaInfo = () => {
       camState: 'Active',
       alrmColor: 'confirmColor',
       alarmMessage: '작업자 진입 확인',
+      firstName: '1차 감지',
+      firstState: '1',
+      secondName: '2차 감지',
+      secondState: '0',
     },
     {
       title: 'H3 공장 크레인',
@@ -47,6 +59,10 @@ const AreaInfo = () => {
       camState: 'Active',
       alrmColor: 'dangerColor',
       alarmMessage: '작업자 위험 반경 진입!',
+      firstName: '1차 감지',
+      firstState: '2',
+      secondName: '2차 감지',
+      secondState: '1',
     },
     {
       title: 'H4 공장 로봇',
@@ -57,6 +73,10 @@ const AreaInfo = () => {
       camState: 'Active',
       alrmColor: 'confirmColor',
       alarmMessage: '작업자 진입 확인',
+      firstName: '1차 감지',
+      firstState: '2',
+      secondName: '2차 감지',
+      secondState: '0',
     },
     {
       title: 'H5 공장 로봇',
@@ -67,6 +87,10 @@ const AreaInfo = () => {
       camState: 'Active',
       alrmColor: '',
       alarmMessage: '없음',
+      firstName: '1차 감지',
+      firstState: '0',
+      secondName: '2차 감지',
+      secondState: '0',
     },
     {
       title: 'H6 공장 로봇',
@@ -77,6 +101,10 @@ const AreaInfo = () => {
       camState: 'Active',
       alrmColor: 'confirmColor',
       alarmMessage: '작업자 진입 확인',
+      firstName: '1차 감지',
+      firstState: '1',
+      secondName: '2차 감지',
+      secondState: '0',
     },
     {
       title: 'H7 공장 로봇',
@@ -87,6 +115,10 @@ const AreaInfo = () => {
       camState: 'Active',
       alrmColor: '',
       alarmMessage: '없음',
+      firstName: '1차 감지',
+      firstState: '0',
+      secondName: '2차 감지',
+      secondState: '0',
     },
     {
       title: 'H8 공장 로봇',
@@ -97,6 +129,10 @@ const AreaInfo = () => {
       camState: 'Active',
       alrmColor: 'dangerColor',
       alarmMessage: '작업자 위험 반경 진입!',
+      firstName: '1차 감지',
+      firstState: '3',
+      secondName: '2차 감지',
+      secondState: '1',
     },
     {
       title: 'H9 공장 로봇',
@@ -107,6 +143,10 @@ const AreaInfo = () => {
       camState: 'Active',
       alrmColor: 'dangerColor',
       alarmMessage: '작업자 위험 반경 진입!',
+      firstName: '1차 감지',
+      firstState: '1',
+      secondName: '2차 감지',
+      secondState: '1',
     },
   ]);
 
@@ -128,6 +168,10 @@ const AreaInfo = () => {
             <div className="areaTextContent">
               <p className="camContent">Cam(2):<span>Active</span></p>
               <p>Alarms:</p><p>없음</p>
+            // <div className="detectContent">
+            //   <p>1차 감지: <span>0</span></p>
+            //   <p>2차 감지: <span>0</span></p>
+            // </div>
             </div>
           </div>`;
         document.querySelector('section').appendChild(addContent);
@@ -162,6 +206,10 @@ const AreaInfo = () => {
           </p>
           <p>Alarms:</p>
           <p className={card.alrmColor}>{card.alarmMessage}</p>
+          <div className="detectContent">
+            <p>{card.firstName}: <span>{card.firstState}</span></p>
+            <p>{card.secondName}: <span>{card.secondState}</span></p>
+          </div>
         </div>
       </div>
     </div>

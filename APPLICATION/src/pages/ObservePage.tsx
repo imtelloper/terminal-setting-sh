@@ -1,10 +1,11 @@
-import NavBar from 'components/NavBar';
 import React, { useState } from 'react';
 import { flushSync } from 'react-dom';
 import '../style/pages/ObservePage.scss';
 import { BiDownload, BiExport } from 'react-icons/bi';
+import { useNavigate } from 'react-router-dom';
 
 const ObservePage = () => {
+  const navigate = useNavigate();
   const camWidth = 512;
   const camHeight = 384;
   const [streamUrl, setStreamUrl] = useState(
@@ -81,7 +82,6 @@ const ObservePage = () => {
 
   return (
     <>
-      <NavBar />
       <div id="observeContainer" className="observeContainer">
         <div className="leftSafetyBox">
           <p className="SafetyTitle">H1 공장 크레인</p>
@@ -90,6 +90,7 @@ const ObservePage = () => {
             id="safetyTab1"
             type="radio"
             name="tabs"
+            defaultChecked
           />
           {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
           <label className="safeLabel" htmlFor="safetyTab1">
@@ -153,8 +154,16 @@ const ObservePage = () => {
                   Error Reset
                 </button>
               </div>
-              <div className="bottomBtnBox">
+              <div className="safetyCreateBtnBox">
                 <button className="safetyCreateBtn">생성</button>
+              </div>
+              <div className="bottomBtnBox">
+                <button className="bottomBtn">Recording</button>
+                <button className="bottomBtn" onClick={() => {
+                  navigate('/detail');
+                }}>
+                  설정
+                </button>
               </div>
             </div>
           </section>
@@ -182,8 +191,16 @@ const ObservePage = () => {
                   Error Reset
                 </button>
               </div>
-              <div className="bottomBtnBox">
+              <div className="safetyCreateBtnBox">
                 <button className="safetyCreateBtn">생성</button>
+              </div>
+              <div className="bottomBtnBox">
+                <button className="bottomBtn">Recording</button>
+                <button className="bottomBtn" onClick={() => {
+                  navigate('/detail');
+                }}>
+                  설정
+                </button>
               </div>
             </div>
           </section>
@@ -211,8 +228,16 @@ const ObservePage = () => {
                   Error Reset
                 </button>
               </div>
-              <div className="bottomBtnBox">
+              <div className="safetyCreateBtnBox">
                 <button className="safetyCreateBtn">생성</button>
+              </div>
+              <div className="bottomBtnBox">
+                <button className="bottomBtn">Recording</button>
+                <button className="bottomBtn" onClick={() => {
+                  navigate('/detail');
+                }}>
+                  설정
+                </button>
               </div>
             </div>
           </section>
@@ -240,8 +265,16 @@ const ObservePage = () => {
                   Error Reset
                 </button>
               </div>
-              <div className="bottomBtnBox">
+              <div className="safetyCreateBtnBox">
                 <button className="safetyCreateBtn">생성</button>
+              </div>
+              <div className="bottomBtnBox">
+                <button className="bottomBtn">Recording</button>
+                <button className="bottomBtn" onClick={() => {
+                  navigate('/detail');
+                }}>
+                  설정
+                </button>
               </div>
             </div>
           </section>
@@ -275,6 +308,22 @@ const ObservePage = () => {
               title="stream1"
               // src={streamUrl ?? 'http://127.0.0.1:8000/api/stream/area/'}
               src="http://192.168.0.24:81/"
+              width={camWidth}
+              height={camHeight}
+            />
+          </div>
+          <div className="iframeBox">
+            <canvas
+              className="polygonCanvas polygonCanvas3"
+              width={camWidth}
+              height={camHeight}
+              onClick={canvasClick}
+              typeof="coordinate3"
+            />
+            <iframe
+              title="stream1"
+              // src={streamUrl ?? 'http://127.0.0.1:8000/api/stream/area/'}
+              src="http://192.168.0.30:81/"
               width={camWidth}
               height={camHeight}
             />

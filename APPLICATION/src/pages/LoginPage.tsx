@@ -70,24 +70,27 @@ const LoginPage = () => {
 
   // eslint-disable-next-line consistent-return
   const login = () => {
-    if (!inputState.emailValid) return alert('아이디가 올바르지 않습니다.');
-    if (!inputState.pwValid) return alert('비밀번호가 올바르지 않습니다.');
-    if (!inputState.email) return alert('이메일을 입력해주세요');
-    if (!inputState.pw) return alert('비밀번호를 입력해주세요');
+    // if (!inputState.emailValid) return alert('아이디가 올바르지 않습니다.');
+    // if (!inputState.pwValid) return alert('비밀번호가 올바르지 않습니다.');
+    // if (!inputState.email) return alert('이메일을 입력해주세요');
+    // if (!inputState.pw) return alert('비밀번호를 입력해주세요');
+    //
+    // /* 로그인 */
+    // Api.login
+    //   .loginAndGetToken(inputState)
+    //   .then((res) => {
+    //     if (res) sessionStorage.setItem('authToken', res.access_token);
+    //     setUserInfo();
+    //   })
+    //   .catch((err) => console.error(err));
 
-    /* 로그인 */
-    Api.login
-      .loginAndGetToken(inputState)
-      .then((res) => {
-        if (res) sessionStorage.setItem('authToken', res.access_token);
-        setUserInfo();
-      })
-      .catch((err) => console.error(err));
+    //임시로 메인 넘어가도록
+    navigate('/main');
   };
 
   useEffect(() => {
     setUserInfo();
-    navigate('/main');
+    // navigate('/main');
   }, []);
 
   const handleEnter = (e) => e.key === 'Enter' && login();
@@ -104,7 +107,7 @@ const LoginPage = () => {
   return (
     <div className="loginContainer">
       <div className="loginBox">
-        Sign In
+        <span>Sign In</span>
         <div className="inputLoginBox">
           <input
             className="form"
