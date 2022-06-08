@@ -14,6 +14,8 @@ module.exports = {
     'click-events-have-key-events': 'off',
     'import/order': 'off',
     '@typescript-eslint/no-unused-expressions': 'off',
+    'import/prefer-default-export': 'off',
+    'react/no-array-index-key': 'off',
   },
   parserOptions: {
     ecmaVersion: 2020,
@@ -33,7 +35,6 @@ module.exports = {
     },
     'import/parsers': {
       '@typescript-eslint/parser': ['.ts', '.tsx'],
-
     },
   },
 };

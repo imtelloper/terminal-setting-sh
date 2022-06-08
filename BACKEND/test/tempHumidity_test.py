@@ -5,7 +5,7 @@ import sys
 from httpx import AsyncClient
 
 sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))
-baseUrl = "http://127.0.0.1:9000/api/temperature-humidity"
+baseUrl = "http://127.0.0.1:8000/api/temperature-humidity"
 
 
 @pytest.mark.asyncio
