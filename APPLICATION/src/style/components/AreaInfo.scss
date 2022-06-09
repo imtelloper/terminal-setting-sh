@@ -1,14 +1,13 @@
 div.areaInfoContainer{
   width: 100%;
-  display: flex;
-  section{
+  display: flex;  section{
     width: 100%;
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(400px, max-content));
     grid-gap: 16px;
     justify-content: center;
     div.areaCardBox{
-      cursor: pointer;
+      cursor: inter;
       border-radius: 10px;
       padding: 20px;
       width: 350px;
@@ -73,6 +72,27 @@ div.areaInfoContainer{
           }
           p.dangerColor{
             color: red;
+          }
+          div.detectContent{
+            margin-top: 10px;
+            display: flex;
+            p{
+              margin-right: 20px;
+              &:first-child{
+                color: #ffc000;
+                span{
+                  color: #ffc000;
+                  font-size: 20px;
+                }
+              }
+              &:last-child{
+                color: red;
+                span{
+                  color: red;
+                  font-size: 20px;
+                }
+              }
+            }
           }
         }
       }

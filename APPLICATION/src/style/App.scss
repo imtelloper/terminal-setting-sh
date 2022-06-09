@@ -13,8 +13,9 @@
 body {
   position: relative;
   color: white;
-  width: 100%;
+  width: 100vw;
   height: 100vh;
+  overflow: hidden;
   background: linear-gradient(-45deg, #CFF375, #80EAAD, #69BAF3, #2553BD);
   font-family: sans-serif;
   overflow-y: hidden;
@@ -44,9 +45,10 @@ html, body {
   font-family: 'Muli', Helvetica, sans-serif;
 }
 div.mainTopContainer{
+  padding: 5px 15px;
+  box-sizing: border-box;
   display: flex;
   justify-content: space-between;
-  padding-bottom: 10px;
   border-bottom: 1px solid #292929;
   button{
     font-size: 18px;

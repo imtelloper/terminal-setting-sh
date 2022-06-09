@@ -5,8 +5,6 @@ import AreaInfo from '../components/AreaInfo';
 import { useSWRState } from '../fetcher/useSWRState';
 import { useEffect } from 'react';
 import axios from 'axios';
-import { getFetcher } from '../fetcher/fetcher';
-import useSWR from 'swr';
 
 const MainPage = () => {
   const navigate = useNavigate();
@@ -58,25 +56,6 @@ const MainPage = () => {
 
   return (
     <div className="mainContainer">
-      <div className="mainTopContainer">
-        <button
-          onClick={() => {
-            navigate('/');
-          }}
-        >
-          홈
-        </button>
-        <div>
-          <button
-            onClick={() => {
-              navigate('/setting');
-            }}
-          >
-            설정
-          </button>
-          <button onClick={logout}>로그아웃</button>
-        </div>
-      </div>
       <CurrentTime />
       <AreaInfo />
     </div>

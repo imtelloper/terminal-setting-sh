@@ -1,0 +1,154 @@
+div.detailViewContainer {
+  width: 100%;
+  height: 100%;
+  background-color: #fff;
+  color: #555;
+  margin: 0;
+  box-sizing: border-box;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+
+  div.leftCon {
+    margin-right: 30px;
+    div.title {
+      font-size: 36px;
+      font-weight: bold;
+    }
+
+    input {
+      display: none;
+    }
+
+    label {
+      display: inline-block;
+      margin: 10px 30px 0 0;
+      position: relative;
+      cursor: pointer;
+    }
+
+    input:checked + label {
+      font-weight: bold;
+    }
+
+    div.realTimeBox {
+      width: 540px;
+      min-height: 400px;
+      height: 100%;
+      border: 1px solid #555555;
+      padding: 10px;
+      margin-top: 10px;
+      position: relative;
+      display: none;
+
+      select {
+        width: 400px;
+        height: 30px;
+      }
+
+      ul {
+        li {
+          list-style: square;
+          margin: 10px 0;
+
+          span.green {
+            color: green;
+          }
+        }
+      }
+
+      div.bottomBtnBox {
+        width: 100%;
+        display: flex;
+        justify-content: space-around;
+        position: absolute;
+        bottom: 30px;
+      }
+    }
+
+    div.recordBox {
+      width: 540px;
+      min-height: 400px;
+      height: 100%;
+      border: 1px solid #555555;
+      padding: 10px;
+      margin-top: 10px;
+      position: relative;
+      display: none;
+
+      p {
+        width: 100%;
+        margin-bottom: 10px;
+      }
+
+      div.alertBox {
+        border-top: 1.5px dashed #bbbbbb;
+        padding-top: 10px;
+
+        p {
+          margin-bottom: 10px;
+
+          span {
+            margin-right: 10px;
+          }
+
+          span.red {
+            color: crimson;
+          }
+
+          span.yellow {
+            color: #ffc000;
+          }
+        }
+      }
+    }
+  }
+    div.iframeBox{
+      width: 1024px;
+      height: 768px;
+      position: relative;
+      canvas{
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        z-index: 2;
+        border: 1px solid #555;
+        box-sizing: border-box;
+      }
+      iframe{
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        z-index: 1;
+        border: 1px solid #555;
+        box-sizing: border-box;
+      }
+    }
+
+  button {
+    width: 50px;
+    font-size: 15px;
+    background-color: #292929;
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-left: 10px;
+  }
+
+  button:hover {
+    background-color: white;
+    color: black;
+  }
+
+  button.off {
+    display: none;
+  }
+}
+
+#menuTab1:checked ~ .realTimeBox,
+#menuTab2:checked ~ .recordBox {
+  display: block;
+}
+
+
