@@ -2,7 +2,6 @@ import glob
 from typing import Optional
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-
 from buzzer import *
 from database.mongoDB import *
 from routers.tempHumidityRouter import router as TempHumidityRouter
@@ -18,6 +17,7 @@ import logging.config
 import cv2
 import traceback
 import warnings
+import datetime
 
 warnings.filterwarnings('ignore')
 from modules.yolov5.detect import detect
@@ -35,7 +35,6 @@ import serial
 logger = logging.getLogger(__name__)
 
 print('app start')
-
 
 # def speak(text):
 #     tts = gTTS(text=text, lang='ko')
@@ -76,6 +75,7 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
 
 # routers
 app.include_router(TempHumidityRouter, prefix="/api/temperature-humidity")

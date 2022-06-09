@@ -3,6 +3,11 @@ import os
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
 """
+POSITION KEYWORD
+"""
+AREA = "H1 공장 크레인"
+CAMPORT = "cam1"
+"""
 DEFAULT KEYWORD
 """
 DEFAULT = "default"

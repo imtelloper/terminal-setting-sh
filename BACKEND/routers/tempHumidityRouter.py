@@ -22,7 +22,6 @@ async def saveTempHumidity(tempData: TempHumidity = Body(...)):
 @router.get("/", response_description="")
 async def getAllTempHumidities():
     serviceResult = await service.searchTempHumidities()
-    print('serviceResult', serviceResult)
     resultArr = []
     for res in serviceResult:
         resultArr.append(TempHumidityDto(**res))

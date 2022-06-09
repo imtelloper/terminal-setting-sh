@@ -4,6 +4,7 @@ __all__ = [
     "insertOne",
     "find",
     "findOne",
+    "findDatas",
     "updateOne",
     "deleteOne",
     "dataCount",
@@ -17,6 +18,10 @@ async def insertOne(database: str, collection: str, param: dict):
 
 def find(database: str, collection: str):
     return getConnection()[database][collection].find().sort("_id", -1)
+
+
+def findDatas(database: str, collection: str, param: dict):
+    return getConnection()[database][collection].find(param).limit(1000)
 
 
 async def findOne(database: str, collection: str, param: dict):

@@ -11,6 +11,12 @@ class ObserveService:
     def getDataOne(self, id):
         return findOne(self.dbName, self.tableName, {"_id": ObjectId(id)})
 
+    async def searchDatas(self, data: dict):
+        dataArr = []
+        async for val in findDatas(self.dbName, self.tableName, data):
+            dataArr.append(val)
+        return dataArr
+
     async def addOneData(self, data: dict) -> dict:
         resultData = await insertOne(self.dbName, self.tableName, data)
         newData = await self.getDataOne(resultData.inserted_id)
@@ -31,9 +37,14 @@ class ObserveService:
 
     async def updateOneData(self, id: str, data: dict):
         resultData = await self.getDataOne(id)
+        copyData = data.copy()
+        for key in data.keys():
+            if data[key] == None:
+                copyData.pop(key)
+
         if resultData:
             updatedData = await updateOne(
-                self.dbName, self.tableName, {"_id": ObjectId(id)}, {"$set": data}
+                self.dbName, self.tableName, {"_id": ObjectId(id)}, {"$set": copyData}
             )
             if updatedData:
                 updatedResult = await self.getDataOne(id)

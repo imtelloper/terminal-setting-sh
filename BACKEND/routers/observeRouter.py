@@ -1,8 +1,8 @@
 from fastapi import APIRouter, Body
 from fastapi.encoders import jsonable_encoder
 from dtos.observeDto import ObserveDto
-from models.observeModel import Observe
-from services.observeService import ObserveService
+from models.observeModel import *
+from services.observeService import *
 
 router = APIRouter(
     tags=['observe'],
@@ -27,8 +27,18 @@ async def getOneData(id):
     return dto(**serviceResult)
 
 
-@router.put("/{id}", response_description="id로 데이터 수정하기")
-async def modifyOneData(id, data: Observe = Body(...)):
+@router.get("/", response_description="id로 데이터 가져오기")
+async def findData(data=Body(...)):
+    jsonData = jsonable_encoder(data)
+    serviceResult = await service.searchDatas(jsonData)
+    resultArr = []
+    for res in serviceResult:
+        resultArr.append(dto(**res))
+    return resultArr
+
+
+@router.patch("/{id}", response_description="id로 데이터 수정하기")
+async def modifyOneData(id, data: UpdateObserve = Body(...)):
     jsonData = jsonable_encoder(data)
     serviceResult = await service.updateOneData(id, jsonData)
     return dto(**serviceResult)
