@@ -1,8 +1,8 @@
 echo 'hi'
-sudo apt-get update
-sudo apt-get net-tools
-sudo apt-get nginx
-sudo apt-get install build-essential
+sudo apt install update
+sudo apt install net-tools
+sudo apt install nginx
+sudo apt install install build-essential
 sh -c "$(curl -fsSL https://raw.githubusercontent.com/Linuxbrew/install/master/install.sh)"
 export PATH="/home/linuxbrew/.linuxbrew/bin:$PATH"
 export MANPATH="/home/linuxbrew/.linuxbrew/share/man:$MANPATH"
