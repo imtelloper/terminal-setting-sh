@@ -148,6 +148,7 @@ class StreamService:
         buzzer_cnt = 0  # 경고음 카운트
         warning_signal = 0
         unit_num = 9  # 사람 영역 분할 계수
+        warn_sig = None
 
         # tracking api 호출
         multi_tracker = cv2.MultiTracker_create()
