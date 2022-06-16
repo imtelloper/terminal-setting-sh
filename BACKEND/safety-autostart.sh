@@ -18,14 +18,7 @@
 #  맨 아래에 입력
 #   @reboot /home/interx/SAFETY-AI/BACKEND/safety-autostart.sh > safety-autostart.sh.log 2>&1
 
-#conda activate SAFETY-AI
-#conda init zsh
-#echo $0
-#source ~/anaconda3/etc/profile.d/conda.sh
-#conda activate SAFETY-AI
-#pip3 install -r /home/interx/SAFETY-AI/BACKEND/requirements.txt
 # 8000포트를 안쓰고 있거나 죽었다면 다시 재실행 시키도록. 8000 포트를 계속 확인하는 python 필요
-
 fuser -k 8000/tcp
 python /home/interx/SAFETY-AI/BACKEND/port-watcher.py
 
