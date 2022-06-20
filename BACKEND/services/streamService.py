@@ -26,11 +26,14 @@ class StreamService:
         아니라면 만들도록 한다.
         '''
         print('##############self.list_ports() : ', self.list_ports())
+        self.currentPort = None
         if(self.list_ports()[1]):
-            self.video = cv2.VideoCapture(self.list_ports()[1][0])
+            self.currentPort = self.list_ports()[1][0]
+            self.video = cv2.VideoCapture(self.currentPort)
             self.video.set(cv2.CAP_PROP_FRAME_WIDTH, 640)
             self.video.set(cv2.CAP_PROP_FRAME_HEIGHT, 480)
         else:
+            os.system("fuser -k 8000/tcp")
             self.video = cv2.VideoCapture(0)
         self.cameraOnOff = True
         self.observeService = ObserveService()
@@ -88,7 +91,6 @@ class StreamService:
             print('newData : ',newData)
             self.todayCamDataId = resultData.inserted_id
 
-
     def list_ports(self):
         """
         Test the ports and returns a tuple with the available ports and the ones that are working.
@@ -118,8 +120,12 @@ class StreamService:
         return available_ports, working_ports, non_working_ports
 
     def video_streaming(self, coordinates1=[], coordinates2=[]):
+        print('video_streaming video check : ', self.currentPort)
+        if self.currentPort == None:
+            os.system("fuser -k 8000/tcp")
         # 사용자 설정
-        pt = "modules/yolov5/weights/1_nano.pt"
+        # pt = "modules/yolov5/weights/1_nano.pt"
+        pt = "/home/interx/SAFETY-AI/BACKEND/modules/yolov5/weights/1_nano.pt"
         device_mode = ""
         conf = 0.7
 
@@ -150,6 +156,7 @@ class StreamService:
         buzzer_cnt = 0  # 경고음 카운트
         warning_signal = 0
         unit_num = 9  # 사람 영역 분할 계수
+        warn_sig = None
 
         # tracking api 호출
         multi_tracker = cv2.MultiTracker_create()
