@@ -16,6 +16,11 @@ module.exports = {
     '@typescript-eslint/no-unused-expressions': 'off',
     'import/prefer-default-export': 'off',
     'react/no-array-index-key': 'off',
+    'jsx-a11y/click-events-have-key-events': 'off',
+    'jsx-a11y/label-has-associated-control': 'off',
+    'jsx-a11y/no-static-element-interactions': 'off',
+    'no-plusplus': 'off',
+    'react-hooks/exhaustive-deps': 'off',
   },
   parserOptions: {
     ecmaVersion: 2020,

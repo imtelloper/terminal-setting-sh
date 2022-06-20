@@ -133,8 +133,10 @@ class StreamService:
         img_color = False
         setting_signal = False
         rois_history = []  # rois history
+        # rois1 = Yellow Zone / 2차원으로 설정 가능하며 배열 안에서 첫번째 배열 좌표값은 첫번째 Yellow Zone이다. 두번째 배열 좌표값은 두번째 Yellow Zone이다.
         # rois1 = [[(50,50), (400,50), (400,300), (50,300)]]
         rois1 = coordinates1
+        # rois2 = Red Zone / 2차원으로 설정 가능하며 배열 안에서 첫번째 배열 좌표값은 첫번째 Red Zone이다. 두번째 배열 좌표값은 두번째 Red Zone이다.
         # rois2 = [[(200,200), (300,200), (300,300), (200,300)]]
         rois2 = coordinates2
         sub_rois = []  # 다중 polygon을 위한 리스트

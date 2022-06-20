@@ -1,12 +1,10 @@
 $camWidth: 512px;
 $camHeight: 384px;
+$titleHeight: 30px;
 div.observeContainer {
   width: 100%;
-  //height: 100%;
   display: flex;
   justify-content: center;
-  //border-bottom: 1px solid #2553BD;
-  //border: 1px solid #2553BD;
   padding: 50px;
   div.leftSafetyBox{
     width: 540px;
@@ -16,30 +14,37 @@ div.observeContainer {
       font-size: 30px;
       font-weight: bold;
     }
-    input.safetyTab{
-      display: none;
+    div.safetyTabContainer{
+      display: flex;
+      div.safetyTabBox{
+        display: flex;
+        input.safetyTab{
+          display: none;
+        }
+        label.safeLabel{
+          display: inline-block;
+          margin: 0 0 -1px;
+          padding: 15px 25px;
+          font-weight: 600;
+          text-align: center;
+          color: #bbb;
+          border: 1px solid transparent;
+        }
+        label:hover {
+          color: #5940ff;
+          cursor: pointer;
+        }
+        /*input 클릭시, label 스타일*/
+        input:checked + label {
+          color: #555;
+          border: 1px solid #ddd;
+          border-top: 2px solid #5940ff;
+          border-bottom: 1px solid #ffffff;
+        }
+      }
     }
-    label.safeLabel{
-      display: inline-block;
-      margin: 0 0 -1px;
-      padding: 15px 25px;
-      font-weight: 600;
-      text-align: center;
-      color: #bbb;
-      border: 1px solid transparent;
-    }
-    label:hover {
-      color: #5940ff;
-      cursor: pointer;
-    }
-    /*input 클릭시, label 스타일*/
-    input:checked + label {
-      color: #555;
-      border: 1px solid #ddd;
-      border-top: 2px solid #5940ff;
-      border-bottom: 1px solid #ffffff;
-    }
-    section{
+
+    section.safetyContents{
       display: none;
       div.safetyContentBox{
         display: flex;
@@ -54,10 +59,10 @@ div.observeContainer {
             font-weight: bold;
           }
           span.saveParameter{
-
+            cursor: pointer;
           }
           span.callParameter{
-
+            cursor: pointer;
           }
         }
         p{
@@ -116,19 +121,35 @@ div.observeContainer {
       }
     }
   }
+
   div.iframeContainer{
     display: grid;
     grid-template-rows: repeat(2, 1fr);
     grid-template-columns: repeat(2, 1fr);
     width: $camWidth*2;
-    height: $camHeight*2;
+    height: $camHeight*2 + $titleHeight;
     box-sizing: border-box;
 
     div.iframeBox{
       width: $camWidth;
-      height: $camHeight;
-      //background-color: #006154;
+      height: $camHeight + $titleHeight;
       box-sizing: border-box;
+
+      div.iframeTitle{
+        height: $titleHeight;
+        font-size: 16px;
+        display: flex;
+        align-items: center;
+        border: 1px solid white;
+        padding-left: 5px;
+        padding-right: 5px;
+        color: black;
+        span.iframeRecording{
+          position: relative;
+          margin-left: auto;
+        }
+      }
+
       canvas.polygonCanvas{
         position: absolute;
         z-index: 2;
@@ -136,6 +157,10 @@ div.observeContainer {
         box-sizing: border-box;
         width: $camWidth;
         height: $camHeight;
+      }
+      canvas.secondCanvas{
+        z-index: 3;
+        border: 3px solid red;
       }
       iframe{
         position: absolute;
@@ -151,10 +176,6 @@ div.observeContainer {
   }
 }
 
-#safetyTab1:checked ~ #safetyContent1,
-#safetyTab2:checked ~ #safetyContent2,
-#safetyTab3:checked ~ #safetyContent3,
-#safetyTab4:checked ~ #safetyContent4 {
+#safetyContent1{
   display: block;
 }
-

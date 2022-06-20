@@ -1,23 +1,143 @@
-import React, { useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { flushSync } from 'react-dom';
 import '../style/pages/ObservePage.scss';
-import { BiDownload, BiExport } from 'react-icons/bi';
 import { useNavigate } from 'react-router-dom';
+import ObserveCamInfo from '../components/ObserveCamInfo';
+import axios from 'axios';
+
+type ViedeoFrameType = {
+  canvasClass: string;
+  frameSrc: string;
+  firstCanvas: {
+    visible: boolean;
+    yellowSensingPercent: number;
+    redSensingPercent: number;
+    coordinate: Array<any>;
+  };
+  secondCanvas: {
+    visible: boolean;
+    yellowSensingPercent: number;
+    redSensingPercent: number;
+    coordinate: Array<any>;
+  };
+};
+
+const initVideoFrameData: Array<ViedeoFrameType> = [
+  {
+    canvasClass: 'polygonCanvas1',
+    frameSrc: 'http://192.168.0.7:81',
+    firstCanvas: {
+      visible: true,
+      yellowSensingPercent: 0.7,
+      redSensingPercent: 0.3,
+      coordinate: [],
+    },
+    secondCanvas: {
+      visible: false,
+      yellowSensingPercent: 0.7,
+      redSensingPercent: 0.3,
+      coordinate: [],
+    },
+  },
+  {
+    canvasClass: 'polygonCanvas2',
+    frameSrc: 'http://192.168.0.24:81',
+    firstCanvas: {
+      visible: true,
+      yellowSensingPercent: 0.7,
+      redSensingPercent: 0.3,
+      coordinate: [],
+    },
+    secondCanvas: {
+      visible: false,
+      yellowSensingPercent: 0.7,
+      redSensingPercent: 0.3,
+      coordinate: [],
+    },
+  },
+  {
+    canvasClass: 'polygonCanvas3',
+    frameSrc: 'http://192.168.0.23:81',
+    firstCanvas: {
+      visible: true,
+      yellowSensingPercent: 0.7,
+      redSensingPercent: 0.3,
+      coordinate: [],
+    },
+    secondCanvas: {
+      visible: false,
+      yellowSensingPercent: 0.7,
+      redSensingPercent: 0.3,
+      coordinate: [],
+    },
+  },
+  {
+    canvasClass: 'polygonCanvas4',
+    frameSrc: 'http://192.168.0.30:81',
+    firstCanvas: {
+      visible: true,
+      yellowSensingPercent: 0.7,
+      redSensingPercent: 0.3,
+      coordinate: [],
+    },
+    secondCanvas: {
+      visible: false,
+      yellowSensingPercent: 0.7,
+      redSensingPercent: 0.3,
+      coordinate: [],
+    },
+  },
+];
 
 const ObservePage = () => {
   const navigate = useNavigate();
   const camWidth = 512;
   const camHeight = 384;
-  const [streamUrl, setStreamUrl] = useState(
-    'http://127.0.0.1:8000/api/stream/area/456,307,658,329,536,486,332,469'
-  );
+  const pointSize = 3;
+  const lineSize = 2.5;
 
-  const [pointsState, setPointsState] = useState({
-    coordinate1: [],
-    coordinate2: [],
-    coordinate3: [],
-    coordinate4: [],
-  });
+  const drawColor = {
+    green: '#42f593',
+    yellow: '#FFFA7C',
+    red: '#FF374B',
+  };
+  const [videoFrameState, setVideoFrameState] =
+    useState<Array<ViedeoFrameType>>(initVideoFrameData);
+
+  const getCentroid = (points) => {
+    let area = 0;
+    let cx = 0;
+    let cy = 0;
+
+    for (let i = 0; i < points?.length; i++) {
+      const j = (i + 1) % points?.length;
+
+      const pt1 = points[i];
+      const pt2 = points[j];
+
+      const x1 = pt1[0];
+      const x2 = pt2[0];
+      const y1 = pt1[1];
+      const y2 = pt2[1];
+
+      area += x1 * y2;
+      area -= y1 * x2;
+
+      cx += (x1 + x2) * (x1 * y2 - x2 * y1);
+      cy += (y1 + y2) * (x1 * y2 - x2 * y1);
+    }
+
+    area /= 2;
+    area = Math.abs(area);
+
+    cx /= 6.0 * area;
+    cy /= 6.0 * area;
+
+    return {
+      x: Math.abs(cx),
+      y: Math.abs(cy),
+    };
+  };
 
   const squaredPolar = (point, centre) => {
     return [
@@ -26,327 +146,248 @@ const ObservePage = () => {
     ];
   };
 
-  const polySort = (canvasType) => {
-    const pointArray = pointsState[canvasType];
+  const polySort = (arrIndex, itemID) => {
+    const { coordinate } = videoFrameState[arrIndex][itemID];
     const centre = [
-      pointArray.reduce((sum, p) => sum + p[0], 0) / pointArray.length,
-      pointArray.reduce((sum, p) => sum + p[1], 0) / pointArray.length,
+      coordinate.reduce((sum, p) => sum + p[0], 0) / coordinate.length,
+      coordinate.reduce((sum, p) => sum + p[1], 0) / coordinate.length,
     ];
-    pointArray.forEach((point) => point.push(...squaredPolar(point, centre)));
-    pointArray.sort((a, b) => a[2] - b[2] || a[3] - b[3]);
-    pointArray.forEach((point) => (point.length -= 2));
-    setPointsState({ ...pointsState, [canvasType]: pointArray });
+    coordinate.forEach((point) => point.push(...squaredPolar(point, centre)));
+    coordinate.sort((a, b) => a[2] - b[2] || a[3] - b[3]);
+    coordinate.forEach((point) => (point.length -= 2));
+
+    const newArr = videoFrameState;
+    newArr[arrIndex][itemID].coordinate = coordinate;
+    flushSync(() => setVideoFrameState([]));
+    flushSync(() => setVideoFrameState(newArr));
   };
 
-  const draw = (canvas, ctx) => {
-    const pointArray = pointsState[canvas.getAttribute('typeof')];
-    console.log('draw ctx', ctx);
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    ctx.strokeStyle = '#42f593';
-    ctx.lineWidth = 4;
-    if (!pointArray.length) return;
-    for (const [x, y] of pointArray) {
-      ctx.beginPath();
-      ctx.arc(x, y, 5, 0, 2 * Math.PI, true);
-      ctx.fillStyle = '#42f593';
-      ctx.fill();
+  const draw = (canvas) => {
+    const greenCtx = canvas?.getContext('2d');
+    const yellowCtx = canvas?.getContext('2d');
+    const redCtx = canvas?.getContext('2d');
+    const arrIndex = canvas?.getAttribute('tabIndex');
+    const itemID = canvas?.getAttribute('itemID');
+    greenCtx?.clearRect(0, 0, canvas.width, canvas.height);
+
+    /* 다각형 라인 그리기 */
+    const drawLines = (context, targetPoints, color = drawColor.green) => {
+      context.strokeStyle = color;
+      context.lineWidth = lineSize;
+      context.beginPath();
+      context.moveTo(...targetPoints[0]);
+      for (const [x, y] of targetPoints.slice(1)) context.lineTo(x, y);
+      context.closePath();
+      context.stroke();
+    };
+
+    const { yellowSensingPercent, redSensingPercent, coordinate } =
+      videoFrameState[arrIndex][itemID];
+    const yellowSensingPoints = [];
+    const redSensingPoints = [];
+    /* 내분점 구하기 공식 참고 */
+    const m1 = yellowSensingPercent;
+    const n1 = 1 - yellowSensingPercent;
+    const m2 = redSensingPercent;
+    const n2 = 1 - redSensingPercent;
+
+    // 무게중심의 좌표값
+    const centerX = getCentroid(coordinate).x;
+    const centerY = getCentroid(coordinate).y;
+
+    /* 다각형의 점 찍기 */
+    const drawPoints = (context, x, y, color = drawColor.green) => {
+      context.beginPath();
+      context.arc(x, y, pointSize, 0, 2 * Math.PI, true);
+      context.fillStyle = color;
+      context.fill();
+    };
+
+    /* 무게 중식 찍기 */
+    // drawPoints(greenCtx, centerX, centerY);
+
+    /* 내분점 좌표 구하기 */
+    const getInsideX = (m, n, x) => (m * x + n * centerX) / (m + n);
+    const getInsideY = (m, n, y) => (m * y + n * centerY) / (m + n);
+
+    if (!coordinate.length) return;
+    for (const [x, y] of coordinate) {
+      /* Green Zone 다각형점 찍기 */
+      drawPoints(greenCtx, x, y);
+
+      /* Yellow Zone 다각형점 찍기 */
+      const yellowInsideX = Math.round(getInsideX(m1, n1, x));
+      const yellowInsideY = Math.round(getInsideY(m1, n1, y));
+      yellowSensingPoints.push([yellowInsideX, yellowInsideY]);
+      drawPoints(yellowCtx, yellowInsideX, yellowInsideY, drawColor.yellow);
+
+      /* Red Zone 다각형점 찍기 */
+      const redInsideX = Math.round(getInsideX(m2, n2, x));
+      const redInsideY = Math.round(getInsideY(m2, n2, y));
+      redSensingPoints.push([redInsideX, redInsideY]);
+      drawPoints(redCtx, redInsideX, redInsideY, drawColor.red);
     }
-    ctx.beginPath();
-    ctx.moveTo(...pointArray[0]);
-    for (const [x, y] of pointArray.slice(1)) ctx.lineTo(x, y);
-    ctx.closePath();
-    ctx.stroke();
+
+    const yellowSensingCoordinate = yellowSensingPoints.join(',');
+    const redSensingCoordinate = redSensingPoints.join(',');
+
+    /* Green Zone 라인  그리기 */
+    drawLines(greenCtx, coordinate);
+    /* Yellow Zone 라인  그리기 */
+    drawLines(yellowCtx, yellowSensingPoints, drawColor.yellow);
+    /* Red Zone 라인  그리기 */
+    drawLines(redCtx, redSensingPoints, drawColor.red);
+    // console.log('yellowSensingCoordinate', yellowSensingCoordinate);
+    // console.log('redSensingCoordinate', redSensingCoordinate);
+    if (coordinate.length > 2) {
+      let { frameSrc } = videoFrameState[arrIndex];
+
+      if (itemID === 'firstCanvas') {
+        console.log('firstCanvas');
+        frameSrc = `${frameSrc.split(':81')[0]}:81`;
+        videoFrameState[
+          arrIndex
+        ].frameSrc = `${frameSrc}/api/stream/area/${yellowSensingCoordinate}/${redSensingCoordinate}`;
+      } else {
+        console.log('secondCanvas');
+        videoFrameState[
+          arrIndex
+        ].frameSrc = `${frameSrc}/${yellowSensingCoordinate}/${redSensingCoordinate}`;
+      }
+    }
   };
 
   const canvasClick = (e) => {
     const canvas = e.currentTarget;
-    const ctx = canvas?.getContext('2d');
-    const canvasType = canvas?.getAttribute('typeof');
-    let x = e.clientX - canvas.offsetLeft;
-    const y = e.clientY - canvas.offsetTop - 56;
-    if (canvasType === 'coordinate2') {
-      x -= 1024;
-    }
-    const pointArray = pointsState[canvasType];
-    const match = pointArray?.findIndex(
+    /* Viedeo Frames Array Index */
+    const arrIndex = canvas?.getAttribute('tabIndex');
+    /* firstCanvas | secondCanvas */
+    const itemID = canvas?.getAttribute('itemID');
+    const x = e.clientX - canvas.offsetLeft - 6;
+    const y = e.clientY - canvas.offsetTop - 8;
+    const { coordinate } = videoFrameState[arrIndex][itemID];
+    const match = coordinate?.findIndex(
       ([x0, y0]) => Math.abs(x0 - x) + Math.abs(y0 - y) <= 6
     );
-    if (match < 0) pointArray.push([x, y]);
-    else pointArray.splice(match, 1); // delete point when user clicks near it.
-    flushSync(() =>
-      setPointsState({ ...pointsState, [canvasType]: pointArray })
-    );
-    flushSync(() => polySort(canvasType));
-    flushSync(() => draw(canvas, ctx));
+    if (match < 0) coordinate.push([x, y]);
+    else coordinate.splice(match, 1); // delete point when user clicks near it.
+    const newArr = videoFrameState;
+    newArr[arrIndex][itemID].coordinate = coordinate;
+    flushSync(() => setVideoFrameState([]));
+    flushSync(() => setVideoFrameState(newArr));
+    flushSync(() => polySort(arrIndex, itemID));
+    flushSync(() => draw(canvas));
+  };
+
+  useEffect(() => {
+    console.log('videoFrameState[0].frameSrc', videoFrameState[0]?.frameSrc);
+    document.querySelectorAll('.polygonCanvas').forEach((ele) => draw(ele));
+  }, [videoFrameState]);
+
+  const videoFrameMap = useMemo(() => {
+    return videoFrameState.map((data: ViedeoFrameType, idx) => (
+      <div className="iframeBox" key={idx}>
+        <div className="iframeTitle">
+          CAM{(idx + 1).toString()}
+          <span
+            className="iframeRecording"
+            onClick={() => {
+              axios.get(
+                `${data.frameSrc.split(':81')[0]}:81/api/util/reboot/`,
+                {
+                  withCredentials: false,
+                }
+              );
+            }}
+          >
+            Refresh({data.frameSrc})
+          </span>
+          <span className="iframeRecording">Recording...</span>
+        </div>
+        {data.firstCanvas.visible && (
+          <canvas
+            className={`firstCanvas polygonCanvas ${data.canvasClass}`}
+            tabIndex={idx}
+            itemID="firstCanvas"
+            width={camWidth}
+            height={camHeight}
+            onClick={canvasClick}
+          />
+        )}
+        {data.secondCanvas.visible && (
+          <canvas
+            className={`secondCanvas polygonCanvas ${data.canvasClass}`}
+            tabIndex={idx}
+            itemID="secondCanvas"
+            width={camWidth}
+            height={camHeight}
+            onClick={canvasClick}
+          />
+        )}
+        <iframe
+          title="stream1"
+          src={
+            data.frameSrc.split('/').includes('area')
+              ? data.frameSrc
+              : `${data.frameSrc}/api/stream/`
+          }
+          width={camWidth}
+          height={camHeight}
+        />
+      </div>
+    ));
+  }, [videoFrameState]);
+
+  const visibilityCamInfo = (e) => {
+    const target = e.currentTarget;
+    const dType = target.getAttribute('datatype');
+    const camTabs = Array.from(document.querySelectorAll('.safetyContents'));
+    camTabs.forEach((ele: HTMLElement) => {
+      ele.style.display = 'none';
+    });
+    (
+      document.querySelector(
+        `#safetyContent${dType}`
+      ) as HTMLTableSectionElement
+    ).style.display = 'block';
+  };
+
+  const getTabEles = () => {
+    const tabArr = [];
+    for (let i = 0; i < 4; i++) {
+      tabArr.push(
+        <div className="safetyTabBox" key={i}>
+          <input
+            className="safetyTab"
+            id={`safetyTab${i + 1}`}
+            datatype={(i + 1).toString()}
+            type="radio"
+            name="tabs"
+            defaultChecked={i === 0 && true}
+            onChange={visibilityCamInfo}
+          />
+          <label className="safeLabel" htmlFor={`safetyTab${i + 1}`}>
+            {`Cam${i + 1}`}
+          </label>
+        </div>
+      );
+    }
+    return tabArr;
   };
 
   return (
-    <>
-      <div id="observeContainer" className="observeContainer">
-        <div className="leftSafetyBox">
-          <p className="SafetyTitle">H1 공장 크레인</p>
-          <input
-            className="safetyTab"
-            id="safetyTab1"
-            type="radio"
-            name="tabs"
-            defaultChecked
-          />
-          {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
-          <label className="safeLabel" htmlFor="safetyTab1">
-            Cam1
-          </label>
-
-          <input
-            className="safetyTab"
-            id="safetyTab2"
-            type="radio"
-            name="tabs"
-          />
-          {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
-          <label className="safeLabel" htmlFor="safetyTab2">
-            Cam2
-          </label>
-
-          <input
-            className="safetyTab"
-            id="safetyTab3"
-            type="radio"
-            name="tabs"
-          />
-          {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
-          <label className="safeLabel" htmlFor="safetyTab3">
-            Cam3
-          </label>
-
-          <input
-            className="safetyTab"
-            id="safetyTab4"
-            type="radio"
-            name="tabs"
-          />
-          {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
-          <label className="safeLabel" htmlFor="safetyTab4">
-            Cam4
-          </label>
-
-          <section id="safetyContent1">
-            <div className="safetyContentBox">
-              <div className="groupBox">
-                <span className="groupName">Group1</span>
-                <span className="saveParameter">
-                  <BiDownload />
-                  파라미터 저장
-                </span>
-                <span className="callParameter">
-                  <BiExport />
-                  파라미터 불러오기
-                </span>
-              </div>
-              <p>
-                Safety Level : <span className="safeLevel">Green</span>
-              </p>
-              <p>감지 수 : 0</p>
-              <div className="safetyBtnBox">
-                <button className="safetyBtn safetyActiveBtn">Active</button>
-                <button className="safetyBtn safetyDeleteBtn">Delete</button>
-                <button className="safetyBtn safetyResetBtn">
-                  Error Reset
-                </button>
-              </div>
-              <div className="safetyCreateBtnBox">
-                <button className="safetyCreateBtn">생성</button>
-              </div>
-              <div className="bottomBtnBox">
-                <button className="bottomBtn">Recording</button>
-                <button className="bottomBtn" onClick={() => {
-                  navigate('/detail');
-                }}>
-                  설정
-                </button>
-              </div>
-            </div>
-          </section>
-          <section id="safetyContent2">
-            <div className="safetyContentBox">
-              <div className="groupBox">
-                <span className="groupName">Group2</span>
-                <span className="saveParameter">
-                  <BiDownload />
-                  파라미터 저장
-                </span>
-                <span className="callParameter">
-                  <BiExport />
-                  파라미터 불러오기
-                </span>
-              </div>
-              <p>
-                Safety Level : <span className="safeLevel">Green</span>
-              </p>
-              <p>감지 수 : 0</p>
-              <div className="safetyBtnBox">
-                <button className="safetyBtn safetyActiveBtn">Active</button>
-                <button className="safetyBtn safetyDeleteBtn">Delete</button>
-                <button className="safetyBtn safetyResetBtn">
-                  Error Reset
-                </button>
-              </div>
-              <div className="safetyCreateBtnBox">
-                <button className="safetyCreateBtn">생성</button>
-              </div>
-              <div className="bottomBtnBox">
-                <button className="bottomBtn">Recording</button>
-                <button className="bottomBtn" onClick={() => {
-                  navigate('/detail');
-                }}>
-                  설정
-                </button>
-              </div>
-            </div>
-          </section>
-          <section id="safetyContent3">
-            <div className="safetyContentBox">
-              <div className="groupBox">
-                <span className="groupName">Group3</span>
-                <span className="saveParameter">
-                  <BiDownload />
-                  파라미터 저장
-                </span>
-                <span className="callParameter">
-                  <BiExport />
-                  파라미터 불러오기
-                </span>
-              </div>
-              <p>
-                Safety Level : <span className="safeLevel">Green</span>
-              </p>
-              <p>감지 수 : 0</p>
-              <div className="safetyBtnBox">
-                <button className="safetyBtn safetyActiveBtn">Active</button>
-                <button className="safetyBtn safetyDeleteBtn">Delete</button>
-                <button className="safetyBtn safetyResetBtn">
-                  Error Reset
-                </button>
-              </div>
-              <div className="safetyCreateBtnBox">
-                <button className="safetyCreateBtn">생성</button>
-              </div>
-              <div className="bottomBtnBox">
-                <button className="bottomBtn">Recording</button>
-                <button className="bottomBtn" onClick={() => {
-                  navigate('/detail');
-                }}>
-                  설정
-                </button>
-              </div>
-            </div>
-          </section>
-          <section id="safetyContent4">
-            <div className="safetyContentBox">
-              <div className="groupBox">
-                <span className="groupName">Group4</span>
-                <span className="saveParameter">
-                  <BiDownload />
-                  파라미터 저장
-                </span>
-                <span className="callParameter">
-                  <BiExport />
-                  파라미터 불러오기
-                </span>
-              </div>
-              <p>
-                Safety Level : <span className="safeLevel">Green</span>
-              </p>
-              <p>감지 수 : 0</p>
-              <div className="safetyBtnBox">
-                <button className="safetyBtn safetyActiveBtn">Active</button>
-                <button className="safetyBtn safetyDeleteBtn">Delete</button>
-                <button className="safetyBtn safetyResetBtn">
-                  Error Reset
-                </button>
-              </div>
-              <div className="safetyCreateBtnBox">
-                <button className="safetyCreateBtn">생성</button>
-              </div>
-              <div className="bottomBtnBox">
-                <button className="bottomBtn">Recording</button>
-                <button className="bottomBtn" onClick={() => {
-                  navigate('/detail');
-                }}>
-                  설정
-                </button>
-              </div>
-            </div>
-          </section>
-        </div>
-        <div className="iframeContainer">
-          <div className="iframeBox">
-            <canvas
-              className="polygonCanvas polygonCanvas1"
-              width={camWidth}
-              height={camHeight}
-              onClick={canvasClick}
-              typeof="coordinate1"
-            />
-            <iframe
-              title="stream1"
-              // src={streamUrl ?? 'http://127.0.0.1:8000/api/stream/area/'}
-              src="http://192.168.0.7:81/api/stream/"
-              width={camWidth}
-              height={camHeight}
-            />
-          </div>
-          <div className="iframeBox">
-            <canvas
-              className="polygonCanvas polygonCanvas2"
-              width={camWidth}
-              height={camHeight}
-              onClick={canvasClick}
-              typeof="coordinate2"
-            />
-            <iframe
-              title="stream1"
-              // src={streamUrl ?? 'http://127.0.0.1:8000/api/stream/area/'}
-              src="http://192.168.0.24:81/api/stream/"
-              width={camWidth}
-              height={camHeight}
-            />
-          </div>
-          <div className="iframeBox">
-            <canvas
-              className="polygonCanvas polygonCanvas3"
-              width={camWidth}
-              height={camHeight}
-              onClick={canvasClick}
-              typeof="coordinate3"
-            />
-            <iframe
-              title="stream1"
-              // src={streamUrl ?? 'http://127.0.0.1:8000/api/stream/area/'}
-              src="http://192.168.0.30:81/api/stream/"
-              width={camWidth}
-              height={camHeight}
-            />
-          </div>
-          <div className="iframeBox">
-            <canvas
-              className="polygonCanvas polygonCanvas3"
-              width={camWidth}
-              height={camHeight}
-              onClick={canvasClick}
-              typeof="coordinate3"
-            />
-            <iframe
-              title="stream1"
-              // src={streamUrl ?? 'http://127.0.0.1:8000/api/stream/area/'}
-              src="http://192.168.0.30:81/"
-              width={camWidth}
-              height={camHeight}
-            />
-          </div>
-        </div>
+    <div id="observeContainer" className="observeContainer">
+      <div className="leftSafetyBox">
+        <p className="SafetyTitle">H1 공장 크레인</p>
+        <div className="safetyTabContainer">{getTabEles()}</div>
+        <ObserveCamInfo
+          videoFrameState={videoFrameState}
+          setVideoFrameState={setVideoFrameState}
+        />
       </div>
-    </>
+      {/* 카메라 Observe 박스 */}
+      <div className="iframeContainer">{videoFrameMap}</div>
+    </div>
   );
 };
 
