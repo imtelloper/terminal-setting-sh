@@ -1,4 +1,5 @@
 import json
+import os
 
 from fastapi import APIRouter, Body
 from fastapi.responses import JSONResponse
@@ -10,6 +11,12 @@ router = APIRouter(
     tags=['util'],
     responses={404: {"description": "not found"}, 200: {"description": "ok"}},
 )
+
+@router.get("/reboot/", response_description="")
+async def reboot():
+    os.system("echo reboot")
+    os.system("sudo reboot")
+    return "reboot"
 
 @router.get("/", response_description="")
 async def getRtu():
