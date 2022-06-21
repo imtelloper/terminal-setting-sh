@@ -13,6 +13,7 @@ import config
 from database.mongoDB import *
 from dtos.observeDto import ObserveDto
 from fastapi.encoders import jsonable_encoder
+import socket
 
 warnings.filterwarnings( 'ignore' )
 
@@ -23,10 +24,24 @@ router = APIRouter(
 
 service = StreamService()
 
+def isInternetConnected()->bool:
+    ethernetIp = socket.gethostbyname(socket.gethostname())
+    s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    s.connect(("8.8.8.8", 80))
+    wifiIp = s.getsockname()[0]
+    s.close()
+
+    if ethernetIp == wifiIp:
+        print('Internet is not connected')
+        return False
+    else:
+        print('Internet connected ')
+        return True
 
 @router.get("/", response_description="")
 async def streamVideo():
-    await service.addTodayCamData()
+    if isInternetConnected():
+        await service.addTodayCamData()
     service.setCameraOff()
     service.setCameraOn()
     return StreamingResponse(service.video_streaming(), media_type="multipart/x-mixed-replace; boundary=frame")
@@ -46,7 +61,8 @@ async def streamVideoOff():
 
 @router.get("/area/{coordinate1}", response_description="")
 async def streamVideoAreaSet(coordinate1):
-    await service.addTodayCamData()
+    if isInternetConnected():
+        await service.addTodayCamData()
     data = coordinate1.split(',')
     coordinates = [[]]
     coordiList = []
@@ -62,7 +78,8 @@ async def streamVideoAreaSet(coordinate1):
 
 @router.get("/area/{coordinate1}/{coordinate2}", response_description="")
 async def streamVideoAreaSet(coordinate1, coordinate2):
-    await service.addTodayCamData()
+    if isInternetConnected():
+        await service.addTodayCamData()
     data1 = coordinate1.split(',')
     data2 = coordinate2.split(',')
     coordinates1 = [[]]

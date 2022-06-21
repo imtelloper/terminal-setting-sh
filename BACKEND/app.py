@@ -29,6 +29,7 @@ import time
 import playsound
 import minimalmodbus as minimalmodbus
 import serial
+import socket
 
 # load_dotenv(dotenv_path=f".{os.getenv('DOT_ENV', 'test')}.env")
 # logging.config.fileConfig("logging.conf", disable_existing_loggers=False)
