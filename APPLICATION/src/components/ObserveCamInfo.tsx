@@ -51,6 +51,9 @@ const ObserveCamInfo = ({ videoFrameState, setVideoFrameState }) => {
     console.log('handleErrorReset');
     const newArr = videoFrameState;
     newArr[0].secondCanvas.visible = true;
+    newArr[1].secondCanvas.visible = true;
+    newArr[2].secondCanvas.visible = true;
+    newArr[3].secondCanvas.visible = true;
     flushSync(() => setVideoFrameState([]));
     flushSync(() => setVideoFrameState(newArr));
   };
