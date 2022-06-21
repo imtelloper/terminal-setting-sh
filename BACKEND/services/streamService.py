@@ -192,7 +192,6 @@ class StreamService:
                     # 욜로가 0.2초, 트랙킹이 3번 <- 반복
                     if humans:
                         # 욜로로 감지 -> 객체를 오픈cv
-                        print('humans')
                         # detection
                         for bbox in humans:
                             x1, y1, x2, y2 = tuple([int(_) for _ in bbox])
@@ -203,10 +202,9 @@ class StreamService:
                             track_signal = True
                             warn_sig, result_img = calculate_human(img, x1, y1, x2, y2, w, h, unit_num, [rois1, rois2])
                             sensing = warn_sig
-                            print('warn_sig', warn_sig) # 0:안전, 1: 옐로우1차, 2: 2차 레드
+                            # print('warn_sig', warn_sig) # 0:안전, 1: 옐로우1차, 2: 2차 레드
 
                     else:
-                        print('aliean')
                         # print("tracking")
                         if track_signal:
                             ret, t_bboxes = multi_tracker.update(img)
@@ -216,11 +214,11 @@ class StreamService:
                                     x2, y2 = x1 + w, y1 + h
                                     warn_sig, result_img = calculate_human(img, x1, y1, x2, y2, w, h, unit_num, [rois1, rois2])
                                     sensing = warn_sig
-                                    print('warn_sig',warn_sig) # 0:안전, 1: 옐로우1차, 2: 2차 레드
+                                    # print('warn_sig',warn_sig) # 0:안전, 1: 옐로우1차, 2: 2차 레드
                         else:
                             result_img = img
 
-                    if timeCnt == 10:
+                    if timeCnt == 50:
                         print('#########################################################timeCnt :',timeCnt)
                         timeCnt = 0
                         '''
@@ -263,7 +261,7 @@ class StreamService:
                             )
 
 
-                    print('############## len result_img : ', len(result_img))
+                    # print('############## len result_img : ', len(result_img))
                     if len(result_img) <= 0:
                         continue
                     result_img = np.array(result_img)  # hoon
