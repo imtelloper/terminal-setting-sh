@@ -88,3 +88,52 @@ async def streamVideoAreaSet(coordinate1, coordinate2):
 
 
 
+
+
+@router.get("/area/{coordinate1}/{coordinate2}/{coordinate3}/{coordinate4}", response_description="")
+async def streamVideoAreaSet(coordinate1, coordinate2, coordinate3, coordinate4):
+    await service.addTodayCamData()
+    data1 = coordinate1.split(',')
+    data2 = coordinate2.split(',')
+    data3 = coordinate3.split(',')
+    data4 = coordinate4.split(',')
+    coordinates1 = [[], []]
+    coordinates2 = [[], []]
+    coordiList1 = []
+    coordiList2 = []
+    coordiList3 = []
+    coordiList4 = []
+
+    for val in data1:
+        coordiList1.append(int(val))
+        if (len(coordiList1) > 1):
+            coordinates1[0].append(tuple(coordiList1))
+            coordiList1 = []
+
+    for val in data2:
+        coordiList2.append(int(val))
+        if (len(coordiList2) > 1):
+            coordinates2[0].append(tuple(coordiList2))
+            coordiList2 = []
+
+
+    for val in data3:
+        coordiList3.append(int(val))
+        if (len(coordiList3) > 1):
+            coordinates1[1].append(tuple(coordiList3))
+            coordiList3 = []
+
+
+    for val in data4:
+        coordiList4.append(int(val))
+        if (len(coordiList4) > 1):
+            coordinates2[1].append(tuple(coordiList4))
+            coordiList4 = []
+
+
+    print('streamVideoAreaSet 2data :', coordinates1)
+    print('streamVideoAreaSet 2data :', coordinates2)
+    return StreamingResponse(service.video_streaming(coordinates1, coordinates2), media_type="multipart/x-mixed-replace; boundary=frame")
+
+
+
