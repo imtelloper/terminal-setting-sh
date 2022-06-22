@@ -104,9 +104,6 @@ async def streamVideoAreaSet(coordinate1, coordinate2):
     return StreamingResponse(service.video_streaming(coordinates1, coordinates2), media_type="multipart/x-mixed-replace; boundary=frame")
 
 
-
-
-
 @router.get("/area/{coordinate1}/{coordinate2}/{coordinate3}/{coordinate4}", response_description="")
 async def streamVideoAreaSet(coordinate1, coordinate2, coordinate3, coordinate4):
     await service.addTodayCamData()
