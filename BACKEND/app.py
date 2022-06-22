@@ -2,7 +2,6 @@ import glob
 from typing import Optional
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from buzzer import *
 from database.mongoDB import *
 from routers.tempHumidityRouter import router as TempHumidityRouter
 from routers.utilRouter import router as UtilRouter

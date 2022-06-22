@@ -7,7 +7,6 @@
 # 지정한 명령어만 사용가능
 # testuser1 ALL=NOPASSWD: /usr/sbin/useradd, /usr/sbin/userdel
 
-
 ### crontab에서 등록하기
 # 1. 스크립트 생성
 #   vi safety-autostart.sh
@@ -18,8 +17,8 @@
 #  맨 아래에 입력
 #   @reboot /home/interx/SAFETY-AI/BACKEND/safety-autostart.sh > safety-autostart.sh.log 2>&1
 
-# 8000포트를 안쓰고 있거나 죽었다면 다시 재실행 시키도록. 8000 포트를 계속 확인하는 python 필요
+# port-watcher.py: 8000포트를 안쓰고 있거나 죽었다면 다시 재실행 시키도록. 8000 포트를 계속 확인하는 python script
 fuser -k 8000/tcp
-python /home/interx/SAFETY-AI/BACKEND/port-watcher.py
+python /home/interx/SAFETY-AI/BACKEND/reviver/port-watcher.py
 
 exit 0
