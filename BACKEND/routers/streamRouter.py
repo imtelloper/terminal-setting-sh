@@ -25,23 +25,26 @@ router = APIRouter(
 service = StreamService()
 
 
-def isInternetConnected() -> bool:
-    ethernetIp = socket.gethostbyname(socket.gethostname())
-    s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-    s.connect(("8.8.8.8", 80))
-    wifiIp = s.getsockname()[0]
-    s.close()
-
-    if ethernetIp == wifiIp:
-        print('Internet is not connected')
-        return False
-    else:
+def isInternetConnected(host="8.8.8.8", port=53, timeout=3) -> bool:
+    """
+    Host: 8.8.8.8 (google-public-dns-a.google.com)
+    OpenPort: 53/tcp
+    Service: domain (DNS/TCP)
+    """
+    try:
+        socket.setdefaulttimeout(timeout)
+        socket.socket(socket.AF_INET, socket.SOCK_STREAM).connect((host, port))
         print('Internet connected ')
         return True
+    except socket.error as ex:
+        print('Internet is not connected')
+        print(ex)
+        return False
 
 
 @router.get("/", response_description="")
 async def streamVideo():
+    print('isInternetConnected :', isInternetConnected)
     if isInternetConnected():
         await service.addTodayCamData()
     service.setCameraOff()

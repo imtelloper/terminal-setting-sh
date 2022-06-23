@@ -61,6 +61,7 @@ class StreamService:
     async def addTodayCamData(self):
         today = str(datetime.date.today())
         dataArr = []
+        print('addTodayCamData config.CAMPORT', config.CAMPORT)
         searchedData = findDatas(self.dbName, self.tableName, {
             'camPort': config.CAMPORT,
             'date': today,
