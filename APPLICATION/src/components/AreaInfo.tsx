@@ -5,6 +5,7 @@ import '../style/components/AreaInfo.scss';
 import { useNavigate } from 'react-router-dom';
 import useSWR from 'swr';
 import { getFetcher } from '../fetcher/fetcher';
+import axios from 'axios';
 
 type AreaCard = {
   title: string;
@@ -23,9 +24,17 @@ type AreaCard = {
 
 const AreaInfo = () => {
   const navigate = useNavigate();
+  const today = new Date().toISOString().slice(0, 10);
+  const [getObserveState, setGetObserveState] = useState({
+    // date: today,
+    date: '2022-06-22',
+  });
+  const findFetcher = (url: string) =>
+    axios.post(url, getObserveState).then((res) => res.data);
+
   const { data: swrObserveData, error } = useSWR<Array<Observe>>(
-    '/api/observe/0/5',
-    getFetcher,
+    '/api/observe/find',
+    findFetcher,
     {
       refreshInterval: 1000,
     }

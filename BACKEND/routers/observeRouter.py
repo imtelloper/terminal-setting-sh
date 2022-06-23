@@ -4,6 +4,14 @@ from dtos.observeDto import ObserveDto
 from models.observeModel import *
 from services.observeService import *
 
+
+'''
+변경할 것들
+- APIRouter -> tags
+- service
+- dto
+'''
+
 router = APIRouter(
     tags=['observe'],
     responses={404: {"description": "not found"}, 200: {"description": "ok"}}
@@ -27,7 +35,7 @@ async def getOneData(id):
     return dto(**serviceResult)
 
 
-@router.get("/", response_description="id로 데이터 가져오기")
+@router.post("/find", response_description='Json데이터로 찾아서 가져오기 body example -> { "date": "2022-06-22" } ')
 async def findData(data=Body(...)):
     jsonData = jsonable_encoder(data)
     serviceResult = await service.searchDatas(jsonData)

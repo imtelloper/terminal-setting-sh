@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { flushSync } from 'react-dom';
 import '../style/pages/ObservePage.scss';
 import { useNavigate } from 'react-router-dom';
@@ -162,7 +162,7 @@ const ObservePage = () => {
     flushSync(() => setVideoFrameState(newArr));
   };
 
-  const draw = (canvas) => {
+  const draw = (canvas, clicked = false) => {
     const greenCtx = canvas?.getContext('2d');
     const yellowCtx = canvas?.getContext('2d');
     const redCtx = canvas?.getContext('2d');
@@ -237,23 +237,35 @@ const ObservePage = () => {
     drawLines(yellowCtx, yellowSensingPoints, drawColor.yellow);
     /* Red Zone 라인  그리기 */
     drawLines(redCtx, redSensingPoints, drawColor.red);
-    // console.log('yellowSensingCoordinate', yellowSensingCoordinate);
-    // console.log('redSensingCoordinate', redSensingCoordinate);
-    if (coordinate.length > 2) {
-      let { frameSrc } = videoFrameState[arrIndex];
 
-      if (itemID === 'firstCanvas') {
-        console.log('firstCanvas');
-        frameSrc = `${frameSrc.split(':81')[0]}:81`;
-        videoFrameState[
-          arrIndex
-        ].frameSrc = `${frameSrc}/api/stream/area/${yellowSensingCoordinate}/${redSensingCoordinate}`;
-      } else {
-        console.log('secondCanvas');
-        videoFrameState[
-          arrIndex
-        ].frameSrc = `${frameSrc}/${yellowSensingCoordinate}/${redSensingCoordinate}`;
-      }
+    if (coordinate.length < 3) {
+      return;
+    }
+
+    let { frameSrc } = videoFrameState[arrIndex];
+    if (!clicked) {
+      return;
+    }
+
+    const setNewVideoState = (newSrc) => {
+      const newArr = videoFrameState;
+      newArr[arrIndex].frameSrc = newSrc;
+      flushSync(() => setVideoFrameState([]));
+      flushSync(() => setVideoFrameState(newArr));
+    };
+
+    if (itemID === 'firstCanvas') {
+      console.log('firstCanvas');
+      frameSrc = `${frameSrc.split(':81')[0]}:81`;
+      const newSrc = `${frameSrc}/api/stream/area/${yellowSensingCoordinate}/${redSensingCoordinate}`;
+      setNewVideoState(newSrc);
+    } else {
+      console.log('secondCanvas');
+      const splitedSrc = frameSrc.split('/');
+      splitedSrc.length = 8;
+      frameSrc = splitedSrc.join('/');
+      const newSrc = `${frameSrc}/${yellowSensingCoordinate}/${redSensingCoordinate}`;
+      setNewVideoState(newSrc);
     }
   };
 
@@ -276,12 +288,20 @@ const ObservePage = () => {
     flushSync(() => setVideoFrameState([]));
     flushSync(() => setVideoFrameState(newArr));
     flushSync(() => polySort(arrIndex, itemID));
-    flushSync(() => draw(canvas));
+    draw(canvas, true);
   };
 
+  const drawCallback = useCallback((ele) => draw(ele), [videoFrameState]);
+
   useEffect(() => {
-    console.log('videoFrameState[0].frameSrc', videoFrameState[0]?.frameSrc);
-    document.querySelectorAll('.polygonCanvas').forEach((ele) => draw(ele));
+    videoFrameState[0]?.frameSrc &&
+      console.log('videoFrameState[0].frameSrc', videoFrameState[0]?.frameSrc);
+
+    document.querySelectorAll('.polygonCanvas').forEach((ele, idx) => {
+      console.log('idx', idx);
+      draw(ele);
+      // drawCallback(ele);
+    });
   }, [videoFrameState]);
 
   const videoFrameMap = useMemo(() => {

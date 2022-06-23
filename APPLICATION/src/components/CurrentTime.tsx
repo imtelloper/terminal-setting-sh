@@ -16,7 +16,6 @@ const CurrentTime = () => {
     second: '2-digit',
   });
 
-
   return (
     <div className="currentTimeContainer">
       {todayDate}

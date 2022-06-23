@@ -3,7 +3,7 @@ import * as ReactDOM from 'react-dom/client';
 import App from './App';
 
 axios.defaults.baseURL = 'http://127.0.0.1:8000';
-axios.defaults.withCredentials = true;
+axios.defaults.withCredentials = false;
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(<App />);

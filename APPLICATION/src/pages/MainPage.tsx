@@ -18,7 +18,7 @@ const MainPage = () => {
   };
 
   useEffect(() => {
-    navigate('/observe');
+    // navigate('/observe');
     // axios
     //   .post('/api/observe/', observeData, {
     //     withCredentials: false,
@@ -26,7 +26,6 @@ const MainPage = () => {
     //   .then((res) => {
     //     console.log('res', res);
     //   });
-
     // axios
     //   .get('/api/observe/0/10', {
     //     withCredentials: false,

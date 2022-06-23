@@ -1,12 +1,15 @@
 import os
+from dotenv import load_dotenv
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+
+load_dotenv(verbose=True)
 
 """
 POSITION KEYWORD
 """
-AREA = "H1 공장 크레인"
-CAMPORT = "cam1"
+AREA = os.getenv('AREA')
+CAMPORT = os.getenv('CAMPORT')
 """
 DEFAULT KEYWORD
 """

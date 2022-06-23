@@ -15,7 +15,7 @@ from dtos.observeDto import ObserveDto
 from fastapi.encoders import jsonable_encoder
 import socket
 
-warnings.filterwarnings( 'ignore' )
+warnings.filterwarnings('ignore')
 
 router = APIRouter(
     tags=['stream'],
@@ -24,7 +24,8 @@ router = APIRouter(
 
 service = StreamService()
 
-def isInternetConnected()->bool:
+
+def isInternetConnected() -> bool:
     ethernetIp = socket.gethostbyname(socket.gethostname())
     s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     s.connect(("8.8.8.8", 80))
@@ -37,6 +38,7 @@ def isInternetConnected()->bool:
     else:
         print('Internet connected ')
         return True
+
 
 @router.get("/", response_description="")
 async def streamVideo():
@@ -73,7 +75,8 @@ async def streamVideoAreaSet(coordinate1):
             coordiList = []
 
     print('streamVideoAreaSet 2data :', coordinates)
-    return StreamingResponse(service.video_streaming(coordinates), media_type="multipart/x-mixed-replace; boundary=frame")
+    return StreamingResponse(service.video_streaming(coordinates),
+                             media_type="multipart/x-mixed-replace; boundary=frame")
 
 
 @router.get("/area/{coordinate1}/{coordinate2}", response_description="")
@@ -101,7 +104,8 @@ async def streamVideoAreaSet(coordinate1, coordinate2):
 
     print('streamVideoAreaSet 2data :', coordinates1)
     print('streamVideoAreaSet 2data :', coordinates2)
-    return StreamingResponse(service.video_streaming(coordinates1, coordinates2), media_type="multipart/x-mixed-replace; boundary=frame")
+    return StreamingResponse(service.video_streaming(coordinates1, coordinates2),
+                             media_type="multipart/x-mixed-replace; boundary=frame")
 
 
 @router.get("/area/{coordinate1}/{coordinate2}/{coordinate3}/{coordinate4}", response_description="")
@@ -130,13 +134,11 @@ async def streamVideoAreaSet(coordinate1, coordinate2, coordinate3, coordinate4)
             coordinates2[0].append(tuple(coordiList2))
             coordiList2 = []
 
-
     for val in data3:
         coordiList3.append(int(val))
         if (len(coordiList3) > 1):
             coordinates1[1].append(tuple(coordiList3))
             coordiList3 = []
-
 
     for val in data4:
         coordiList4.append(int(val))
@@ -144,10 +146,7 @@ async def streamVideoAreaSet(coordinate1, coordinate2, coordinate3, coordinate4)
             coordinates2[1].append(tuple(coordiList4))
             coordiList4 = []
 
-
     print('streamVideoAreaSet 2data :', coordinates1)
     print('streamVideoAreaSet 2data :', coordinates2)
-    return StreamingResponse(service.video_streaming(coordinates1, coordinates2), media_type="multipart/x-mixed-replace; boundary=frame")
-
-
-
+    return StreamingResponse(service.video_streaming(coordinates1, coordinates2),
+                             media_type="multipart/x-mixed-replace; boundary=frame")

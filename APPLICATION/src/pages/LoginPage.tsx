@@ -58,7 +58,7 @@ const LoginPage = () => {
   };
 
   const setUserInfo = () => {
-    if(!sessionStorage.getItem('authToken')) return
+    if (!sessionStorage.getItem('authToken')) return;
     Api.login
       .getUserInfo(sessionStorage.getItem('authToken'))
       .then((res) => {
@@ -70,27 +70,36 @@ const LoginPage = () => {
 
   // eslint-disable-next-line consistent-return
   const login = () => {
-    // if (!inputState.emailValid) return alert('아이디가 올바르지 않습니다.');
-    // if (!inputState.pwValid) return alert('비밀번호가 올바르지 않습니다.');
-    // if (!inputState.email) return alert('이메일을 입력해주세요');
-    // if (!inputState.pw) return alert('비밀번호를 입력해주세요');
-    //
-    // /* 로그인 */
-    // Api.login
-    //   .loginAndGetToken(inputState)
-    //   .then((res) => {
-    //     if (res) sessionStorage.setItem('authToken', res.access_token);
-    //     setUserInfo();
-    //   })
-    //   .catch((err) => console.error(err));
+    if (!inputState.emailValid) return alert('아이디가 올바르지 않습니다.');
+    if (!inputState.pwValid) return alert('비밀번호가 올바르지 않습니다.');
+    if (!inputState.email) return alert('이메일을 입력해주세요');
+    if (!inputState.pw) return alert('비밀번호를 입력해주세요');
 
-    //임시로 메인 넘어가도록
-    navigate('/main');
+    /* 로그인 */
+    Api.login
+      .loginAndGetToken(inputState)
+      .then((res) => {
+        /* authToken키로 세션 저장 */
+        if (res) sessionStorage.setItem('authToken', res.access_token);
+        setUserInfo();
+      })
+      .catch((err) => console.error(err));
   };
 
   useEffect(() => {
+    /* 토큰으로 로그인 정보를 불러와 세션에 셋팅함 */
     setUserInfo();
+
     navigate('/main');
+    Api.observe
+      .findData({
+        date: '2022-06-22',
+        area: 'H1 공장 크레인',
+      })
+      .then((res) => {
+        console.log('res', res);
+      })
+      .catch((err) => console.error(err));
   }, []);
 
   const handleEnter = (e) => e.key === 'Enter' && login();
