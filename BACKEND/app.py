@@ -29,6 +29,7 @@ import playsound
 import minimalmodbus as minimalmodbus
 import serial
 import socket
+from services.streamService import StreamService
 
 # load_dotenv(dotenv_path=f".{os.getenv('DOT_ENV', 'test')}.env")
 # logging.config.fileConfig("logging.conf", disable_existing_loggers=False)
@@ -38,16 +39,11 @@ print('app start')
 
 # def speak(text):
 #     tts = gTTS(text=text, lang='ko')
-#
 #     filename = 'voice.mp3'
-#
 #     tts.save(filename)
-#
 #     playsound.playsound(filename)
 #
-#
 # speak("안녕하세요 호호호")
-
 
 # s = gTTS("Sample Text")
 # s.save('sample.mp3')

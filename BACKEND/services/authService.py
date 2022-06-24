@@ -18,8 +18,8 @@ JWT_ALGORITHM = os.getenv('JWT_ALGORITHM')
 TOKEN_URL = os.getenv('TOKEN_URL')
 print('TOKEN_URLTOKEN_URLTOKEN_URL : ', TOKEN_URL)
 oauth2Scheme = OAuth2PasswordBearer(tokenUrl=TOKEN_URL)
-print('oauth2Scheme : ', oauth2Scheme.scheme_name)
-print('oauth2Scheme : ', oauth2Scheme.model)
+# print('oauth2Scheme : ', oauth2Scheme.scheme_name)
+# print('oauth2Scheme : ', oauth2Scheme.model)
 dbName = config.DB_NAME
 collection = config.TABLE_USERS
 

@@ -64,6 +64,21 @@ async def streamVideoOff():
     return service.cameraOnOff
 
 
+@router.get("/capture", response_description="")
+async def screenCapture():
+    return service.setCaptureGateOpen()
+
+
+@router.get("/record-on", response_description="")
+async def videoRecordOn():
+    return service.setRecordGateOpen()
+
+
+@router.get("/record-off", response_description="")
+async def videoRecordOff():
+    return service.setRecordGateClose()
+
+
 @router.get("/area/{coordinate1}", response_description="")
 async def streamVideoAreaSet(coordinate1):
     if isInternetConnected():
@@ -84,6 +99,8 @@ async def streamVideoAreaSet(coordinate1):
 
 @router.get("/area/{coordinate1}/{coordinate2}", response_description="")
 async def streamVideoAreaSet(coordinate1, coordinate2):
+    print('coordinate1     ', coordinate1)
+    print('coordinate2     ', coordinate2)
     if isInternetConnected():
         await service.addTodayCamData()
     data1 = coordinate1.split(',')
