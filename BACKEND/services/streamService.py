@@ -26,7 +26,8 @@ class StreamService:
         # 카메라 설치 구역
         self.camArea = config.AREA.replace(" ", "")
         # 각 파일들의 폴더들이 저장될 루트 경로
-        self.savePath = '{0}/safety-archives'.format(os.path.expanduser('~'))
+        # self.savePath = '{0}/safety-archives'.format(os.path.expanduser('~'))
+        self.savePath = './safety-archives'
         # 현재 날짜
         self.currentDate = datetime.datetime.now().strftime('%Y-%m-%d')
         # 현재 시간
@@ -324,11 +325,11 @@ class StreamService:
 
                 # video 녹화
                 if self.recordGate:
-                    print('self.recordGate', self.recordGate)
-                    print('self.videoRecordPath', self.videoRecordPath)
+                    # print('self.recordGate', self.recordGate)
+                    # print('self.videoRecordPath', self.videoRecordPath)
                     # VIDEO 저장 메서드
                     self.videoWriter.write(result_img)
-                    cv2.imshow('frame', result_img)
+                    # cv2.imshow('frame', result_img)
                 else:
                     cv2.destroyAllWindows()
 
