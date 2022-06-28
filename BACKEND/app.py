@@ -88,8 +88,7 @@ async def main(saveFolder, dateFolder, areaFolder, camPortFolder, fileTypeFolder
     print('camPortFolder : ',camPortFolder)
     print('fileTypeFolder : ',fileTypeFolder)
     print('file : ',file)
-
-    return FileResponse("./{0}/{1}/{2}/{3}/{4}/{5}".format(saveFolder, dateFolder, areaFolder, camPortFolder, fileTypeFolder, file))
+    return FileResponse("/home/interx/SAFETY-AI/BACKEND/{0}/{1}/{2}/{3}/{4}/{5}".format(saveFolder, dateFolder, areaFolder, camPortFolder, fileTypeFolder, file))
 
 
 # routers
