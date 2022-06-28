@@ -14,6 +14,8 @@ const ObserveCamInfo = ({
   videoFrameState,
   setVideoFrameState,
   camTabState,
+  recordState,
+  setRecordState,
 }) => {
   const navigate = useNavigate();
   const [camInfoState, setCamInfoState] = useState([
@@ -22,6 +24,7 @@ const ObserveCamInfo = ({
     { safetyLevel: 'Yellow', sensingCnt: 2 },
     { safetyLevel: 'Green', sensingCnt: 3 },
   ]);
+  const [ipState, setIpState] = useState('');
 
   const saveParameter = () => {
     console.log('saveParameter');
@@ -86,7 +89,31 @@ const ObserveCamInfo = ({
 
   // 녹화
   const handleRecordVideo = () => {
-    Api.stream.startRecordVideo();
+    console.log('camTabState', camTabState);
+    let ip = null;
+    switch (camTabState) {
+      case 1:
+        ip = '192.168.0.7';
+        break;
+      case 2:
+        ip = '192.168.0.24';
+        break;
+      case 3:
+        ip = '192.168.0.23';
+        break;
+      case 4:
+        ip = '192.168.0.30';
+        break;
+      default:
+        ip = '192.168.0.7';
+    }
+    if (!recordState) {
+      Api.stream.startRecordVideo(ip);
+      setRecordState(true);
+    } else {
+      Api.stream.stopRecordVideo(ip);
+      setRecordState(false);
+    }
   };
 
   const groupBoxComponent = (camInfoStateInfo, idx) => (
@@ -155,7 +182,7 @@ const ObserveCamInfo = ({
             className="bottomBtn"
             onClick={() => {
               // navigate('/detail');
-              Api.stream.stopRecordVideo();
+              Api.stream.stopRecordVideo(ipState);
             }}
           >
             설정
