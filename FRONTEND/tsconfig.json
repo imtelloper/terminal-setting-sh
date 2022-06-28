@@ -1,6 +1,9 @@
 {
   "compilerOptions": {
-    "target": "es5",
+    "target": [
+      "es5",
+      "@emotion/react"
+    ],
     "lib": [
       "dom",
       "dom.iterable",

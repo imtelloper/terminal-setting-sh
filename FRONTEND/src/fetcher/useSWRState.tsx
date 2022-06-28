@@ -1,127 +1,31 @@
 import useSWR from 'swr';
-import { IUser } from '../../@types/user';
 
-type PatientType = {
-  id: string;
-  birth: string;
-  age: number;
-  sex: string;
-  date: string;
-  region: string;
-  clinicalDataType: string;
-};
-
-type PacsImgType = {
-  id: string;
-  img: string;
-  type: string;
-  studyDate: string;
-  modality: string;
-};
-
-// ############### SwrStateType
 type SwrStateType = {
-  user: IUser;
-  employeeNo: string;
-  email: string;
-  name: string;
-  logState: string;
-  time: string;
-  duration: string;
-  ip: string;
-  patientID: string;
-  error: string;
-  loginTime: string;
-  loginLogId: string;
-  differentIp: boolean;
-  tenMinutesNotUsed: boolean;
-  pacsImgState: Array<PacsImgType>;
-  findImgState: {
-    patientId: string;
-    sex: string;
-    age1: string;
-    age2: string;
-    notes: string;
+  user: {
+    email: string;
   };
-  clinicLoadData: {
-    id: string;
-    birth: string;
-    age: string;
-    sex: string;
-    date: string;
-    region: string;
-    clinicTypeEMR: boolean;
-    clinicTypeNationCheck: boolean;
-    clinicTypeNomalCheck: boolean;
-  };
-  navTabStatus: {
-    load: boolean;
-    imgLoad: boolean;
-    clinicLoad: boolean;
-    analysis: boolean;
-    report: boolean;
-  };
+  observe: Observe;
 };
 
 let state: SwrStateType = {
   user: {
-    id: '',
-    ip: '',
-    username: '',
     email: '',
-    department: '',
-    employeeNo: '',
-    lastLogin: '',
-    createdAt: '',
-    auth: false,
-    deactivate: false,
-    emailCert: false,
-    isAdmin: false,
-    job: null,
-    sixMonth: false,
-    imageLoadCert: null,
-    clinicalDataCert: null,
-    analysisCert: null,
-    reportCert: null,
   },
-  employeeNo: '',
-  email: '',
-  name: '',
-  logState: '',
-  time: '',
-  duration: '',
-  ip: '',
-  patientID: '',
-  error: '',
-  loginTime: '',
-  loginLogId: '',
-  differentIp: false,
-  tenMinutesNotUsed: false,
-  pacsImgState: [],
-  findImgState: {
-    patientId: '',
-    sex: '',
-    age1: '',
-    age2: '',
-    notes: '',
-  },
-  clinicLoadData: {
-    id: '',
-    birth: '',
-    age: '',
-    sex: '',
-    date: '',
-    region: '',
-    clinicTypeEMR: true,
-    clinicTypeNationCheck: false,
-    clinicTypeNomalCheck: false,
-  },
-  navTabStatus: {
-    load: false,
-    imgLoad: false,
-    clinicLoad: false,
-    analysis: false,
-    report: false,
+  observe: {
+    area: 'H3 공장 크레인',
+    camPort: 'cam1',
+    activate: true,
+    alarms: '없음',
+    date: '2022-06-03',
+    computeDevice: 'CPU',
+    savingPath: '/home/',
+    camName: '3크레인 구역1',
+    sensingModel: 'small',
+    camCoordinate1: '456,307,658,329,536,486,332,469',
+    camCoordinate2: '456,307,658,329,536,486,332,469',
+    camSafetyLevel: 'Green',
+    camSensing1: 5,
+    camSensing2: 1,
   },
 };
 

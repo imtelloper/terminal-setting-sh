@@ -135,7 +135,7 @@ const VerticalNav = () => {
           {verticalLiFrame({
             datatype: "dashboard",
             iconType: "apps",
-            navText: "셀프 러닝 AI Dashboard",
+            navText: "Safety AI Dashboard",
             callback: handleClickHref,
           })}
           {verticalLiFrame({

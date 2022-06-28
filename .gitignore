@@ -1,5 +1,7 @@
 BACKEND/.idea
 BACKEND/safety-archives
+BACKEND/safety-archives*
+BACKEND/safety-archives/
 .idea
 # Logs
 logs

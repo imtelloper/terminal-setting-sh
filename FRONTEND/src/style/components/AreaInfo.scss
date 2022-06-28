@@ -1,0 +1,101 @@
+div.areaInfoContainer{
+  width: 100%;
+  display: flex;  section{
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(400px, max-content));
+    grid-gap: 16px;
+    justify-content: center;
+    div.areaCardBox{
+      cursor: pointer;
+      border-radius: 10px;
+      padding: 20px;
+      width: 350px;
+      border: 1px solid #292929;
+      display: flex;
+      flex-direction: column;
+      margin: 10px;
+      h3{
+        margin: 5px;
+      }
+      div.areaContent{
+        display: flex;
+        width: 100%;
+        align-items: center;
+        div.areaImgContent{
+          display: flex;
+          flex-direction: column;
+          justify-items: center;
+          padding: 10px;
+          img{
+            justify-items: center;
+            width: 80px;
+            height: 70px;
+          }
+          div.areaZone{
+            height: 100%;
+            color: white;
+            font-weight: bold;
+            padding: 2px;
+            text-align: center;
+            margin-top: 5px;
+          }
+          div.areaZoneGreen{
+            background-color: #006154;
+          }
+          div.areaZoneYellow{
+            background-color: #ffae00;
+          }
+          div.areaZoneRed{
+            background-color: red;
+          }
+        }
+        div.areaTextContent{
+          display: flex;
+          flex-direction: column;
+          height: 100%;
+          font-weight: bold;
+          padding-left: 20px;
+          p{
+            margin: 0;
+            span{
+              margin-left: 5px;
+              color: green;
+            }
+          }
+          p.camContent{
+            margin-top: 10px;
+            margin-bottom: 5px;
+          }
+          p.confirmColor{
+            color: #ff8000;
+          }
+          p.dangerColor{
+            color: red;
+          }
+          div.detectContent{
+            margin-top: 10px;
+            display: flex;
+            p{
+              margin-right: 20px;
+              &:first-child{
+                color: #ffc000;
+                span{
+                  color: #ffc000;
+                  font-size: 20px;
+                }
+              }
+              &:last-child{
+                color: red;
+                span{
+                  color: red;
+                  font-size: 20px;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

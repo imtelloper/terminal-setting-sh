@@ -10,21 +10,25 @@ POSITION KEYWORD
 """
 AREA = os.getenv('AREA')
 CAMPORT = os.getenv('CAMPORT')
+
 """
 DEFAULT KEYWORD
 """
 DEFAULT = "default"
+
 """
 DATABASE ADDRESS
 """
 DB_ADDRESS = "mongodb://interx:interx%40504@{0}/admin".format("server.interxlab.io:15115")
 # DB_ADDRESS = "mongodb://127.0.0.1:27017/"
+
 """
 DATABASE KEYWORD
 """
 DB_NAME = "safety"
 # DB_NAME = "DC4F67F8"
 # DB_NAME = "testdb"
+
 """
 COLLECTION KEYWORD
 """

@@ -32,11 +32,20 @@ const ObserveCamInfo = ({ videoFrameState, setVideoFrameState }) => {
     const target = e.currentTarget as HTMLButtonElement;
     const dType = target.getAttribute('datatype');
     console.log('dType', dType);
-    JSON.parse(dType)
-      ? ((target.textContent = 'Inactive'),
-        target.setAttribute('datatype', 'false'))
-      : ((target.textContent = 'Active'),
-        target.setAttribute('datatype', 'true'));
+
+    // JSON.parse(dType)
+    //   ? ((target.textContent = 'Inactive'),
+    //     target.setAttribute('datatype', 'false'))
+    //   : ((target.textContent = 'Active'),
+    //     target.setAttribute('datatype', 'true'));
+
+    if(JSON.parse(dType)){
+      target.textContent = 'Inactive'
+      target.setAttribute('datatype', 'false')
+    } else {
+      target.textContent = 'Active'
+      target.setAttribute('datatype', 'true')
+    }
 
     const newArr = videoFrameState;
     newArr[3].frameSrc = 'http://192.168.0.30:81/api/stream/';

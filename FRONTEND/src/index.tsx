@@ -1,14 +1,13 @@
+import axios from 'axios';
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 
-const rootNode = document.querySelector('#root')
+axios.defaults.baseURL = 'http://127.0.0.1:8000';
+axios.defaults.withCredentials = false;
 
-ReactDOM.createRoot(rootNode).render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
-);
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(<App />);
 
 reportWebVitals();

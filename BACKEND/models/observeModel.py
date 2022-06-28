@@ -7,20 +7,20 @@ from models.baseModel import PyObjectId
 
 class Observe(BaseModel):
     _id = Optional[PyObjectId]
-    area: str = Field(..., description="카메라가 설치된 구역")
-    camPort: str = Field(..., description="cam1 | cam2 | cam3 | cam4")
-    activate: bool = Field(..., description="카메라 작동중 true | false")
-    alarms: str = Field(..., description="없음 | 작업자 진입 확인 | 작업자 위험 반경 진입!")
-    date: str = Field(..., description="날짜")
-    computeDevice: str = Field(..., description="CPU | GPU 둘중 연산장치 선택")
-    savingPath: str = Field(..., description="현재 카메라의 각종 파일 저장위치")
+    area: str = Field(..., description="카메라가 설치된 구역 이름")
+    camPort: str = Field(..., description="현재 카메라의 번호 -> cam1 | cam2 | cam3 | cam4")
+    activate: bool = Field(..., description="현재 카메라 작동중 -> true | false")
+    alarms: str = Field(..., description="위험 알림 메세지 -> 없음 | 작업자 진입 확인 | 작업자 위험 반경 진입!")
+    date: str = Field(..., description="날짜 -> yyyy-mm-dd 형식")
+    computeDevice: str = Field(..., description="연산장치 선택 -> CPU | GPU")
+    savingPath: str = Field(..., description="현재 카메라의 각종 파일 저장 경로")
     camName: str = Field(..., description="카메라 지정 이름")
     sensingModel: str = Field(..., description="AI 감지 모델")
-    camCoordinate1: str = Field(..., description="1차 감지 구역의 좌표 Yellow")
-    camCoordinate2: str = Field(..., description="2차 감지 구역의 좌표 Red")
-    camSafetyLevel: str = Field(..., description="Green | Yellow | Red / 감지 구역의 현재 안전 레벨")
-    camSensing1: Optional[int] = Field(..., description="1차 감지 구역에서 카메라 감지 됐을때 +1")
-    camSensing2: Optional[int] = Field(..., description="2차 감지 구역에서 카메라 감지 됐을때 +1")
+    camCoordinate1: str = Field(..., description="1차 감지 구역의 좌표 Green & Yellow & Red")
+    camCoordinate2: str = Field(..., description="2차 감지 구역의 좌표 Green & Yellow & Red")
+    camSafetyLevel: str = Field(..., description="감지 구역의 현재 안전 레벨 -> Green | Yellow | Red")
+    camSensing1: Optional[int] = Field(..., description="1차 감지 구역에서 RED 카메라 감지 됐을때 +1")
+    camSensing2: Optional[int] = Field(..., description="2차 감지 구역에서 RED 카메라 감지 됐을때 +1")
     createdAt: Optional[datetime] = datetime.now()
 
     class Config:

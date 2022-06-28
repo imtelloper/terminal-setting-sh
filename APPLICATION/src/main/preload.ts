@@ -2,7 +2,7 @@ import { contextBridge, ipcRenderer } from 'electron';
 
 contextBridge.exposeInMainWorld('electron', {
   ipcRenderer: {
-    /* 2  -> index.tsx*/
+    /* 2  -> index.tsx */
     myPing() {
       ipcRenderer.send('ipc-example', 'ping');
       console.log(
@@ -10,25 +10,27 @@ contextBridge.exposeInMainWorld('electron', {
       );
     },
     getIp() {
-      ipcRenderer.invoke('get-ip', 'ping').then(res=>{
-        document
-          ?.querySelector('#mainContainer')
-          ?.setAttribute('ip', res);
-        console.log(
-          `ipip : ${res}`
-        );
-      })
+      ipcRenderer
+        .invoke('get-ip', 'ping')
+        .then((res) => {
+          document?.querySelector('#mainContainer')?.setAttribute('ip', res);
+          console.log(`ipip : ${res}`);
+        })
+        .catch((err) => console.error(err));
     },
     trans() {
-      ipcRenderer.invoke('ipc-example', 'ping').then((res) => {
-        document
-          ?.querySelector('#mainContainer')
-          ?.setAttribute('temperature', res.temperature);
-        document
-          ?.querySelector('#mainContainer')
-          ?.setAttribute('humidity', res.humidity);
-        // console.log(`preload temperature:${res.temperature}, humidity:${res.humidity}`)
-      });
+      ipcRenderer
+        .invoke('ipc-example', 'ping')
+        .then((res) => {
+          document
+            ?.querySelector('#mainContainer')
+            ?.setAttribute('temperature', res.temperature);
+          document
+            ?.querySelector('#mainContainer')
+            ?.setAttribute('humidity', res.humidity);
+          // console.log(`preload temperature:${res.temperature}, humidity:${res.humidity}`)
+        })
+        .catch((err) => console.error(err));
     },
     on(channel: string, func: (...args: any[]) => void) {
       const validChannels = ['ipc-example'];
@@ -53,4 +55,3 @@ contextBridge.exposeInMainWorld('electron', {
     },
   },
 });
-

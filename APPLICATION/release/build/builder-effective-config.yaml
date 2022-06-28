@@ -2,8 +2,8 @@ directories:
   output: release/build
   buildResources: assets
   app: release/app
-productName: InterCaster
-appId: org.erb.InterCaster
+productName: SAFETY-AI
+appId: org.erb.SAFETY-AI
 asar: true
 asarUnpack: '**\*.{node,dll}'
 files:

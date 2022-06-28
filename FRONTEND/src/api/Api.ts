@@ -1,11 +1,12 @@
-import FaqApi from './Admin/FaqApi';
+// eslint-disable-next-line import/no-named-as-default
+import LoginApi from './LoginApi';
+import ObserveApi from './ObserveApi';
+import StreamApi from './StreamApi';
 
 export default class Api {
-  faqApi = new FaqApi();
+  static login = new LoginApi();
+
+  static observe = new ObserveApi();
+
+  static stream = new StreamApi();
 }
-// noticeApi = new NoticeApi()
-// imageApi = new ImageApi()
-// dataApi = new DataApi()
-// accountApi = new AccountApi()
-// mainApi = new MainApi()
-// modelManagementApi = new ModelManagementApi()
