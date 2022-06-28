@@ -17,6 +17,7 @@ import cv2
 import traceback
 import warnings
 import datetime
+from fastapi.responses import FileResponse
 
 warnings.filterwarnings('ignore')
 from modules.yolov5.detect import detect
@@ -71,6 +72,24 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+# @app.get("/image/{path}")
+# async def main():
+#     return FileResponse("./safety-archives/2022-06-28/H1공장크레인/cam1/capture/safety-shot#H1공장크레인#cam1#2022-06-28_13:50:46.913461.png")
+
+@app.get("/{saveFolder}/{dateFolder}/{areaFolder}/{camPortFolder}/{fileTypeFolder}/{file}")
+async def main(saveFolder, dateFolder, areaFolder, camPortFolder, fileTypeFolder, file):
+    # print('path :',path)
+    # if len(path) > 0:
+    #     print('버터 플라이 ')
+    print('saveFolder : ',saveFolder)
+    print('dateFolder : ',dateFolder)
+    print('areaFolder : ',areaFolder)
+    print('camPortFolder : ',camPortFolder)
+    print('fileTypeFolder : ',fileTypeFolder)
+    print('file : ',file)
+
+    return FileResponse("./{0}/{1}/{2}/{3}/{4}/{5}".format(saveFolder, dateFolder, areaFolder, camPortFolder, fileTypeFolder, file))
 
 
 # routers

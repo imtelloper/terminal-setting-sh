@@ -28,12 +28,13 @@ class StreamService:
         # 각 파일들의 폴더들이 저장될 루트 경로
         # self.savePath = '{0}/safety-archives'.format(os.path.expanduser('~'))
         self.savePath = './safety-archives'
+        self.savePath = '/home/interx/SAFETY-AI/BACKEND/safety-archives'
         # 현재 날짜
         self.currentDate = datetime.datetime.now().strftime('%Y-%m-%d')
         # 현재 시간
         self.currentTime = datetime.datetime.now().strftime('%Y-%m-%d_%H:%M:%S.%f')
         # 파일명을 다르게 하기 위한 파일 정보 생성
-        self.fileInfo = '#{0}#{1}#{2}'.format(self.camArea, self.camPort, self.currentTime)
+        self.fileInfo = '-{0}-{1}-{2}'.format(self.camArea, self.camPort, self.currentTime)
         # 녹화 파일 저장 경로  safety-archives / 오늘날짜 / area / camPort / video
         self.videoFolderPath = '{0}/{1}/{2}/{3}/video'.format(self.savePath, self.currentDate, self.camArea,
                                                               self.camPort)
@@ -109,7 +110,7 @@ class StreamService:
     def initVideoRecordPath(self):
         self.currentDate = datetime.datetime.now().strftime('%Y-%m-%d')
         self.currentTime = datetime.datetime.now().strftime('%Y-%m-%d_%H:%M:%S.%f')
-        self.fileInfo = '#{0}#{1}#{2}'.format(self.camArea, self.camPort, self.currentTime)
+        self.fileInfo = '-{0}-{1}-{2}'.format(self.camArea, self.camPort, self.currentTime)
         self.videoFolderPath = '{0}/{1}/{2}/{3}/video'.format(self.savePath, self.currentDate, self.camArea,
                                                               self.camPort)
         self.videoRecordPath = '{0}/safety-record{1}.avi'.format(self.videoFolderPath, self.fileInfo)
@@ -119,7 +120,7 @@ class StreamService:
     def initScreenCapturePath(self):
         self.currentDate = datetime.datetime.now().strftime('%Y-%m-%d')
         self.currentTime = datetime.datetime.now().strftime('%Y-%m-%d_%H:%M:%S.%f')
-        self.fileInfo = '#{0}#{1}#{2}'.format(self.camArea, self.camPort, self.currentTime)
+        self.fileInfo = '-{0}-{1}-{2}'.format(self.camArea, self.camPort, self.currentTime)
         self.screenShotFolderPath = '{0}/{1}/{2}/{3}/capture'.format(self.savePath, self.currentDate, self.camArea,
                                                                      self.camPort)
         self.screenShotRecordPath = '{0}/safety-shot{1}.png'.format(self.screenShotFolderPath, self.fileInfo)
