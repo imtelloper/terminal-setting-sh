@@ -51,7 +51,13 @@ const SettingPage = () => {
         <AiFillSetting />
         <span>Settings</span>
       </p>
-      <input className="tabInput" id="tab1" type="radio" name="tabs" defaultChecked/>
+      <input
+        className="tabInput"
+        id="tab1"
+        type="radio"
+        name="tabs"
+        defaultChecked
+      />
       <label htmlFor="tab1">Cam1</label>
 
       <input className="tabInput" id="tab2" type="radio" name="tabs" />

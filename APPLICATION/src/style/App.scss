@@ -42,12 +42,15 @@ body {
 
 html, body {
   background-color: #00091B;
-  font-family: 'Muli', Helvetica, sans-serif;
+  font-family: 'Pretendard';
 }
 div.mainTopContainer{
-  padding: 5px 15px;
+  height: 64px;
+  padding: 0 16px;
+  background-color: #9cccf1;
   box-sizing: border-box;
   display: flex;
+  align-items: center;
   justify-content: space-between;
   border-bottom: 1px solid #292929;
   button{
@@ -58,6 +61,6 @@ div.mainTopContainer{
     border: none;
     background-color: #292929;
     color: white;
-    margin-left: 10px;
+    margin-right: 10px;
   }
 }

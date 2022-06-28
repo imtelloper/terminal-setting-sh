@@ -5,6 +5,10 @@ import useSWR from 'swr';
 import Api from '../api/Api';
 import { useSWRState } from '../fetcher/useSWRState';
 
+import LogoImg from '../images/interx.ai_logo.png';
+import WorldIcon from '../images/world.png';
+import ArrowDown from '../images/arrow-down.png';
+
 const LoginPage = () => {
   const navigate = useNavigate();
 
@@ -107,32 +111,46 @@ const LoginPage = () => {
   return (
     <div className="loginContainer">
       <div className="loginBox">
-        <span>Sign In</span>
-        <div className="inputLoginBox">
-          <input
-            className="form"
-            id="id"
-            placeholder="이메일을 입력하세요."
-            maxLength={320}
-            onChange={checkEmail}
-            value={inputState.email}
-          />
-          <input
-            className="form"
-            id="pwd"
-            type="password"
-            placeholder="비밀번호를 입력하세요"
-            maxLength={16}
-            onChange={checkPw}
-            value={inputState.pw}
-            onKeyPress={handleEnter}
-          />
+        <div className="left">
+          <div className="logoImg">{/* <LogoImg /> */}</div>
         </div>
-        <div className="loginBtnBox">
-          <button id="loginButton" onClick={login}>
-            로그인
-          </button>
+        <div className="right">
+          <div className="titleBox">
+            <span className="title">SIGN IN</span>
+            <p>
+            {/* <p><WorldIcon/></p> */}
+              <div className="dropdown">
+                en
+                {/*<span><ArrowDown/></span>*/}
+              </div>
+            </p>
+          </div>
         </div>
+        {/* <div className="inputLoginBox"> */}
+        {/*  <input */}
+        {/*    className="form" */}
+        {/*    id="id" */}
+        {/*    placeholder="이메일을 입력하세요." */}
+        {/*    maxLength={320} */}
+        {/*    onChange={checkEmail} */}
+        {/*    value={inputState.email} */}
+        {/*  /> */}
+        {/*  <input */}
+        {/*    className="form" */}
+        {/*    id="pwd" */}
+        {/*    type="password" */}
+        {/*    placeholder="비밀번호를 입력하세요" */}
+        {/*    maxLength={16} */}
+        {/*    onChange={checkPw} */}
+        {/*    value={inputState.pw} */}
+        {/*    onKeyPress={handleEnter} */}
+        {/*  /> */}
+        {/* </div> */}
+        {/* <div className="loginBtnBox"> */}
+        {/*  <button id="loginButton" onClick={login}> */}
+        {/*    로그인 */}
+        {/*  </button> */}
+        {/* </div> */}
       </div>
     </div>
   );
