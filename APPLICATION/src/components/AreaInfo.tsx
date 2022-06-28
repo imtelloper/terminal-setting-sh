@@ -21,6 +21,76 @@ type AreaCard = {
   secondName: string;
   secondState: string;
 };
+const dummyData = [
+  {
+    activate: true,
+    alarms: '없음',
+    area: 'H1공장크레인',
+    camCoordinate1: null,
+    camCoordinate2: null,
+    camName: null,
+    camPort: 'cam1',
+    camSafetyLevel: 'Green',
+    camSensing1: null,
+    camSensing2: null,
+    computeDevice: null,
+    createdAt: '2022-06-28T00:12:52+00:00',
+    date: '2022-06-28',
+    savingPath: null,
+    sensingModel: null,
+  },
+  {
+    activate: true,
+    alarms: '없음',
+    area: 'H1공장크레인',
+    camCoordinate1: null,
+    camCoordinate2: null,
+    camName: null,
+    camPort: 'cam2',
+    camSafetyLevel: 'Green',
+    camSensing1: null,
+    camSensing2: null,
+    computeDevice: null,
+    createdAt: '2022-06-28T00:12:52+00:00',
+    date: '2022-06-28',
+    savingPath: null,
+    sensingModel: null,
+  },
+  {
+    activate: true,
+    alarms: '없음',
+    area: 'H1공장크레인',
+    camCoordinate1: null,
+    camCoordinate2: null,
+    camName: null,
+    camPort: 'cam3',
+    camSafetyLevel: 'Green',
+    camSensing1: null,
+    camSensing2: null,
+    computeDevice: null,
+    createdAt: '2022-06-28T00:12:52+00:00',
+    date: '2022-06-28',
+    savingPath: null,
+    sensingModel: null,
+  },
+  {
+    activate: true,
+    alarms: '없음',
+    area: 'H1공장크레인',
+    camCoordinate1: null,
+    camCoordinate2: null,
+    camName: null,
+    camPort: 'cam4',
+    camSafetyLevel: 'Green',
+    camSensing1: null,
+    camSensing2: null,
+    computeDevice: null,
+    createdAt: '2022-06-28T00:12:52+00:00',
+    date: '2022-06-28',
+    savingPath: null,
+    sensingModel: null,
+  },
+];
 
 const AreaInfo = () => {
   const navigate = useNavigate();
@@ -76,7 +146,7 @@ const AreaInfo = () => {
     navigate('/observe');
   };
 
-  const areaCardsMap = swrObserveData?.map((card, idx) => (
+  const areaCardsMap = (swrObserveData || dummyData).map((card, idx) => (
     <div
       className="areaCardBox"
       key={idx}
@@ -87,7 +157,9 @@ const AreaInfo = () => {
       <div className="areaContent">
         <div className="areaImgContent">
           <img src={Crane} />
-          <div className={`areaZone areaZone${card.camSafetyLevel}`}>{card.camSafetyLevel}</div>
+          <div className={`areaZone areaZone${card.camSafetyLevel}`}>
+            {card.camSafetyLevel}
+          </div>
         </div>
         <div className="areaTextContent">
           <p className="camContent">
@@ -109,10 +181,10 @@ const AreaInfo = () => {
   ));
 
   useEffect(() => {
-    console.log('swrObserveData',swrObserveData);
-    swrObserveData?.forEach(obj => {
-      console.log('obj',obj);
-    })
+    console.log('swrObserveData', swrObserveData);
+    swrObserveData?.forEach((obj) => {
+      console.log('obj', obj);
+    });
   }, [swrObserveData]);
 
   return (

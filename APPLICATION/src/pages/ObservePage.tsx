@@ -27,7 +27,7 @@ const initVideoFrameData: Array<ViedeoFrameType> = [
     canvasClass: 'polygonCanvas1',
     frameSrc: 'http://192.168.0.7:81',
     firstCanvas: {
-      visible: true,
+      visible: false,
       yellowSensingPercent: 0.7,
       redSensingPercent: 0.3,
       coordinate: [],
@@ -43,7 +43,7 @@ const initVideoFrameData: Array<ViedeoFrameType> = [
     canvasClass: 'polygonCanvas2',
     frameSrc: 'http://192.168.0.24:81',
     firstCanvas: {
-      visible: true,
+      visible: false,
       yellowSensingPercent: 0.7,
       redSensingPercent: 0.3,
       coordinate: [],
@@ -59,7 +59,7 @@ const initVideoFrameData: Array<ViedeoFrameType> = [
     canvasClass: 'polygonCanvas3',
     frameSrc: 'http://192.168.0.23:81',
     firstCanvas: {
-      visible: true,
+      visible: false,
       yellowSensingPercent: 0.7,
       redSensingPercent: 0.3,
       coordinate: [],
@@ -75,7 +75,7 @@ const initVideoFrameData: Array<ViedeoFrameType> = [
     canvasClass: 'polygonCanvas4',
     frameSrc: 'http://192.168.0.30:81',
     firstCanvas: {
-      visible: true,
+      visible: false,
       yellowSensingPercent: 0.7,
       redSensingPercent: 0.3,
       coordinate: [],
@@ -103,6 +103,8 @@ const ObservePage = () => {
   };
   const [videoFrameState, setVideoFrameState] =
     useState<Array<ViedeoFrameType>>(initVideoFrameData);
+
+  const [camTabState, setCamTabState] = useState();
 
   const getCentroid = (points) => {
     let area = 0;
@@ -294,11 +296,10 @@ const ObservePage = () => {
   const drawCallback = useCallback((ele) => draw(ele), [videoFrameState]);
 
   useEffect(() => {
-    videoFrameState[0]?.frameSrc &&
-      console.log('videoFrameState[0].frameSrc', videoFrameState[0]?.frameSrc);
+    // videoFrameState[0]?.frameSrc &&
+    //   console.log('videoFrameState[0].frameSrc', videoFrameState[0]?.frameSrc);
 
     document.querySelectorAll('.polygonCanvas').forEach((ele, idx) => {
-      console.log('idx', idx);
       draw(ele);
       // drawCallback(ele);
     });
@@ -309,19 +310,19 @@ const ObservePage = () => {
       <div className="iframeBox" key={idx}>
         <div className="iframeTitle">
           CAM{(idx + 1).toString()}
-          <span
-            className="iframeRecording"
-            onClick={() => {
-              axios.get(
-                `${data.frameSrc.split(':81')[0]}:81/api/util/reboot/`,
-                {
-                  withCredentials: false,
-                }
-              );
-            }}
-          >
-            Refresh({data.frameSrc})
-          </span>
+          {/* <span */}
+          {/*  className="iframeRecording" */}
+          {/*  onClick={() => { */}
+          {/*    axios.get( */}
+          {/*      `${data.frameSrc.split(':81')[0]}:81/api/util/reboot/`, */}
+          {/*      { */}
+          {/*        withCredentials: false, */}
+          {/*      } */}
+          {/*    ); */}
+          {/*  }} */}
+          {/* > */}
+          {/*  Refresh({data.frameSrc}) */}
+          {/* </span> */}
           <span className="iframeRecording">Recording...</span>
         </div>
         {data.firstCanvas.visible && (
@@ -370,6 +371,8 @@ const ObservePage = () => {
         `#safetyContent${dType}`
       ) as HTMLTableSectionElement
     ).style.display = 'block';
+
+    setCamTabState(parseInt(dType, 10));
   };
 
   const getTabEles = () => {
@@ -403,6 +406,7 @@ const ObservePage = () => {
         <ObserveCamInfo
           videoFrameState={videoFrameState}
           setVideoFrameState={setVideoFrameState}
+          camTabState={camTabState}
         />
       </div>
       {/* 카메라 Observe 박스 */}

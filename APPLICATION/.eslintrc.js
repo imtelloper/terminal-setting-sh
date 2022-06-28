@@ -21,6 +21,7 @@ module.exports = {
     'jsx-a11y/no-static-element-interactions': 'off',
     'no-plusplus': 'off',
     'react-hooks/exhaustive-deps': 'off',
+    'react/prop-types': 'off',
   },
   parserOptions: {
     ecmaVersion: 2020,

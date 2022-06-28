@@ -1,7 +1,7 @@
 {
-  "name": "electron-react-boilerplate",
+  "name": "SAFETY-AI",
   "version": "1.0.0",
-  "description": "A foundation for scalable desktop apps",
+  "description": "AI safety observe system",
   "scripts": {
     "app:dir": "electron-builder --dir",
     "app:dist": "electron-builder",

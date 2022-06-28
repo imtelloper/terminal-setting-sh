@@ -101,7 +101,6 @@ const LoginPage = () => {
 
   useEffect(() => {
     console.log('swrState', swrState);
-    // eslint-disable-next-line @typescript-eslint/no-unused-expressions
     swrState?.user?.email && navigate('/main');
   }, [swrState]);
 
