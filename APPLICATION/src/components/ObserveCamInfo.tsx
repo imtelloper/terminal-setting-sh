@@ -10,7 +10,11 @@ type Props = {
 };
 
 // eslint-disable-next-line react/prop-types
-const ObserveCamInfo = ({ videoFrameState, setVideoFrameState }) => {
+const ObserveCamInfo = ({
+  videoFrameState,
+  setVideoFrameState,
+  camTabState,
+}) => {
   const navigate = useNavigate();
   const [camInfoState, setCamInfoState] = useState([
     { safetyLevel: 'Green', sensingCnt: 0 },
@@ -44,10 +48,12 @@ const ObserveCamInfo = ({ videoFrameState, setVideoFrameState }) => {
     flushSync(() => setVideoFrameState(newArr));
   };
 
+  // 그룹안 삭제
   const handleDelete = () => {
     console.log('handleDelete');
   };
 
+  // 그룹안 리셋
   const handleErrorReset = () => {
     console.log('handleErrorReset');
     const newArr = videoFrameState;
@@ -59,18 +65,65 @@ const ObserveCamInfo = ({ videoFrameState, setVideoFrameState }) => {
     flushSync(() => setVideoFrameState(newArr));
   };
 
+  // 생성
   const createCanvas = (e) => {
+    console.log('createCanvas');
     const target = e.currentTarget;
     const dType = parseInt(target.getAttribute('datatype'), 10);
+    console.log('현재 캠 스테이트 dType', dType);
     const newArr = videoFrameState;
-    newArr[dType].yellowCanvasVisible = true;
+    console.log('그룹1 비지블 스테이트', newArr[dType].firstCanvas.visible);
+    // 첫번째 그룹이 있다면 두번째 그룹 생성
+    if (newArr[dType].firstCanvas.visible === false) {
+      newArr[dType].firstCanvas.visible = true;
+    } else {
+      newArr[dType].secondCanvas.visible = true;
+    }
+
     flushSync(() => setVideoFrameState([]));
     flushSync(() => setVideoFrameState(newArr));
   };
 
+  // 녹화
   const handleRecordVideo = () => {
     Api.stream.startRecordVideo();
   };
+
+  const groupBoxComponent = (camInfoStateInfo, idx) => (
+    <>
+      <div className="groupBox">
+        <span className="groupName">{`Group${parseInt(idx, 10) + 1}`}</span>
+        <span className="saveParameter" onClick={saveParameter}>
+          <BiDownload />
+          파라미터 저장
+        </span>
+        <span className="callParameter" onClick={callParameter}>
+          <BiExport />
+          파라미터 불러오기
+        </span>
+      </div>
+      <p>
+        Safety Level :{' '}
+        <span className="safeLevel">{camInfoStateInfo.safetyLevel}</span>
+      </p>
+      <p>감지 수 : {camInfoStateInfo.sensingCnt}</p>
+      <div className="safetyBtnBox">
+        <button
+          className="safetyBtn safetyActiveBtn"
+          datatype="false"
+          onClick={handleActive}
+        >
+          Inactive
+        </button>
+        <button className="safetyBtn safetyDeleteBtn" onClick={handleDelete}>
+          Delete
+        </button>
+        <button className="safetyBtn safetyResetBtn" onClick={handleErrorReset}>
+          Error Reset
+        </button>
+      </div>
+    </>
+  );
 
   const camInfosMap = camInfoState.map((info, idx) => (
     <section
@@ -79,39 +132,12 @@ const ObserveCamInfo = ({ videoFrameState, setVideoFrameState }) => {
       key={idx}
     >
       <div className="safetyContentBox">
-        <div className="groupBox">
-          <span className="groupName">{`Group${idx + 1}`}</span>
-          <span className="saveParameter" onClick={saveParameter}>
-            <BiDownload />
-            파라미터 저장
-          </span>
-          <span className="callParameter" onClick={callParameter}>
-            <BiExport />
-            파라미터 불러오기
-          </span>
-        </div>
-        <p>
-          Safety Level : <span className="safeLevel">{info.safetyLevel}</span>
-        </p>
-        <p>감지 수 : {info.sensingCnt}</p>
-        <div className="safetyBtnBox">
-          <button
-            className="safetyBtn safetyActiveBtn"
-            datatype="false"
-            onClick={handleActive}
-          >
-            Inactive
-          </button>
-          <button className="safetyBtn safetyDeleteBtn" onClick={handleDelete}>
-            Delete
-          </button>
-          <button
-            className="safetyBtn safetyResetBtn"
-            onClick={handleErrorReset}
-          >
-            Error Reset
-          </button>
-        </div>
+        {videoFrameState[idx]?.firstCanvas?.visible &&
+          groupBoxComponent(info, idx)}
+
+        {videoFrameState[idx]?.secondCanvas?.visible &&
+          groupBoxComponent(info, idx + 1)}
+
         <div className="safetyCreateBtnBox">
           <button
             className="safetyCreateBtn"
