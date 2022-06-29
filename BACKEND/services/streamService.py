@@ -119,6 +119,7 @@ class StreamService:
         self.insertVideoRecordPath(self.getTrackerId())
 
     async def insertVideoRecordPath(self, trackerId):
+        print('insertVideoRecordPath trackerId',trackerId)
         insertData = {
             "trackerId": trackerId,
             "fileType": "video",
@@ -126,9 +127,11 @@ class StreamService:
             "safetyLevel": "",
         }
         resultData = insertOne(self.dbName, config.TABLE_ARCHIVE, insertData)
+        print('resultData',resultData)
         return resultData
 
     async def getTrackerId(self):
+        print('************* getTrackerId ***************')
         dataArr = []
         searchedData = findDatas(self.dbName, config.TABLE_TRACKER, {
             "area": config.AREA,
