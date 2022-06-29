@@ -145,7 +145,8 @@ class StreamService:
         self.videoWriter = cv2.VideoWriter(self.videoRecordPath, self.fcc, self.fps, (self.camWidth, self.camHeight))
         print('#################')
         print('self.getTrackerId()', self.getTrackerId())
-        self.insertVideoRecordPath(self.getTrackerId())
+        trackerId = str(self.getTrackerId())
+        self.insertVideoRecordPath(trackerId)
 
     # 스크린 캡쳐 경로, 파일명 초기화
     def initScreenCapturePath(self):
