@@ -337,6 +337,14 @@ class StreamService:
                                     }
                                 }
                             )
+                            getConnection()[self.dbName][config.TABLE_ARCHIVE].insert_one(
+                                {
+                                    "trackerId": self.trackerId,
+                                    "fileType": "img",
+                                    "path": self.screenShotRecordPath,
+                                    "safetyLevel": 'RED',
+                                },
+                            )
                         sensingLevel = 'YELLOW'
                     elif warn_sig == 2:
                         print('RED RED RED RED RED RED RED RED RED RED RED RED RED RED RED RED RED RED RED')
@@ -351,6 +359,18 @@ class StreamService:
                                         'camSafetyLevel': 'Red'
                                     }
                                 }
+                            )
+                            print(' self.trackerId', self.trackerId)
+                            print(' "img"', "img")
+                            print(' self.screenShotRecordPath', self.screenShotRecordPath)
+                            print(' sensingLevel', sensingLevel)
+                            getConnection()[self.dbName][config.TABLE_ARCHIVE].insert_one(
+                                {
+                                    "trackerId": self.trackerId,
+                                    "fileType": "img",
+                                    "path": self.screenShotRecordPath,
+                                    "safetyLevel": 'RED',
+                                },
                             )
                         sensingLevel = 'RED'
                     else:
