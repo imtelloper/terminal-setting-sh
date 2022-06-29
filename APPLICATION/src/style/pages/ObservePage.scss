@@ -32,16 +32,19 @@ div.observeContainer {
         height: 172px;
         padding: 40px;
         box-sizing: border-box;
-        p{
+
+        p {
           margin-bottom: 8px;
           color: #878E9B;
         }
-        span{
+
+        span {
           font-size: 28px;
           font-weight: 700;
         }
       }
-      div.safetyTabWrap{
+
+      div.safetyTabWrap {
         height: calc(100% - 156px);
         background: $white;
         border-bottom: 1px solid $line;
@@ -51,7 +54,7 @@ div.observeContainer {
         flex-direction: column;
         align-items: center;
 
-        div.safetyTabBox{
+        div.safetyTabBox {
           width: 100%;
           height: 48px;
           line-height: 48px;
@@ -61,15 +64,16 @@ div.observeContainer {
           border-top-left-radius: 8px;
           border-top-right-radius: 8px;
 
-          input{
+          input {
             display: none;
-            &:checked + label{
+
+            &:checked + label {
               color: $blue-500;
               border-bottom: 4px solid $blue-500;
             }
           }
 
-          label{
+          label {
             width: 100%;
             color: $inactive-text;
             font-weight: 700;
@@ -79,12 +83,12 @@ div.observeContainer {
           }
         }
 
-        div.safetyContainer{
+        div.safetyContainer {
           width: 100%;
           height: 100%;
           overflow-y: auto;
 
-          div.safetyContent{
+          div.safetyContent {
             width: 100%;
             height: 284px;
             //padding: 24px;
@@ -93,7 +97,7 @@ div.observeContainer {
         }
       }
 
-      div.bottomBtnBox{
+      div.bottomBtnBox {
         width: 100%;
         height: 88px;
         padding: 24px;
@@ -101,7 +105,8 @@ div.observeContainer {
         box-sizing: border-box;
         display: flex;
         justify-content: space-between;
-        button{
+
+        button {
           all: unset;
           width: calc(50% - 8px);
           height: 40px;
@@ -111,10 +116,12 @@ div.observeContainer {
           justify-content: center;
           align-items: center;
           border-top: 1px solid $line;
-          &:first-child{
+
+          &:first-child {
             border: 1px solid $line;
           }
-          &:last-child{
+
+          &:last-child {
             margin-left: 16px;
             color: $white;
             background-color: $info;
@@ -123,71 +130,68 @@ div.observeContainer {
       }
     }
   }
-    div.observeRight {
-      width: calc(75% - 16px);
-      height: calc(100% - 88px);
 
-      div.rightBox{
-        width: calc(100% - 16px);
-        height: 100%;
-        margin: 16px;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        div.iframeContent{
-          //min-width: 1048px;
-          width: 1048px;
-          height: 888px;
+  div.observeRight {
+    width: calc(75% - 16px);
+    height: calc(100% - 88px);
+
+    div.rightBox {
+      width: calc(100% - 16px);
+      height: 100%;
+      margin: 16px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      div.iframeContent {
+        //min-width: 1048px;
+        width: 1048px;
+        height: 888px;
+        position: relative;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        //border: 2px solid #555555;
+        div.iframeBox {
+          width: 512px;
+          height: 432px;
+          background-color: $white;
+          border-radius: 8px;
           position: relative;
-          display: grid;
-          grid-template-columns: 1fr 1fr;
-          //border: 2px solid #555555;
-          div.iframeBox{
-            //min-width: 512px;
-            width: calc(100% - 24px);
-            height: calc(100% - 24px);
-            background-color: $white;
-            border-radius: 8px;
+          //border: 2px solid black;
+
+          div.iframeTitle {
+            height: 48px;
+            font-size: 18px;
+            padding-left: 24px;
+            border-bottom: 1px solid $line;
+            display: flex;
+            align-items: center;
             position: relative;
-            //border: 2px solid black;
+          }
 
-            &:nth-child(1n){
-              margin-right: 16px;
-            }
+          canvas {
+            all: unset;
+            width: 100%;
+            height: calc(100% - 48px);
+            position: absolute;
 
-            &:nth-child(1), &:nth-child(2){
-              margin-bottom: 16px;
-            }
+          }
 
-            div.iframeTitle{
-              height: 48px;
-              font-size: 18px;
-              padding-left: 24px;
-              border-bottom: 1px solid $line;
-              display: flex;
-              align-items: center;
-              position: relative;
-            }
-            canvas{
-              all: unset;
-              width: 100%;
-              height: calc(100% - 48px);
-              position: absolute;
+          canvas.firstCanvas {
+            z-index: 1;
+            //border: 2px solid #0CBEF4;
+          }
 
-            }
-            canvas.firstCanvas{
-              z-index: 1;
-              //border: 2px solid #0CBEF4;
-            }
-            canvas.secondCanvas{
-              z-index: 2;
-              //border: 2px solid red;
-            }
-            iframe{
-              border: none;
-            }
+          canvas.secondCanvas {
+            z-index: 2;
+            //border: 2px solid red;
+          }
+
+          iframe {
+            border: none;
           }
         }
       }
     }
+  }
 }

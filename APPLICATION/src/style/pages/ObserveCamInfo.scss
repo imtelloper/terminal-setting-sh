@@ -33,6 +33,7 @@ div.observeCamInfoContainer{
         display: flex;
         justify-content: center;
         align-items: center;
+        cursor: pointer;
       }
 
       .on{
@@ -96,6 +97,7 @@ div.observeCamInfoContainer{
           font-size: 14px;
           font-weight: 700;
           border-radius: 8px;
+          cursor: pointer;
 
           &:first-child {
             margin-bottom: 16px;
@@ -131,6 +133,7 @@ div.observeCamInfoContainer{
         display: flex;
         justify-content: center;
         align-items: center;
+        cursor: pointer;
       }
       button.safetyDeleteBtn{
         width: 40px;
@@ -138,3 +141,4 @@ div.observeCamInfoContainer{
     }
   }
 }
+
