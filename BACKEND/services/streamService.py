@@ -135,7 +135,7 @@ class StreamService:
         foundData = dataArr[0]
         trackerId = foundData['_id']
         print('trackerId',trackerId)
-        return trackerId
+        return ObjectId(trackerId)
 
     # 녹화 경로, 파일명 초기화
     def initVideoRecordPath(self):
@@ -157,7 +157,7 @@ class StreamService:
             "trackerId": trackerId,
             "fileType": "video",
             "path": self.videoRecordPath,
-            "safetyLevel": "",
+            "safetyLevel": "green",
         }
         print('################# insertData', insertData)
         insertOne(self.dbName, config.TABLE_ARCHIVE, insertData)
