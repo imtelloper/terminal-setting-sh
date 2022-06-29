@@ -116,23 +116,30 @@ class StreamService:
         self.videoRecordPath = '{0}/safety-record{1}.avi'.format(self.videoFolderPath, self.fileInfo)
         self.videoWriter = cv2.VideoWriter(self.videoRecordPath, self.fcc, self.fps, (self.camWidth, self.camHeight))
 
+        self.insertVideoRecordPath(self.getTrackerId())
+
+    async def insertVideoRecordPath(self, trackerId):
+        insertData = {
+            "trackerId": trackerId,
+            "fileType": "video",
+            "path": self.videoRecordPath,
+            "safetyLevel": "",
+        }
+        resultData = insertOne(self.dbName, config.TABLE_ARCHIVE, insertData)
+        return resultData
+
+    async def getTrackerId(self):
         dataArr = []
         searchedData = findDatas(self.dbName, config.TABLE_TRACKER, {
             "area": config.AREA,
             "camPort": config.CAMPORT,
         })
-        for val in searchedData:
+        async for val in searchedData:
             dataArr.append(val)
         foundData = dataArr[0]
         trackerId = foundData['_id']
-
-        insertData = {
-          "trackerId": trackerId,
-          "fileType": "video",
-          "path": self.videoRecordPath,
-          "safetyLevel": "",
-        }
-        resultData = insertOne(self.dbName, config.TABLE_ARCHIVE, insertData)
+        print('trackerId',trackerId)
+        return trackerId
 
     # 스크린 캡쳐 경로, 파일명 초기화
     def initScreenCapturePath(self):
