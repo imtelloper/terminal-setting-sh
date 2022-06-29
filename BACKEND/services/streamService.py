@@ -133,9 +133,9 @@ class StreamService:
         async for val in searchedData:
             dataArr.append(val)
         foundData = dataArr[0]
-        trackerId = foundData['_id']
+        trackerId = ObjectId(foundData['_id'])
         print('trackerId',trackerId)
-        return ObjectId(trackerId)
+        return trackerId
 
     # 녹화 경로, 파일명 초기화
     def initVideoRecordPath(self):
@@ -150,7 +150,7 @@ class StreamService:
         print('#################')
         insertVideoRecordPath('trackerId', 'self.videoRecordPath')
         print('self.getTrackerId()', self.getTrackerId())
-        trackerId = str(self.getTrackerId())
+        trackerId = self.getTrackerId()
         print('trackerId',trackerId)
         print('################# insert start')
         insertData = {
