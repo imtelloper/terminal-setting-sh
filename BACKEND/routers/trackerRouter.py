@@ -1,29 +1,32 @@
 from fastapi import APIRouter, Body
 from fastapi.encoders import jsonable_encoder
-from dtos.observeDto import ObserveDto
-from models.observeModel import *
-from services.observeService import *
-
+from dtos.trackerDto import TrackerDto
+from models.trackerModel import *
+from services.trackerService import TrackerService
 
 '''
 Change below variables
 - APIRouter -> tags
-- service
-- dto
+- service =
+- dto =
+- dataModel =
+- updateModel =
 '''
 
 router = APIRouter(
-    tags=['observe'],
+    tags=['tracker'],
     responses={404: {"description": "not found"}, 200: {"description": "ok"}}
 )
 
-service = ObserveService()
+service = TrackerService()
 
-dto = ObserveDto
+dto = TrackerDto
+dataModel = Tracker
+updateModel = UpdateTracker
 
 
 @router.post("/", response_description="데이터 저장")
-async def saveData(data: Observe = Body(...)):
+async def saveData(data: dataModel = Body(...)):
     jsonData = jsonable_encoder(data)
     resultData = await service.addOneData(jsonData)
     return dto(**resultData)
@@ -46,7 +49,7 @@ async def findData(data=Body(...)):
 
 
 @router.patch("/{id}", response_description="id로 데이터 수정하기")
-async def modifyOneData(id, data: UpdateObserve = Body(...)):
+async def modifyOneData(id, data: updateModel = Body(...)):
     jsonData = jsonable_encoder(data)
     serviceResult = await service.updateOneData(id, jsonData)
     return dto(**serviceResult)

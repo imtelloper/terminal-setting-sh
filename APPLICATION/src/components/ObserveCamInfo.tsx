@@ -16,6 +16,8 @@ const ObserveCamInfo = ({
   videoFrameState,
   setVideoFrameState,
   camTabState,
+  recordState,
+  setRecordState,
 }) => {
   const navigate = useNavigate();
   const [camInfoState, setCamInfoState] = useState([
@@ -24,6 +26,7 @@ const ObserveCamInfo = ({
     { safetyLevel: 'Yellow', sensingCnt: 2 },
     { safetyLevel: 'Green', sensingCnt: 3 },
   ]);
+  const [ipState, setIpState] = useState('');
 
   const saveParameter = () => {
     console.log('saveParameter');
@@ -86,9 +89,33 @@ const ObserveCamInfo = ({
     flushSync(() => setVideoFrameState(newArr));
   };
 
-  // // 녹화 => ObservePage로 이동
+  // // 녹화
   // const handleRecordVideo = () => {
-  //   Api.stream.startRecordVideo();
+  //   console.log('camTabState', camTabState);
+  //   let ip = null;
+  //   switch (camTabState) {
+  //     case 1:
+  //       ip = '192.168.0.7';
+  //       break;
+  //     case 2:
+  //       ip = '192.168.0.24';
+  //       break;
+  //     case 3:
+  //       ip = '192.168.0.18';
+  //       break;
+  //     case 4:
+  //       ip = '192.168.0.30';
+  //       break;
+  //     default:
+  //       ip = '192.168.0.7';
+  //   }
+  //   if (!recordState) {
+  //     Api.stream.startRecordVideo(ip);
+  //     setRecordState(true);
+  //   } else {
+  //     Api.stream.stopRecordVideo(ip);
+  //     setRecordState(false);
+  //   }
   // };
 
   const groupBoxComponent = (camInfoStateInfo, idx) => (
@@ -128,7 +155,7 @@ const ObserveCamInfo = ({
         <div className="groupBox">
           <span className="groupName">{`Group${parseInt(idx, 10) + 1}`}</span>
           <button className="switchBtn on">ON</button>
-          {/*<button className="switchBtn off">OFF</button>*/}
+          {/* <button className="switchBtn off">OFF</button> */}
         </div>
         <div className="btnBox">
           {/* className : green yellow red inactive => alarmTxt에 추가해주시면 됩니다! */}
@@ -176,30 +203,30 @@ const ObserveCamInfo = ({
         {videoFrameState[idx]?.secondCanvas?.visible &&
           groupBoxComponent(info, idx + 1)}
 
-        <div className="safetyCreateBtnBox">
-          {/*<button*/}
-          {/*  className="safetyCreateBtn"*/}
-          {/*  datatype={idx.toString()}*/}
-          {/*  onClick={createCanvas}*/}
-          {/*>*/}
-          {/*  생성*/}
-          {/*</button>*/}
-        </div>
+        {/* <div className="safetyCreateBtnBox"> */}
+        {/*  <button */}
+        {/*    className="safetyCreateBtn" */}
+        {/*    datatype={idx.toString()} */}
+        {/*    onClick={createCanvas} */}
+        {/*  > */}
+        {/*    생성 */}
+        {/*  </button> */}
+        {/* </div> */}
+        {/* <div className="bottomBtnBox"> */}
+        {/*  <button className="bottomBtn" onClick={handleRecordVideo}> */}
+        {/*    Recording */}
+        {/*  </button> */}
+        {/*  <button */}
+        {/*    className="bottomBtn" */}
+        {/*    onClick={() => { */}
+        {/*      // navigate('/detail'); */}
+        {/*      Api.stream.stopRecordVideo(ipState); */}
+        {/*    }} */}
+        {/*  > */}
+        {/*    설정 */}
+        {/*  </button> */}
+        {/* </div> */}
       </div>
-        {/*<div className="bottomBtnBox">*/}
-        {/*  <button className="bottomBtn" onClick={handleRecordVideo}>*/}
-        {/*    Recording*/}
-        {/*  </button>*/}
-        {/*  <button*/}
-        {/*    className="bottomBtn"*/}
-        {/*    onClick={() => {*/}
-        {/*      // navigate('/detail');*/}
-        {/*      Api.stream.stopRecordVideo();*/}
-        {/*    }}*/}
-        {/*  >*/}
-        {/*    설정*/}
-        {/*  </button>*/}
-        {/*</div>*/}
     </section>
   ));
 

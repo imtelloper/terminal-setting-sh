@@ -58,7 +58,7 @@ const initVideoFrameData: Array<ViedeoFrameType> = [
   },
   {
     canvasClass: 'polygonCanvas3',
-    frameSrc: 'http://192.168.0.23:81',
+    frameSrc: 'http://192.168.0.18:81',
     firstCanvas: {
       visible: true,
       yellowSensingPercent: 0.7,
@@ -105,7 +105,8 @@ const ObservePage = () => {
   const [videoFrameState, setVideoFrameState] =
     useState<Array<ViedeoFrameType>>(initVideoFrameData);
 
-  const [camTabState, setCamTabState] = useState();
+  const [camTabState, setCamTabState] = useState(1);
+  const [recordState, setRecordState] = useState(false);
 
   const getCentroid = (points) => {
     let area = 0;
@@ -326,7 +327,7 @@ const ObservePage = () => {
           {/* > */}
           {/*  Refresh({data.frameSrc}) */}
           {/* </span> */}
-          {/*<span className="iframeRecording">Recording...</span>*/}
+          {/* <span className="iframeRecording">Recording...</span> */}
         </div>
         {data.firstCanvas.visible && (
           <canvas
@@ -360,7 +361,7 @@ const ObservePage = () => {
         />
       </div>
     ));
-  }, [videoFrameState]);
+  }, [videoFrameState, recordState]);
 
   const visibilityCamInfo = (e) => {
     const target = e.currentTarget;
@@ -422,6 +423,8 @@ const ObservePage = () => {
                   videoFrameState={videoFrameState}
                   setVideoFrameState={setVideoFrameState}
                   camTabState={camTabState}
+                  recordState={undefined}
+                  setRecordState={undefined}
                 />
               </div>
             </div>

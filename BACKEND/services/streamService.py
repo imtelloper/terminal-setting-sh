@@ -17,6 +17,9 @@ from util import *
 
 
 # W: 256 H: 192
+
+
+
 class StreamService:
     def __init__(self):
         self.camWidth = 512
@@ -27,7 +30,7 @@ class StreamService:
         self.camArea = config.AREA.replace(" ", "")
         # 각 파일들의 폴더들이 저장될 루트 경로
         # self.savePath = '{0}/safety-archives'.format(os.path.expanduser('~'))
-        self.savePath = './safety-archives'
+        # self.savePath = './safety-archives'
         self.savePath = '/home/interx/SAFETY-AI/BACKEND/safety-archives'
         # 현재 날짜
         self.currentDate = datetime.datetime.now().strftime('%Y-%m-%d')
@@ -70,13 +73,17 @@ class StreamService:
         self.dbName = config.DB_NAME
         self.tableName = config.TABLE_OBSERVE
         self.todayCamDataId = ""
+        self.trackerId = ""
         # 각종 파일 저장 경로 폴더 생성
-        makedirs(self.videoFolderPath)
-        makedirs(self.screenShotFolderPath)
+        # makedirs(self.videoFolderPath)
+        # makedirs(self.screenShotFolderPath)
         print('##### CONNECTED CAMERA ##### : ', self.listPorts)
 
     def __del__(self):
         self.video.release()
+
+    def getVideoRecordPath(self):
+        return self.videoRecordPath
 
     def setCurrentPort(self, port):
         self.currentPort = port
@@ -97,6 +104,7 @@ class StreamService:
 
     # 녹화 시작 메서드
     def setRecordGateOpen(self):
+        print('*************** setRecordGateOpen ***************')
         self.initVideoRecordPath()
         self.recordGate = True
         return True
@@ -106,8 +114,41 @@ class StreamService:
         self.recordGate = False
         return False
 
+    async def getTrackerId(self):
+        print('************* getTrackerId ***************')
+        dataArr = []
+        searchedData = findDatas(self.dbName, config.TABLE_TRACKER, {
+            "area": config.AREA,
+            "camPort": config.CAMPORT,
+        })
+        async for val in searchedData:
+            dataArr.append(val)
+            print('val', val)
+        foundData = dataArr[0]
+        print('foundData', foundData)
+        print('foundData[_id]', foundData['_id'])
+        trackerId = ObjectId(foundData['_id'])
+        self.trackerId = trackerId
+        print('trackerId',trackerId)
+        return trackerId
+
+    async def insertVideoRecordPath(self, trackerId, videoRecordPath):
+        print('insertVideoRecordPath')
+        print('insertVideoRecordPath trackerId', trackerId)
+        print('insertVideoRecordPath videoRecordPath', videoRecordPath)
+        insertData = {
+            "trackerId": trackerId,
+            "fileType": "video",
+            "path": videoRecordPath,
+            "safetyLevel": "",
+        }
+        resultData = await insertOne(self.dbName, config.TABLE_ARCHIVE, insertData)
+        print('resultData',resultData)
+        return resultData
+
     # 녹화 경로, 파일명 초기화
     def initVideoRecordPath(self):
+        print('initVideoRecordPath')
         self.currentDate = datetime.datetime.now().strftime('%Y-%m-%d')
         self.currentTime = datetime.datetime.now().strftime('%Y-%m-%d_%H:%M:%S.%f')
         self.fileInfo = '-{0}-{1}-{2}'.format(self.camArea, self.camPort, self.currentTime)
@@ -124,6 +165,7 @@ class StreamService:
         self.screenShotFolderPath = '{0}/{1}/{2}/{3}/capture'.format(self.savePath, self.currentDate, self.camArea,
                                                                      self.camPort)
         self.screenShotRecordPath = '{0}/safety-shot{1}.png'.format(self.screenShotFolderPath, self.fileInfo)
+
 
     async def searchDatas(self, data: dict):
         dataArr = []
@@ -210,7 +252,7 @@ class StreamService:
         while self.cameraOnOff:
             k = cv2.waitKey(1) & 0xFF
             timeCnt += 1
-            time.sleep(0.1)
+            time.sleep(0.08)
             ret, frame = self.video.read()
             if frame is None: return
             img = frame.copy()
@@ -261,7 +303,8 @@ class StreamService:
                     else:
                         result_img = img
 
-                if timeCnt == 10:
+                # timeCnt가 낮을수록 Yellow, Red 업데이트 속도 빨라짐. 너무 빠르면 성능에 문제 있을 수 있음
+                if timeCnt == 8:
                     print('#########################################################timeCnt :', timeCnt)
                     timeCnt = 0
                     '''
@@ -294,6 +337,14 @@ class StreamService:
                                     }
                                 }
                             )
+                            getConnection()[self.dbName][config.TABLE_ARCHIVE].insert_one(
+                                {
+                                    "trackerId": self.trackerId,
+                                    "fileType": "img",
+                                    "path": self.screenShotRecordPath,
+                                    "safetyLevel": 'Yellow',
+                                },
+                            )
                         sensingLevel = 'YELLOW'
                     elif warn_sig == 2:
                         print('RED RED RED RED RED RED RED RED RED RED RED RED RED RED RED RED RED RED RED')
@@ -308,6 +359,18 @@ class StreamService:
                                         'camSafetyLevel': 'Red'
                                     }
                                 }
+                            )
+                            print(' self.trackerId', self.trackerId)
+                            print(' "img"', "img")
+                            print(' self.screenShotRecordPath', self.screenShotRecordPath)
+                            print(' sensingLevel', sensingLevel)
+                            getConnection()[self.dbName][config.TABLE_ARCHIVE].insert_one(
+                                {
+                                    "trackerId": self.trackerId,
+                                    "fileType": "img",
+                                    "path": self.screenShotRecordPath,
+                                    "safetyLevel": 'Red',
+                                },
                             )
                         sensingLevel = 'RED'
                     else:
@@ -336,8 +399,21 @@ class StreamService:
 
                 # 스크린 캡쳐
                 if self.captureGate:
+                    print('SCREEN CAPTURE SCREEN CAPTURE SCREEN CAPTURE SCREEN CAPTURE SCREEN CAPTURE SCREEN CAPTURE ')
                     cv2.imwrite(self.screenShotRecordPath, result_img, params=[cv2.IMWRITE_PNG_COMPRESSION, 0])
                     self.captureGate = False
+                    print(' self.trackerId',  self.trackerId)
+                    print(' "img"',  "img")
+                    print(' self.screenShotRecordPath',  self.screenShotRecordPath)
+                    print(' sensingLevel',  sensingLevel)
+                    getConnection()[self.dbName][config.TABLE_ARCHIVE].insert_one(
+                        {
+                            "trackerId": self.trackerId,
+                            "fileType": "img",
+                            "path": self.screenShotRecordPath,
+                            "safetyLevel": sensingLevel,
+                        },
+                    )
 
                 # 키보드 눌렀을시 이벤트 발생
                 if k == ord('s'):
