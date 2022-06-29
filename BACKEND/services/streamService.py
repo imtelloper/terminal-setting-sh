@@ -151,7 +151,7 @@ class StreamService:
         insertVideoRecordPath('trackerId', 'self.videoRecordPath')
         print('self.getTrackerId()', self.getTrackerId())
         trackerId = self.getTrackerId()
-        print('trackerId type',type trackerId)
+        print('trackerId type',type(trackerId))
         print('trackerId',trackerId)
         print('################# insert start')
         insertData = {
