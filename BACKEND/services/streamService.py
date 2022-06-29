@@ -141,7 +141,7 @@ class StreamService:
         return trackerId
 
     # 녹화 경로, 파일명 초기화
-    async def initVideoRecordPath(self):
+    def initVideoRecordPath(self):
         print('initVideoRecordPath')
         self.currentDate = datetime.datetime.now().strftime('%Y-%m-%d')
         self.currentTime = datetime.datetime.now().strftime('%Y-%m-%d_%H:%M:%S.%f')
@@ -154,11 +154,11 @@ class StreamService:
         insertVideoRecordPath('trackerId', 'self.videoRecordPath')
         print('self.getTrackerId()', self.getTrackerId())
         dataArr = []
-        searchedData = await findDatas(self.dbName, config.TABLE_TRACKER, {
+        searchedData = findDatas(self.dbName, config.TABLE_TRACKER, {
             "area": config.AREA,
             "camPort": config.CAMPORT,
         })
-        async for val in searchedData:
+        for val in searchedData:
             dataArr.append(val)
             print('val', val)
         foundData = dataArr[0]
@@ -176,7 +176,7 @@ class StreamService:
             "safetyLevel": "green",
         }
         print('################# insertData', insertData)
-        await insertOne(self.dbName, config.TABLE_ARCHIVE, insertData)
+        insertOne(self.dbName, config.TABLE_ARCHIVE, insertData)
         print('################# insert done')
         ################# insert done
 
