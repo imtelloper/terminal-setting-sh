@@ -17,20 +17,7 @@ from util import *
 
 
 # W: 256 H: 192
-async def insertVideoRecordPath(trackerId, videoRecordPath):
-    print('insertVideoRecordPath')
-    print('insertVideoRecordPath trackerId',trackerId)
-    print('insertVideoRecordPath videoRecordPath',videoRecordPath)
-    # insertData = {
-    #     "trackerId": trackerId,
-    #     "fileType": "video",
-    #     "path": videoRecordPath,
-    #     "safetyLevel": "",
-    # }
-    # resultData = await insertOne(self.dbName, config.TABLE_ARCHIVE, insertData)
-    # print('resultData',resultData)
-    # return resultData
-    return 'resultData'
+
 
 
 class StreamService:
@@ -94,6 +81,9 @@ class StreamService:
     def __del__(self):
         self.video.release()
 
+    def getVideoRecordPath(self):
+        return self.videoRecordPath
+
     def setCurrentPort(self, port):
         self.currentPort = port
 
@@ -140,6 +130,20 @@ class StreamService:
         print('trackerId',trackerId)
         return trackerId
 
+    async def insertVideoRecordPath(self, trackerId, videoRecordPath):
+        print('insertVideoRecordPath')
+        print('insertVideoRecordPath trackerId', trackerId)
+        print('insertVideoRecordPath videoRecordPath', videoRecordPath)
+        insertData = {
+            "trackerId": trackerId,
+            "fileType": "video",
+            "path": videoRecordPath,
+            "safetyLevel": "",
+        }
+        resultData = await insertOne(self.dbName, config.TABLE_ARCHIVE, insertData)
+        print('resultData',resultData)
+        return resultData
+
     # 녹화 경로, 파일명 초기화
     def initVideoRecordPath(self):
         print('initVideoRecordPath')
@@ -149,37 +153,6 @@ class StreamService:
         self.videoFolderPath = '{0}/{1}/{2}/{3}/video'.format(self.savePath, self.currentDate, self.camArea,
                                                               self.camPort)
         self.videoRecordPath = '{0}/safety-record{1}.avi'.format(self.videoFolderPath, self.fileInfo)
-
-        print('#################')
-        insertVideoRecordPath('trackerId', 'self.videoRecordPath')
-        print('self.getTrackerId()', self.getTrackerId())
-        dataArr = []
-        searchedData = findDatas(self.dbName, config.TABLE_TRACKER, {
-            "area": config.AREA,
-            "camPort": config.CAMPORT,
-        })
-        for val in searchedData:
-            dataArr.append(val)
-            print('val', val)
-        foundData = dataArr[0]
-        print('foundData', foundData)
-        print('foundData[_id]', foundData['_id'])
-        trackerId = ObjectId(foundData['_id'])
-        print('trackerId', trackerId)
-        print('trackerId type',type(trackerId))
-        print('trackerId',trackerId)
-        print('################# insert start')
-        insertData = {
-            "trackerId": str(trackerId),
-            "fileType": "video",
-            "path": self.videoRecordPath,
-            "safetyLevel": "green",
-        }
-        print('################# insertData', insertData)
-        insertOne(self.dbName, config.TABLE_ARCHIVE, insertData)
-        print('################# insert done')
-        ################# insert done
-
         self.videoWriter = cv2.VideoWriter(self.videoRecordPath, self.fcc, self.fps, (self.camWidth, self.camHeight))
 
     # 스크린 캡쳐 경로, 파일명 초기화
