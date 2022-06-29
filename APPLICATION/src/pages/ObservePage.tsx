@@ -350,7 +350,9 @@ const ObservePage = () => {
           {/* > */}
           {/*  Refresh({data.frameSrc}) */}
           {/* </span> */}
-          <span className="iframeRecording">Recording...</span>
+          <span className="iframeRecording">
+            {camTabState - 1 === idx && recordState && 'Recording...'}
+          </span>
         </div>
         {data.firstCanvas.visible && (
           <canvas
