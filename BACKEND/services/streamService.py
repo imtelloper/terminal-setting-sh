@@ -132,13 +132,16 @@ class StreamService:
         })
         async for val in searchedData:
             dataArr.append(val)
+            print('val', val)
         foundData = dataArr[0]
+        print('foundData', foundData)
+        print('foundData[_id]', foundData['_id'])
         trackerId = ObjectId(foundData['_id'])
         print('trackerId',trackerId)
         return trackerId
 
     # 녹화 경로, 파일명 초기화
-    def initVideoRecordPath(self):
+    async def initVideoRecordPath(self):
         print('initVideoRecordPath')
         self.currentDate = datetime.datetime.now().strftime('%Y-%m-%d')
         self.currentTime = datetime.datetime.now().strftime('%Y-%m-%d_%H:%M:%S.%f')
@@ -150,7 +153,19 @@ class StreamService:
         print('#################')
         insertVideoRecordPath('trackerId', 'self.videoRecordPath')
         print('self.getTrackerId()', self.getTrackerId())
-        trackerId = self.getTrackerId()
+        dataArr = []
+        searchedData = await findDatas(self.dbName, config.TABLE_TRACKER, {
+            "area": config.AREA,
+            "camPort": config.CAMPORT,
+        })
+        async for val in searchedData:
+            dataArr.append(val)
+            print('val', val)
+        foundData = dataArr[0]
+        print('foundData', foundData)
+        print('foundData[_id]', foundData['_id'])
+        trackerId = ObjectId(foundData['_id'])
+        print('trackerId', trackerId)
         print('trackerId type',type(trackerId))
         print('trackerId',trackerId)
         print('################# insert start')
@@ -161,7 +176,7 @@ class StreamService:
             "safetyLevel": "green",
         }
         print('################# insertData', insertData)
-        insertOne(self.dbName, config.TABLE_ARCHIVE, insertData)
+        await insertOne(self.dbName, config.TABLE_ARCHIVE, insertData)
         print('################# insert done')
         ################# insert done
 
