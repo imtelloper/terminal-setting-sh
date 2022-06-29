@@ -57,7 +57,7 @@ const initVideoFrameData: Array<ViedeoFrameType> = [
   },
   {
     canvasClass: 'polygonCanvas3',
-    frameSrc: 'http://192.168.0.23:81',
+    frameSrc: 'http://192.168.0.18:81',
     firstCanvas: {
       visible: false,
       yellowSensingPercent: 0.7,

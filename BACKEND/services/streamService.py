@@ -71,8 +71,8 @@ class StreamService:
         self.tableName = config.TABLE_OBSERVE
         self.todayCamDataId = ""
         # 각종 파일 저장 경로 폴더 생성
-        makedirs(self.videoFolderPath)
-        makedirs(self.screenShotFolderPath)
+        # makedirs(self.videoFolderPath)
+        # makedirs(self.screenShotFolderPath)
         print('##### CONNECTED CAMERA ##### : ', self.listPorts)
 
     def __del__(self):

@@ -99,7 +99,7 @@ const ObserveCamInfo = ({
         ip = '192.168.0.24';
         break;
       case 3:
-        ip = '192.168.0.23';
+        ip = '192.168.0.18';
         break;
       case 4:
         ip = '192.168.0.30';
