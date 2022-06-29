@@ -107,12 +107,12 @@ class StreamService:
         self.recordGate = False
         return False
 
-    async def insertVideoRecordPath(self, trackerId):
+    async def insertVideoRecordPath(self, trackerId, videoRecordPath):
         print('insertVideoRecordPath trackerId',trackerId)
         insertData = {
             "trackerId": trackerId,
             "fileType": "video",
-            "path": self.videoRecordPath,
+            "path": videoRecordPath,
             "safetyLevel": "",
         }
         resultData = await insertOne(self.dbName, config.TABLE_ARCHIVE, insertData)
@@ -142,11 +142,14 @@ class StreamService:
         self.videoFolderPath = '{0}/{1}/{2}/{3}/video'.format(self.savePath, self.currentDate, self.camArea,
                                                               self.camPort)
         self.videoRecordPath = '{0}/safety-record{1}.avi'.format(self.videoFolderPath, self.fileInfo)
-        self.videoWriter = cv2.VideoWriter(self.videoRecordPath, self.fcc, self.fps, (self.camWidth, self.camHeight))
+
         print('#################')
         print('self.getTrackerId()', self.getTrackerId())
         trackerId = str(self.getTrackerId())
-        self.insertVideoRecordPath(trackerId)
+        print('trackerId',trackerId)
+        self.insertVideoRecordPath(trackerId, self.videoRecordPath)
+
+        self.videoWriter = cv2.VideoWriter(self.videoRecordPath, self.fcc, self.fps, (self.camWidth, self.camHeight))
 
     # 스크린 캡쳐 경로, 파일명 초기화
     def initScreenCapturePath(self):
