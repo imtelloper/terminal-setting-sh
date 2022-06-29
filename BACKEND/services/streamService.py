@@ -106,6 +106,32 @@ class StreamService:
         self.recordGate = False
         return False
 
+    async def insertVideoRecordPath(self, trackerId):
+        print('insertVideoRecordPath trackerId',trackerId)
+        insertData = {
+            "trackerId": trackerId,
+            "fileType": "video",
+            "path": self.videoRecordPath,
+            "safetyLevel": "",
+        }
+        resultData = await insertOne(self.dbName, config.TABLE_ARCHIVE, insertData)
+        print('resultData',resultData)
+        return resultData
+
+    async def getTrackerId(self):
+        print('************* getTrackerId ***************')
+        dataArr = []
+        searchedData = await findDatas(self.dbName, config.TABLE_TRACKER, {
+            "area": config.AREA,
+            "camPort": config.CAMPORT,
+        })
+        async for val in searchedData:
+            dataArr.append(val)
+        foundData = dataArr[0]
+        trackerId = foundData['_id']
+        print('trackerId',trackerId)
+        return trackerId
+
     # 녹화 경로, 파일명 초기화
     def initVideoRecordPath(self):
         self.currentDate = datetime.datetime.now().strftime('%Y-%m-%d')
@@ -117,32 +143,6 @@ class StreamService:
         self.videoWriter = cv2.VideoWriter(self.videoRecordPath, self.fcc, self.fps, (self.camWidth, self.camHeight))
 
         self.insertVideoRecordPath(self.getTrackerId())
-
-    async def insertVideoRecordPath(self, trackerId):
-        print('insertVideoRecordPath trackerId',trackerId)
-        insertData = {
-            "trackerId": trackerId,
-            "fileType": "video",
-            "path": self.videoRecordPath,
-            "safetyLevel": "",
-        }
-        resultData = insertOne(self.dbName, config.TABLE_ARCHIVE, insertData)
-        print('resultData',resultData)
-        return resultData
-
-    async def getTrackerId(self):
-        print('************* getTrackerId ***************')
-        dataArr = []
-        searchedData = findDatas(self.dbName, config.TABLE_TRACKER, {
-            "area": config.AREA,
-            "camPort": config.CAMPORT,
-        })
-        async for val in searchedData:
-            dataArr.append(val)
-        foundData = dataArr[0]
-        trackerId = foundData['_id']
-        print('trackerId',trackerId)
-        return trackerId
 
     # 스크린 캡쳐 경로, 파일명 초기화
     def initScreenCapturePath(self):
