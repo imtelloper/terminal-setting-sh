@@ -18,6 +18,7 @@ from util import *
 
 # W: 256 H: 192
 async def insertVideoRecordPath(trackerId, videoRecordPath):
+    print('insertVideoRecordPath')
     print('insertVideoRecordPath trackerId',trackerId)
     print('insertVideoRecordPath videoRecordPath',videoRecordPath)
     # insertData = {
@@ -147,10 +148,11 @@ class StreamService:
         self.videoRecordPath = '{0}/safety-record{1}.avi'.format(self.videoFolderPath, self.fileInfo)
 
         print('#################')
+        insertVideoRecordPath('trackerId', 'self.videoRecordPath')
         print('self.getTrackerId()', self.getTrackerId())
         trackerId = str(self.getTrackerId())
         print('trackerId',trackerId)
-        insertVideoRecordPath('trackerId', 'self.videoRecordPath')
+
 
         self.videoWriter = cv2.VideoWriter(self.videoRecordPath, self.fcc, self.fps, (self.camWidth, self.camHeight))
 
