@@ -444,13 +444,6 @@ const ObservePage = () => {
             </div>
           </div>
         </div>
-
-        {/* <div className="safetyTabContainer">{getTabEles()}</div> */}
-        {/* <ObserveCamInfo */}
-        {/*  videoFrameState={videoFrameState} */}
-        {/*  setVideoFrameState={setVideoFrameState} */}
-        {/*  camTabState={camTabState} */}
-        {/* /> */}
       </div>
       <div className="observeRight">
         <div className="rightBox">
