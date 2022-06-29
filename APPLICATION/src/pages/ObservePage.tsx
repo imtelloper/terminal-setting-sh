@@ -279,10 +279,30 @@ const ObservePage = () => {
     const arrIndex = canvas?.getAttribute('tabIndex');
     /* firstCanvas | secondCanvas */
     const itemID = canvas?.getAttribute('itemID');
-    const x = e.clientX - canvas.offsetLeft - 6;
-    const y = e.clientY - canvas.offsetTop - 8;
-    console.log(x);
-    console.log(y);
+    // const x = e.clientX - canvas.offsetLeft - 6;
+    // const y = e.clientY - canvas.offsetTop - 8;
+    let offsetWidth = 504;
+    let offsetHeight = 336 - 49;
+    switch (parseInt(arrIndex, 10) + 1) {
+      case 1:
+        offsetWidth = 504;
+        offsetHeight = 336 - 49;
+        break;
+      case 2:
+        offsetWidth = 1031;
+        offsetHeight = 336 - 49;
+        break;
+      case 3:
+        offsetWidth = 504;
+        offsetHeight = 784 - 49;
+        break;
+      case 4:
+        offsetWidth = 1031;
+        offsetHeight = 784 - 49;
+        break;
+    }
+    const x = e.clientX - canvas.offsetLeft - offsetWidth;
+    const y = e.clientY - canvas.offsetTop - offsetHeight;
     const { coordinate } = videoFrameState[arrIndex][itemID];
     const match = coordinate?.findIndex(
       ([x0, y0]) => Math.abs(x0 - x) + Math.abs(y0 - y) <= 6
