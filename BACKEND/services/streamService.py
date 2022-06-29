@@ -109,15 +109,16 @@ class StreamService:
 
     async def insertVideoRecordPath(self, trackerId, videoRecordPath):
         print('insertVideoRecordPath trackerId',trackerId)
-        insertData = {
-            "trackerId": trackerId,
-            "fileType": "video",
-            "path": videoRecordPath,
-            "safetyLevel": "",
-        }
-        resultData = await insertOne(self.dbName, config.TABLE_ARCHIVE, insertData)
-        print('resultData',resultData)
-        return resultData
+        # insertData = {
+        #     "trackerId": trackerId,
+        #     "fileType": "video",
+        #     "path": videoRecordPath,
+        #     "safetyLevel": "",
+        # }
+        # resultData = await insertOne(self.dbName, config.TABLE_ARCHIVE, insertData)
+        # print('resultData',resultData)
+        # return resultData
+        return 'resultData'
 
     async def getTrackerId(self):
         print('************* getTrackerId ***************')
