@@ -4,6 +4,7 @@ import '../style/pages/ObservePage.scss';
 import { useNavigate } from 'react-router-dom';
 import ObserveCamInfo from '../components/ObserveCamInfo';
 import axios from 'axios';
+import Api from '../api/Api';
 
 type ViedeoFrameType = {
   canvasClass: string;
@@ -27,7 +28,7 @@ const initVideoFrameData: Array<ViedeoFrameType> = [
     canvasClass: 'polygonCanvas1',
     frameSrc: 'http://192.168.0.7:81',
     firstCanvas: {
-      visible: false,
+      visible: true,
       yellowSensingPercent: 0.7,
       redSensingPercent: 0.3,
       coordinate: [],
@@ -43,13 +44,13 @@ const initVideoFrameData: Array<ViedeoFrameType> = [
     canvasClass: 'polygonCanvas2',
     frameSrc: 'http://192.168.0.24:81',
     firstCanvas: {
-      visible: false,
+      visible: true,
       yellowSensingPercent: 0.7,
       redSensingPercent: 0.3,
       coordinate: [],
     },
     secondCanvas: {
-      visible: false,
+      visible: true,
       yellowSensingPercent: 0.7,
       redSensingPercent: 0.3,
       coordinate: [],
@@ -59,13 +60,13 @@ const initVideoFrameData: Array<ViedeoFrameType> = [
     canvasClass: 'polygonCanvas3',
     frameSrc: 'http://192.168.0.23:81',
     firstCanvas: {
-      visible: false,
+      visible: true,
       yellowSensingPercent: 0.7,
       redSensingPercent: 0.3,
       coordinate: [],
     },
     secondCanvas: {
-      visible: false,
+      visible: true,
       yellowSensingPercent: 0.7,
       redSensingPercent: 0.3,
       coordinate: [],
@@ -75,13 +76,13 @@ const initVideoFrameData: Array<ViedeoFrameType> = [
     canvasClass: 'polygonCanvas4',
     frameSrc: 'http://192.168.0.30:81',
     firstCanvas: {
-      visible: false,
+      visible: true,
       yellowSensingPercent: 0.7,
       redSensingPercent: 0.3,
       coordinate: [],
     },
     secondCanvas: {
-      visible: false,
+      visible: true,
       yellowSensingPercent: 0.7,
       redSensingPercent: 0.3,
       coordinate: [],
@@ -279,6 +280,8 @@ const ObservePage = () => {
     const itemID = canvas?.getAttribute('itemID');
     const x = e.clientX - canvas.offsetLeft - 6;
     const y = e.clientY - canvas.offsetTop - 8;
+    console.log(x);
+    console.log(y);
     const { coordinate } = videoFrameState[arrIndex][itemID];
     const match = coordinate?.findIndex(
       ([x0, y0]) => Math.abs(x0 - x) + Math.abs(y0 - y) <= 6
@@ -323,7 +326,7 @@ const ObservePage = () => {
           {/* > */}
           {/*  Refresh({data.frameSrc}) */}
           {/* </span> */}
-          <span className="iframeRecording">Recording...</span>
+          {/*<span className="iframeRecording">Recording...</span>*/}
         </div>
         {data.firstCanvas.visible && (
           <canvas
@@ -398,19 +401,60 @@ const ObservePage = () => {
     return tabArr;
   };
 
+  // 녹화
+  const handleRecordVideo = () => {
+    Api.stream.startRecordVideo();
+  };
+
   return (
     <div id="observeContainer" className="observeContainer">
-      <div className="leftSafetyBox">
-        <p className="SafetyTitle">H1 공장 크레인</p>
-        <div className="safetyTabContainer">{getTabEles()}</div>
-        <ObserveCamInfo
-          videoFrameState={videoFrameState}
-          setVideoFrameState={setVideoFrameState}
-          camTabState={camTabState}
-        />
+      <div className="observeLeft">
+        <div className="leftBox">
+          <div className="titleBox">
+            <p>Place</p>
+            <span>H1 공장 크레인</span>
+          </div>
+          <div className="safetyTabWrap">
+            <div className="safetyTabBox">{getTabEles()}</div>
+            <div className="safetyContainer">
+              <div className="safetyContent">
+                <ObserveCamInfo
+                  videoFrameState={videoFrameState}
+                  setVideoFrameState={setVideoFrameState}
+                  camTabState={camTabState}
+                />
+              </div>
+            </div>
+            <div className="bottomBtnBox">
+              <button className="bottomBtn" onClick={handleRecordVideo}>
+                SETTING
+              </button>
+              <button
+                className="bottomBtn"
+                onClick={() => {
+                  // navigate('/detail');
+                  Api.stream.stopRecordVideo();
+                }}
+              >
+                SAVE
+              </button>
+            </div>
+          </div>
+        </div>
+
+        {/* <div className="safetyTabContainer">{getTabEles()}</div> */}
+        {/* <ObserveCamInfo */}
+        {/*  videoFrameState={videoFrameState} */}
+        {/*  setVideoFrameState={setVideoFrameState} */}
+        {/*  camTabState={camTabState} */}
+        {/* /> */}
       </div>
-      {/* 카메라 Observe 박스 */}
-      <div className="iframeContainer">{videoFrameMap}</div>
+      <div className="observeRight">
+        <div className="rightBox">
+          {/* 카메라 Observe 박스 */}
+          <div className="iframeContent">{videoFrameMap}</div>
+        </div>
+      </div>
     </div>
   );
 };

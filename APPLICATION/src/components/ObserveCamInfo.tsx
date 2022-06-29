@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from 'react';
+import '../style/pages/ObserveCamInfo.scss';
 import { BiDownload, BiExport } from 'react-icons/bi';
 import { useNavigate } from 'react-router-dom';
 import { flushSync } from 'react-dom';
 import Api from '../api/Api';
+import Delete from '../images/delete.png';
 
 type Props = {
   videoFrameState: Array<any>;
@@ -84,45 +86,81 @@ const ObserveCamInfo = ({
     flushSync(() => setVideoFrameState(newArr));
   };
 
-  // 녹화
-  const handleRecordVideo = () => {
-    Api.stream.startRecordVideo();
-  };
+  // // 녹화 => ObservePage로 이동
+  // const handleRecordVideo = () => {
+  //   Api.stream.startRecordVideo();
+  // };
 
   const groupBoxComponent = (camInfoStateInfo, idx) => (
-    <>
-      <div className="groupBox">
-        <span className="groupName">{`Group${parseInt(idx, 10) + 1}`}</span>
-        <span className="saveParameter" onClick={saveParameter}>
-          <BiDownload />
-          파라미터 저장
-        </span>
-        <span className="callParameter" onClick={callParameter}>
-          <BiExport />
-          파라미터 불러오기
-        </span>
+    <div className="observeCamInfoContainer">
+      {/* <div className="groupBox"> */}
+      {/*  <span className="groupName">{`Group${parseInt(idx, 10) + 1}`}</span> */}
+      {/*  <span className="saveParameter" onClick={saveParameter}> */}
+      {/*    <BiDownload /> */}
+      {/*    파라미터 저장 */}
+      {/*  </span> */}
+      {/*  <span className="callParameter" onClick={callParameter}> */}
+      {/*    <BiExport /> */}
+      {/*    파라미터 불러오기 */}
+      {/*  </span> */}
+      {/* </div> */}
+      {/* <p> */}
+      {/*  Safety Level :{' '} */}
+      {/*  <span className="safeLevel">{camInfoStateInfo.safetyLevel}</span> */}
+      {/* </p> */}
+      {/* <p>감지 수 : {camInfoStateInfo.sensingCnt}</p> */}
+      {/* <div className="safetyBtnBox"> */}
+      {/*  <button */}
+      {/*    className="safetyBtn safetyActiveBtn" */}
+      {/*    datatype="false" */}
+      {/*    onClick={handleActive} */}
+      {/*  > */}
+      {/*    Inactive */}
+      {/*  </button> */}
+      {/*  <button className="safetyBtn safetyDeleteBtn" onClick={handleDelete}> */}
+      {/*    Delete */}
+      {/*  </button> */}
+      {/*  <button className="safetyBtn safetyResetBtn" onClick={handleErrorReset}> */}
+      {/*    Error Reset */}
+      {/*  </button> */}
+      {/* </div> */}
+      <div className="observeBox">
+        <div className="groupBox">
+          <span className="groupName">{`Group${parseInt(idx, 10) + 1}`}</span>
+          <button className="switchBtn on">ON</button>
+          {/*<button className="switchBtn off">OFF</button>*/}
+        </div>
+        <div className="btnBox">
+          {/* className : green yellow red inactive => alarmTxt에 추가해주시면 됩니다! */}
+          <div className="alarmTxt green">안전합니다.</div>
+          <div className="sensingBox">
+            <span>
+              1차 감지<p>{camInfoStateInfo.sensingCnt}</p>
+            </span>
+            <span>
+              2차 감지<p>{camInfoStateInfo.sensingCnt}</p>
+            </span>
+          </div>
+        </div>
+        <div className="safetyBtnBox">
+          <button className="saveParameter" onClick={saveParameter}>
+            설정 저장
+          </button>
+          <button className="callParameter" onClick={callParameter}>
+            설정 불러오기
+          </button>
+          <button
+            className="safetyBtn safetyResetBtn"
+            onClick={handleErrorReset}
+          >
+            에러 리셋
+          </button>
+          <button className="safetyBtn safetyDeleteBtn" onClick={handleDelete}>
+            <img src={Delete} />
+          </button>
+        </div>
       </div>
-      <p>
-        Safety Level :{' '}
-        <span className="safeLevel">{camInfoStateInfo.safetyLevel}</span>
-      </p>
-      <p>감지 수 : {camInfoStateInfo.sensingCnt}</p>
-      <div className="safetyBtnBox">
-        <button
-          className="safetyBtn safetyActiveBtn"
-          datatype="false"
-          onClick={handleActive}
-        >
-          Inactive
-        </button>
-        <button className="safetyBtn safetyDeleteBtn" onClick={handleDelete}>
-          Delete
-        </button>
-        <button className="safetyBtn safetyResetBtn" onClick={handleErrorReset}>
-          Error Reset
-        </button>
-      </div>
-    </>
+    </div>
   );
 
   const camInfosMap = camInfoState.map((info, idx) => (
@@ -139,29 +177,29 @@ const ObserveCamInfo = ({
           groupBoxComponent(info, idx + 1)}
 
         <div className="safetyCreateBtnBox">
-          <button
-            className="safetyCreateBtn"
-            datatype={idx.toString()}
-            onClick={createCanvas}
-          >
-            생성
-          </button>
-        </div>
-        <div className="bottomBtnBox">
-          <button className="bottomBtn" onClick={handleRecordVideo}>
-            Recording
-          </button>
-          <button
-            className="bottomBtn"
-            onClick={() => {
-              // navigate('/detail');
-              Api.stream.stopRecordVideo();
-            }}
-          >
-            설정
-          </button>
+          {/*<button*/}
+          {/*  className="safetyCreateBtn"*/}
+          {/*  datatype={idx.toString()}*/}
+          {/*  onClick={createCanvas}*/}
+          {/*>*/}
+          {/*  생성*/}
+          {/*</button>*/}
         </div>
       </div>
+        {/*<div className="bottomBtnBox">*/}
+        {/*  <button className="bottomBtn" onClick={handleRecordVideo}>*/}
+        {/*    Recording*/}
+        {/*  </button>*/}
+        {/*  <button*/}
+        {/*    className="bottomBtn"*/}
+        {/*    onClick={() => {*/}
+        {/*      // navigate('/detail');*/}
+        {/*      Api.stream.stopRecordVideo();*/}
+        {/*    }}*/}
+        {/*  >*/}
+        {/*    설정*/}
+        {/*  </button>*/}
+        {/*</div>*/}
     </section>
   ));
 

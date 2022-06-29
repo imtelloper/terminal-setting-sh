@@ -1,0 +1,140 @@
+@import "../color.scss";
+
+div.observeCamInfoContainer{
+  width: 100%;
+  height: 100%;
+  border-bottom: 1px solid $line;
+
+  &:last-child{
+    border: none;
+  }
+
+  div.observeBox{
+    width: 100%;
+    height: 100%;
+    padding: 24px 24px 16px 24px;
+    box-sizing: border-box;
+
+    div.groupBox{
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 24px;
+      span{
+        font-size: 18px;
+        font-weight: 500;
+      }
+      button.switchBtn{
+        all: unset;
+        width: 60px;
+        height: 36px;
+        border-radius: 8px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .on{
+        background-color: $blue-500 !important;
+        color: $white !important;
+      }
+
+      .off{
+        background-color: $inactive !important;
+        color: $inactive-text !important;
+      }
+    }
+
+    div.btnBox{
+      width: 100%;
+      box-sizing: border-box;
+      //padding-bottom: 24px;
+      border-bottom: 1px solid $line;
+      div.alarmTxt{
+        width: 100%;
+        height: 48px;
+        background-color: $success-500;
+        border-radius: 8px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-weight: 700;
+        margin-bottom: 16px;
+      }
+
+      div.green {
+        background-color: $quality-good;
+      }
+
+      div.yellow {
+        background-color: $warning-500;
+      }
+
+      div.red {
+        background-color: $error-500;
+        color: $white;
+      }
+
+      div.inactive {
+        background-color: $inactive;
+        color: $inactive-text;
+      }
+
+      div.sensingBox {
+        width: 100%;
+        display: flex;
+
+        span {
+          width: calc(50% - 8px);
+          height: 48px;
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          padding: 0 16px;
+          box-sizing: border-box;
+          font-size: 14px;
+          font-weight: 700;
+          border-radius: 8px;
+
+          &:first-child {
+            margin-bottom: 16px;
+            background-color: $warning-500;
+            color: $dark;
+            margin-right: 16px;
+          }
+
+          &:last-child {
+            background-color: $error-500;
+            color: $white;
+          }
+
+          p {
+            font-size: 28px;
+          }
+        }
+      }
+    }
+
+    div.safetyBtnBox{
+      width: 100%;
+      box-sizing: border-box;
+      display: flex;
+      justify-content: space-between;
+      margin-top: 16px;
+      button{
+        all: unset;
+        width: 112px;
+        height: 40px;
+        border: 1px solid $line;
+        border-radius: 8px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+      button.safetyDeleteBtn{
+        width: 40px;
+      }
+    }
+  }
+}

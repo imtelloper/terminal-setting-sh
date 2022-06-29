@@ -1,3 +1,7 @@
+@import "./color.scss";
+
+*{margin: 0; padding: 0;}
+
 #root {
   width: 100%;
   height: 100%;
@@ -12,42 +16,44 @@
 
 body {
   position: relative;
-  color: white;
+  color: $dark;
   width: 100vw;
   height: 100vh;
   overflow: hidden;
-  background: linear-gradient(-45deg, #CFF375, #80EAAD, #69BAF3, #2553BD);
+  background-color: $background;
+  //background: linear-gradient(-45deg, #CFF375, #80EAAD, #69BAF3, #2553BD);
   font-family: sans-serif;
-  overflow-y: hidden;
+  //overflow: hidden;
   display: flex;
   justify-content: center;
   align-items: center;
   box-sizing: border-box;
-  background-size: 400% 400%;
-  animation: gradient 4s ease infinite;
+  //background-size: 400% 400%;
+  //animation: gradient 4s ease infinite;
 
-  @keyframes gradient {
-    0% {
-      background-position: 0% 50%;
-    }
-    50% {
-      background-position: 100% 50%;
-    }
-    100% {
-      background-position: 0% 50%;
-    }
-  }
+  //@keyframes gradient {
+  //  0% {
+  //    background-position: 0% 50%;
+  //  }
+  //  50% {
+  //    background-position: 100% 50%;
+  //  }
+  //  100% {
+  //    background-position: 0% 50%;
+  //  }
+  //}
 }
 
 
 html, body {
-  background-color: #00091B;
+  background-color: $white;
   font-family: 'Pretendard';
 }
 div.mainTopContainer{
+  width: 100%;
   height: 64px;
   padding: 0 16px;
-  background-color: #9cccf1;
+  background-color: $dark;
   box-sizing: border-box;
   display: flex;
   align-items: center;

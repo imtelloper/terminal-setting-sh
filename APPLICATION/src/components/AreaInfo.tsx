@@ -1,11 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import Robot from '../images/robot.png';
 import Crane from '../images/crane.png';
+import Videocam from '../images/videocam.png';
+import Warning from '../images/warning.png';
+import BgImg from '../images/bg.png';
 import '../style/components/AreaInfo.scss';
 import { useNavigate } from 'react-router-dom';
 import useSWR from 'swr';
 import { getFetcher } from '../fetcher/fetcher';
 import axios from 'axios';
+import CurrentTime from './CurrentTime';
 
 type AreaCard = {
   title: string;
@@ -20,67 +24,107 @@ type AreaCard = {
   firstState: string;
   secondName: string;
   secondState: string;
+  alarmTxt: string;
 };
 const dummyData = [
   {
     activate: true,
     alarms: '없음',
-    area: 'H1공장크레인',
+    area: 'H1 공장크레인',
     camCoordinate1: null,
     camCoordinate2: null,
     camName: null,
-    camPort: 'cam1',
+    camPort: '4',
     camSafetyLevel: 'Green',
-    camSensing1: null,
-    camSensing2: null,
+    camSensing1: '7',
+    camSensing2: '7',
     computeDevice: null,
     createdAt: '2022-06-28T00:12:52+00:00',
     date: '2022-06-28',
     savingPath: null,
     sensingModel: null,
+    alarmTxt: '안전합니다.',
   },
   {
     activate: true,
     alarms: '없음',
-    area: 'H1공장크레인',
+    area: 'H2 공장크레인',
     camCoordinate1: null,
     camCoordinate2: null,
     camName: null,
-    camPort: 'cam2',
+    camPort: '4',
     camSafetyLevel: 'Green',
-    camSensing1: null,
-    camSensing2: null,
+    camSensing1: '2',
+    camSensing2: '7',
     computeDevice: null,
     createdAt: '2022-06-28T00:12:52+00:00',
     date: '2022-06-28',
     savingPath: null,
     sensingModel: null,
+    alarmTxt: '작업자 진입 확인',
   },
   {
     activate: true,
     alarms: '없음',
-    area: 'H1공장크레인',
+    area: 'H3 공장크레인',
     camCoordinate1: null,
     camCoordinate2: null,
     camName: null,
-    camPort: 'cam3',
+    camPort: '4',
     camSafetyLevel: 'Green',
-    camSensing1: null,
-    camSensing2: null,
+    camSensing1: '0',
+    camSensing2: '7',
     computeDevice: null,
     createdAt: '2022-06-28T00:12:52+00:00',
     date: '2022-06-28',
     savingPath: null,
     sensingModel: null,
+    alarmTxt: '안전합니다.',
   },
   {
     activate: true,
     alarms: '없음',
-    area: 'H1공장크레인',
+    area: 'H4 공장크레인',
     camCoordinate1: null,
     camCoordinate2: null,
     camName: null,
-    camPort: 'cam4',
+    camPort: '4',
+    camSafetyLevel: 'Green',
+    camSensing1: '9999',
+    camSensing2: '7',
+    computeDevice: null,
+    createdAt: '2022-06-28T00:12:52+00:00',
+    date: '2022-06-28',
+    savingPath: null,
+    sensingModel: null,
+    alarmTxt: '작업자 위험 반경 진입',
+  },
+  {
+    activate: true,
+    alarms: '없음',
+    area: 'H5 공장크레인',
+    camCoordinate1: null,
+    camCoordinate2: null,
+    camName: null,
+    camPort: '',
+    camSafetyLevel: 'Green',
+    camSensing1: '0',
+    camSensing2: '7',
+    computeDevice: null,
+    createdAt: '2022-06-28T00:12:52+00:00',
+    date: '2022-06-28',
+    savingPath: null,
+    sensingModel: null,
+    alarmTxt: '안전합니다.',
+  },
+  {
+    activate: true,
+    alarms: '없음',
+    area: 'H6 공장크레인',
+    camCoordinate1: null,
+    camCoordinate2: null,
+    camName: null,
+    camPort: '',
     camSafetyLevel: 'Green',
     camSensing1: null,
     camSensing2: null,
@@ -89,6 +133,97 @@ const dummyData = [
     date: '2022-06-28',
     savingPath: null,
     sensingModel: null,
+    alarmTxt: '비활성 되었습니다.',
+  },
+  {
+    activate: true,
+    alarms: '없음',
+    area: 'H7 공장크레인',
+    camCoordinate1: null,
+    camCoordinate2: null,
+    camName: null,
+    camPort: '',
+    camSafetyLevel: 'Green',
+    camSensing1: null,
+    camSensing2: null,
+    computeDevice: null,
+    createdAt: '2022-06-28T00:12:52+00:00',
+    date: '2022-06-28',
+    savingPath: null,
+    sensingModel: null,
+    alarmTxt: '안전합니다.',
+  },
+  {
+    activate: true,
+    alarms: '없음',
+    area: '',
+    camCoordinate1: null,
+    camCoordinate2: null,
+    camName: null,
+    camPort: '',
+    camSafetyLevel: 'Green',
+    camSensing1: null,
+    camSensing2: null,
+    computeDevice: null,
+    createdAt: '2022-06-28T00:12:52+00:00',
+    date: '2022-06-28',
+    savingPath: null,
+    sensingModel: null,
+    alarmTxt: '안전합니다.',
+  },
+  {
+    activate: true,
+    alarms: '없음',
+    area: '',
+    camCoordinate1: null,
+    camCoordinate2: null,
+    camName: null,
+    camPort: '',
+    camSafetyLevel: 'Green',
+    camSensing1: null,
+    camSensing2: null,
+    computeDevice: null,
+    createdAt: '2022-06-28T00:12:52+00:00',
+    date: '2022-06-28',
+    savingPath: null,
+    sensingModel: null,
+    alarmTxt: '안전합니다.',
+  },
+  {
+    activate: true,
+    alarms: '없음',
+    area: '',
+    camCoordinate1: null,
+    camCoordinate2: null,
+    camName: null,
+    camPort: '',
+    camSafetyLevel: 'Green',
+    camSensing1: null,
+    camSensing2: null,
+    computeDevice: null,
+    createdAt: '2022-06-28T00:12:52+00:00',
+    date: '2022-06-28',
+    savingPath: null,
+    sensingModel: null,
+    alarmTxt: '안전합니다.',
+  },
+  {
+    activate: true,
+    alarms: '없음',
+    area: '',
+    camCoordinate1: null,
+    camCoordinate2: null,
+    camName: null,
+    camPort: '',
+    camSafetyLevel: 'Green',
+    camSensing1: null,
+    camSensing2: null,
+    computeDevice: null,
+    createdAt: '2022-06-28T00:12:52+00:00',
+    date: '2022-06-28',
+    savingPath: null,
+    sensingModel: null,
+    alarmTxt: '안전합니다.',
   },
 ];
 
@@ -153,27 +288,40 @@ const AreaInfo = () => {
       onClick={goObservePage}
       datatype={idx.toString()}
     >
-      <h3>{card.area}</h3>
+      {/* <h3>{card.area}</h3> */}
+      <div className="titleBox">
+        <span>{card.area}</span>
+        <div className="activeBadge">
+          <p />
+          <span>ACTIVE</span>
+        </div>
+      </div>
       <div className="areaContent">
-        <div className="areaImgContent">
-          <img src={Crane} />
-          <div className={`areaZone areaZone${card.camSafetyLevel}`}>
-            {card.camSafetyLevel}
+        <div className="areaLeft">
+          <div className="imgBox">
+            <div className="bgImg">
+              <img src={BgImg} />
+            </div>
+            <div className="bgGradient" />
+          </div>
+          <div className="alarmBox">
+            {/* className : green yellow red inactive => bgAlarm에 추가해주시면 됩니다!*/}
+            <div className="bgAlarm">
+              <div className="alarmTxt">{card.alarmTxt}</div>
+            </div>
           </div>
         </div>
-        <div className="areaTextContent">
-          <p className="camContent">
-            {card.camPort}:<span>{card.activate ? 'Active' : 'Deactive'}</span>
-          </p>
-          <p>Alarms:</p>
-          <p className="dangerColor">{card.alarms}</p>
-          <div className="detectContent">
-            <p>
-              1차 감지: <span>{card.camSensing1}</span>
-            </p>
-            <p>
-              2차 감지: <span>{card.camSensing2}</span>
-            </p>
+        <div className="areaRight">
+          <div className="camPort">
+            CAM <span>{card.camPort}</span>
+          </div>
+          <div className="sensingBox">
+            <span>
+              1차 감지<p>{card.camSensing1}</p>
+            </span>
+            <span>
+              2차 감지<p>{card.camSensing2}</p>
+            </span>
           </div>
         </div>
       </div>
@@ -189,7 +337,43 @@ const AreaInfo = () => {
 
   return (
     <div className="areaInfoContainer">
-      <section>{areaCardsMap}</section>
+      <div className="areaInfo">
+        <div className="infoLeft">
+          <div className="leftBox">
+            <div className="top">
+              <CurrentTime />
+            </div>
+            <div className="bottom">
+              <p>
+                <span>
+                  Safety.AI가
+                  <br />
+                  <span className="bold">감시중인 구역</span>
+                </span>
+                <div className="icon">
+                  <img src={Videocam} />
+                  <span className="blue">4</span>
+                </div>
+              </p>
+              <p>
+                <span>
+                  최근 10시간 중<br />
+                  <span className="bold">감지된 위험</span>
+                </span>
+                <div className="icon">
+                  <img src={Warning} />
+                  <span className="red">3</span>
+                </div>
+              </p>
+            </div>
+          </div>
+        </div>
+        <div className="infoRight">
+          <div className="rightBox">
+            <div className="areaCardWrap">{areaCardsMap}</div>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };
