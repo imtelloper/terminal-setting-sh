@@ -109,6 +109,7 @@ class StreamService:
 
     async def insertVideoRecordPath(self, trackerId, videoRecordPath):
         print('insertVideoRecordPath trackerId',trackerId)
+        print('insertVideoRecordPath videoRecordPath',videoRecordPath)
         # insertData = {
         #     "trackerId": trackerId,
         #     "fileType": "video",
@@ -148,7 +149,7 @@ class StreamService:
         print('self.getTrackerId()', self.getTrackerId())
         trackerId = str(self.getTrackerId())
         print('trackerId',trackerId)
-        self.insertVideoRecordPath(trackerId, self.videoRecordPath)
+        self.insertVideoRecordPath('trackerId', 'self.videoRecordPath')
 
         self.videoWriter = cv2.VideoWriter(self.videoRecordPath, self.fcc, self.fps, (self.camWidth, self.camHeight))
 
