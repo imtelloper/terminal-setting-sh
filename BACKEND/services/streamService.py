@@ -135,6 +135,7 @@ class StreamService:
 
     # 녹화 경로, 파일명 초기화
     def initVideoRecordPath(self):
+        print('initVideoRecordPath')
         self.currentDate = datetime.datetime.now().strftime('%Y-%m-%d')
         self.currentTime = datetime.datetime.now().strftime('%Y-%m-%d_%H:%M:%S.%f')
         self.fileInfo = '-{0}-{1}-{2}'.format(self.camArea, self.camPort, self.currentTime)
@@ -142,6 +143,8 @@ class StreamService:
                                                               self.camPort)
         self.videoRecordPath = '{0}/safety-record{1}.avi'.format(self.videoFolderPath, self.fileInfo)
         self.videoWriter = cv2.VideoWriter(self.videoRecordPath, self.fcc, self.fps, (self.camWidth, self.camHeight))
+        print('#################')
+        print('self.getTrackerId()', self.getTrackerId())
         self.insertVideoRecordPath(self.getTrackerId())
 
     # 스크린 캡쳐 경로, 파일명 초기화
