@@ -300,6 +300,9 @@ const ObservePage = () => {
         offsetWidth = 1031;
         offsetHeight = 784 - 49;
         break;
+      default:
+        offsetWidth = 504;
+        offsetHeight = 336 - 49;
     }
     const x = e.clientX - canvas.offsetLeft - offsetWidth;
     const y = e.clientY - canvas.offsetTop - offsetHeight;
@@ -333,7 +336,7 @@ const ObservePage = () => {
     return videoFrameState.map((data: ViedeoFrameType, idx) => (
       <div className="iframeBox" key={idx}>
         <div className="iframeTitle">
-          CAM{(idx + 1).toString()}
+          <span>CAM{(idx + 1).toString()}</span>
           {/* <span */}
           {/*  className="iframeRecording" */}
           {/*  onClick={() => { */}
@@ -347,7 +350,7 @@ const ObservePage = () => {
           {/* > */}
           {/*  Refresh({data.frameSrc}) */}
           {/* </span> */}
-          {/* <span className="iframeRecording">Recording...</span> */}
+          <span className="iframeRecording">Recording...</span>
         </div>
         {data.firstCanvas.visible && (
           <canvas
@@ -423,8 +426,37 @@ const ObservePage = () => {
   };
 
   // 녹화
+  // const handleRecordVideo = () => {
+  //   Api.stream.startRecordVideo();
+  // };
+
+  // // 녹화
   const handleRecordVideo = () => {
-    Api.stream.startRecordVideo();
+    console.log('camTabState', camTabState);
+    let ip = null;
+    switch (camTabState) {
+      case 1:
+        ip = '192.168.0.7';
+        break;
+      case 2:
+        ip = '192.168.0.24';
+        break;
+      case 3:
+        ip = '192.168.0.18';
+        break;
+      case 4:
+        ip = '192.168.0.30';
+        break;
+      default:
+        ip = '192.168.0.7';
+    }
+    if (!recordState) {
+      Api.stream.startRecordVideo(ip);
+      setRecordState(true);
+    } else {
+      Api.stream.stopRecordVideo(ip);
+      setRecordState(false);
+    }
   };
 
   return (
@@ -443,14 +475,14 @@ const ObservePage = () => {
                   videoFrameState={videoFrameState}
                   setVideoFrameState={setVideoFrameState}
                   camTabState={camTabState}
-                  recordState={undefined}
-                  setRecordState={undefined}
+                  recordState={recordState}
+                  setRecordState={setRecordState}
                 />
               </div>
             </div>
             <div className="bottomBtnBox">
               <button className="bottomBtn" onClick={handleRecordVideo}>
-                SETTING
+                RECORD
               </button>
               <button
                 className="bottomBtn"
