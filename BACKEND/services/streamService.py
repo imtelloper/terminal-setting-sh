@@ -379,8 +379,13 @@ class StreamService:
 
                 # 스크린 캡쳐
                 if self.captureGate:
+                    print('SCREEN CAPTURE SCREEN CAPTURE SCREEN CAPTURE SCREEN CAPTURE SCREEN CAPTURE SCREEN CAPTURE ')
                     cv2.imwrite(self.screenShotRecordPath, result_img, params=[cv2.IMWRITE_PNG_COMPRESSION, 0])
                     self.captureGate = False
+                    print(' self.trackerId',  self.trackerId)
+                    print(' "img"',  "img")
+                    print(' self.screenShotRecordPath',  self.screenShotRecordPath)
+                    print(' sensingLevel',  sensingLevel)
                     getConnection()[self.dbName][config.TABLE_ARCHIVE].insert_one(
                         {
                             "trackerId": self.trackerId,
