@@ -97,6 +97,7 @@ class StreamService:
 
     # 녹화 시작 메서드
     def setRecordGateOpen(self):
+        print('*************** setRecordGateOpen ***************')
         self.initVideoRecordPath()
         self.recordGate = True
         return True
@@ -141,7 +142,6 @@ class StreamService:
                                                               self.camPort)
         self.videoRecordPath = '{0}/safety-record{1}.avi'.format(self.videoFolderPath, self.fileInfo)
         self.videoWriter = cv2.VideoWriter(self.videoRecordPath, self.fcc, self.fps, (self.camWidth, self.camHeight))
-
         self.insertVideoRecordPath(self.getTrackerId())
 
     # 스크린 캡쳐 경로, 파일명 초기화
