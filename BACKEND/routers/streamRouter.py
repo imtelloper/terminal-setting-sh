@@ -72,11 +72,11 @@ async def screenCapture():
 @router.get("/record-on", response_description="")
 async def videoRecordOn():
     serviceResult = service.setRecordGateOpen()
-    trackerId = service.getTrackerId()
+    trackerId = await service.getTrackerId()
     videoPath = service.getVideoRecordPath()
     print('trackerId : ',trackerId)
     print('videoPath : ',videoPath)
-    service.insertVideoRecordPath(trackerId, videoPath)
+    await service.insertVideoRecordPath(trackerId, videoPath)
     return serviceResult
 
 
