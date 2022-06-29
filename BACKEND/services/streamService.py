@@ -17,6 +17,21 @@ from util import *
 
 
 # W: 256 H: 192
+async def insertVideoRecordPath(trackerId, videoRecordPath):
+    print('insertVideoRecordPath trackerId',trackerId)
+    print('insertVideoRecordPath videoRecordPath',videoRecordPath)
+    # insertData = {
+    #     "trackerId": trackerId,
+    #     "fileType": "video",
+    #     "path": videoRecordPath,
+    #     "safetyLevel": "",
+    # }
+    # resultData = await insertOne(self.dbName, config.TABLE_ARCHIVE, insertData)
+    # print('resultData',resultData)
+    # return resultData
+    return 'resultData'
+
+
 class StreamService:
     def __init__(self):
         self.camWidth = 512
@@ -107,20 +122,6 @@ class StreamService:
         self.recordGate = False
         return False
 
-    async def insertVideoRecordPath(self, trackerId, videoRecordPath):
-        print('insertVideoRecordPath trackerId',trackerId)
-        print('insertVideoRecordPath videoRecordPath',videoRecordPath)
-        # insertData = {
-        #     "trackerId": trackerId,
-        #     "fileType": "video",
-        #     "path": videoRecordPath,
-        #     "safetyLevel": "",
-        # }
-        # resultData = await insertOne(self.dbName, config.TABLE_ARCHIVE, insertData)
-        # print('resultData',resultData)
-        # return resultData
-        return 'resultData'
-
     async def getTrackerId(self):
         print('************* getTrackerId ***************')
         dataArr = []
@@ -149,7 +150,7 @@ class StreamService:
         print('self.getTrackerId()', self.getTrackerId())
         trackerId = str(self.getTrackerId())
         print('trackerId',trackerId)
-        self.insertVideoRecordPath('trackerId', 'self.videoRecordPath')
+        insertVideoRecordPath('trackerId', 'self.videoRecordPath')
 
         self.videoWriter = cv2.VideoWriter(self.videoRecordPath, self.fcc, self.fps, (self.camWidth, self.camHeight))
 
