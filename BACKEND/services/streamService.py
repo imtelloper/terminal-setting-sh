@@ -27,7 +27,7 @@ class StreamService:
         self.camArea = config.AREA.replace(" ", "")
         # 각 파일들의 폴더들이 저장될 루트 경로
         # self.savePath = '{0}/safety-archives'.format(os.path.expanduser('~'))
-        self.savePath = './safety-archives'
+        # self.savePath = './safety-archives'
         self.savePath = '/home/interx/SAFETY-AI/BACKEND/safety-archives'
         # 현재 날짜
         self.currentDate = datetime.datetime.now().strftime('%Y-%m-%d')
@@ -115,6 +115,24 @@ class StreamService:
                                                               self.camPort)
         self.videoRecordPath = '{0}/safety-record{1}.avi'.format(self.videoFolderPath, self.fileInfo)
         self.videoWriter = cv2.VideoWriter(self.videoRecordPath, self.fcc, self.fps, (self.camWidth, self.camHeight))
+
+        dataArr = []
+        searchedData = findDatas(self.dbName, config.TABLE_TRACKER, {
+            "area": config.AREA,
+            "camPort": config.CAMPORT,
+        })
+        for val in searchedData:
+            dataArr.append(val)
+        foundData = dataArr[0]
+        trackerId = foundData['_id']
+
+        insertData = {
+          "trackerId": trackerId,
+          "fileType": "video",
+          "path": self.videoRecordPath,
+          "safetyLevel": "",
+        }
+        resultData = insertOne(self.dbName, config.TABLE_ARCHIVE, insertData)
 
     # 스크린 캡쳐 경로, 파일명 초기화
     def initScreenCapturePath(self):
@@ -210,7 +228,7 @@ class StreamService:
         while self.cameraOnOff:
             k = cv2.waitKey(1) & 0xFF
             timeCnt += 1
-            time.sleep(0.1)
+            time.sleep(0.08)
             ret, frame = self.video.read()
             if frame is None: return
             img = frame.copy()
@@ -261,7 +279,8 @@ class StreamService:
                     else:
                         result_img = img
 
-                if timeCnt == 10:
+                # timeCnt가 낮을수록 Yellow, Red 업데이트 속도 빨라짐. 너무 빠르면 성능에 문제 있을 수 있음
+                if timeCnt == 8:
                     print('#########################################################timeCnt :', timeCnt)
                     timeCnt = 0
                     '''
