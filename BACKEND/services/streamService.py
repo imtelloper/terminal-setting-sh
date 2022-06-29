@@ -116,7 +116,7 @@ class StreamService:
     async def getTrackerId(self):
         print('************* getTrackerId ***************')
         dataArr = []
-        searchedData = await findDatas(self.dbName, config.TABLE_TRACKER, {
+        searchedData = findDatas(self.dbName, config.TABLE_TRACKER, {
             "area": config.AREA,
             "camPort": config.CAMPORT,
         })
