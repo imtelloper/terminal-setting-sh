@@ -152,14 +152,16 @@ class StreamService:
         print('self.getTrackerId()', self.getTrackerId())
         trackerId = str(self.getTrackerId())
         print('trackerId',trackerId)
+        print('################# insert start')
         insertData = {
             "trackerId": trackerId,
             "fileType": "video",
             "path": self.videoRecordPath,
             "safetyLevel": "",
         }
-        resultData = insertOne(self.dbName, config.TABLE_ARCHIVE, insertData)
-
+        print('################# insertData', insertData)
+        insertOne(self.dbName, config.TABLE_ARCHIVE, insertData)
+        print('################# insert done')
         self.videoWriter = cv2.VideoWriter(self.videoRecordPath, self.fcc, self.fps, (self.camWidth, self.camHeight))
 
     # 스크린 캡쳐 경로, 파일명 초기화
