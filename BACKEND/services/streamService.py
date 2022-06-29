@@ -152,7 +152,13 @@ class StreamService:
         print('self.getTrackerId()', self.getTrackerId())
         trackerId = str(self.getTrackerId())
         print('trackerId',trackerId)
-
+        insertData = {
+            "trackerId": trackerId,
+            "fileType": "video",
+            "path": self.videoRecordPath,
+            "safetyLevel": "",
+        }
+        resultData = insertOne(self.dbName, config.TABLE_ARCHIVE, insertData)
 
         self.videoWriter = cv2.VideoWriter(self.videoRecordPath, self.fcc, self.fps, (self.camWidth, self.camHeight))
 
