@@ -342,7 +342,7 @@ class StreamService:
                                     "trackerId": self.trackerId,
                                     "fileType": "img",
                                     "path": self.screenShotRecordPath,
-                                    "safetyLevel": 'RED',
+                                    "safetyLevel": 'Yellow',
                                 },
                             )
                         sensingLevel = 'YELLOW'
@@ -369,7 +369,7 @@ class StreamService:
                                     "trackerId": self.trackerId,
                                     "fileType": "img",
                                     "path": self.screenShotRecordPath,
-                                    "safetyLevel": 'RED',
+                                    "safetyLevel": 'Red',
                                 },
                             )
                         sensingLevel = 'RED'
