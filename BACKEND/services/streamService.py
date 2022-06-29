@@ -73,6 +73,7 @@ class StreamService:
         self.dbName = config.DB_NAME
         self.tableName = config.TABLE_OBSERVE
         self.todayCamDataId = ""
+        self.trackerId = ""
         # 각종 파일 저장 경로 폴더 생성
         # makedirs(self.videoFolderPath)
         # makedirs(self.screenShotFolderPath)
@@ -127,6 +128,7 @@ class StreamService:
         print('foundData', foundData)
         print('foundData[_id]', foundData['_id'])
         trackerId = ObjectId(foundData['_id'])
+        self.trackerId = trackerId
         print('trackerId',trackerId)
         return trackerId
 
@@ -163,6 +165,7 @@ class StreamService:
         self.screenShotFolderPath = '{0}/{1}/{2}/{3}/capture'.format(self.savePath, self.currentDate, self.camArea,
                                                                      self.camPort)
         self.screenShotRecordPath = '{0}/safety-shot{1}.png'.format(self.screenShotFolderPath, self.fileInfo)
+
 
     async def searchDatas(self, data: dict):
         dataArr = []
@@ -378,6 +381,14 @@ class StreamService:
                 if self.captureGate:
                     cv2.imwrite(self.screenShotRecordPath, result_img, params=[cv2.IMWRITE_PNG_COMPRESSION, 0])
                     self.captureGate = False
+                    getConnection()[self.dbName][config.TABLE_ARCHIVE].insert_one(
+                        {
+                            "trackerId": self.trackerId,
+                            "fileType": "img",
+                            "path": self.screenShotRecordPath,
+                            "safetyLevel": sensingLevel,
+                        },
+                    )
 
                 # 키보드 눌렀을시 이벤트 발생
                 if k == ord('s'):
