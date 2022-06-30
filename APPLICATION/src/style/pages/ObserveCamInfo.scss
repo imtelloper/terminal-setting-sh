@@ -5,9 +5,9 @@ div.observeCamInfoContainer{
   height: 100%;
   border-bottom: 1px solid $line;
 
-  &:last-child{
-    border: none;
-  }
+  //&:last-child{
+  //  border: none;
+  //}
 
   div.observeBox{
     width: 100%;
@@ -126,7 +126,7 @@ div.observeCamInfoContainer{
       margin-top: 16px;
       button{
         all: unset;
-        width: 112px;
+        width: calc((100% - 24px)/3);
         height: 40px;
         border: 1px solid $line;
         border-radius: 8px;
@@ -134,11 +134,14 @@ div.observeCamInfoContainer{
         justify-content: center;
         align-items: center;
         cursor: pointer;
+        margin-right: 8px;
       }
       button.safetyDeleteBtn{
         width: 40px;
+        margin-right: 0;
       }
     }
+
   }
 }
 

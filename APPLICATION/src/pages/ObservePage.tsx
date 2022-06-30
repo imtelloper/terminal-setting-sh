@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import ObserveCamInfo from '../components/ObserveCamInfo';
 import axios from 'axios';
 import Api from '../api/Api';
+import CreateBtn from '../components/CreateBtn';
 
 export const camPort1Ip = '192.168.0.7';
 export const camPort2Ip = '192.168.0.24';
@@ -33,7 +34,7 @@ const initVideoFrameData: Array<ViedeoFrameType> = [
     canvasClass: 'polygonCanvas1',
     frameSrc: `http://${camPort1Ip}:81`,
     firstCanvas: {
-      visible: true,
+      visible: false,
       yellowSensingPercent: 0.7,
       redSensingPercent: 0.3,
       coordinate: [],
@@ -49,13 +50,13 @@ const initVideoFrameData: Array<ViedeoFrameType> = [
     canvasClass: 'polygonCanvas2',
     frameSrc: `http://${camPort2Ip}:81`,
     firstCanvas: {
-      visible: true,
+      visible: false,
       yellowSensingPercent: 0.7,
       redSensingPercent: 0.3,
       coordinate: [],
     },
     secondCanvas: {
-      visible: true,
+      visible: false,
       yellowSensingPercent: 0.7,
       redSensingPercent: 0.3,
       coordinate: [],
@@ -65,13 +66,13 @@ const initVideoFrameData: Array<ViedeoFrameType> = [
     canvasClass: 'polygonCanvas3',
     frameSrc: `http://${camPort3Ip}:81`,
     firstCanvas: {
-      visible: true,
+      visible: false,
       yellowSensingPercent: 0.7,
       redSensingPercent: 0.3,
       coordinate: [],
     },
     secondCanvas: {
-      visible: true,
+      visible: false,
       yellowSensingPercent: 0.7,
       redSensingPercent: 0.3,
       coordinate: [],
@@ -81,13 +82,13 @@ const initVideoFrameData: Array<ViedeoFrameType> = [
     canvasClass: 'polygonCanvas4',
     frameSrc: `http://${camPort4Ip}:81`,
     firstCanvas: {
-      visible: true,
+      visible: false,
       yellowSensingPercent: 0.7,
       redSensingPercent: 0.3,
       coordinate: [],
     },
     secondCanvas: {
-      visible: true,
+      visible: false,
       yellowSensingPercent: 0.7,
       redSensingPercent: 0.3,
       coordinate: [],
@@ -465,6 +466,15 @@ const ObservePage = () => {
     return tabArr;
   };
 
+  const createCanvas = (e) => {
+    const target = e.currentTarget;
+    const dType = parseInt(target.getAttribute('datatype'), 10);
+    const newArr = videoFrameState;
+    newArr[dType].yellowCanvasVisible = true;
+    flushSync(() => setVideoFrameState([]));
+    flushSync(() => setVideoFrameState(newArr));
+  };
+
   // 녹화
   // const handleRecordVideo = () => {
   //   Api.stream.startRecordVideo();
@@ -510,15 +520,13 @@ const ObservePage = () => {
           <div className="safetyTabWrap">
             <div className="safetyTabBox">{getTabEles()}</div>
             <div className="safetyContainer">
-              <div className="safetyContent">
-                <ObserveCamInfo
-                  videoFrameState={videoFrameState}
-                  setVideoFrameState={setVideoFrameState}
-                  camTabState={camTabState}
-                  recordState={recordState}
-                  setRecordState={setRecordState}
-                />
-              </div>
+              <ObserveCamInfo
+                videoFrameState={videoFrameState}
+                setVideoFrameState={setVideoFrameState}
+                camTabState={camTabState}
+                recordState={recordState}
+                setRecordState={setRecordState}
+              />
             </div>
             <div className="bottomBtnBox">
               <button className="bottomBtn" onClick={handleRecordVideo}>

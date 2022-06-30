@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { flushSync } from 'react-dom';
 import Api from '../api/Api';
 import Delete from '../images/delete.png';
+import { AiOutlinePlusCircle } from 'react-icons/ai';
 
 type Props = {
   videoFrameState: Array<any>;
@@ -143,14 +144,15 @@ const ObserveCamInfo = ({
         {videoFrameState[idx]?.secondCanvas?.visible &&
           groupBoxComponent(info, idx + 1)}
 
-        {/* <div className="safetyCreateBtnBox"> */}
-        {/*  <button */}
-        {/*    className="safetyCreateBtn" */}
-        {/*    datatype={idx.toString()} */}
-        {/*    onClick={createCanvas} */}
-        {/*  > */}
-        {/*    생성 */}
-        {/*  </button> */}
+         <div className="safetyCreateBtnBox">
+          <button
+            className="safetyCreateBtn"
+            datatype={idx.toString()}
+            onClick={createCanvas}
+          >
+            <span><AiOutlinePlusCircle/></span>
+            <span>ADD</span>
+          </button>
         {/* </div> */}
         {/* <div className="bottomBtnBox"> */}
         {/*  <button className="bottomBtn" onClick={handleRecordVideo}> */}
@@ -165,7 +167,7 @@ const ObserveCamInfo = ({
         {/*  > */}
         {/*    설정 */}
         {/*  </button> */}
-        {/* </div> */}
+         </div>
       </div>
     </section>
   ));
