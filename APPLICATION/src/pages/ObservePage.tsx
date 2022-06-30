@@ -7,6 +7,11 @@ import axios from 'axios';
 import Api from '../api/Api';
 import CreateBtn from '../components/CreateBtn';
 
+export const camPort1Ip = '192.168.0.7';
+export const camPort2Ip = '192.168.0.24';
+export const camPort3Ip = '192.168.0.18';
+export const camPort4Ip = '192.168.0.30';
+
 type ViedeoFrameType = {
   canvasClass: string;
   frameSrc: string;
@@ -27,7 +32,7 @@ type ViedeoFrameType = {
 const initVideoFrameData: Array<ViedeoFrameType> = [
   {
     canvasClass: 'polygonCanvas1',
-    frameSrc: 'http://192.168.0.7:81',
+    frameSrc: `http://${camPort1Ip}:81`,
     firstCanvas: {
       visible: false,
       yellowSensingPercent: 0.7,
@@ -43,7 +48,7 @@ const initVideoFrameData: Array<ViedeoFrameType> = [
   },
   {
     canvasClass: 'polygonCanvas2',
-    frameSrc: 'http://192.168.0.24:81',
+    frameSrc: `http://${camPort2Ip}:81`,
     firstCanvas: {
       visible: false,
       yellowSensingPercent: 0.7,
@@ -59,7 +64,7 @@ const initVideoFrameData: Array<ViedeoFrameType> = [
   },
   {
     canvasClass: 'polygonCanvas3',
-    frameSrc: 'http://192.168.0.18:81',
+    frameSrc: `http://${camPort3Ip}:81`,
     firstCanvas: {
       visible: false,
       yellowSensingPercent: 0.7,
@@ -75,7 +80,7 @@ const initVideoFrameData: Array<ViedeoFrameType> = [
   },
   {
     canvasClass: 'polygonCanvas4',
-    frameSrc: 'http://192.168.0.30:81',
+    frameSrc: `http://${camPort4Ip}:81`,
     firstCanvas: {
       visible: false,
       yellowSensingPercent: 0.7,
@@ -448,19 +453,19 @@ const ObservePage = () => {
     let ip = null;
     switch (camTabState) {
       case 1:
-        ip = '192.168.0.7';
+        ip = camPort1Ip;
         break;
       case 2:
-        ip = '192.168.0.24';
+        ip = camPort2Ip;
         break;
       case 3:
-        ip = '192.168.0.18';
+        ip = camPort3Ip;
         break;
       case 4:
-        ip = '192.168.0.30';
+        ip = camPort4Ip;
         break;
       default:
-        ip = '192.168.0.7';
+        ip = camPort1Ip;
     }
     if (!recordState) {
       Api.stream.startRecordVideo(ip);
@@ -498,7 +503,9 @@ const ObservePage = () => {
                 className="bottomBtn"
                 onClick={() => {
                   // navigate('/detail');
-                  Api.stream.stopRecordVideo();
+                  // Api.stream
+                  //   .stopRecordVideo()
+                  //   .catch((err) => console.error(err));
                 }}
               >
                 SAVE

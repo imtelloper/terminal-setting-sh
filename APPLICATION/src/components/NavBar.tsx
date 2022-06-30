@@ -29,14 +29,14 @@ const NaviBar = () => {
         <div>
           <button
             onClick={() => {
-              navigate('/setting');
+              navigate('/login');
             }}
           >
             <BsFillPersonFill/>
           </button>
           <button
             onClick={() => {
-              navigate('/login');
+              navigate('/setting');
             }}
           >
             <AiFillSetting/>

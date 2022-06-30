@@ -1,4 +1,5 @@
 import os
+import platform
 import time
 import cv2
 import traceback
@@ -75,8 +76,9 @@ class StreamService:
         self.todayCamDataId = ""
         self.trackerId = ""
         # 각종 파일 저장 경로 폴더 생성
-        # makedirs(self.videoFolderPath)
-        # makedirs(self.screenShotFolderPath)
+        if platform.platform() != 'macOS-12.4-arm64-arm-64bit':
+            makedirs(self.videoFolderPath)
+            makedirs(self.screenShotFolderPath)
         print('##### CONNECTED CAMERA ##### : ', self.listPorts)
 
     def __del__(self):
@@ -137,7 +139,7 @@ class StreamService:
         print('insertVideoRecordPath trackerId', trackerId)
         print('insertVideoRecordPath videoRecordPath', videoRecordPath)
         insertData = {
-            "trackerId": trackerId,
+            "trackerId": str(trackerId),
             "fileType": "video",
             "path": videoRecordPath,
             "safetyLevel": "",
@@ -339,7 +341,7 @@ class StreamService:
                             )
                             getConnection()[self.dbName][config.TABLE_ARCHIVE].insert_one(
                                 {
-                                    "trackerId": self.trackerId,
+                                    "trackerId": str(self.trackerId),
                                     "fileType": "img",
                                     "path": self.screenShotRecordPath,
                                     "safetyLevel": 'Yellow',
@@ -366,7 +368,7 @@ class StreamService:
                             print(' sensingLevel', sensingLevel)
                             getConnection()[self.dbName][config.TABLE_ARCHIVE].insert_one(
                                 {
-                                    "trackerId": self.trackerId,
+                                    "trackerId": str(self.trackerId),
                                     "fileType": "img",
                                     "path": self.screenShotRecordPath,
                                     "safetyLevel": 'Red',
