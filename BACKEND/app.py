@@ -1,4 +1,5 @@
 import glob
+import platform
 from typing import Optional
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
@@ -39,7 +40,16 @@ logger = logging.getLogger(__name__)
 
 print('app start')
 
-
+platform.system()
+print(platform.system())
+print(platform.system())
+print(platform.system())
+print(platform.system())
+print(platform.system())
+print(platform.system())
+print(platform.platform())
+print(platform.platform())
+print(platform.platform())
 # def speak(text):
 #     tts = gTTS(text=text, lang='ko')
 #     filename = 'voice.mp3'

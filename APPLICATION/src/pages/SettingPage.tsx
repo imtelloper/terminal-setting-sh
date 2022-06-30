@@ -3,6 +3,7 @@ import '../style/pages/SettingPage.scss';
 import { AiFillFolderOpen, AiFillSetting, AiFillTool } from 'react-icons/ai';
 import { GoDeviceCameraVideo, GoGraph, GoRocket } from 'react-icons/go';
 import Api from '../api/Api';
+import { camPort1Ip } from './ObservePage';
 
 const SettingPage = () => {
   const [toggleState, setToggleState] = useState({
@@ -22,7 +23,7 @@ const SettingPage = () => {
 
   useEffect(() => {
     Api.archive
-      .findData({ fileType: 'string' })
+      .findData({ fileType: 'video' })
       .then((res) => {
         console.log('video res', res);
       })
@@ -30,8 +31,35 @@ const SettingPage = () => {
 
     Api.archive
       .findData({ fileType: 'img' })
-      .then((res) => {
+      .then(async (res) => {
         console.log('img res', res);
+        const urlData = [];
+        await res.forEach(async (data) => {
+          await Api.tracker.getOneData(data.trackerId).then((res) => {
+            console.log('tracker', res);
+            switch (res.camPort) {
+              case 'cam1':
+                // const correctPath = data.path.split('/').slice(3)
+                urlData.push(
+                  `http://${camPort1Ip}:81/${data.path
+                    .split('/')
+                    .slice(5)
+                    .join('/')}`
+                );
+                console.log(`http://${camPort1Ip}:81/${data.path.split('/')
+                  .slice(5)
+                  .join('/')}`);
+                break;
+              case 'cam2':
+                break;
+              case 'cam3':
+                break;
+              case 'cam4':
+                break;
+            }
+          });
+        });
+        console.log('2urlData', urlData);
       })
       .catch((error) => console.error(error));
 

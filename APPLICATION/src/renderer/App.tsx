@@ -15,7 +15,7 @@ export default function App() {
         <Routes>
           <Route path="/" element={<LandingPage />} />
           <Route path="/login" element={<LoginPage />} />
-          {/*<Route path="/main" element={<LoginPage />} />*/}
+          {/* <Route path="/main" element={<LoginPage />} /> */}
           <Route path="/main" element={<MainPage />} />
           <Route path="/observe" element={<ObservePage />} />
           <Route path="/setting" element={<SettingPage />} />
