@@ -286,29 +286,62 @@ const ObservePage = () => {
     const itemID = canvas?.getAttribute('itemID');
     // const x = e.clientX - canvas.offsetLeft - 6;
     // const y = e.clientY - canvas.offsetTop - 8;
-    let offsetWidth = 504;
-    let offsetHeight = 336 - 49;
+    console.log();
+
+    // let offsetWidth = 504;
+    // let offsetHeight = 336 - 49;
+    //
+    // switch (parseInt(arrIndex, 10) + 1) {
+    //   case 1:
+    //     offsetWidth = 504;
+    //     offsetHeight = 336 - 49;
+    //     break;
+    //   case 2:
+    //     offsetWidth = 1031;
+    //     offsetHeight = 336 - 49;
+    //     break;
+    //   case 3:
+    //     offsetWidth = 504;
+    //     offsetHeight = 784 - 49;
+    //     break;
+    //   case 4:
+    //     offsetWidth = 1031;
+    //     offsetHeight = 784 - 49;
+    //     break;
+    //   default:
+    //     offsetWidth = 504;
+    //     offsetHeight = 336 - 49;
+    // }
+
+    let offsetWidth;
+    let offsetHeight;
+
     switch (parseInt(arrIndex, 10) + 1) {
       case 1:
-        offsetWidth = 504;
-        offsetHeight = 336 - 49;
+        offsetWidth = 440;
+        offsetHeight = 102 - 49;
         break;
       case 2:
-        offsetWidth = 1031;
-        offsetHeight = 336 - 49;
+        offsetWidth = 962;
+        offsetHeight = 102 - 49;
         break;
       case 3:
-        offsetWidth = 504;
-        offsetHeight = 784 - 49;
+        offsetWidth = 440;
+        offsetHeight = 547 - 49;
         break;
       case 4:
-        offsetWidth = 1031;
-        offsetHeight = 784 - 49;
+        offsetWidth = 962;
+        offsetHeight = 547 - 49;
         break;
       default:
-        offsetWidth = 504;
+        offsetWidth = 962;
         offsetHeight = 336 - 49;
     }
+
+    console.log('e.clientX',e.clientX);
+    console.log('e.clientY',e.clientY);
+    console.log('canvas.offsetLeft',canvas.offsetLeft);
+    console.log('canvas.offsetTop',canvas.offsetTop);
     const x = e.clientX - canvas.offsetLeft - offsetWidth;
     const y = e.clientY - canvas.offsetTop - offsetHeight;
     const { coordinate } = videoFrameState[arrIndex][itemID];

@@ -132,3 +132,9 @@ div.settingMain {
 #tab4:checked ~ #content4 {
   display: block;
 }
+.urlStateMap{
+  width: 100%;
+  border: 1px solid black;
+  height: 150px;
+  overflow-y: auto;
+}
