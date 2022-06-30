@@ -137,7 +137,7 @@ class StreamService:
         print('insertVideoRecordPath trackerId', trackerId)
         print('insertVideoRecordPath videoRecordPath', videoRecordPath)
         insertData = {
-            "trackerId": trackerId,
+            "trackerId": str(trackerId),
             "fileType": "video",
             "path": videoRecordPath,
             "safetyLevel": "",
@@ -339,7 +339,7 @@ class StreamService:
                             )
                             getConnection()[self.dbName][config.TABLE_ARCHIVE].insert_one(
                                 {
-                                    "trackerId": self.trackerId,
+                                    "trackerId": str(self.trackerId),
                                     "fileType": "img",
                                     "path": self.screenShotRecordPath,
                                     "safetyLevel": 'Yellow',
@@ -366,7 +366,7 @@ class StreamService:
                             print(' sensingLevel', sensingLevel)
                             getConnection()[self.dbName][config.TABLE_ARCHIVE].insert_one(
                                 {
-                                    "trackerId": self.trackerId,
+                                    "trackerId": str(self.trackerId),
                                     "fileType": "img",
                                     "path": self.screenShotRecordPath,
                                     "safetyLevel": 'Red',
