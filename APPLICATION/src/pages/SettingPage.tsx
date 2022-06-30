@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import '../style/pages/SettingPage.scss';
 import { AiFillFolderOpen, AiFillSetting, AiFillTool } from 'react-icons/ai';
 import { GoDeviceCameraVideo, GoGraph, GoRocket } from 'react-icons/go';
+import Api from '../api/Api';
 
 const SettingPage = () => {
   const [toggleState, setToggleState] = useState({
@@ -19,21 +20,32 @@ const SettingPage = () => {
     console.log(e.target.id);
   };
 
-  useEffect(
-    (e) => {
-      if (currentClick !== null) {
-        const current = document.getElementById(currentClick);
-        current.style.fontWeight = 'bold';
-      }
+  useEffect(() => {
+    Api.archive
+      .findData({ fileType: 'string' })
+      .then((res) => {
+        console.log('video res', res);
+      })
+      .catch((error) => console.error(error));
 
-      if (prevClick !== null) {
-        const prev = document.getElementById(prevClick);
-        prev.style.fontWeight = 'lighter';
-      }
-      setPrevClick(currentClick);
-    },
-    [currentClick]
-  );
+    Api.archive
+      .findData({ fileType: 'img' })
+      .then((res) => {
+        console.log('img res', res);
+      })
+      .catch((error) => console.error(error));
+
+    if (currentClick !== null) {
+      const current = document.getElementById(currentClick);
+      current.style.fontWeight = 'bold';
+    }
+
+    if (prevClick !== null) {
+      const prev = document.getElementById(prevClick);
+      prev.style.fontWeight = 'lighter';
+    }
+    setPrevClick(currentClick);
+  }, [currentClick]);
 
   // on, off 버튼
   const toggleClick = (e) => {

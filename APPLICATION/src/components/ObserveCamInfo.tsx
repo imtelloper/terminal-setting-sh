@@ -89,68 +89,8 @@ const ObserveCamInfo = ({
     flushSync(() => setVideoFrameState(newArr));
   };
 
-  // // 녹화
-  // const handleRecordVideo = () => {
-  //   console.log('camTabState', camTabState);
-  //   let ip = null;
-  //   switch (camTabState) {
-  //     case 1:
-  //       ip = '192.168.0.7';
-  //       break;
-  //     case 2:
-  //       ip = '192.168.0.24';
-  //       break;
-  //     case 3:
-  //       ip = '192.168.0.18';
-  //       break;
-  //     case 4:
-  //       ip = '192.168.0.30';
-  //       break;
-  //     default:
-  //       ip = '192.168.0.7';
-  //   }
-  //   if (!recordState) {
-  //     Api.stream.startRecordVideo(ip);
-  //     setRecordState(true);
-  //   } else {
-  //     Api.stream.stopRecordVideo(ip);
-  //     setRecordState(false);
-  //   }
-  // };
-
   const groupBoxComponent = (camInfoStateInfo, idx) => (
     <div className="observeCamInfoContainer">
-      {/* <div className="groupBox"> */}
-      {/*  <span className="groupName">{`Group${parseInt(idx, 10) + 1}`}</span> */}
-      {/*  <span className="saveParameter" onClick={saveParameter}> */}
-      {/*    <BiDownload /> */}
-      {/*    파라미터 저장 */}
-      {/*  </span> */}
-      {/*  <span className="callParameter" onClick={callParameter}> */}
-      {/*    <BiExport /> */}
-      {/*    파라미터 불러오기 */}
-      {/*  </span> */}
-      {/* </div> */}
-      {/* <p> */}
-      {/*  Safety Level :{' '} */}
-      {/*  <span className="safeLevel">{camInfoStateInfo.safetyLevel}</span> */}
-      {/* </p> */}
-      {/* <p>감지 수 : {camInfoStateInfo.sensingCnt}</p> */}
-      {/* <div className="safetyBtnBox"> */}
-      {/*  <button */}
-      {/*    className="safetyBtn safetyActiveBtn" */}
-      {/*    datatype="false" */}
-      {/*    onClick={handleActive} */}
-      {/*  > */}
-      {/*    Inactive */}
-      {/*  </button> */}
-      {/*  <button className="safetyBtn safetyDeleteBtn" onClick={handleDelete}> */}
-      {/*    Delete */}
-      {/*  </button> */}
-      {/*  <button className="safetyBtn safetyResetBtn" onClick={handleErrorReset}> */}
-      {/*    Error Reset */}
-      {/*  </button> */}
-      {/* </div> */}
       <div className="observeBox">
         <div className="groupBox">
           <span className="groupName">{`Group${parseInt(idx, 10) + 1}`}</span>

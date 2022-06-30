@@ -37,7 +37,6 @@ const MainPage = () => {
 
   return (
     <div className="mainContainer">
-      {/*<CurrentTime />*/}
       <AreaInfo />
     </div>
   );
