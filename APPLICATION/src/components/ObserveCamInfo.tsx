@@ -14,18 +14,18 @@ type Props = {
 
 // eslint-disable-next-line react/prop-types
 const ObserveCamInfo = ({
-  videoFrameState,
-  setVideoFrameState,
-  camTabState,
-  recordState,
-  setRecordState,
-}) => {
+                          videoFrameState,
+                          setVideoFrameState,
+                          camTabState,
+                          recordState,
+                          setRecordState
+                        }) => {
   const navigate = useNavigate();
   const [camInfoState, setCamInfoState] = useState([
     { safetyLevel: 'Green', sensingCnt: 0 },
     { safetyLevel: 'Red', sensingCnt: 1 },
     { safetyLevel: 'Yellow', sensingCnt: 2 },
-    { safetyLevel: 'Green', sensingCnt: 3 },
+    { safetyLevel: 'Green', sensingCnt: 3 }
   ]);
   const [ipState, setIpState] = useState('');
 
@@ -91,17 +91,17 @@ const ObserveCamInfo = ({
   };
 
   const groupBoxComponent = (camInfoStateInfo, idx) => (
-    <div className="observeCamInfoContainer">
-      <div className="observeBox">
-        <div className="groupBox">
-          <span className="groupName">{`Group${parseInt(idx, 10) + 1}`}</span>
-          <button className="switchBtn on">ON</button>
+    <div className='observeCamInfoContainer'>
+      <div className='observeBox'>
+        <div className='groupBox'>
+          <span className='groupName'>{`Group${parseInt(idx, 10) + 1}`}</span>
+          <button className='switchBtn on'>ON</button>
           {/* <button className="switchBtn off">OFF</button> */}
         </div>
-        <div className="btnBox">
+        <div className='btnBox'>
           {/* className : green yellow red inactive => alarmTxt에 추가해주시면 됩니다! */}
-          <div className="alarmTxt green">안전합니다.</div>
-          <div className="sensingBox">
+          <div className='alarmTxt green'>안전합니다.</div>
+          <div className='sensingBox'>
             <span>
               1차 감지<p>{camInfoStateInfo.sensingCnt}</p>
             </span>
@@ -110,20 +110,20 @@ const ObserveCamInfo = ({
             </span>
           </div>
         </div>
-        <div className="safetyBtnBox">
-          <button className="saveParameter" onClick={saveParameter}>
+        <div className='safetyBtnBox'>
+          <button className='saveParameter' onClick={saveParameter}>
             설정 저장
           </button>
-          <button className="callParameter" onClick={callParameter}>
+          <button className='callParameter' onClick={callParameter}>
             설정 불러오기
           </button>
           <button
-            className="safetyBtn safetyResetBtn"
+            className='safetyBtn safetyResetBtn'
             onClick={handleErrorReset}
           >
             에러 리셋
           </button>
-          <button className="safetyBtn safetyDeleteBtn" onClick={handleDelete}>
+          <button className='safetyBtn safetyDeleteBtn' onClick={handleDelete}>
             <img src={Delete} />
           </button>
         </div>
@@ -134,40 +134,29 @@ const ObserveCamInfo = ({
   const camInfosMap = camInfoState.map((info, idx) => (
     <section
       id={`safetyContent${idx + 1}`}
-      className="safetyContents"
+      className='safetyContents'
       key={idx}
     >
-      <div className="safetyContentBox">
+      <div className='safetyContentBox'>
         {videoFrameState[idx]?.firstCanvas?.visible &&
           groupBoxComponent(info, idx)}
 
         {videoFrameState[idx]?.secondCanvas?.visible &&
           groupBoxComponent(info, idx + 1)}
 
-         <div className="safetyCreateBtnBox">
-          <button
-            className="safetyCreateBtn"
-            datatype={idx.toString()}
-            onClick={createCanvas}
-          >
-            <span><AiOutlinePlusCircle/></span>
-            <span>ADD</span>
-          </button>
-        {/* </div> */}
-        {/* <div className="bottomBtnBox"> */}
-        {/*  <button className="bottomBtn" onClick={handleRecordVideo}> */}
-        {/*    Recording */}
-        {/*  </button> */}
-        {/*  <button */}
-        {/*    className="bottomBtn" */}
-        {/*    onClick={() => { */}
-        {/*      // navigate('/detail'); */}
-        {/*      Api.stream.stopRecordVideo(ipState); */}
-        {/*    }} */}
-        {/*  > */}
-        {/*    설정 */}
-        {/*  </button> */}
-         </div>
+        {camInfoState.length === idx + 1 && (
+          <div className='safetyCreateBtnBox'>
+            <button
+              className='safetyCreateBtn'
+              datatype={idx.toString()}
+              onClick={createCanvas}
+            >
+              <span><AiOutlinePlusCircle /></span>
+              <span>ADD</span>
+            </button>
+          </div>
+        )}
+
       </div>
     </section>
   ));
