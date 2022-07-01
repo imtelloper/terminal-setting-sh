@@ -5,7 +5,6 @@ import { useNavigate } from 'react-router-dom';
 import ObserveCamInfo from '../components/ObserveCamInfo';
 import axios from 'axios';
 import Api from '../api/Api';
-import CreateBtn from '../components/CreateBtn';
 
 export const camPort1Ip = '192.168.0.7';
 export const camPort2Ip = '192.168.0.24';
