@@ -105,13 +105,13 @@
     ],
     "publish": {
       "provider": "github",
-      "owner": "electron-react-boilerplate",
-      "repo": "electron-react-boilerplate"
+      "owner": "SAFETY-AI",
+      "repo": "SAFETY-AI"
     }
   },
   "author": {
-    "name": "Electron React Boilerplate Maintainers",
-    "email": "electronreactboilerplate@gmail.com",
+    "name": "SAFETY-AI Maintainers",
+    "email": "h91oon@gmail.com",
     "url": "https://electron-react-boilerplate.js.org"
   },
   "contributors": [
