@@ -13,9 +13,9 @@ const NaviBar = () => {
         <div>
           <div className="hamBtnBox">
             <p>
-              <span/>
-              <span/>
-              <span/>
+              <span />
+              <span />
+              <span />
             </p>
           </div>
           <button
@@ -23,23 +23,23 @@ const NaviBar = () => {
               navigate('/');
             }}
           >
-            <img src={Logo} alt=""/>
+            <img src={Logo} alt="" />
           </button>
         </div>
         <div>
           <button
             onClick={() => {
-              navigate('/login');
+              navigate('/main');
             }}
           >
-            <BsFillPersonFill/>
+            <BsFillPersonFill />
           </button>
           <button
             onClick={() => {
               navigate('/setting');
             }}
           >
-            <AiFillSetting/>
+            <AiFillSetting />
           </button>
         </div>
       </div>

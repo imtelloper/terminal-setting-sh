@@ -291,37 +291,76 @@ const AreaInfo = () => {
       {/* <h3>{card.area}</h3> */}
       <div className="titleBox">
         <span>{card.area}</span>
-        <div className="activeBadge">
-          <p />
-          <span>ACTIVE</span>
-        </div>
       </div>
       <div className="areaContent">
-        <div className="areaLeft">
+        <div className="areaTop">
           <div className="imgBox">
-            <div className="bgImg">
-              <img src={BgImg} />
+            <img src={BgImg} />
+          </div>
+        </div>
+        <div className="areaBottom">
+          <div className="camBox">
+            <div className="camPort">
+              CAM <span>{card.camPort}</span>
             </div>
-            <div className="bgGradient" />
+            <div className="activeBadge">
+              <p />
+              <span>ACTIVE</span>
+            </div>
           </div>
           <div className="alarmBox">
-            {/* className : green yellow red inactive => bgAlarm에 추가해주시면 됩니다!*/}
-            <div className="bgAlarm">
-              <div className="alarmTxt">{card.alarmTxt}</div>
+            {/* className : green yellow red inactive => alarmTxt 에 추가해주시면 됩니다! */}
+            <div className="alarmTxt yellow">{card.alarmTxt}</div>
+            <div className="sensingBox">
+              <span>
+                1차 감지<p>{card.camSensing1}</p>
+              </span>
+              <span>
+                2차 감지<p>{card.camSensing2}</p>
+              </span>
             </div>
           </div>
         </div>
-        <div className="areaRight">
-          <div className="camPort">
-            CAM <span>{card.camPort}</span>
+      </div>
+    </div>
+  ));
+
+  const cardSkeletonMap = (swrObserveData || dummyData).map((card, idx) => (
+    <div
+      className="areaCardBox"
+      key={idx}
+      onClick={goObservePage}
+      datatype={idx.toString()}
+    >
+      {/* <h3>{card.area}</h3> */}
+      <div className="titleBox">
+        <span/>
+      </div>
+      <div className="areaContent">
+        <div className="areaTop">
+          <div className="imgBox"/>
+        </div>
+        <div className="areaBottom">
+          <div className="camBox">
+            <div className="camPort">
+              CAM <span>{card.camPort}</span>
+            </div>
+            <div className="activeBadge">
+              <p />
+              <span>ACTIVE</span>
+            </div>
           </div>
-          <div className="sensingBox">
-            <span>
-              1차 감지<p>{card.camSensing1}</p>
-            </span>
-            <span>
-              2차 감지<p>{card.camSensing2}</p>
-            </span>
+          <div className="alarmBox">
+            {/* className : green yellow red inactive => alarmTxt 에 추가해주시면 됩니다! */}
+            <div className="alarmTxt yellow">{card.alarmTxt}</div>
+            <div className="sensingBox">
+              <span>
+                1차 감지<p>{card.camSensing1}</p>
+              </span>
+              <span>
+                2차 감지<p>{card.camSensing2}</p>
+              </span>
+            </div>
           </div>
         </div>
       </div>
@@ -344,7 +383,7 @@ const AreaInfo = () => {
               <CurrentTime />
             </div>
             <div className="bottom">
-              <p>
+              <div>
                 <span>
                   Safety.AI가
                   <br />
@@ -354,8 +393,8 @@ const AreaInfo = () => {
                   <img src={Videocam} />
                   <span className="blue">4</span>
                 </div>
-              </p>
-              <p>
+              </div>
+              <div>
                 <span>
                   최근 10시간 중<br />
                   <span className="bold">감지된 위험</span>
@@ -364,13 +403,14 @@ const AreaInfo = () => {
                   <img src={Warning} />
                   <span className="red">3</span>
                 </div>
-              </p>
+              </div>
             </div>
           </div>
         </div>
         <div className="infoRight">
           <div className="rightBox">
-            <div className="areaCardWrap">{areaCardsMap}</div>
+            <div className="areaCardWrap">{cardSkeletonMap}</div>
+            {/*<div className="areaCardWrap">{areaCardsMap}</div>*/}
           </div>
         </div>
       </div>
