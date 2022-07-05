@@ -48,6 +48,7 @@ body {
 html, body {
   background-color: $white;
   font-family: 'Pretendard';
+  font-size: 14px;
 }
 div.mainTopContainer{
   width: 100%;
@@ -72,7 +73,7 @@ div.mainTopContainer{
       justify-content: center;
       align-items: center;
       cursor: pointer;
-      p{
+      div{
         width: 24px;
         height: 24px;
         display: flex;

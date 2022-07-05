@@ -1,0 +1,231 @@
+@import 'color.scss';
+
+//button
+button.btnXXS{
+  all: unset;
+  height: 24px;
+  font-weight: 400;
+  border-radius: 8px;
+  padding: 0 12px;
+  box-sizing: border-box;
+  font-size: 12px;
+  text-align: center;
+  cursor: pointer;
+}
+
+button.btnXS{
+  all: unset;
+  height: 32px;
+  font-weight: 400;
+  border-radius: 8px;
+  padding: 0 12px;
+  box-sizing: border-box;
+  font-size: 14px;
+  text-align: center;
+  cursor: pointer;
+}
+
+button.btnS{
+  all: unset;
+  height: 36px;
+  font-weight: 400;
+  border-radius: 8px;
+  color: $white;
+  padding: 0 16px;
+  box-sizing: border-box;
+  font-size: 14px;
+  text-align: center;
+  cursor: pointer;
+}
+
+button.btnR{
+  all: unset;
+  height: 40px;
+  font-weight: 400;
+  border-radius: 8px;
+  color: $white;
+  padding: 0 16px;
+  box-sizing: border-box;
+  font-size: 14px;
+  text-align: center;
+  cursor: pointer;
+}
+
+button.btnL{
+  all: unset;
+  height: 48px;
+  font-weight: 400;
+  border-radius: 8px;
+  color: $white;
+  padding: 0 16px;
+  box-sizing: border-box;
+  font-size: 14px;
+  text-align: center;
+  cursor: pointer;
+}
+
+//icon button
+button.iconBtnXS{
+  all: unset;
+  height: 24px;
+  background-color: $inactive;
+  color: $inactive-text;
+  font-size: 12px;
+  border-radius: 8px;
+  padding: 0 16px;
+}
+
+
+button.iconBtnS{
+  all: unset;
+  height: 36px;
+  border-radius: 8px;
+  padding: 0 16px 0 8px;
+  color: $white;
+  background-color: $blue-500;
+  display: flex;
+  align-items: center;
+  font-size: 14px;
+  span.iconS{
+    width: 16px;
+    height: 16px;
+    margin: 4px;
+  }
+}
+
+button.iconBtnL{
+  all: unset;
+  height: 40px;
+  border-radius: 8px;
+  padding: 0 16px 0 8px;
+  color: $white;
+  background-color: $blue-500;
+  display: flex;
+  align-items: center;
+  font-size: 14px;
+  span.iconL{
+    width: 24px;
+    height: 24px;
+    margin: 4px;
+  }
+  span.txt{
+    margin-left: 4px;
+  }
+}
+
+//default
+button.defaultPrimary{
+  background-color: $blue-500;
+  color: $white;
+}
+
+button.defaultES{
+  background-color: $blue-100;
+  color: $blue-500;
+}
+
+button.defaultOutlined{
+  background-color: $white;
+  color: $blue-500;
+  border: 1px solid $blue-500;
+}
+
+button.defaultGhost{
+  color: $blue-500;
+}
+
+//normal
+button.normalPrimary{
+  background-color: $white;
+  color: $black;
+  border: 1px solid #d4d4d4;
+}
+
+button.normalGhost{
+  color: $black;
+}
+
+//success
+button.successPrimary{
+  background-color: $success-500;
+  color: $success-900;
+}
+
+button.successES{
+  background-color: $success-100;
+  color: $success-900;
+}
+
+button.successOutlined{
+  background-color: $white;
+  color: $success-600;
+  border: 1px solid $success-500;
+}
+
+button.successGhost{
+  color: $success-600;
+}
+
+//warning
+button.warningPrimary{
+  background-color: $warning-500;
+  color: $warning-900;
+}
+
+button.warningES{
+  background-color: $warning-100;
+  color: $warning-800;
+}
+
+button.warningOutlined{
+  background-color: $white;
+  color: $warning-500;
+  border: 1px solid $warning-500;
+}
+
+button.warningGhost{
+  color: $warning-500;
+}
+
+//danger
+button.dangerPrimary{
+  background-color: $error-500;
+  color: $white;
+}
+
+button.dangerES{
+  background-color: $error-200;
+  color: $error-500;
+}
+
+button.dangerOutlined{
+  background-color: $white;
+  color: $error-500;
+  border: 1px solid $error-500;
+}
+
+button.dangerGhost{
+  color: $error-500;
+}
+
+//special
+button.specialPrimary{
+  background-color: $orange-500;
+  color: $white;
+}
+
+button.specialES{
+  background-color: $orange-200;
+  color: $orange-500;
+}
+
+button.specialOutlined{
+  background-color: $white;
+  color: $orange-500;
+  border: 1px solid $orange-500;
+}
+
+button.specialGhost{
+  color: $orange-500;
+}
+

@@ -12,18 +12,18 @@ const NaviBar = () => {
       <div className="mainTopContainer">
         <div>
           <div className="hamBtnBox">
-            <p>
-              <span/>
-              <span/>
-              <span/>
-            </p>
+            <div>
+              <span />
+              <span />
+              <span />
+            </div>
           </div>
           <button
             onClick={() => {
               navigate('/');
             }}
           >
-            <img src={Logo} alt=""/>
+            <img src={Logo} alt="" />
           </button>
         </div>
         <div>
@@ -32,14 +32,14 @@ const NaviBar = () => {
               navigate('/login');
             }}
           >
-            <BsFillPersonFill/>
+            <BsFillPersonFill />
           </button>
           <button
             onClick={() => {
               navigate('/setting');
             }}
           >
-            <AiFillSetting/>
+            <AiFillSetting />
           </button>
         </div>
       </div>

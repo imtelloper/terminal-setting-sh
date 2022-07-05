@@ -417,8 +417,8 @@ const ObservePage = () => {
       <div className="observeLeft">
         <div className="leftBox">
           <div className="titleBox">
-            <p>Place</p>
-            <span>H1 공장 크레인</span>
+            <span className="subTitle">Place</span>
+            <span className="mainTitle">H1 공장 크레인</span>
           </div>
           <div className="safetyTabWrap">
             <div className="safetyTabBox">{getTabEles()}</div>

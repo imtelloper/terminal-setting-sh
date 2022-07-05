@@ -138,6 +138,7 @@ const SensingView = () => {
                   className="clickTab"
                   name="tabs"
                   id="tab1"
+                  defaultChecked
                 />
                 <label className="clickLabel" htmlFor="tab1">
                   이미지
