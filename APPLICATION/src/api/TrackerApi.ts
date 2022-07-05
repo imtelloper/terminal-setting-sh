@@ -8,6 +8,16 @@ export default class TrackerApi {
     }
   };
 
+  getAllDatas = async () => {
+    try {
+      const res = await axios.get(`/api/tracker`);
+      return res.status === 200 ? res.data : 'failed to get data';
+    } catch (error) {
+      console.error(error);
+    }
+    return 'failed to get datas';
+  };
+
   getOneData = async (id) => {
     try {
       const res = await axios.get(`/api/tracker/${id}`);
