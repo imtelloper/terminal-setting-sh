@@ -1,0 +1,43 @@
+export default class PolygonDraw {
+  getCentroid = (points) => {
+    let area = 0;
+    let cx = 0;
+    let cy = 0;
+
+    for (let i = 0; i < points?.length; i++) {
+      const j = (i + 1) % points?.length;
+
+      const pt1 = points[i];
+      const pt2 = points[j];
+
+      const x1 = pt1[0];
+      const x2 = pt2[0];
+      const y1 = pt1[1];
+      const y2 = pt2[1];
+
+      area += x1 * y2;
+      area -= y1 * x2;
+
+      cx += (x1 + x2) * (x1 * y2 - x2 * y1);
+      cy += (y1 + y2) * (x1 * y2 - x2 * y1);
+    }
+
+    area /= 2;
+    area = Math.abs(area);
+
+    cx /= 6.0 * area;
+    cy /= 6.0 * area;
+
+    return {
+      x: Math.abs(cx),
+      y: Math.abs(cy),
+    };
+  };
+
+  squaredPolar = (point, centre) => {
+    return [
+      Math.atan2(point[1] - centre[1], point[0] - centre[0]),
+      (point[0] - centre[0]) ** 2 + (point[1] - centre[1]) ** 2, // Square of distance
+    ];
+  };
+}

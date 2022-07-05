@@ -5,6 +5,8 @@ import { useNavigate } from 'react-router-dom';
 import ObserveCamInfo from '../components/ObserveCamInfo';
 import axios from 'axios';
 import Api from '../api/Api';
+import CreateBtn from '../components/CreateBtn';
+import PolygonDraw from '../util/PolygonDraw';
 
 export const camPort1Ip = '192.168.0.7';
 export const camPort2Ip = '192.168.0.24';
@@ -33,7 +35,7 @@ const initVideoFrameData: Array<ViedeoFrameType> = [
     canvasClass: 'polygonCanvas1',
     frameSrc: `http://${camPort1Ip}:81`,
     firstCanvas: {
-      visible: false,
+      visible: true,
       yellowSensingPercent: 0.7,
       redSensingPercent: 0.3,
       coordinate: [],
@@ -97,6 +99,7 @@ const initVideoFrameData: Array<ViedeoFrameType> = [
 
 const ObservePage = () => {
   const navigate = useNavigate();
+  const polygonDraw = new PolygonDraw();
   const camWidth = 512;
   const camHeight = 384;
   const pointSize = 3;
@@ -113,55 +116,15 @@ const ObservePage = () => {
   const [camTabState, setCamTabState] = useState(1);
   const [recordState, setRecordState] = useState(false);
 
-  const getCentroid = (points) => {
-    let area = 0;
-    let cx = 0;
-    let cy = 0;
-
-    for (let i = 0; i < points?.length; i++) {
-      const j = (i + 1) % points?.length;
-
-      const pt1 = points[i];
-      const pt2 = points[j];
-
-      const x1 = pt1[0];
-      const x2 = pt2[0];
-      const y1 = pt1[1];
-      const y2 = pt2[1];
-
-      area += x1 * y2;
-      area -= y1 * x2;
-
-      cx += (x1 + x2) * (x1 * y2 - x2 * y1);
-      cy += (y1 + y2) * (x1 * y2 - x2 * y1);
-    }
-
-    area /= 2;
-    area = Math.abs(area);
-
-    cx /= 6.0 * area;
-    cy /= 6.0 * area;
-
-    return {
-      x: Math.abs(cx),
-      y: Math.abs(cy),
-    };
-  };
-
-  const squaredPolar = (point, centre) => {
-    return [
-      Math.atan2(point[1] - centre[1], point[0] - centre[0]),
-      (point[0] - centre[0]) ** 2 + (point[1] - centre[1]) ** 2, // Square of distance
-    ];
-  };
-
   const polySort = (arrIndex, itemID) => {
     const { coordinate } = videoFrameState[arrIndex][itemID];
     const centre = [
       coordinate.reduce((sum, p) => sum + p[0], 0) / coordinate.length,
       coordinate.reduce((sum, p) => sum + p[1], 0) / coordinate.length,
     ];
-    coordinate.forEach((point) => point.push(...squaredPolar(point, centre)));
+    coordinate.forEach((point) =>
+      point.push(...polygonDraw.squaredPolar(point, centre))
+    );
     coordinate.sort((a, b) => a[2] - b[2] || a[3] - b[3]);
     coordinate.forEach((point) => (point.length -= 2));
 
@@ -201,8 +164,8 @@ const ObservePage = () => {
     const n2 = 1 - redSensingPercent;
 
     // 무게중심의 좌표값
-    const centerX = getCentroid(coordinate).x;
-    const centerY = getCentroid(coordinate).y;
+    const centerX = polygonDraw.getCentroid(coordinate).x;
+    const centerY = polygonDraw.getCentroid(coordinate).y;
 
     /* 다각형의 점 찍기 */
     const drawPoints = (context, x, y, color = drawColor.green) => {
@@ -338,12 +301,34 @@ const ObservePage = () => {
         offsetHeight = 336 - 49;
     }
 
-    console.log('e.clientX',e.clientX);
-    console.log('e.clientY',e.clientY);
-    console.log('canvas.offsetLeft',canvas.offsetLeft);
-    console.log('canvas.offsetTop',canvas.offsetTop);
-    const x = e.clientX - canvas.offsetLeft - offsetWidth;
-    const y = e.clientY - canvas.offsetTop - offsetHeight;
+    console.log('e.clientX', e.clientX);
+    console.log('e.clientY', e.clientY);
+
+    const bbox = canvas.getBoundingClientRect(); // viewport 기준으로 나의 위치 알려줌
+    // return {
+    //   x: x - bbox.left * (canvas.width / bbox.width),
+    //   y: y - bbox.top * (canvas.height / bbox.height)
+    // };
+
+    // console.log('bbox.left', bbox.left);
+    // console.log('bbox.top', bbox.top);
+    // console.log(
+    //   'bbox.left * (canvas.width / bbox.width),',
+    //   bbox.left * (canvas.width / bbox.width)
+    // );
+    // console.log(
+    //   'bbox.top * (canvas.height / bbox.height)',
+    //   bbox.top * (canvas.height / bbox.height)
+    // );
+
+    // offsetLeft:원소의 왼쪽 바깥쪽 테두리 에서 원 소 를 포함 하 는 왼쪽 안쪽 테두리 사이 의 픽 셀 거리 까지 입 니 다.
+    // offsetTop:요소의 상단 경계선 에서 요 소 를 포함 하 는 상단 경계선 사이 의 픽 셀 거리 까지.
+    // const x = e.clientX - canvas.offsetLeft - offsetWidth;
+    // const y = e.clientY - canvas.offsetTop - offsetHeight;
+    const x = e.clientX - bbox.left;
+    const y = e.clientY - bbox.top;
+    console.log('x', x);
+    console.log('y', y);
     const { coordinate } = videoFrameState[arrIndex][itemID];
     const match = coordinate?.findIndex(
       ([x0, y0]) => Math.abs(x0 - x) + Math.abs(y0 - y) <= 6
@@ -469,15 +454,10 @@ const ObservePage = () => {
     const target = e.currentTarget;
     const dType = parseInt(target.getAttribute('datatype'), 10);
     const newArr = videoFrameState;
-    newArr[dType].yellowCanvasVisible = true;
+    // newArr[dType].yellowCanvasVisible = true;
     flushSync(() => setVideoFrameState([]));
     flushSync(() => setVideoFrameState(newArr));
   };
-
-  // 녹화
-  // const handleRecordVideo = () => {
-  //   Api.stream.startRecordVideo();
-  // };
 
   // // 녹화
   const handleRecordVideo = () => {

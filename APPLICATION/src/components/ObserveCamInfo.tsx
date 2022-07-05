@@ -1,9 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import '../style/pages/ObserveCamInfo.scss';
-import { BiDownload, BiExport } from 'react-icons/bi';
 import { useNavigate } from 'react-router-dom';
 import { flushSync } from 'react-dom';
-import Api from '../api/Api';
 import Delete from '../images/delete.png';
 import { AiOutlinePlusCircle } from 'react-icons/ai';
 
@@ -78,7 +76,14 @@ const ObserveCamInfo = ({
     const dType = parseInt(target.getAttribute('datatype'), 10);
     console.log('현재 캠 스테이트 dType', dType);
     const newArr = videoFrameState;
-    console.log('그룹1 비지블 스테이트', newArr[dType].firstCanvas.visible);
+    console.log(
+      '그룹1 first 비지블 스테이트',
+      newArr[dType].firstCanvas.visible
+    );
+    console.log(
+      '그룹1 second 비지블 스테이트',
+      newArr[dType].secondCanvas.visible
+    );
     // 첫번째 그룹이 있다면 두번째 그룹 생성
     if (newArr[dType].firstCanvas.visible === false) {
       newArr[dType].firstCanvas.visible = true;
@@ -94,7 +99,7 @@ const ObserveCamInfo = ({
     <div className="observeCamInfoContainer">
       <div className="observeBox">
         <div className="groupBox">
-          <span className="groupName">{`Group${parseInt(idx, 10) + 1}`}</span>
+          <span className="groupName">{`Group${idx}`}</span>
           <button className="switchBtn on">ON</button>
           {/* <button className="switchBtn off">OFF</button> */}
         </div>
@@ -124,27 +129,27 @@ const ObserveCamInfo = ({
             에러 리셋
           </button>
           <button className="safetyBtn safetyDeleteBtn" onClick={handleDelete}>
-            <img src={Delete} />
+            <img src={Delete} alt="" />
           </button>
         </div>
       </div>
     </div>
   );
 
-  const camInfosMap = camInfoState.map((info, idx) => (
-    <section
-      id={`safetyContent${idx + 1}`}
-      className="safetyContents"
-      key={idx}
-    >
-      <div className="safetyContentBox">
-        {videoFrameState[idx]?.firstCanvas?.visible &&
-          groupBoxComponent(info, idx)}
+  const camInfosMap = useMemo(() => {
+    return camInfoState.map((info, idx) => (
+      <section
+        id={`safetyContent${idx + 1}`}
+        className="safetyContents"
+        key={idx}
+      >
+        <div className="safetyContentBox">
+          {videoFrameState[idx]?.firstCanvas?.visible &&
+            groupBoxComponent(info, 1)}
 
-        {videoFrameState[idx]?.secondCanvas?.visible &&
-          groupBoxComponent(info, idx + 1)}
+          {videoFrameState[idx]?.secondCanvas?.visible &&
+            groupBoxComponent(info, 2)}
 
-        {camInfoState.length === idx + 1 && (
           <div className="safetyCreateBtnBox">
             <button
               className="safetyCreateBtn"
@@ -157,10 +162,19 @@ const ObserveCamInfo = ({
               <span>ADD</span>
             </button>
           </div>
-        )}
-      </div>
-    </section>
-  ));
+        </div>
+      </section>
+    ));
+  }, [camInfoState, videoFrameState]);
+
+  useEffect(() => {
+    const camTabs = Array.from(document.querySelectorAll('.safetyContents'));
+    camTabs.forEach((ele: HTMLElement, idx) => {
+      if (idx !== 0) {
+        ele.style.display = 'none';
+      }
+    });
+  }, []);
 
   return <>{camInfosMap}</>;
 };
