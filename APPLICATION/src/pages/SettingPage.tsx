@@ -15,15 +15,18 @@ const SettingPage = () => {
   // toolBtn 클릭 색상 변경
   const [currentClick, setCurrentClick] = useState(null);
   const [prevClick, setPrevClick] = useState(null);
+  // 밑에 세개
   const [urlState, setUrlState] = useState([]);
   const [videoSrcState, setVideoSrcState] = useState([]);
   const [captureSrcState, setCaptureSrcState] = useState('');
+
   const getClick = (e) => {
     setCurrentClick(e.target.id);
     console.log(e.target.id);
   };
 
   useEffect(() => {
+    // Api 2개
     Api.archive
       .findData({ fileType: 'video' })
       .then((videoRes) => {
@@ -144,12 +147,13 @@ const SettingPage = () => {
     });
   };
 
+  //이거
   const setCaptureImg = (e) => {
     const target = e.currentTarget;
     const dType = target.getAttribute('datatype');
     setCaptureSrcState(dType);
   };
-
+  //이거
   const urlStateMap = useMemo(() => {
     return urlState.map((src, idx) => (
       // <img src={src} alt="" width={100} height={80} key={idx}/>
@@ -468,10 +472,13 @@ const SettingPage = () => {
           </div>
         </div>
       </section>
+      {/* 밑에 엘레멘트들 */}
       <img src={captureSrcState} alt="" width={512} height={384} />
+      {/* 이미지 탭 */}
       <div className="urlStateMap">
         {urlStateMap}
       </div>
+      {/* 비디오 탭 */}
       <div className="urlStateMap">
         {videoSrcState.map(src => (<div>{src}</div>))}
       </div>

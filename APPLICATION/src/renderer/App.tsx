@@ -7,6 +7,7 @@ import LoginPage from '../pages/LoginPage';
 import LandingPage from '../pages/LandingPage';
 import LayoutForm from '../components/layout/LayoutForm';
 import DetailViewPage from '../pages/DetailViewPage';
+import SensingView from '../pages/SensingView';
 
 export default function App() {
   return (
@@ -15,11 +16,11 @@ export default function App() {
         <Routes>
           <Route path="/" element={<LandingPage />} />
           <Route path="/login" element={<LoginPage />} />
-          {/* <Route path="/main" element={<LoginPage />} /> */}
           <Route path="/main" element={<MainPage />} />
           <Route path="/observe" element={<ObservePage />} />
           <Route path="/setting" element={<SettingPage />} />
           <Route path="/detail" element={<DetailViewPage />} />
+          <Route path="/sensingView" element={<SensingView/>}/>
         </Routes>
       </LayoutForm>
     </Router>
