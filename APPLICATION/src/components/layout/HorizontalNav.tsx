@@ -1,25 +1,24 @@
-import React, { useEffect, useState } from "react";
-import "../../styles/components/module/HorizontalNav.scss";
-import { useNavigate } from "react-router-dom";
-import { useSWRState } from "../../fetcher/useSWRState";
-import { Link } from "react-router-dom";
+import React, { useEffect, useState } from 'react';
+import '../../styles/components/module/HorizontalNav.scss';
+import { useNavigate, Link } from 'react-router-dom';
+import { useSWRState } from '../../fetcher/useSWRState';
 
 const HorizontalNav = () => {
   const navigate = useNavigate();
   const { data: swrState, mutate: setSwrState } = useSWRState();
   const onClickIcon = (e) => {
-    const tabType = e.currentTarget.getAttribute("datatype");
+    const tabType = e.currentTarget.getAttribute('datatype');
     switch (tabType) {
-      case "home":
-        navigate("/main");
+      case 'home':
+        navigate('/main');
         break;
-      case "user":
-        navigate("/loginModal");
+      case 'user':
+        navigate('/loginModal');
         break;
-      case "help":
-        navigate("/help");
+      case 'help':
+        navigate('/help');
         break;
-      case "setting":
+      case 'setting':
         break;
     }
   };

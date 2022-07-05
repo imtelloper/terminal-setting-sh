@@ -1,13 +1,15 @@
 import glob
+import platform
 from typing import Optional
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from database.mongoDB import *
-from routers.tempHumidityRouter import router as TempHumidityRouter
 from routers.utilRouter import router as UtilRouter
 from routers.streamRouter import router as StreamRouter
 from routers.authRouter import router as AuthRouter
 from routers.observeRouter import router as ObserveRouter
+from routers.archiveRouter import router as ArchiveRouter
+from routers.trackerRouter import router as TrackerRouter
 from dotenv import load_dotenv
 from pathlib import Path
 import os
@@ -38,6 +40,16 @@ logger = logging.getLogger(__name__)
 
 print('app start')
 
+platform.system()
+print(platform.system())
+print(platform.system())
+print(platform.system())
+print(platform.system())
+print(platform.system())
+print(platform.system())
+print(platform.platform())
+print(platform.platform())
+print(platform.platform())
 # def speak(text):
 #     tts = gTTS(text=text, lang='ko')
 #     filename = 'voice.mp3'
@@ -73,30 +85,21 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# @app.get("/image/{path}")
-# async def main():
-#     return FileResponse("./safety-archives/2022-06-28/H1공장크레인/cam1/capture/safety-shot#H1공장크레인#cam1#2022-06-28_13:50:46.913461.png")
 
 @app.get("/{saveFolder}/{dateFolder}/{areaFolder}/{camPortFolder}/{fileTypeFolder}/{file}")
 async def main(saveFolder, dateFolder, areaFolder, camPortFolder, fileTypeFolder, file):
-    # print('path :',path)
-    # if len(path) > 0:
-    #     print('버터 플라이 ')
-    print('saveFolder : ',saveFolder)
-    print('dateFolder : ',dateFolder)
-    print('areaFolder : ',areaFolder)
-    print('camPortFolder : ',camPortFolder)
-    print('fileTypeFolder : ',fileTypeFolder)
-    print('file : ',file)
-    return FileResponse("/home/interx/SAFETY-AI/BACKEND/{0}/{1}/{2}/{3}/{4}/{5}".format(saveFolder, dateFolder, areaFolder, camPortFolder, fileTypeFolder, file))
+    return FileResponse(
+        "/home/interx/SAFETY-AI/BACKEND/{0}/{1}/{2}/{3}/{4}/{5}".format(saveFolder, dateFolder, areaFolder,
+                                                                        camPortFolder, fileTypeFolder, file))
 
 
 # routers
-app.include_router(TempHumidityRouter, prefix="/api/temperature-humidity")
 app.include_router(UtilRouter, prefix="/api/util")
 app.include_router(StreamRouter, prefix="/api/stream")
 app.include_router(AuthRouter, prefix="/api/auth")
 app.include_router(ObserveRouter, prefix="/api/observe")
+app.include_router(ArchiveRouter, prefix="/api/archive")
+app.include_router(TrackerRouter, prefix="/api/tracker")
 
 
 @app.on_event("startup")

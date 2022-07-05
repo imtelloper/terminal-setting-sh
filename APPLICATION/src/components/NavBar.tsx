@@ -1,5 +1,8 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import Logo from '../images/safety.ai_logo.png';
+import { AiFillSetting } from 'react-icons/ai';
+import { BsFillPersonFill } from 'react-icons/bs';
 
 const NaviBar = () => {
   const navigate = useNavigate();
@@ -7,27 +10,36 @@ const NaviBar = () => {
   return (
     <>
       <div className="mainTopContainer">
-        <button
-          onClick={() => {
-            navigate('/');
-          }}
-        >
-          홈
-        </button>
         <div>
+          <div className="hamBtnBox">
+            <div>
+              <span />
+              <span />
+              <span />
+            </div>
+          </div>
           <button
             onClick={() => {
-              navigate('/setting');
+              navigate('/');
             }}
           >
-            설정
+            <img src={Logo} alt="" />
           </button>
+        </div>
+        <div>
           <button
             onClick={() => {
               navigate('/login');
             }}
           >
-            계정정보
+            <BsFillPersonFill />
+          </button>
+          <button
+            onClick={() => {
+              navigate('/setting');
+            }}
+          >
+            <AiFillSetting />
           </button>
         </div>
       </div>

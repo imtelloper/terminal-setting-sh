@@ -1,3 +1,7 @@
+@import "./color.scss";
+
+*{margin: 0; padding: 0;}
+
 #root {
   width: 100%;
   height: 100%;
@@ -12,52 +16,85 @@
 
 body {
   position: relative;
-  color: white;
+  color: $dark;
   width: 100vw;
   height: 100vh;
   overflow: hidden;
-  background: linear-gradient(-45deg, #CFF375, #80EAAD, #69BAF3, #2553BD);
+  background-color: $background;
+  //background: linear-gradient(-45deg, #CFF375, #80EAAD, #69BAF3, #2553BD);
   font-family: sans-serif;
-  overflow-y: hidden;
+  //overflow: hidden;
   display: flex;
   justify-content: center;
   align-items: center;
   box-sizing: border-box;
-  background-size: 400% 400%;
-  animation: gradient 4s ease infinite;
+  //background-size: 400% 400%;
+  //animation: gradient 4s ease infinite;
 
-  @keyframes gradient {
-    0% {
-      background-position: 0% 50%;
-    }
-    50% {
-      background-position: 100% 50%;
-    }
-    100% {
-      background-position: 0% 50%;
-    }
-  }
+  //@keyframes gradient {
+  //  0% {
+  //    background-position: 0% 50%;
+  //  }
+  //  50% {
+  //    background-position: 100% 50%;
+  //  }
+  //  100% {
+  //    background-position: 0% 50%;
+  //  }
+  //}
 }
 
 
 html, body {
-  background-color: #00091B;
-  font-family: 'Muli', Helvetica, sans-serif;
+  background-color: $white;
+  font-family: 'Pretendard';
+  font-size: 14px;
 }
 div.mainTopContainer{
-  padding: 5px 15px;
+  width: 100%;
+  height: 64px;
+  padding-right: 16px;
+  background-color: $dark;
   box-sizing: border-box;
   display: flex;
+  align-items: center;
   justify-content: space-between;
-  border-bottom: 1px solid #292929;
+  border-bottom: 1px solid $dark;
+
+  div{
+    display: flex;
+
+    div.hamBtnBox{
+      width: 64px;
+      height: 64px;
+      background-color: #050A12;
+      margin-right: 16px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+      div{
+        width: 24px;
+        height: 24px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        span{
+          width: 100%;
+          height: 2px;
+          background-color: $white;
+        }
+      }
+    }
+  }
   button{
     font-size: 18px;
     padding: 5px;
     border-radius: 5px;
     cursor: pointer;
     border: none;
-    background-color: #292929;
+    background-color: $dark;
     color: white;
-    margin-left: 10px;
+    margin-right: 10px;
   }
 }

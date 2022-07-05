@@ -10,13 +10,19 @@ Change below variables
 - self.tableName =
 '''
 
-class ObserveService:
+class TrackerService:
     def __init__(self):
         self.dbName = config.DB_NAME
-        self.tableName = config.TABLE_OBSERVE
+        self.tableName = config.TABLE_TRACKER
 
     def getDataOne(self, id):
         return findOne(self.dbName, self.tableName, {"_id": ObjectId(id)})
+
+    async def getAllDatas(self):
+        dataArr = []
+        async for data in find(self.dbName, self.tableName):
+            dataArr.append(data)
+        return dataArr
 
     async def searchDatas(self, data: dict):
         dataArr = []

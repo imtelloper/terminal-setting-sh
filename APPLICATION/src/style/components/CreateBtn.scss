@@ -1,0 +1,28 @@
+@import "../../style/color";
+
+div.safetyCreateBtnContainer{
+  width: 100%;
+  padding: 24px;
+  box-sizing: border-box;
+  position: relative;
+  button.safetyCreateBtn{
+    all: unset;
+    width: 100%;
+    height: 40px;
+    background-color: $blue-100;
+    color: $blue-500;
+    text-align: center;
+    border-radius: 8px;
+    font-weight: 500;
+    cursor: pointer;
+    span{
+      line-height: 40px;
+      position: relative;
+
+      &:first-child{
+        top: 2px;
+        margin-right: 4px;
+      }
+    }
+  }
+}

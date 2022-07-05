@@ -1,4 +1,32 @@
 div.currentTimeContainer{
   padding: 10px;
   font-size: 20px;
+  margin-top: 40px;
+  margin-left: 40px;
+  p{
+    &:first-child{
+      font-size: 40px;
+      font-weight: 700;
+      color: #878E9B;
+    }
+    &:nth-child(2){
+      font-size: 62px;
+      font-weight: 700;
+      display: flex;
+      span{
+        font-weight: 400;
+      }
+      p{
+        font-size: 20px;
+        color: #878E9B;
+      }
+    }
+    &:last-child{
+      font-size: 40px;
+      font-weight: 700;
+      span{
+        color: #878E9B;
+      }
+    }
+  }
 }

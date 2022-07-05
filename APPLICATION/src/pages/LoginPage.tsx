@@ -1,9 +1,15 @@
 import React, { FormEvent, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import '../style/DesignSystem.scss';
 import '../style/pages/LoginPage.scss';
 import useSWR from 'swr';
 import Api from '../api/Api';
 import { useSWRState } from '../fetcher/useSWRState';
+
+import LogoImg from '../images/safety.ai_logo.png';
+import LoginBg from '../images/loginBg.png';
+import WorldIcon from '../images/world.png';
+import ArrowDown from '../images/arrow-down.png';
 
 const LoginPage = () => {
   const navigate = useNavigate();
@@ -89,15 +95,15 @@ const LoginPage = () => {
   useEffect(() => {
     /* 토큰으로 로그인 정보를 불러와 세션에 셋팅함 */
     // setUserInfo();
-
-    navigate('/main');
+    // navigate('/main');
+    navigate('/login')
   }, []);
 
   const handleEnter = (e) => e.key === 'Enter' && login();
 
   useEffect(() => {
     console.log('swrState', swrState);
-    swrState?.user?.email && navigate('/main');
+    swrState?.user?.email && navigate('/');
   }, [swrState]);
 
   // if (loading) return <Loading />;
@@ -106,33 +112,48 @@ const LoginPage = () => {
   return (
     <div className="loginContainer">
       <div className="loginBox">
-        <span>Sign In</span>
-        <div className="inputLoginBox">
-          <input
-            className="form"
-            id="id"
-            placeholder="이메일을 입력하세요."
-            maxLength={320}
-            onChange={checkEmail}
-            value={inputState.email}
-          />
-          <input
-            className="form"
-            id="pwd"
-            type="password"
-            placeholder="비밀번호를 입력하세요"
-            maxLength={16}
-            onChange={checkPw}
-            value={inputState.pw}
-            onKeyPress={handleEnter}
-          />
+        <div className="left">
+          <div className="logoImg">
+            <img src={LogoImg} />
+          </div>
+          <div className="loginBg">
+            <img src={LoginBg} />
+          </div>
         </div>
-        <div className="loginBtnBox">
-          <button id="loginButton" onClick={login}>
-            로그인
-          </button>
+        <div className="right">
+          <div className="top">
+            <span className="title">SIGN IN</span>
+            <div className="inputLoginBox">
+              <div className="content">
+                <label>ID</label>
+                <input
+                  className="form"
+                  id="id"
+                  placeholder="이메일을 입력하세요."
+                  maxLength={320}
+                  onChange={checkEmail}
+                  value={inputState.email}
+                />
+              </div>
+              <div className="content">
+                <label>Password</label>
+                <input
+                  className="form"
+                  id="pwd"
+                  type="password"
+                  placeholder="비밀번호를 입력하세요"
+                  maxLength={16}
+                  onChange={checkPw}
+                  value={inputState.pw}
+                  onKeyPress={handleEnter}
+                />
+              </div>
+            </div>
+          </div>
+          <button className="btnR defaultPrimary">LOG IN</button>
         </div>
       </div>
+      <div className="interX">© INTERX</div>
     </div>
   );
 };

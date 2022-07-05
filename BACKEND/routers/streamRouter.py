@@ -45,8 +45,10 @@ def isInternetConnected(host="8.8.8.8", port=53, timeout=3) -> bool:
 @router.get("/", response_description="")
 async def streamVideo():
     print('isInternetConnected :', isInternetConnected)
+
     if isInternetConnected():
         await service.addTodayCamData()
+        await service.getTrackerId()
     service.setCameraOff()
     service.setCameraOn()
     return StreamingResponse(service.video_streaming(), media_type="multipart/x-mixed-replace; boundary=frame")
@@ -71,7 +73,13 @@ async def screenCapture():
 
 @router.get("/record-on", response_description="")
 async def videoRecordOn():
-    return service.setRecordGateOpen()
+    serviceResult = service.setRecordGateOpen()
+    trackerId = await service.getTrackerId()
+    videoPath = service.getVideoRecordPath()
+    print('trackerId : ',trackerId)
+    print('videoPath : ',videoPath)
+    await service.insertVideoRecordPath(trackerId, videoPath)
+    return serviceResult
 
 
 @router.get("/record-off", response_description="")
@@ -83,6 +91,7 @@ async def videoRecordOff():
 async def streamVideoAreaSet(coordinate1):
     if isInternetConnected():
         await service.addTodayCamData()
+        await service.getTrackerId()
     data = coordinate1.split(',')
     coordinates = [[]]
     coordiList = []
@@ -103,6 +112,7 @@ async def streamVideoAreaSet(coordinate1, coordinate2):
     print('coordinate2     ', coordinate2)
     if isInternetConnected():
         await service.addTodayCamData()
+        await service.getTrackerId()
     data1 = coordinate1.split(',')
     data2 = coordinate2.split(',')
     coordinates1 = [[]]
@@ -131,6 +141,7 @@ async def streamVideoAreaSet(coordinate1, coordinate2):
 @router.get("/area/{coordinate1}/{coordinate2}/{coordinate3}/{coordinate4}", response_description="")
 async def streamVideoAreaSet(coordinate1, coordinate2, coordinate3, coordinate4):
     await service.addTodayCamData()
+    await service.getTrackerId()
     data1 = coordinate1.split(',')
     data2 = coordinate2.split(',')
     data3 = coordinate3.split(',')

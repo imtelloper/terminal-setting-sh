@@ -1,0 +1,150 @@
+@import "../color.scss";
+
+div.sensingViewContainer {
+  width: 100%;
+  height: 100%;
+  display: flex;
+
+  div.sensingLeft {
+    width: 444px;
+    margin-right: 16px;
+    position: relative;
+
+    &:after {
+      content: '';
+      width: 1px;
+      height: 100%;
+      background-color: #bbbbbb;
+      position: absolute;
+      top: 0;
+      right: -16px;
+    }
+
+    div.leftBox {
+      width: calc(100% - 16px);
+      height: calc(100% - 96px);
+      margin: 16px;
+      display: flex;
+      flex-direction: column;
+
+      div.titleBox {
+        width: 100%;
+        height: 172px;
+        padding: 40px;
+        box-sizing: border-box;
+
+        p {
+          margin-bottom: 8px;
+          color: #878E9B;
+        }
+
+        span {
+          font-size: 28px;
+          font-weight: 700;
+        }
+      }
+
+      div.clickTabWrap {
+        width: 100%;
+        height: calc(100% - 156px);
+        background: $white;
+        border-bottom: 1px solid $line;
+        box-sizing: border-box;
+        border-radius: 8px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+
+        div.clickTabBox {
+          width: 100%;
+          height: 100%;
+          line-height: 48px;
+          display: flex;
+          align-items: center;
+          justify-content: space-around;
+          border-top-left-radius: 8px;
+          border-top-right-radius: 8px;
+          text-align: center;
+          position: relative;
+
+          .clickTab{
+            width: 100%;
+            height: 100%;
+
+            input {
+              display: none;
+
+              &:checked + label {
+                color: $blue-500;
+                border-bottom: 4px solid $blue-500;
+                box-sizing: border-box;
+              }
+            }
+
+            label {
+              display: block;
+              width: 100%;
+              height: 48px;
+              color: $inactive-text;
+              font-weight: 700;
+              text-align: center;
+              box-sizing: border-box;
+              cursor: pointer;
+            }
+
+            div.contentBox{
+              width: 100%;
+              height: calc(100% - 48px);
+              overflow-x: hidden;
+              overflow-y: auto;
+              position: absolute;
+              left: 0;
+              display: none;
+              border-bottom-left-radius: 8px;
+              border-bottom-right-radius: 8px;
+              h3{
+                width: 100%;
+              }
+              div.urlStateMap{
+                width: 100%;
+                height: 100%;
+                border: none;
+              }
+
+              div.imgContent{
+                background-color: pink;
+              }
+              div.videoContent{
+                background-color: #0CBEF4;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+  div.sensingRight {
+    width: calc(100% - 444px);
+    height: calc(100% - 88px);
+
+    div.rightBox {
+      width: calc(100% - 16px);
+      height: 100%;
+      margin: 16px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+  }
+}
+
+#tab1:checked ~ .imgContentBox{
+    display: block;
+  }
+
+#tab2:checked ~ .videoContentBox{
+  display: block;
+}
+
+
