@@ -123,7 +123,6 @@ const LoginPage = () => {
         <div className="right">
           <div className="top">
             <span className="title">SIGN IN</span>
-            {/* <p><WorldIcon/></p> */}
             <div className="inputLoginBox">
               <div className="content">
                 <label>ID</label>

@@ -1,7 +1,7 @@
 @import 'color.scss';
 
 //button
-button.btnXS{
+button.btnXXS{
   all: unset;
   height: 24px;
   font-weight: 400;
@@ -9,6 +9,18 @@ button.btnXS{
   padding: 0 12px;
   box-sizing: border-box;
   font-size: 12px;
+  text-align: center;
+  cursor: pointer;
+}
+
+button.btnXS{
+  all: unset;
+  height: 32px;
+  font-weight: 400;
+  border-radius: 8px;
+  padding: 0 12px;
+  box-sizing: border-box;
+  font-size: 14px;
   text-align: center;
   cursor: pointer;
 }

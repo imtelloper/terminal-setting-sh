@@ -260,13 +260,13 @@ const AreaInfo = () => {
               </div>
             </div>
             <div className="areaTextContent">
-              <p className="camContent">Cam(2):<span>Active</span></p>
-              <p>Alarms:</p><p>없음</p>
+              <span className="camContent">Cam(2):<span>Active</span></span>
+              <span>Alarms:</span><span>없음</span>
               <div className="detectContent">
-                <p>1차 감지: <span>0</span></p>
-                <p>2차 감지: <span>0</span></p>
-              </div>
-            </div>
+                <span>1차 감지: <span>0</span></span>
+                <span>2차 감지: <span>0</span></span>
+              </span>
+            </span>
           </div>`;
         document.querySelector('section').appendChild(addContent);
         // document.querySelector("section").createElement(addContent);
@@ -304,7 +304,7 @@ const AreaInfo = () => {
               CAM <span>{card.camPort}</span>
             </div>
             <div className="activeBadge">
-              <p />
+              <div className="circle" />
               <span>ACTIVE</span>
             </div>
           </div>
@@ -346,7 +346,7 @@ const AreaInfo = () => {
               CAM <span>{card.camPort}</span>
             </div>
             <div className="activeBadge">
-              <p />
+              <div className="circle" />
               <span>ACTIVE</span>
             </div>
           </div>

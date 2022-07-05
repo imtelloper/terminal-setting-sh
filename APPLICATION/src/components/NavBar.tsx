@@ -12,11 +12,11 @@ const NaviBar = () => {
       <div className="mainTopContainer">
         <div>
           <div className="hamBtnBox">
-            <p>
+            <div>
               <span />
               <span />
               <span />
-            </p>
+            </div>
           </div>
           <button
             onClick={() => {
@@ -29,7 +29,7 @@ const NaviBar = () => {
         <div>
           <button
             onClick={() => {
-              navigate('/main');
+              navigate('/login');
             }}
           >
             <BsFillPersonFill />

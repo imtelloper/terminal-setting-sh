@@ -12,7 +12,7 @@ const DesignSystem = () => {
       {/* 아이콘 버튼은 button 안 span 에 아이콘, 텍스트를 넣어 사용합니다 */}
 
       {/* XSmall */}
-      <button className="iconBtnXS">
+      <button className="iconBtnXXS">
         <span className="txt">BUTTON</span>
       </button>
 
