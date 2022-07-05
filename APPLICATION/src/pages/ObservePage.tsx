@@ -247,88 +247,12 @@ const ObservePage = () => {
     const arrIndex = canvas?.getAttribute('tabIndex');
     /* firstCanvas | secondCanvas */
     const itemID = canvas?.getAttribute('itemID');
-    // const x = e.clientX - canvas.offsetLeft - 6;
-    // const y = e.clientY - canvas.offsetTop - 8;
-    console.log();
-
-    // let offsetWidth = 504;
-    // let offsetHeight = 336 - 49;
-    //
-    // switch (parseInt(arrIndex, 10) + 1) {
-    //   case 1:
-    //     offsetWidth = 504;
-    //     offsetHeight = 336 - 49;
-    //     break;
-    //   case 2:
-    //     offsetWidth = 1031;
-    //     offsetHeight = 336 - 49;
-    //     break;
-    //   case 3:
-    //     offsetWidth = 504;
-    //     offsetHeight = 784 - 49;
-    //     break;
-    //   case 4:
-    //     offsetWidth = 1031;
-    //     offsetHeight = 784 - 49;
-    //     break;
-    //   default:
-    //     offsetWidth = 504;
-    //     offsetHeight = 336 - 49;
-    // }
-
-    let offsetWidth;
-    let offsetHeight;
-
-    switch (parseInt(arrIndex, 10) + 1) {
-      case 1:
-        offsetWidth = 440;
-        offsetHeight = 102 - 49;
-        break;
-      case 2:
-        offsetWidth = 962;
-        offsetHeight = 102 - 49;
-        break;
-      case 3:
-        offsetWidth = 440;
-        offsetHeight = 547 - 49;
-        break;
-      case 4:
-        offsetWidth = 962;
-        offsetHeight = 547 - 49;
-        break;
-      default:
-        offsetWidth = 962;
-        offsetHeight = 336 - 49;
-    }
-
-    console.log('e.clientX', e.clientX);
-    console.log('e.clientY', e.clientY);
-
     const bbox = canvas.getBoundingClientRect(); // viewport 기준으로 나의 위치 알려줌
-    // return {
-    //   x: x - bbox.left * (canvas.width / bbox.width),
-    //   y: y - bbox.top * (canvas.height / bbox.height)
-    // };
-
-    // console.log('bbox.left', bbox.left);
-    // console.log('bbox.top', bbox.top);
-    // console.log(
-    //   'bbox.left * (canvas.width / bbox.width),',
-    //   bbox.left * (canvas.width / bbox.width)
-    // );
-    // console.log(
-    //   'bbox.top * (canvas.height / bbox.height)',
-    //   bbox.top * (canvas.height / bbox.height)
-    // );
 
     // offsetLeft:원소의 왼쪽 바깥쪽 테두리 에서 원 소 를 포함 하 는 왼쪽 안쪽 테두리 사이 의 픽 셀 거리 까지 입 니 다.
     // offsetTop:요소의 상단 경계선 에서 요 소 를 포함 하 는 상단 경계선 사이 의 픽 셀 거리 까지.
-    // const x = e.clientX - canvas.offsetLeft - offsetWidth;
-    // const y = e.clientY - canvas.offsetTop - offsetHeight;
     const x = e.clientX - bbox.left;
     const y = e.clientY - bbox.top;
-    console.log('x', x);
-    console.log('y', y);
     const { coordinate } = videoFrameState[arrIndex][itemID];
     const match = coordinate?.findIndex(
       ([x0, y0]) => Math.abs(x0 - x) + Math.abs(y0 - y) <= 6

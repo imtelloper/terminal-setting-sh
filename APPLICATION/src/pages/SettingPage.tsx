@@ -4,6 +4,7 @@ import { AiFillFolderOpen, AiFillSetting, AiFillTool } from 'react-icons/ai';
 import { GoDeviceCameraVideo, GoGraph, GoRocket } from 'react-icons/go';
 import Api from '../api/Api';
 import { camPort1Ip, camPort2Ip, camPort3Ip, camPort4Ip } from './ObservePage';
+import { cssValue } from 'react-spinners/helpers';
 
 type CamSettingType = {
   area: string;
@@ -17,6 +18,7 @@ type CamSettingType = {
   messageSwitch: boolean;
   kakaoSwitch: boolean;
 };
+
 const camDummyData: Array<CamSettingType> = [
   {
     area: 'H1 공장 크레인',
@@ -71,7 +73,6 @@ const camDummyData: Array<CamSettingType> = [
 /*
 tracker들을 가져와서 area를 고유값으로 select option에 셋팅
 tracker들이 cam이 1개일지, 2개일지 모르니 각 해당 구역의 cam만큼만 설정할 수 있도록 해야함
-
 */
 
 const SettingPage = () => {
@@ -97,104 +98,6 @@ const SettingPage = () => {
   };
 
   useEffect(() => {
-    // Api 2개
-    // Api.archive
-    //   .findData({ fileType: 'video' })
-    //   .then((videoRes) => {
-    //     const urlData = [];
-    //     videoRes.forEach((data, idx) => {
-    //       Api.tracker.getOneData(data.trackerId).then((res) => {
-    //         switch (res.camPort) {
-    //           case 'cam1':
-    //             urlData.push(
-    //               `http://${camPort1Ip}:81/${data.path
-    //                 .split('/')
-    //                 .slice(5)
-    //                 .join('/')}`
-    //             );
-    //             break;
-    //           case 'cam2':
-    //             urlData.push(
-    //               `http://${camPort2Ip}:81/${data.path
-    //                 .split('/')
-    //                 .slice(5)
-    //                 .join('/')}`
-    //             );
-    //             break;
-    //           case 'cam3':
-    //             urlData.push(
-    //               `http://${camPort3Ip}:81/${data.path
-    //                 .split('/')
-    //                 .slice(5)
-    //                 .join('/')}`
-    //             );
-    //             break;
-    //           case 'cam4':
-    //             urlData.push(
-    //               `http://${camPort4Ip}:81/${data.path
-    //                 .split('/')
-    //                 .slice(5)
-    //                 .join('/')}`
-    //             );
-    //             break;
-    //           default:
-    //             console.log('default');
-    //         }
-    //         videoRes.length === idx + 1 && setVideoSrcState(urlData);
-    //       });
-    //     });
-    //   })
-    //   .catch((error) => console.error(error));
-    // Api.archive
-    //   .findData({ fileType: 'img' })
-    //   .then((archiveRes) => {
-    //     console.log('img archiveRes', archiveRes);
-    //     const urlData = [];
-    //     archiveRes.forEach((data, idx) => {
-    //       Api.tracker.getOneData(data.trackerId).then((res) => {
-    //         switch (res.camPort) {
-    //           case 'cam1':
-    //             urlData.push(
-    //               `http://${camPort1Ip}:81/${data.path
-    //                 .split('/')
-    //                 .slice(5)
-    //                 .join('/')}`
-    //             );
-    //             break;
-    //           case 'cam2':
-    //             urlData.push(
-    //               `http://${camPort2Ip}:81/${data.path
-    //                 .split('/')
-    //                 .slice(5)
-    //                 .join('/')}`
-    //             );
-    //             break;
-    //           case 'cam3':
-    //             urlData.push(
-    //               `http://${camPort3Ip}:81/${data.path
-    //                 .split('/')
-    //                 .slice(5)
-    //                 .join('/')}`
-    //             );
-    //             break;
-    //           case 'cam4':
-    //             urlData.push(
-    //               `http://${camPort4Ip}:81/${data.path
-    //                 .split('/')
-    //                 .slice(5)
-    //                 .join('/')}`
-    //             );
-    //             break;
-    //           default:
-    //             console.log('default');
-    //         }
-    //         console.log('2urlData', urlData);
-    //         archiveRes.length === idx + 1 && setUrlState(urlData);
-    //       });
-    //     });
-    //   })
-    //   .catch((error) => console.error(error));
-
     if (currentClick !== null) {
       const current = document.getElementById(currentClick);
       current.style.fontWeight = 'bold';
@@ -217,29 +120,18 @@ const SettingPage = () => {
     });
   };
 
-  // 이거
-  const setCaptureImg = (e) => {
+  const handleChangeValue = (e) => {
     const target = e.currentTarget;
+    const { value } = target;
     const dType = target.getAttribute('datatype');
-    setCaptureSrcState(dType);
+    console.log('handleChangeValue value', value);
+    console.log('handleChangeValue datatype', dType);
   };
-
-  // 이거
-  const urlStateMap = useMemo(() => {
-    return urlState.map((src, idx) => (
-      <div datatype={src} onClick={setCaptureImg} key={idx}>
-        {src}
-      </div>
-    ));
-  }, [urlState]);
-
-  const handleChangeInput = (e) => {};
-
-  const handleChangeSelect = (e) => {};
 
   useEffect(() => {
     Api.tracker.getAllDatas().then((res) => {
       console.log('Api.tracker.getAllDatas res', res);
+      setCamSettingState(res);
     });
   }, []);
 
@@ -247,7 +139,20 @@ const SettingPage = () => {
     console.log('camSettingState', camSettingState);
   }, [camSettingState]);
 
+  const modifyTrackerData = (objectId, data) => {
+    Api.tracker.modifyOneData(objectId, data).then((res) => {
+      console.log('Api.tracker.modifyOneData res', res);
+    });
+  };
+
   /* 어느 구역에서 몇번째 카메라인지 구역 설정 필요 */
+
+  const handleChangeTrackerData = (e) => {
+    const target = e.currentTarget;
+    console.log(target.parentNode);
+    console.log(target.parentElement.parentElement);
+    // Api.tracker.modifyOneData({});
+  };
 
   const camSettingMap = useMemo(() => {
     return camSettingState.map((data, idx) => (
@@ -255,14 +160,14 @@ const SettingPage = () => {
         <div>
           <AiFillFolderOpen />
           <span>저장폴더 :</span>
-          <input value={data.savingPath} />
-          <button>선택</button>
+          <input defaultValue={data.savingPath} />
+          <button onClick={handleChangeTrackerData}>선택</button>
         </div>
         <div>
           <GoDeviceCameraVideo />
           <span>카메라 이름 :</span>
-          <input placeholder="Cam4" value={data.camName} />
-          <button>적용</button>
+          <input defaultValue={data.camName} />
+          <button onClick={handleChangeTrackerData}>적용</button>
         </div>
         <div className="bottomCon">
           <div>
@@ -274,8 +179,10 @@ const SettingPage = () => {
                   id="toolTab7"
                   type="radio"
                   name="toolTabs"
-                  onChange={handleChangeInput}
-                  checked={data.computeDevice === 'GPU' && true}
+                  datatype="computeDevice"
+                  onChange={handleChangeValue}
+                  value="GPU"
+                  // checked={data.computeDevice === 'GPU' && true}
                 />
                 <label htmlFor="toolTab7">GPU</label>
                 <div />
@@ -283,8 +190,11 @@ const SettingPage = () => {
                   id="toolTab8"
                   type="radio"
                   name="toolTabs"
-                  onChange={handleChangeInput}
-                  checked={data.computeDevice === 'CPU' && true}
+                  onChange={handleChangeValue}
+                  datatype="computeDevice"
+                  value="CPU"
+                  // defaultChecked={data.computeDevice === 'CPU' && true}
+                  // checked={data.computeDevice === 'CPU' && true}
                 />
                 <label htmlFor="toolTab8">CPU</label>
               </div>
@@ -292,7 +202,11 @@ const SettingPage = () => {
             <div>
               <GoRocket />
               <span>감지모델 :</span>
-              <select onChange={handleChangeSelect} value={data.sensingModel}>
+              <select
+                onChange={handleChangeValue}
+                defaultValue={data.sensingModel}
+                datatype="sensingModel"
+              >
                 <option>Small</option>
                 <option>Big</option>
               </select>
@@ -301,7 +215,11 @@ const SettingPage = () => {
             <div>
               <GoGraph />
               <span>Threshold :</span>
-              <select onChange={handleChangeSelect} value={data.threshold}>
+              <select
+                onChange={handleChangeValue}
+                defaultValue={data.threshold}
+                datatype="threshold"
+              >
                 <option>50</option>
                 <option>70</option>
                 <option>100</option>
@@ -329,7 +247,7 @@ const SettingPage = () => {
         </div>
       </section>
     ));
-  }, []);
+  }, [camSettingState]);
 
   return (
     <div className="settingMain">
@@ -356,17 +274,6 @@ const SettingPage = () => {
       <label htmlFor="tab4">Cam4</label>
 
       {camSettingMap}
-
-      {/* 밑에 엘레멘트들 */}
-      <img src={captureSrcState} alt="" width={512} height={384} />
-      {/* 이미지 탭 */}
-      <div className="urlStateMap">{urlStateMap}</div>
-      {/* 비디오 탭 */}
-      <div className="urlStateMap">
-        {videoSrcState.map((src) => (
-          <div>{src}</div>
-        ))}
-      </div>
     </div>
   );
 };

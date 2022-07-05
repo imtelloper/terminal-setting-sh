@@ -8,7 +8,7 @@ div.settingMain {
   box-sizing: border-box;
   background: #ffffff;
 
-  p.settingTitle {
+  div.settingTitle {
     font-size: 30px;
     font-weight: bold;
     display: flex;
@@ -51,7 +51,7 @@ div.settingMain {
     padding: 20px 0 0;
     border-top: 1px solid #ddd;
 
-    p {
+    div {
       font-size: 20px;
       margin-left: 10px;
 
@@ -96,7 +96,7 @@ div.settingMain {
         &:first-child {
           margin-right: 100px;
         }
-        p{
+        div{
           display: flex;
           div.toolBtnBox{
             display: flex;

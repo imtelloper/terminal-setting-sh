@@ -19,7 +19,9 @@ const MainPage = () => {
 
   useEffect(() => {
     // navigate('/sensingView');
-    navigate('/setting');
+    // navigate('/setting');
+    // navigate('/setting');
+
     // axios
     //   .post('/api/observe/', observeData, {
     //     withCredentials: false,
