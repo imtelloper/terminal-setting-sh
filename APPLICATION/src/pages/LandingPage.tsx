@@ -7,8 +7,8 @@ const LandingPage = () => {
 
   useEffect(() => {
     setTimeout(() => {
-      // navigate('/login');
-      navigate('/detail');
+      navigate('/login');
+      // navigate('/detail');
     }, 300);
   }, []);
 
