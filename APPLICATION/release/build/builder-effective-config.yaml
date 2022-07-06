@@ -48,6 +48,6 @@ extraResources:
       - ./assets/**
 publish:
   provider: github
-  owner: electron-react-boilerplate
-  repo: electron-react-boilerplate
-electronVersion: 18.2.3
+  owner: SAFETY-AI
+  repo: SAFETY-AI
+electronVersion: 18.3.5

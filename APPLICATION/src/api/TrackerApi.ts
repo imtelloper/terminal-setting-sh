@@ -29,8 +29,6 @@ export default class TrackerApi {
 
   findData = async (data) => {
     try {
-      const formData = new FormData();
-      formData.append('date', data.date);
       const res = await axios.post('/api/tracker/find', data, {
         withCredentials: false,
       });
@@ -40,8 +38,10 @@ export default class TrackerApi {
     }
   };
 
-  modifyOneData = async (data) => {
+  modifyOneData = async (id, data) => {
     try {
+      const res = await axios.patch(`/api/tracker/${id}`, data);
+      return res.status === 200 ? res.data : 'failed to modify data';
     } catch (error) {
       console.error(error);
     }
