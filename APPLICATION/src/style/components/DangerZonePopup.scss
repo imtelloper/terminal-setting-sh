@@ -36,6 +36,8 @@ div.dangerZoneContainer{
         width: 100%;
         display: flex;
         justify-content: space-between;
+        padding: 20px;
+        box-sizing: border-box;
         ul{
           width: 50%;
           li{
@@ -50,7 +52,6 @@ div.dangerZoneContainer{
         div.box{
           width: 35%;
           position: relative;
-          margin-right: 30px;
           div{
             &:first-child{
               width: 100%;
