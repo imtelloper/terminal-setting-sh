@@ -310,7 +310,7 @@ const AreaInfo = () => {
           </div>
           <div className="alarmBox">
             {/* className : green yellow red inactive => alarmTxt 에 추가해주시면 됩니다! */}
-            <div className="alarmTxt yellow">{card.alarmTxt}</div>
+            <div className="alarmTxt green">{card.alarmTxt}</div>
             <div className="sensingBox">
               <span>
                 1차 감지<p>{card.camSensing1}</p>
@@ -325,47 +325,38 @@ const AreaInfo = () => {
     </div>
   ));
 
-  const cardSkeletonMap = (swrObserveData || dummyData).map((card, idx) => (
-    <div
-      className="areaCardBox"
-      key={idx}
-      onClick={goObservePage}
-      datatype={idx.toString()}
-    >
-      {/* <h3>{card.area}</h3> */}
-      <div className="titleBox">
-        <span/>
-      </div>
-      <div className="areaContent">
-        <div className="areaTop">
-          <div className="imgBox"/>
-        </div>
-        <div className="areaBottom">
-          <div className="camBox">
-            <div className="camPort">
-              CAM <span>{card.camPort}</span>
-            </div>
-            <div className="activeBadge">
-              <div className="circle" />
-              <span>ACTIVE</span>
-            </div>
-          </div>
-          <div className="alarmBox">
-            {/* className : green yellow red inactive => alarmTxt 에 추가해주시면 됩니다! */}
-            <div className="alarmTxt yellow">{card.alarmTxt}</div>
-            <div className="sensingBox">
-              <span>
-                1차 감지<p>{card.camSensing1}</p>
-              </span>
-              <span>
-                2차 감지<p>{card.camSensing2}</p>
-              </span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  ));
+  // const cardSkeletonMap = (swrObserveData || dummyData).map((card, idx) => (
+  //   <div
+  //     className="cardSkeleton"
+  //     key={idx}
+  //     onClick={goObservePage}
+  //     datatype={idx.toString()}
+  //   >
+  //     {/* <h3>{card.area}</h3> */}
+  //     <div className="titleBox">
+  //       <span/>
+  //     </div>
+  //     <div className="areaContent">
+  //       <div className="areaTop">
+  //         <div className="imgBox"/>
+  //       </div>
+  //       <div className="areaBottom">
+  //         <div className="alarmBox">
+  //           {/* className : green yellow red inactive => alarmTxt 에 추가해주시면 됩니다! */}
+  //           <div className="alarmTxt"></div>
+  //           <div className="sensingBox">
+  //             <span>
+  //               1차 감지<p>{card.camSensing1}</p>
+  //             </span>
+  //             <span>
+  //               2차 감지<p>{card.camSensing2}</p>
+  //             </span>
+  //           </div>
+  //         </div>
+  //       </div>
+  //     </div>
+  //   </div>
+  // ));
 
   useEffect(() => {
     console.log('swrObserveData', swrObserveData);
@@ -409,8 +400,8 @@ const AreaInfo = () => {
         </div>
         <div className="infoRight">
           <div className="rightBox">
-            <div className="areaCardWrap">{cardSkeletonMap}</div>
-            {/*<div className="areaCardWrap">{areaCardsMap}</div>*/}
+            {/*<div className="areaCardWrap">{cardSkeletonMap}</div>*/}
+            <div className="areaCardWrap">{areaCardsMap}</div>
           </div>
         </div>
       </div>
