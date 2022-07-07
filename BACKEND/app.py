@@ -39,24 +39,23 @@ from services.streamService import StreamService
 logger = logging.getLogger(__name__)
 
 print('app start')
+print('platform.system: ', platform.system())
+print('platform.platform: ', platform.platform())
 
-platform.system()
-print(platform.system())
-print(platform.system())
-print(platform.system())
-print(platform.system())
-print(platform.system())
-print(platform.system())
-print(platform.platform())
-print(platform.platform())
-print(platform.platform())
+
+print('IP :',socket.gethostbyname(socket.gethostname()))
+sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+sock.connect(("pwnbit.kr", 443))
+print('IP :',sock.getsockname()[0])
+
+
 # def speak(text):
 #     tts = gTTS(text=text, lang='ko')
 #     filename = 'voice.mp3'
 #     tts.save(filename)
 #     playsound.playsound(filename)
 #
-# speak("안녕하세요 호호호")
+# speak("안녕하세요")
 
 # s = gTTS("Sample Text")
 # s.save('sample.mp3')

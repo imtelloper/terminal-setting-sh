@@ -29,7 +29,9 @@ echo BACKEND $PROGRAM_BACKEND running on $BACKEND_PID
 if [ $portWatcherPidCnt -gt 0 ]
 then
   echo 'port is running'
+  sudo service cron stop
+  sudo service crond stop
   kill -9 $PORT_WATCHER_PID $BACKEND_PID
-  fuser -k 8000/tcp
+  sudo fuser -k 8000/tcp
   ps aux | grep python
 fi
