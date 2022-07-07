@@ -3,7 +3,7 @@ import '../style/pages/SensingView.scss';
 import Api from '../api/Api';
 import { camPort1Ip, camPort2Ip, camPort3Ip, camPort4Ip } from './ObservePage';
 
-const SensingView = () => {
+const SensingViewPage = () => {
   const [urlState, setUrlState] = useState([]);
   const [videoSrcState, setVideoSrcState] = useState([]);
   const [captureSrcState, setCaptureSrcState] = useState('');
@@ -179,4 +179,4 @@ const SensingView = () => {
   );
 };
 
-export default SensingView;
+export default SensingViewPage;

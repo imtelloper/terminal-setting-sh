@@ -22,7 +22,6 @@ const MainPage = () => {
     // navigate('/setting');
     // navigate('/observe');
     // navigate('/detail');
-
     // axios
     //   .post('/api/observe/', observeData, {
     //     withCredentials: false,

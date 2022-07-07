@@ -48,12 +48,19 @@ div.detailViewContainer {
       }
 
       ul {
+        padding: 20px;
         li {
           list-style: square;
           margin: 10px 0;
 
           span.green {
             color: green;
+          }
+        }
+        div.sensingBox{
+          display: flex;
+          li{
+            margin-right: 30px;
           }
         }
       }
