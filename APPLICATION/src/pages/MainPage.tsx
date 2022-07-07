@@ -20,7 +20,8 @@ const MainPage = () => {
   useEffect(() => {
     // navigate('/sensingView');
     // navigate('/setting');
-    navigate('/setting');
+    // navigate('/setting');
+    // navigate('/observe');
     // axios
     //   .post('/api/observe/', observeData, {
     //     withCredentials: false,

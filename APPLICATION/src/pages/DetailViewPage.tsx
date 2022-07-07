@@ -2,16 +2,26 @@ import React, { useEffect, useState } from 'react';
 import '../style/pages/DetailViewPage.scss';
 import DangerZonePopup from '../components/DangerZonePopup';
 import { IoIosWarning } from 'react-icons/io';
+import CalibrationPopup from '../components/CalibrationPopup';
 
 const DetailViewPage = () => {
-  const [isOpenState, setIsOpenState] = useState(false);
+  const [isOpenDangerZoneState, setIsOpenDangerZoneState] = useState(false);
+  const [isOpenCalibrationState, setIsOpenCalibrationState] = useState(false);
 
-  const openPopup = () => {
-    setIsOpenState(!isOpenState);
+  const openDangerZonePopup = () => {
+    setIsOpenDangerZoneState(!isOpenDangerZoneState);
   };
 
-  const closePopup = () => {
-    setIsOpenState(!isOpenState);
+  const closeDangerZonePopup = () => {
+    setIsOpenDangerZoneState(!isOpenDangerZoneState);
+  };
+
+  const openCalibrationPopup = () => {
+    setIsOpenCalibrationState(!isOpenCalibrationState);
+  };
+
+  const closeCalibrationPopup = () => {
+    setIsOpenCalibrationState(!isOpenCalibrationState);
   };
 
   return (
@@ -28,12 +38,7 @@ const DetailViewPage = () => {
         <label className="label1" htmlFor="menuTab1">
           실시간 영상
         </label>
-        <input
-          className="menuTab"
-          id="menuTab2"
-          type="radio"
-          name="tabs"
-        />
+        <input className="menuTab" id="menuTab2" type="radio" name="tabs" />
         <label className="label2" htmlFor="menuTab2">
           이력조회
         </label>
@@ -53,17 +58,27 @@ const DetailViewPage = () => {
               <span>안전펜스 가동시간: </span>
               <span className="bold">32분</span>
             </li>
-            <li>
-              <span>총 감지수: </span>
-              <span className="bold">3</span>
-            </li>
+            <div className="sensingBox">
+              <li>
+                <span>1차 감지: </span>
+                <span className="bold">3</span>
+              </li>
+              <li>
+                <span>2차 감지: </span>
+                <span className="bold">3</span>
+              </li>
+            </div>
             <li>
               <span>영역 재설정</span>
               <button>설정</button>
             </li>
             <li>
+              <span>Calibration 설정</span>
+              <button onClick={openCalibrationPopup}>설정</button>
+            </li>
+            <li>
               <span>위험구간 설정</span>
-              <button onClick={openPopup}>설정</button>
+              <button onClick={openDangerZonePopup}>설정</button>
             </li>
           </ul>
 
@@ -88,17 +103,23 @@ const DetailViewPage = () => {
           </p>
           <div className="alertBox">
             <p>
-              <span><IoIosWarning /></span>
+              <span>
+                <IoIosWarning />
+              </span>
               <span className="red">Red</span>
               <span>2022-05-28 14:10:18</span>
             </p>
             <p>
-              <span><IoIosWarning /></span>
+              <span>
+                <IoIosWarning />
+              </span>
               <span className="red">Red</span>
               <span>2022-05-28 14:10:18</span>
             </p>
             <p>
-              <span><IoIosWarning /></span>
+              <span>
+                <IoIosWarning />
+              </span>
               <span className="yellow">Yellow</span>
               <span>2022-05-28 14:10:18</span>
             </p>
@@ -106,13 +127,21 @@ const DetailViewPage = () => {
         </div>
       </div>
 
-      {isOpenState && <DangerZonePopup openPopup={openPopup} closePopup={closePopup}/>}
+      {isOpenDangerZoneState && (
+        <DangerZonePopup
+          openPopup={openDangerZonePopup}
+          closePopup={closeDangerZonePopup}
+        />
+      )}
+      {isOpenCalibrationState && (
+        <CalibrationPopup
+          openPopup={openCalibrationPopup}
+          closePopup={closeCalibrationPopup}
+        />
+      )}
 
       <div className="iframeBox">
-        <canvas
-          className="polygonCanvas"
-          typeof="coordinate3"
-        />
+        <canvas className="polygonCanvas" typeof="coordinate3" />
         <iframe
           title="stream1"
           // src={streamUrl ??"http://127.0.0.1:8000/api/stream/area/"}
