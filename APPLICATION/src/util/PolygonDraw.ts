@@ -40,4 +40,22 @@ export default class PolygonDraw {
       (point[0] - centre[0]) ** 2 + (point[1] - centre[1]) ** 2, // Square of distance
     ];
   };
+
+  /* 두점 사이의 거리 구하기 */
+  static getTwoPointsDistance = (
+    coordinate1: Array<number>,
+    coordinate2: Array<number>
+  ) => {
+    const firstPoints = coordinate1;
+    const secondPoints = coordinate2;
+    const twoPointsDistance = Math.sqrt(
+      (secondPoints[0] - firstPoints[0]) ** 2 +
+        (secondPoints[1] - firstPoints[1]) ** 2
+    );
+    return twoPointsDistance;
+  };
+
+  static getDistanceRate = (twoPointsDistance, lineDistance) => {
+    return twoPointsDistance / lineDistance;
+  };
 }

@@ -7,20 +7,15 @@ from models.baseModel import PyObjectId
 
 class Observe(BaseModel):
     _id = Optional[PyObjectId]
-    area: str = Field(..., description="카메라가 설치된 구역 이름")
-    camPort: str = Field(..., description="현재 카메라의 번호 -> cam1 | cam2 | cam3 | cam4")
-    activate: bool = Field(..., description="현재 카메라 작동중 -> true | false")
-    alarms: str = Field(..., description="위험 알림 메세지 -> 없음 | 작업자 진입 확인 | 작업자 위험 반경 진입!")
+    trackerId: str = Field(..., description="area, camPort로 setting objectID 조회 -> objectID로 기록 조회")
     date: str = Field(..., description="날짜 -> yyyy-mm-dd 형식")
-    computeDevice: str = Field(..., description="연산장치 선택 -> CPU | GPU")
-    savingPath: str = Field(..., description="현재 카메라의 각종 파일 저장 경로")
-    camName: str = Field(..., description="카메라 지정 이름")
-    sensingModel: str = Field(..., description="AI 감지 모델")
-    camCoordinate1: str = Field(..., description="1차 감지 구역의 좌표 Green & Yellow & Red")
-    camCoordinate2: str = Field(..., description="2차 감지 구역의 좌표 Green & Yellow & Red")
-    camSafetyLevel: str = Field(..., description="감지 구역의 현재 안전 레벨 -> Green | Yellow | Red")
-    camSensing1: Optional[int] = Field(..., description="1차 감지 구역에서 RED 카메라 감지 됐을때 +1")
-    camSensing2: Optional[int] = Field(..., description="2차 감지 구역에서 RED 카메라 감지 됐을때 +1")
+    groupNum: int = Field(..., description="1 -> group1, 2 -> group2")
+    safetyLevel: str = Field(...,
+                             description="감지 구역의 현재 안전 레벨 -> Green | Yellow | Red, 알람 메세지(yellow, red 감지 될때마다 업뎃) -> 없음 | 작업자 진입 확인 | 작업자 위험 반경 진입")
+    yellowCnt: Optional[int] = Field(..., description="해당 감지 그룹에서 YELLO 카메라 감지 됐을때 +1")
+    redCnt: Optional[int] = Field(..., description="해당 감지 그룹에서 RED 카메라 감지 됐을때 +1")
+    observeSwitch: bool = Field(..., description="현재 안전펜스 작동중 -> true | false")
+    observeTime: str = Field(..., description="observeSwitch가 false면 초기화 true가 되었을때 시간 기록")
     createdAt: Optional[datetime] = datetime.now()
 
     class Config:
@@ -28,59 +23,41 @@ class Observe(BaseModel):
         json_encoders = {ObjectId: str}
         scheme_extra = {
             "example": {
-                "area": 'H3 공장 크레인',
-                "camPort": 'cam1',
-                "activate": True,
-                "alarms": '없음',
-                "date": '2022-06-03',
-                "computeDevice": 'cpu',
-                "savingPath": '/home/',
-                "camName": '3크레인 구역1',
-                "sensingModel": 'small',
-                "camCoordinate1": '456,307,658,329,536,486,332,469',
-                "camCoordinate2": '456,307,658,329,536,486,332,469',
-                "camSafetyLevel": 'Green',
-                "camSensing1": 5,
-                "camSensing2": 1,
+                "trackerId": '62a2a2072cbaf74db79fdde9',
+                "date": '2022-07-07',
+                "groupNum": 1,
+                "safetyLevel": 'Green',
+                "yellowCnt": 8,
+                "redCnt": 9,
+                "observeSwitch": True,
+                "observeTime": '',
             }
         }
 
 
 # PATCH 전용 모델
 class UpdateObserve(BaseModel):
-    area:Optional[str] = None
-    camPort: Optional[str] = None
-    activate: Optional[bool] = None
-    alarms: Optional[str] = None
+    trackerId: Optional[str] = None
     date: Optional[str] = None
-    computeDevice: Optional[str] = None
-    savingPath: Optional[str] = None
-    camName: Optional[str] = None
-    sensingModel: Optional[str] = None
-    camCoordinate1: Optional[str] = None
-    camCoordinate2: Optional[str] = None
-    camSafetyLevel: Optional[str] = None
-    camSensing1: Optional[int] = None
-    camSensing2: Optional[int] = None
+    groupNum: Optional[int] = None
+    safetyLevel: Optional[str] = None
+    yellowCnt: Optional[int] = None
+    redCnt: Optional[int] = None
+    observeSwitch: Optional[bool] = None
+    observeTime: Optional[str] = None
 
     class Config:
         arbitrary_types_allowed = True
         json_encoders = {ObjectId: str}
         schema_extra = {
             "example": {
-                "area": 'H3 공장 크레인',
-                "camPort": 'cam1',
-                "activate": True,
-                "alarms": '없음',
-                "date": '2022-06-03',
-                "computeDevice": 'cpu',
-                "savingPath": '/home/',
-                "camName": '3크레인 구역1',
-                "sensingModel": 'small',
-                "camCoordinate1": '456,307,658,329,536,486,332,469',
-                "camCoordinate2": '456,307,658,329,536,486,332,469',
-                "camSafetyLevel": 'Green',
-                "camSensing1": 5,
-                "camSensing2": 1,
+                "trackerId": '62a2a2072cbaf74db79fdde9',
+                "date": '2022-07-07',
+                "groupNum": 1,
+                "safetyLevel": 'Green',
+                "yellowCnt": 8,
+                "redCnt": 9,
+                "observeSwitch": True,
+                "observeTime": '',
             }
         }

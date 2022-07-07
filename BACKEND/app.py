@@ -92,6 +92,10 @@ async def main(saveFolder, dateFolder, areaFolder, camPortFolder, fileTypeFolder
         "/home/interx/SAFETY-AI/BACKEND/{0}/{1}/{2}/{3}/{4}/{5}".format(saveFolder, dateFolder, areaFolder,
                                                                         camPortFolder, fileTypeFolder, file))
 
+@app.get("/")
+async def greeting():
+    return 'hi'
+
 
 # routers
 app.include_router(UtilRouter, prefix="/api/util")

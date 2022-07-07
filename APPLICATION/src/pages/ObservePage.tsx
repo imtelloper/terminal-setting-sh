@@ -36,7 +36,7 @@ const initVideoFrameData: Array<ViedeoFrameType> = [
     frameSrc: `http://${camPort1Ip}:81`,
     firstCanvas: {
       visible: true,
-      yellowSensingPercent: 0.7,
+      yellowSensingPercent: 1.37,
       redSensingPercent: 0.3,
       coordinate: [],
     },
@@ -116,8 +116,18 @@ const ObservePage = () => {
   const [camTabState, setCamTabState] = useState(1);
   const [recordState, setRecordState] = useState(false);
 
+  const getStateCoordinate = (arrIndex, itemID) =>
+    videoFrameState[arrIndex][itemID].coordinate;
+
+  const setStateCoordinate = (arrIndex, itemID, coordinate) => {
+    const newArr = videoFrameState;
+    newArr[arrIndex][itemID].coordinate = coordinate;
+    flushSync(() => setVideoFrameState([]));
+    flushSync(() => setVideoFrameState(newArr));
+  };
+
   const polySort = (arrIndex, itemID) => {
-    const { coordinate } = videoFrameState[arrIndex][itemID];
+    const coordinate = getStateCoordinate(arrIndex, itemID);
     const centre = [
       coordinate.reduce((sum, p) => sum + p[0], 0) / coordinate.length,
       coordinate.reduce((sum, p) => sum + p[1], 0) / coordinate.length,
@@ -127,13 +137,42 @@ const ObservePage = () => {
     );
     coordinate.sort((a, b) => a[2] - b[2] || a[3] - b[3]);
     coordinate.forEach((point) => (point.length -= 2));
+    setStateCoordinate(arrIndex, itemID, coordinate);
+  };
 
+  /* 다각형 라인 그리기 */
+  const drawLines = (context, targetPoints, color = drawColor.green) => {
+    context.strokeStyle = color;
+    context.lineWidth = lineSize;
+    context.beginPath();
+    context.moveTo(...targetPoints[0]);
+    for (const [x, y] of targetPoints.slice(1)) context.lineTo(x, y);
+    context.closePath();
+    context.stroke();
+  };
+
+  /* 다각형의 점 찍기 */
+  const drawPoints = (context, x, y, color = drawColor.green) => {
+    context.beginPath();
+    context.arc(x, y, pointSize, 0, 2 * Math.PI, true);
+    context.fillStyle = color;
+    context.fill();
+  };
+
+  const setNewVideoState = (arrIndex, newSrc) => {
     const newArr = videoFrameState;
-    newArr[arrIndex][itemID].coordinate = coordinate;
+    newArr[arrIndex].frameSrc = newSrc;
     flushSync(() => setVideoFrameState([]));
     flushSync(() => setVideoFrameState(newArr));
   };
 
+  /*
+  칼리브레이션 정리
+  우선 캔버스에 두 점을 찍고 거리를 구한다.
+  구해진 거리가 몇 미터인지 설정한다.
+
+
+  */
   const draw = (canvas, clicked = false) => {
     const greenCtx = canvas?.getContext('2d');
     const yellowCtx = canvas?.getContext('2d');
@@ -142,41 +181,30 @@ const ObservePage = () => {
     const itemID = canvas?.getAttribute('itemID');
     greenCtx?.clearRect(0, 0, canvas.width, canvas.height);
 
-    /* 다각형 라인 그리기 */
-    const drawLines = (context, targetPoints, color = drawColor.green) => {
-      context.strokeStyle = color;
-      context.lineWidth = lineSize;
-      context.beginPath();
-      context.moveTo(...targetPoints[0]);
-      for (const [x, y] of targetPoints.slice(1)) context.lineTo(x, y);
-      context.closePath();
-      context.stroke();
-    };
-
     const { yellowSensingPercent, redSensingPercent, coordinate } =
       videoFrameState[arrIndex][itemID];
     const yellowSensingPoints = [];
     const redSensingPoints = [];
+
+    const calibrate = PolygonDraw.getDistanceRate(200, 10);
+    console.log('calibrate', calibrate); // 13.2  ,  1m당 13.2px
+    const yellowSetMeter = 3; // 5m
+    const yellowDistancePx = calibrate * yellowSetMeter; // 5m = 66px
+
+    // 기준 좌표에서 각 66px만큼 더 커진
+
     /* 내분점 구하기 공식 참고 */
-    const m1 = yellowSensingPercent;
-    const n1 = 1 - yellowSensingPercent;
+    let m1 = yellowSensingPercent;
+    let n1 = 1 - m1;
     const m2 = redSensingPercent;
-    const n2 = 1 - redSensingPercent;
+    const n2 = 1 - m2;
 
     // 무게중심의 좌표값
     const centerX = polygonDraw.getCentroid(coordinate).x;
     const centerY = polygonDraw.getCentroid(coordinate).y;
 
-    /* 다각형의 점 찍기 */
-    const drawPoints = (context, x, y, color = drawColor.green) => {
-      context.beginPath();
-      context.arc(x, y, pointSize, 0, 2 * Math.PI, true);
-      context.fillStyle = color;
-      context.fill();
-    };
-
     /* 무게 중식 찍기 */
-    // drawPoints(greenCtx, centerX, centerY);
+    drawPoints(greenCtx, centerX, centerY);
 
     /* 내분점 좌표 구하기 */
     const getInsideX = (m, n, x) => (m * x + n * centerX) / (m + n);
@@ -184,12 +212,31 @@ const ObservePage = () => {
 
     if (!coordinate.length) return;
     for (const [x, y] of coordinate) {
+      /* 무게중심과 기준 좌표들의 길이 */
+      const standardLineDistance = PolygonDraw.getTwoPointsDistance(
+        [x, y],
+        [centerX, centerY]
+      );
+      console.log('무게중심과 기준 좌표들의 길이 ', standardLineDistance);
+      console.log('meter 비율로 변환된 거리', yellowDistancePx);
+      console.log(
+        'standardLineDistance + yellowDistancePx',
+        standardLineDistance + yellowDistancePx
+      );
+
+      /* 기준선 거리와 calibration에서 구해진 meter당 px 값을 더한값을 기준선거리로 나누어 내분점의 비율을 구한다. */
+      m1 = (standardLineDistance + yellowDistancePx) / standardLineDistance;
+      console.log('m1', m1);
+      n1 = 1 - m1;
+
       /* Green Zone 다각형점 찍기 */
       drawPoints(greenCtx, x, y);
 
       /* Yellow Zone 다각형점 찍기 */
-      const yellowInsideX = Math.round(getInsideX(m1, n1, x));
-      const yellowInsideY = Math.round(getInsideY(m1, n1, y));
+      // const yellowInsideX = Math.round(getInsideX(m1, n1, x));
+      // const yellowInsideY = Math.round(getInsideY(m1, n1, y));
+      const yellowInsideX = getInsideX(m1, n1, x);
+      const yellowInsideY = getInsideY(m1, n1, y);
       yellowSensingPoints.push([yellowInsideX, yellowInsideY]);
       drawPoints(yellowCtx, yellowInsideX, yellowInsideY, drawColor.yellow);
 
@@ -210,34 +257,23 @@ const ObservePage = () => {
     /* Red Zone 라인  그리기 */
     drawLines(redCtx, redSensingPoints, drawColor.red);
 
-    if (coordinate.length < 3) {
-      return;
-    }
+    if (coordinate.length < 3) return;
 
     let { frameSrc } = videoFrameState[arrIndex];
-    if (!clicked) {
-      return;
-    }
-
-    const setNewVideoState = (newSrc) => {
-      const newArr = videoFrameState;
-      newArr[arrIndex].frameSrc = newSrc;
-      flushSync(() => setVideoFrameState([]));
-      flushSync(() => setVideoFrameState(newArr));
-    };
+    if (!clicked) return;
 
     if (itemID === 'firstCanvas') {
       console.log('firstCanvas');
       frameSrc = `${frameSrc.split(':81')[0]}:81`;
       const newSrc = `${frameSrc}/api/stream/area/${yellowSensingCoordinate}/${redSensingCoordinate}`;
-      setNewVideoState(newSrc);
+      setNewVideoState(arrIndex, newSrc);
     } else {
       console.log('secondCanvas');
       const splitedSrc = frameSrc.split('/');
       splitedSrc.length = 8;
       frameSrc = splitedSrc.join('/');
       const newSrc = `${frameSrc}/${yellowSensingCoordinate}/${redSensingCoordinate}`;
-      setNewVideoState(newSrc);
+      setNewVideoState(arrIndex, newSrc);
     }
   };
 
@@ -254,6 +290,9 @@ const ObservePage = () => {
     const x = e.clientX - bbox.left;
     const y = e.clientY - bbox.top;
     const { coordinate } = videoFrameState[arrIndex][itemID];
+    console.log('x', x);
+    console.log('y', y);
+
     const match = coordinate?.findIndex(
       ([x0, y0]) => Math.abs(x0 - x) + Math.abs(y0 - y) <= 6
     );
@@ -272,6 +311,28 @@ const ObservePage = () => {
   useEffect(() => {
     // videoFrameState[0]?.frameSrc &&
     //   console.log('videoFrameState[0].frameSrc', videoFrameState[0]?.frameSrc);
+    // videoFrameState[0]?.frameSrc &&
+    //   console.log(
+    //     'videoFrameState[0].firstCanvas.coordinate',
+    //     videoFrameState[0]?.firstCanvas.coordinate
+    //   );
+    // videoFrameState[0]?.frameSrc &&
+    //   videoFrameState[0]?.firstCanvas.coordinate.forEach((coord) => {
+    //     console.log('coord', coord);
+    //   });
+
+    if (videoFrameState[0]) {
+      const coor1 = videoFrameState[0]?.secondCanvas?.coordinate[0];
+      const coor2 = videoFrameState[0]?.secondCanvas?.coordinate[1];
+      coor1 &&
+        coor2 &&
+        console.log(
+          '2차그룹으로 거리재기 확인',
+          PolygonDraw.getTwoPointsDistance(coor1, coor2)
+        );
+    }
+
+    console.log('rate', PolygonDraw.getDistanceRate(165, 12.5));
 
     document.querySelectorAll('.polygonCanvas').forEach((ele, idx) => {
       draw(ele);

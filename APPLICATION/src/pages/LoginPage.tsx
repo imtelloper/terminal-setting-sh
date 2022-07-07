@@ -96,7 +96,9 @@ const LoginPage = () => {
     /* 토큰으로 로그인 정보를 불러와 세션에 셋팅함 */
     // setUserInfo();
     // navigate('/main');
-    navigate('/login')
+    // navigate('/login')
+    navigate('/observe');
+    // navigate('/detail')
   }, []);
 
   const handleEnter = (e) => e.key === 'Enter' && login();
