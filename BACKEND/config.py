@@ -19,10 +19,7 @@ DEFAULT = "default"
 """
 DATABASE ADDRESS
 """
-# DB_ADDRESS = "mongodb://interx:interx%40504@{0}/admin".format("server.interxlab.io:15115")
 DB_ADDRESS = os.getenv('MONGO_ADDRESS')
-# DB_ADDRESS = "mongodb://127.0.0.1:27017/"
-
 """
 DATABASE KEYWORD
 """
