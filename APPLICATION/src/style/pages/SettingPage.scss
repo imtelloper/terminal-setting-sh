@@ -1,130 +1,258 @@
-div.settingMain {
+@import "../color.scss";
+
+div.settingWrap {
   width: 100%;
   height: 100%;
   min-width: 320px;
   //max-width: 800px;
-  color: #555;
   margin: 0;
   box-sizing: border-box;
-  background: #ffffff;
 
-  div.settingTitle {
-    font-size: 30px;
-    font-weight: bold;
-    display: flex;
-    align-items: center;
+  div.settingContainer {
+    width: calc(100% - 32px);
+    height: calc(100% - 88px);
+    margin: 16px;
+    border-radius: 8px;
 
-    span {
-      margin-left: 5px;
+    div.settingTitle {
+      width: 100%;
+      height: 60px;
+      font-size: 28px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      padding-left: 12px;
+
     }
-  }
 
-  input.tabInput {
-    display: none;
-  }
+    div.settingBox {
+      width: 100%;
+      height: calc(100% - 60px);
+      background-color: $white;
+      border-radius: 8px;
+      box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.2);
 
-  label {
-    display: inline-block;
-    margin: 0 0 -1px;
-    padding: 15px 25px;
-    font-weight: 600;
-    text-align: center;
-    color: #bbb;
-    border: 1px solid transparent;
-  }
-
-  label:hover {
-    color: #5940ff;
-    cursor: pointer;
-  }
-
-  /*input 클릭시, label 스타일*/
-  input:checked + label {
-    color: #555;
-    border: 1px solid #ddd;
-    border-top: 2px solid #5940ff;
-    border-bottom: 1px solid #ffffff;
-  }
-
-  section {
-    display: none;
-    padding: 20px 0 0;
-    border-top: 1px solid #ddd;
-
-    div {
-      font-size: 20px;
-      margin-left: 10px;
-
-      span {
-        margin-left: 10px;
-      }
-
-      input {
-        margin-left: 10px;
-        width: 500px;
-        height: 30px;
-      }
-
-      select {
-        margin-left: 10px;
-      }
-
-      button {
-        width: 50px;
-        font-size: 15px;
-        background-color: #292929;
-        color: white;
-        border-radius: 5px;
-        cursor: pointer;
-        margin-left: 10px;
-      }
-
-      button:hover {
-        background-color: white;
-        color: black;
-      }
-
-      button.off {
+      input.tabInput {
         display: none;
       }
-    }
 
-    div.bottomCon {
-      display: flex;
+      label {
+        display: inline-block;
+        margin: 0 0 -1px;
+        padding: 15px 25px;
+        font-weight: 500;
+        text-align: center;
+        color: $inactive-text;
+        border: 1px solid transparent;
+        cursor: pointer;
+      }
 
-      div {
-        &:first-child {
-          margin-right: 100px;
+      /*input 클릭시, label 스타일*/
+      input:checked + label {
+        color: $blue-500;
+        border-bottom: 2px solid $blue-500;
+      }
+
+      section {
+        display: none;
+        border-top: 1px solid #ddd;
         }
-        div{
-          display: flex;
-          div.toolBtnBox{
+
+        div.contentBox {
+          width: 100%;
+          height: 100%;
+          padding: 24px;
+
+          div.content {
+            height: 40px;
             display: flex;
-            input{
-              display: none;
+            align-items: center;
+            margin-bottom: 16px;
+
+            svg{
+              width: 24px;
+              height: 24px;
             }
-            label{
+
+            span {
+              width: 132px;
+              height: 100%;
+              display: flex;
+              align-items: center;
+              margin-left: 12px;
+            }
+
+            input {
               all: unset;
-              margin-left: 15px;
-              position: relative;
-              font-weight: lighter;
+              width: 552px;
+              height: 40px;
+              box-sizing: border-box;
+              border: 1px solid #d4d4d4;
+              border-radius: 8px;
+              background-color: $white;
+              padding-left: 16px;
             }
-            input:checked + label{
+
+            input:checked + label {
               font-weight: bold;
             }
-            div{
-              width: 1px;
-              height: 100%;
-              background-color: #292929;
-              margin-left: 15px;
+
+            div.toggleBtnBox,div.saveToggleBtnBox, div.messageToggleBtnBox, div.kakaoToggleBtnBox{
+              width: 112px;
+              height: 32px;
+              display: flex;
+              color: #979797;
+              background-color: $inactive;
+              font-size: 14px;
+              position: relative;
+              margin: 0;
+              border-radius: 8px;
+
+              input {
+                display: none;
+              }
+
+              label{
+                all: unset;
+                width: 50%;
+                height: 100%;
+                position: relative;
+                z-index: 1;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                cursor: pointer;
+                transition: 0.1s;
+              }
+
+              div.slider {
+                width: 56px;
+                height: 32px;
+                background-color: $blue-500;
+                margin: 0;
+                border-radius: 8px;
+                position: absolute;
+                z-index: 0;
+                transform: translateX(100%);
+                transition: 0.2s;
+              }
+
+              input:nth-child(1):checked ~ div.slider {
+                transform: translateX(0%);
+              }
+
+              input:nth-child(2):checked ~ div.slider {
+                transform: translateX(100%);
+              }
+
+              input:checked + label{
+                color: $white;
+              }
+
+              div.slider2 {
+                width: 56px;
+                height: 32px;
+                background-color: #979797;
+                margin: 0;
+                border-radius: 8px;
+                position: absolute;
+                z-index: 0;
+                transform: translateX(100%);
+                transition: 0.2s;
+              }
+
+              input:nth-child(1):checked ~ div.slider2 {
+                transform: translateX(0%);
+                background-color: $blue-500;
+              }
+
+              input:nth-child(2):checked ~ div.slider2 {
+                transform: translateX(100%);
+              }
+
+              input:checked + label{
+                color: $white;
+              }
+            }
+
+            //{
+            //  width: 112px;
+            //  height: 32px;
+            //  display: flex;
+            //  color: #979797;
+            //  background-color: $inactive;
+            //  font-size: 14px;
+            //  position: relative;
+            //  margin: 0;
+            //  border-radius: 8px;
+            //
+            //  input {
+            //    display: none;
+            //  }
+            //
+            //  label{
+            //    all: unset;
+            //    width: 50%;
+            //    height: 100%;
+            //    position: relative;
+            //    z-index: 1;
+            //    display: flex;
+            //    align-items: center;
+            //    justify-content: center;
+            //    cursor: pointer;
+            //    transition: 0.1s;
+            //  }
+            //
+            //  input:nth-child(1):checked ~ div.slider {
+            //    transform: translateX(0%);
+            //    background-color: $blue-500;
+            //  }
+            //
+            //  input:nth-child(2):checked ~ div.slider {
+            //    transform: translateX(100%);
+            //  }
+            //
+            //  input:checked + label{
+            //    color: $white;
+            //  }
+            //
+            //  div.slider {
+            //    width: 56px;
+            //    height: 32px;
+            //    background-color: #979797;
+            //    margin: 0;
+            //    border-radius: 8px;
+            //    position: absolute;
+            //    z-index: 0;
+            //    transform: translateX(100%);
+            //    transition: 0.2s;
+            //  }
+            //
+            //  input:checked + label{
+            //    color: $white;
+            //  }
+            //}
+
+            select{
+              width: 160px;
+              height: 40px;
+              border: 1px solid #d4d4d4;
+              border-radius: 8px;
+              display: flex;
+              justify-content: space-between;
+              padding-left: 12px;
+              padding-right: 8px;
+            }
+
+            button.btnR{
+              width:68px;
+              margin-left: 8px;
             }
           }
         }
+      }
     }
   }
-}
-
-}
 
 #tab1:checked ~ #content1,
 #tab2:checked ~ #content2,
@@ -132,7 +260,8 @@ div.settingMain {
 #tab4:checked ~ #content4 {
   display: block;
 }
-.urlStateMap{
+
+.urlStateMap {
   width: 100%;
   border: 1px solid black;
   height: 150px;

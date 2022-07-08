@@ -1,10 +1,19 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import '../style/pages/SettingPage.scss';
-import { AiFillFolderOpen, AiFillSetting, AiFillTool } from 'react-icons/ai';
-import { GoDeviceCameraVideo, GoGraph, GoRocket } from 'react-icons/go';
+import '../style/DesignSystem.scss';
 import Api from '../api/Api';
-import { camPort1Ip, camPort2Ip, camPort3Ip, camPort4Ip } from './ObservePage';
-import { cssValue } from 'react-spinners/helpers';
+// import { camPort1Ip, camPort2Ip, camPort3Ip, camPort4Ip } from './ObservePage';
+// import { cssValue } from 'react-spinners/helpers';
+import {
+  Folder,
+  Memory,
+  PermMedia,
+  PhotoCamera,
+  Textsms,
+} from '@material-ui/icons';
+import { MdViewInAr } from 'react-icons/md';
+import KakaoIcon from '../images/kakao_icon.png';
+import Datathresholding from '../images/data_thresholding.png';
 
 type CamSettingType = {
   area: string;
@@ -130,8 +139,9 @@ const SettingPage = () => {
 
   useEffect(() => {
     Api.tracker.getAllDatas().then((res) => {
-      console.log('Api.tracker.getAllDatas res', res);
-      setCamSettingState(res);
+      console.log('Api.tracker.getAllDatas res', res, typeof res);
+
+      typeof res !== 'string' && setCamSettingState(res);
     });
   }, []);
 
@@ -155,93 +165,163 @@ const SettingPage = () => {
   };
 
   const camSettingMap = useMemo(() => {
-    return camSettingState.map((data, idx) => (
+    return camSettingState?.map((data, idx) => (
       <section id={`content${idx + 1}`} key={idx}>
-        <div>
-          <AiFillFolderOpen />
-          <span>저장폴더 :</span>
-          <input defaultValue={data.savingPath} />
-          <button onClick={handleChangeTrackerData}>선택</button>
-        </div>
-        <div>
-          <GoDeviceCameraVideo />
-          <span>카메라 이름 :</span>
-          <input defaultValue={data.camName} />
-          <button onClick={handleChangeTrackerData}>적용</button>
-        </div>
-        <div className="bottomCon">
-          <div>
-            <div>
-              <AiFillTool />
-              <span>연산장치 :</span>
-              <div className="toolBtnBox">
-                <input
-                  id="toolTab7"
-                  type="radio"
-                  name="toolTabs"
-                  datatype="computeDevice"
-                  onChange={handleChangeValue}
-                  value="GPU"
-                  // checked={data.computeDevice === 'GPU' && true}
-                />
-                <label htmlFor="toolTab7">GPU</label>
-                <div />
-                <input
-                  id="toolTab8"
-                  type="radio"
-                  name="toolTabs"
-                  onChange={handleChangeValue}
-                  datatype="computeDevice"
-                  value="CPU"
-                  // defaultChecked={data.computeDevice === 'CPU' && true}
-                  // checked={data.computeDevice === 'CPU' && true}
-                />
-                <label htmlFor="toolTab8">CPU</label>
-              </div>
+        <div className="contentBox">
+          <div className="content">
+            <Folder style={{ fontSize: '24px' }} />
+            <span>저장폴더</span>
+            <input defaultValue={data.savingPath} />
+            <button
+              className="btnR defaultPrimary"
+              onClick={handleChangeTrackerData}
+            >
+              선택
+            </button>
+          </div>
+          <div className="content">
+            <PhotoCamera style={{ fontSize: '24px' }} />
+            <span>카메라 이름</span>
+            <input defaultValue={data.camName} />
+            <button
+              className="btnR defaultPrimary"
+              onClick={handleChangeTrackerData}
+            >
+              적용
+            </button>
+          </div>
+          <div className="content">
+            <Memory style={{ fontSize: '24px' }} />
+            <span>연산장치</span>
+            <div className="toggleBtnBox">
+              <input
+                type="radio"
+                id="toggleBtn1"
+                name="toggleBtn"
+                defaultChecked
+              />
+              <label className="toggleBtn" htmlFor="toggleBtn1">
+                CPU
+              </label>
+              <input type="radio" id="toggleBtn2" name="toggleBtn" />
+              <label className="toggleBtn" htmlFor="toggleBtn2">
+                GPU
+              </label>
+              <div className="slider" />
             </div>
-            <div>
-              <GoRocket />
-              <span>감지모델 :</span>
-              <select
-                onChange={handleChangeValue}
-                defaultValue={data.sensingModel}
-                datatype="sensingModel"
-              >
-                <option>Small</option>
-                <option>Big</option>
-              </select>
-              <button>선택</button>
-            </div>
-            <div>
-              <GoGraph />
-              <span>Threshold :</span>
-              <select
-                onChange={handleChangeValue}
-                defaultValue={data.threshold}
-                datatype="threshold"
-              >
-                <option>50</option>
-                <option>70</option>
-                <option>100</option>
-              </select>
-              <button>선택</button>
+            {/* <input */}
+            {/*  id="toolTab7" */}
+            {/*  type="radio" */}
+            {/*  name="toolTabs" */}
+            {/*  datatype="computeDevice" */}
+            {/*  onChange={handleChangeValue} */}
+            {/*  value="GPU" */}
+            {/*  // checked={data.computeDevice === 'GPU' && true} */}
+            {/* /> */}
+            {/* <label htmlFor="toolTab7">GPU</label> */}
+            {/* <div /> */}
+            {/* <input */}
+            {/*  id="toolTab8" */}
+            {/*  type="radio" */}
+            {/*  name="toolTabs" */}
+            {/*  onChange={handleChangeValue} */}
+            {/*  datatype="computeDevice" */}
+            {/*  value="CPU" */}
+            {/*  // defaultChecked={data.computeDevice === 'CPU' && true} */}
+            {/*  // checked={data.computeDevice === 'CPU' && true} */}
+            {/* /> */}
+            {/* <label htmlFor="toolTab8">CPU</label> */}
+          </div>
+          <div className="content">
+            <MdViewInAr style={{ fontSize: '24px' }} />
+            <span>감지모델</span>
+            <select
+              onChange={handleChangeValue}
+              defaultValue={data.sensingModel}
+              datatype="sensingModel"
+            >
+              <option>Small</option>
+              <option>Big</option>
+            </select>
+            <button className="btnR defaultPrimary">선택</button>
+          </div>
+          <div className="content">
+            {/* <DataThresholdingIcon /> */}
+            <img src={Datathresholding} alt="" />
+            <span>Threshold</span>
+            <select
+              onChange={handleChangeValue}
+              defaultValue={data.threshold}
+              datatype="threshold"
+            >
+              <option>50</option>
+              <option>70</option>
+              <option>100</option>
+            </select>
+            <button className="btnR defaultPrimary">선택</button>
+          </div>
+          <div className="content">
+            <PermMedia style={{ fontSize: '24px' }} />
+            <span>알람 이미지 저장</span>
+            <div className="saveToggleBtnBox">
+              <input
+                type="radio"
+                id="saveToggleBtn1"
+                name="saveToggleBtn"
+                defaultChecked
+              />
+              <label className="saveToggleBtn" htmlFor="saveToggleBtn1">
+                ON
+              </label>
+              <input type="radio" id="saveToggleBtn2" name="saveToggleBtn" />
+              <label className="toggleBtn" htmlFor="saveToggleBtn2">
+                OFF
+              </label>
+              <div className="slider2" />
             </div>
           </div>
-          <div>
-            <div>
-              <span>알람 이미지 저장:</span>
-              <button className="on">ON</button>
-              <button className="off">OFF</button>
+          <div className="content">
+            <Textsms />
+            <span>문자 알람</span>
+            <div className="messageToggleBtnBox">
+              <input
+                type="radio"
+                id="messageToggleBtn1"
+                name="messageToggleBtn"
+                defaultChecked
+              />
+              <label className="messageToggleBtn" htmlFor="messageToggleBtn1">
+                ON
+              </label>
+              <input
+                type="radio"
+                id="messageToggleBtn2"
+                name="messageToggleBtn"
+              />
+              <label className="toggleBtn" htmlFor="messageToggleBtn2">
+                OFF
+              </label>
+              <div className="slider2" />
             </div>
-            <div>
-              <span>문자 알람:</span>
-              <button className="on">ON</button>
-              <button className="off">OFF</button>
-            </div>
-            <div>
-              <span>카카오톡 알림:</span>
-              <button className="on">ON</button>
-              <button className="off">OFF</button>
+          </div>
+          <div className="content">
+            <img src={KakaoIcon} alt="" />
+            <span>카카오톡 알림</span>
+            <div className="kakaoToggleBtnBox">
+              <input
+                type="radio"
+                id="kakaoToggleBtn1"
+                name="kakaoToggleBtn"
+                defaultChecked
+              />
+              <label className="kakaoToggleBtn" htmlFor="kakaoToggleBtn1">
+                ON
+              </label>
+              <input type="radio" id="kakaoToggleBtn2" name="kakaoToggleBtn" />
+              <label className="toggleBtn" htmlFor="kakaoToggleBtn2">
+                OFF
+              </label>
+              <div className="slider2" />
             </div>
           </div>
         </div>
@@ -250,30 +330,33 @@ const SettingPage = () => {
   }, [camSettingState]);
 
   return (
-    <div className="settingMain">
-      <div className="settingTitle">
-        <AiFillSetting />
-        <span>Settings</span>
+    <div className="settingWrap">
+      <div className="settingContainer">
+        <div className="settingTitle">
+          <span>Settings</span>
+        </div>
+        <div className="settingBox">
+          <input
+            className="tabInput"
+            id="tab1"
+            type="radio"
+            name="tabs"
+            defaultChecked
+          />
+          <label htmlFor="tab1">Cam1</label>
+
+          <input className="tabInput" id="tab2" type="radio" name="tabs" />
+          <label htmlFor="tab2">Cam2</label>
+
+          <input className="tabInput" id="tab3" type="radio" name="tabs" />
+          <label htmlFor="tab3">Cam3</label>
+
+          <input className="tabInput" id="tab4" type="radio" name="tabs" />
+          <label htmlFor="tab4">Cam4</label>
+
+          {camSettingMap}
+        </div>
       </div>
-      <input
-        className="tabInput"
-        id="tab1"
-        type="radio"
-        name="tabs"
-        defaultChecked
-      />
-      <label htmlFor="tab1">Cam1</label>
-
-      <input className="tabInput" id="tab2" type="radio" name="tabs" />
-      <label htmlFor="tab2">Cam2</label>
-
-      <input className="tabInput" id="tab3" type="radio" name="tabs" />
-      <label htmlFor="tab3">Cam3</label>
-
-      <input className="tabInput" id="tab4" type="radio" name="tabs" />
-      <label htmlFor="tab4">Cam4</label>
-
-      {camSettingMap}
     </div>
   );
 };

@@ -22,7 +22,7 @@ div.observeContainer {
 
     div.leftBox {
       width: calc(100% - 16px);
-      height: calc(100% - 96px);
+      height: calc(100% - 88px);
       margin: 16px;
       display: flex;
       flex-direction: column;
@@ -32,6 +32,8 @@ div.observeContainer {
         height: 172px;
         padding: 40px;
         box-sizing: border-box;
+        display: flex;
+        flex-direction: column;
 
          span.subTitle{
           margin-bottom: 8px;
