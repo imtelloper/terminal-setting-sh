@@ -1,10 +1,22 @@
 import useSWR from 'swr';
 
+type CamInfo = {
+  ip: string;
+  camPort: string;
+  area: string;
+};
+
 type SwrStateType = {
   user: {
     email: string;
   };
   observe: Observe;
+  camInfo: {
+    cam1: CamInfo;
+    cam2: CamInfo;
+    cam3: CamInfo;
+    cam4: CamInfo;
+  };
 };
 
 let state: SwrStateType = {
@@ -26,6 +38,28 @@ let state: SwrStateType = {
     camSafetyLevel: 'Green',
     camSensing1: 5,
     camSensing2: 1,
+  },
+  camInfo: {
+    cam1: {
+      ip: '',
+      camPort: '',
+      area: '',
+    },
+    cam2: {
+      ip: '',
+      camPort: '',
+      area: '',
+    },
+    cam3: {
+      ip: '',
+      camPort: '',
+      area: '',
+    },
+    cam4: {
+      ip: '',
+      camPort: '',
+      area: '',
+    },
   },
 };
 

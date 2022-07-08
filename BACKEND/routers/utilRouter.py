@@ -6,6 +6,8 @@ from fastapi.responses import JSONResponse
 import minimalmodbus as minimalmodbus
 import serial
 import cv2
+import config
+import socket
 
 router = APIRouter(
     tags=['util'],
@@ -54,3 +56,21 @@ async def getRtu():
     except IOError:
         print("Failed to read from instrument")
     return "RTU"
+
+@router.get("/info", response_description="")
+async def getInfo():
+    try:
+        sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        sock.connect(("pwnbit.kr", 443))
+        ip = sock.getsockname()[0]
+        obj = {
+            'ip': ip,
+            'camPort': config.CAMPORT,
+            'area': config.AREA,
+        }
+        return JSONResponse(obj)
+    except IOError:
+        print("Failed to get info")
+    return "get info error"
+
+
