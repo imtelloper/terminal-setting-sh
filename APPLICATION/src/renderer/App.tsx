@@ -16,12 +16,12 @@ export default function App() {
       <LayoutForm>
         <Routes>
           <Route path="/" element={<LandingPage />} />
-          <Route path="/login" element={<LoginPage />} />
           <Route path="/main" element={<MainPage />} />
           <Route path="/observe" element={<ObservePage />} />
           <Route path="/setting" element={<SettingPage />} />
           <Route path="/detail" element={<DetailViewPage />} />
           <Route path="/sensingView" element={<SensingViewPage />} />
+          <Route path="/login" element={<LoginPage />} />
         </Routes>
       </LayoutForm>
     </Router>

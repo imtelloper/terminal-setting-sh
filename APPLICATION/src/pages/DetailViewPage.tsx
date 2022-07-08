@@ -129,14 +129,14 @@ const DetailViewPage = () => {
 
       {isOpenDangerZoneState && (
         <DangerZonePopup
-          openPopup={openDangerZonePopup}
-          closePopup={closeDangerZonePopup}
+          openDangerZonePopup={openDangerZonePopup}
+          closeDangerZonePopup={closeDangerZonePopup}
         />
       )}
       {isOpenCalibrationState && (
         <CalibrationPopup
-          openPopup={openCalibrationPopup}
-          closePopup={closeCalibrationPopup}
+          openCalibrationPopup={openCalibrationPopup}
+          closeCalibrationPopup={closeCalibrationPopup}
         />
       )}
 

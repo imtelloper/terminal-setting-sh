@@ -115,11 +115,11 @@ const LoginPage = () => {
     <div className="loginContainer">
       <div className="loginBox">
         <div className="left">
-          <div className="logoImg">
-            <img src={LogoImg} />
-          </div>
           <div className="loginBg">
             <img src={LoginBg} />
+          </div>
+          <div className="logoImg">
+            <img src={LogoImg} />
           </div>
         </div>
         <div className="right">
