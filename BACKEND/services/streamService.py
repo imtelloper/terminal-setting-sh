@@ -15,12 +15,10 @@ from repo.baseRepo import *
 from routers.observeRouter import modifyOneData
 from bson import ObjectId
 from util import *
+from fastapi.responses import JSONResponse
 
 
 # W: 256 H: 192
-
-
-
 class StreamService:
     def __init__(self):
         self.camWidth = 512
@@ -30,8 +28,6 @@ class StreamService:
         # 카메라 설치 구역
         self.camArea = config.AREA.replace(" ", "")
         # 각 파일들의 폴더들이 저장될 루트 경로
-        # self.savePath = '{0}/safety-archives'.format(os.path.expanduser('~'))
-        # self.savePath = './safety-archives'
         self.savePath = '/home/interx/SAFETY-AI/BACKEND/safety-archives'
         # 현재 날짜
         self.currentDate = datetime.datetime.now().strftime('%Y-%m-%d')
@@ -81,6 +77,28 @@ class StreamService:
             makedirs(self.screenShotFolderPath)
         print('##### CONNECTED CAMERA ##### : ', self.listPorts)
 
+    async def test(self):
+        print('self.dbName', self.dbName)
+        print('self.tableName', self.tableName)
+        searchedData = findDatas(self.dbName, self.tableName, {
+            'trackerId': ObjectId('62c796f09715acf6931d4e6b'),
+            'date': '2022-07-08',
+            'groupNum': 2,
+        })
+        print('searchedData type ', type(searchedData))
+        dataArr = []
+        try:
+            # 데이터가 들어 있으므로 전역변수에 셋팅한다.
+            async for val in searchedData:
+                print('val', val)
+                dataArr.append(val)
+            print('dataArr len', len(dataArr))
+            foundData = dataArr[0]
+            print('foundData', foundData)
+            return JSONResponse(foundData)
+        except Exception as e:
+            return False
+
     def __del__(self):
         self.video.release()
 
@@ -98,11 +116,32 @@ class StreamService:
     def setCameraOn(self):
         self.cameraOnOff = True
 
+    # 스크린 캡쳐 경로, 파일명 초기화
+    def initScreenCapturePath(self):
+        self.currentDate = datetime.datetime.now().strftime('%Y-%m-%d')
+        self.currentTime = datetime.datetime.now().strftime('%Y-%m-%d_%H:%M:%S.%f')
+        self.fileInfo = '-{0}-{1}-{2}'.format(self.camArea, self.camPort, self.currentTime)
+        self.screenShotFolderPath = '{0}/{1}/{2}/{3}/capture'.format(self.savePath, self.currentDate, self.camArea,
+                                                                     self.camPort)
+        self.screenShotRecordPath = '{0}/safety-shot{1}.png'.format(self.screenShotFolderPath, self.fileInfo)
+
     # 캡쳐를 하기 위한 메서드
     def setCaptureGateOpen(self):
         self.initScreenCapturePath()
         self.captureGate = True
         return True
+
+    # 녹화 경로, 파일명 초기화
+    def initVideoRecordPath(self):
+        print('initVideoRecordPath')
+        self.currentDate = datetime.datetime.now().strftime('%Y-%m-%d')
+        self.currentTime = datetime.datetime.now().strftime('%Y-%m-%d_%H:%M:%S.%f')
+        self.fileInfo = '-{0}-{1}-{2}'.format(self.camArea, self.camPort, self.currentTime)
+        self.videoFolderPath = '{0}/{1}/{2}/{3}/video'.format(self.savePath, self.currentDate, self.camArea,
+                                                              self.camPort)
+        self.videoRecordPath = '{0}/safety-record{1}.avi'.format(self.videoFolderPath, self.fileInfo)
+        self.videoWriter = cv2.VideoWriter(self.videoRecordPath, self.fcc, self.fps,
+                                           (self.camWidth, self.camHeight))
 
     # 녹화 시작 메서드
     def setRecordGateOpen(self):
@@ -116,6 +155,7 @@ class StreamService:
         self.recordGate = False
         return False
 
+    # 지금 PC의 area, camPort 정보로 tracker object id 가져오기
     async def getTrackerId(self):
         print('************* getTrackerId ***************')
         dataArr = []
@@ -125,82 +165,75 @@ class StreamService:
         })
         async for val in searchedData:
             dataArr.append(val)
-            print('val', val)
         foundData = dataArr[0]
-        print('foundData', foundData)
-        print('foundData[_id]', foundData['_id'])
         trackerId = ObjectId(foundData['_id'])
         self.trackerId = trackerId
-        print('trackerId',trackerId)
+        print('trackerId', trackerId)
         return trackerId
 
+    # 동영상 녹화 경로 삽입
     async def insertVideoRecordPath(self, trackerId, videoRecordPath):
         print('insertVideoRecordPath')
         print('insertVideoRecordPath trackerId', trackerId)
         print('insertVideoRecordPath videoRecordPath', videoRecordPath)
         insertData = {
-            "trackerId": str(trackerId),
+            "trackerId": ObjectId(trackerId),
             "fileType": "video",
             "path": videoRecordPath,
             "safetyLevel": "",
         }
         resultData = await insertOne(self.dbName, config.TABLE_ARCHIVE, insertData)
-        print('resultData',resultData)
-        return resultData
+        print('resultData.inserted_id', resultData.inserted_id)
+        return str(resultData.inserted_id)
 
-    # 녹화 경로, 파일명 초기화
-    def initVideoRecordPath(self):
-        print('initVideoRecordPath')
-        self.currentDate = datetime.datetime.now().strftime('%Y-%m-%d')
-        self.currentTime = datetime.datetime.now().strftime('%Y-%m-%d_%H:%M:%S.%f')
-        self.fileInfo = '-{0}-{1}-{2}'.format(self.camArea, self.camPort, self.currentTime)
-        self.videoFolderPath = '{0}/{1}/{2}/{3}/video'.format(self.savePath, self.currentDate, self.camArea,
-                                                              self.camPort)
-        self.videoRecordPath = '{0}/safety-record{1}.avi'.format(self.videoFolderPath, self.fileInfo)
-        self.videoWriter = cv2.VideoWriter(self.videoRecordPath, self.fcc, self.fps, (self.camWidth, self.camHeight))
-
-    # 스크린 캡쳐 경로, 파일명 초기화
-    def initScreenCapturePath(self):
-        self.currentDate = datetime.datetime.now().strftime('%Y-%m-%d')
-        self.currentTime = datetime.datetime.now().strftime('%Y-%m-%d_%H:%M:%S.%f')
-        self.fileInfo = '-{0}-{1}-{2}'.format(self.camArea, self.camPort, self.currentTime)
-        self.screenShotFolderPath = '{0}/{1}/{2}/{3}/capture'.format(self.savePath, self.currentDate, self.camArea,
-                                                                     self.camPort)
-        self.screenShotRecordPath = '{0}/safety-shot{1}.png'.format(self.screenShotFolderPath, self.fileInfo)
-
-
-    async def searchDatas(self, data: dict):
-        dataArr = []
-        async for val in findDatas(self.dbName, self.tableName, data):
-            dataArr.append(val)
-        return dataArr
-
-    async def addTodayCamData(self):
+    async def isTodayObserveExist(self, groupNum:int):
         today = str(datetime.date.today())
-        dataArr = []
         searchedData = findDatas(self.dbName, self.tableName, {
-            'camPort': self.camPort,
+            'trackerId': self.trackerId,
             'date': today,
+            'groupNum': groupNum,
         })
+        dataArr = []
+        responseRes = False
         try:
-            # 데이터가 들어 있으므로 전역변수에 셋팅한다.
             async for val in searchedData:
                 dataArr.append(val)
-
             foundData = dataArr[0]
+            # 데이터가 들어 있으므로 전역변수에 셋팅한다.
             self.todayCamDataId = foundData['_id']
+            if len(dataArr) > 0:
+                responseRes = True
+            else:
+                responseRes = False
+            return responseRes
         except Exception as e:
-            # 데이터가 없으므로 오늘자 데이터를 삽입한다.
-            insertData = {
-                "area": self.camArea,
-                "camPort": self.camPort,
-                "activate": True,
-                "alarms": "없음",
-                "date": today,
-            }
-            resultData = await insertOne(self.dbName, self.tableName, insertData)
-            newData = await findOne(self.dbName, self.tableName, {"_id": ObjectId(resultData.inserted_id)})
-            self.todayCamDataId = resultData.inserted_id
+            responseRes = False
+            return responseRes
+
+    async def addTodayCamData(self, observeChk:bool, groupNum: int):
+        print('############ addTodayCamData ############')
+        today = str(datetime.date.today())
+        try:
+            if observeChk:
+                print('데이터 있음!!!!!!!!!!!!!!!!!')
+            else:
+                print('데이터 XXXXXXXXXXXXXXXXXXXXXXXX')
+                # 데이터가 없으므로 오늘자 데이터를 삽입한다.
+                insertData = {
+                    'trackerId': ObjectId(self.trackerId),
+                    "date": today,
+                    "groupNum": int(groupNum),
+                    "safetyLevel": "Green",
+                    "yellowCnt": 0,
+                    "redCnt": 0,
+                    "observeSwitch": False,
+                    "observeTime": datetime.datetime.now(),
+                }
+                resultData = await insertOne(self.dbName, self.tableName, insertData)
+                newData = await findOne(self.dbName, self.tableName, {"_id": ObjectId(resultData.inserted_id)})
+                self.todayCamDataId = resultData.inserted_id
+        except Exception as e:
+            print(e)
 
     def list_ports(self):
         """
@@ -306,7 +339,7 @@ class StreamService:
                         result_img = img
 
                 # timeCnt가 낮을수록 Yellow, Red 업데이트 속도 빨라짐. 너무 빠르면 성능에 문제 있을 수 있음
-                if timeCnt == 8:
+                if timeCnt == 8 and len(str(self.todayCamDataId)) > 0:
                     print('#########################################################timeCnt :', timeCnt)
                     timeCnt = 0
                     '''
@@ -321,7 +354,7 @@ class StreamService:
                                 {'_id': ObjectId(self.todayCamDataId)},
                                 {'$set':
                                     {
-                                        'camSafetyLevel': 'Green'
+                                        'safetyLevel': 'Green'
                                     }
                                 }
                             )
@@ -335,13 +368,13 @@ class StreamService:
                                 {'_id': ObjectId(self.todayCamDataId)},
                                 {'$set':
                                     {
-                                        'camSafetyLevel': 'Yellow'
+                                        'safetyLevel': 'Yellow'
                                     }
                                 }
                             )
                             getConnection()[self.dbName][config.TABLE_ARCHIVE].insert_one(
                                 {
-                                    "trackerId": str(self.trackerId),
+                                    "trackerId": ObjectId(self.trackerId),
                                     "fileType": "img",
                                     "path": self.screenShotRecordPath,
                                     "safetyLevel": 'Yellow',
@@ -358,7 +391,7 @@ class StreamService:
                                 {'_id': ObjectId(self.todayCamDataId)},
                                 {'$set':
                                     {
-                                        'camSafetyLevel': 'Red'
+                                        'safetyLevel': 'Red'
                                     }
                                 }
                             )
@@ -368,7 +401,7 @@ class StreamService:
                             print(' sensingLevel', sensingLevel)
                             getConnection()[self.dbName][config.TABLE_ARCHIVE].insert_one(
                                 {
-                                    "trackerId": str(self.trackerId),
+                                    "trackerId": ObjectId(self.trackerId),
                                     "fileType": "img",
                                     "path": self.screenShotRecordPath,
                                     "safetyLevel": 'Red',
@@ -404,13 +437,13 @@ class StreamService:
                     print('SCREEN CAPTURE SCREEN CAPTURE SCREEN CAPTURE SCREEN CAPTURE SCREEN CAPTURE SCREEN CAPTURE ')
                     cv2.imwrite(self.screenShotRecordPath, result_img, params=[cv2.IMWRITE_PNG_COMPRESSION, 0])
                     self.captureGate = False
-                    print(' self.trackerId',  self.trackerId)
-                    print(' "img"',  "img")
-                    print(' self.screenShotRecordPath',  self.screenShotRecordPath)
-                    print(' sensingLevel',  sensingLevel)
+                    print(' self.trackerId', self.trackerId)
+                    print(' "img"', "img")
+                    print(' self.screenShotRecordPath', self.screenShotRecordPath)
+                    print(' sensingLevel', sensingLevel)
                     getConnection()[self.dbName][config.TABLE_ARCHIVE].insert_one(
                         {
-                            "trackerId": self.trackerId,
+                            "trackerId": ObjectId(self.trackerId),
                             "fileType": "img",
                             "path": self.screenShotRecordPath,
                             "safetyLevel": sensingLevel,

@@ -1,12 +1,11 @@
 import React, { useState } from 'react';
 import '../style/components/CalibrationPopup.scss';
 
-const CalibrationPopup = () => {
+const CalibrationPopup = ({ openCalibrationPopup, closeCalibrationPopup }) => {
   const [isOpenState, setIsOpenState] = useState(false);
 
   const handleClick = (e) => {
     const target = e.currentTarget;
-    console.log(target);
     setIsOpenState(!isOpenState);
   };
 
@@ -28,19 +27,24 @@ const CalibrationPopup = () => {
               </li>
 
               {isOpenState && (
-                <li>
-                  <span>기준선 길이</span>
-                  <div className="inputBox">
-                    <input type="text" />
-                    <span>m</span>
+                <>
+                  <div className="addInputBox">
+                    <span>기준선 길이</span>
+                    <div className="inputBox">
+                      <input type="text" />
+                      <span>m</span>
+                    </div>
                   </div>
                   <div className="bottomBtnBox">
                     <button>확인</button>
-                    <button>취소</button>
+                    <button onClick={handleClick}>취소</button>
                   </div>
-                </li>
+                </>
               )}
             </ul>
+            <button className="closeBtn" onClick={closeCalibrationPopup}>
+              닫기
+            </button>
           </div>
         </div>
       </div>
