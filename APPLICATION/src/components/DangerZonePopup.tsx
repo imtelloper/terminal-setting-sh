@@ -2,11 +2,25 @@ import React, { useState, useEffect } from 'react';
 import '../style/components/DangerZonePopup.scss';
 
 const dangerZonePopup = ({ openDangerZonePopup, closeDangerZonePopup }) => {
-  const [text, setText] = useState('');
+  const [yellowText, setYellowText] = useState('');
+  const [greenText, setGreenText] = useState('');
 
-  const handleTextChange = (e) => {
-    setText(e.currentTarget.value);
+  const handleYellowText = (e) => {
+    setYellowText(e.currentTarget.value);
   };
+
+  const handleGreenText = (e) => {
+    setGreenText(e.currentTarget.value);
+  };
+
+  // yellowText.length > 0 && greenText.length > 0
+  //   ? btnBoxEl.classList.add('bottomBtnBoxActive')
+  //   : btnBoxEl.classList.remove('bottomBtnBoxActive');
+
+  const btnBoxEl = document.querySelector('.btnBox');
+  yellowText.length > 0 && greenText.length > 0
+    ? btnBoxEl.classList.add('btnBoxActive')
+    : btnBoxEl.classList.remove('btnBoxActive');
 
   return (
     <div className="dangerZoneContainer">
@@ -21,10 +35,24 @@ const dangerZonePopup = ({ openDangerZonePopup, closeDangerZonePopup }) => {
             <ul>
               <li>Calibration: 설정 필요</li>
               <li>
-                Yellow Zone: <input type="text" className="yellowInput" onChange={handleTextChange} value={text}/>m
+                Yellow Zone:{' '}
+                <input
+                  type="text"
+                  className="yellowInput"
+                  onChange={handleYellowText}
+                  value={yellowText}
+                />
+                m
               </li>
               <li>
-                Green Zone: <input type="text" className="GreenInput" onChange={handleTextChange} value={text}/>m
+                Green Zone:{' '}
+                <input
+                  type="text"
+                  className="GreenInput"
+                  onChange={handleGreenText}
+                  value={greenText}
+                />
+                m
               </li>
             </ul>
             <div className="box">
@@ -34,9 +62,9 @@ const dangerZonePopup = ({ openDangerZonePopup, closeDangerZonePopup }) => {
             </div>
           </div>
           {/* calibration 설정 완료 시 생성 */}
-          <div className="bottomBtnBox">
-            <button disabled={!text}>확인</button>
-            <button disabled={!text}>취소</button>
+          <div className="btnBox">
+            <button>확인</button>
+            <button>취소</button>
           </div>
           <button className="closeBtn" onClick={closeDangerZonePopup}>
             닫기
