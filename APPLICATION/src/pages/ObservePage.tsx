@@ -8,7 +8,7 @@ import Api from '../api/Api';
 import CreateBtn from '../components/CreateBtn';
 import PolygonDraw from '../util/PolygonDraw';
 
-export const camPort1Ip = '192.168.0.7';
+export const camPort1Ip = '192.168.0.3';
 export const camPort2Ip = '192.168.0.24';
 export const camPort3Ip = '192.168.0.18';
 export const camPort4Ip = '192.168.0.30';
@@ -217,16 +217,16 @@ const ObservePage = () => {
         [x, y],
         [centerX, centerY]
       );
-      console.log('무게중심과 기준 좌표들의 길이 ', standardLineDistance);
-      console.log('meter 비율로 변환된 거리', yellowDistancePx);
-      console.log(
-        'standardLineDistance + yellowDistancePx',
-        standardLineDistance + yellowDistancePx
-      );
+      // console.log('무게중심과 기준 좌표들의 길이 ', standardLineDistance);
+      // console.log('meter 비율로 변환된 거리', yellowDistancePx);
+      // console.log(
+      //   'standardLineDistance + yellowDistancePx',
+      //   standardLineDistance + yellowDistancePx
+      // );
 
       /* 기준선 거리와 calibration에서 구해진 meter당 px 값을 더한값을 기준선거리로 나누어 내분점의 비율을 구한다. */
       m1 = (standardLineDistance + yellowDistancePx) / standardLineDistance;
-      console.log('m1', m1);
+      // console.log('m1', m1);
       n1 = 1 - m1;
 
       /* Green Zone 다각형점 찍기 */
@@ -235,8 +235,8 @@ const ObservePage = () => {
       /* Yellow Zone 다각형점 찍기 */
       // const yellowInsideX = Math.round(getInsideX(m1, n1, x));
       // const yellowInsideY = Math.round(getInsideY(m1, n1, y));
-      const yellowInsideX = getInsideX(m1, n1, x);
-      const yellowInsideY = getInsideY(m1, n1, y);
+      const yellowInsideX = Math.round(getInsideX(m1, n1, x));
+      const yellowInsideY = Math.round(getInsideY(m1, n1, y));
       yellowSensingPoints.push([yellowInsideX, yellowInsideY]);
       drawPoints(yellowCtx, yellowInsideX, yellowInsideY, drawColor.yellow);
 
@@ -265,14 +265,23 @@ const ObservePage = () => {
     if (itemID === 'firstCanvas') {
       console.log('firstCanvas');
       frameSrc = `${frameSrc.split(':81')[0]}:81`;
-      const newSrc = `${frameSrc}/api/stream/area/${yellowSensingCoordinate}/${redSensingCoordinate}`;
+      const newSrc = `${frameSrc}/api/stream/area/1/${yellowSensingCoordinate}/${redSensingCoordinate}/`;
+      console.log('newSrc', newSrc);
       setNewVideoState(arrIndex, newSrc);
     } else {
       console.log('secondCanvas');
       const splitedSrc = frameSrc.split('/');
-      splitedSrc.length = 8;
-      frameSrc = splitedSrc.join('/');
+      console.log('splitedSrc', splitedSrc);
+      const firstSensingCoord = splitedSrc.slice(7, 9);
+      console.log('firstSensingCoord', firstSensingCoord);
+
+      splitedSrc.length = 6;
+      splitedSrc.push('2');
+
+      frameSrc = splitedSrc.concat(firstSensingCoord).join('/');
+      console.log('frameSrc', frameSrc);
       const newSrc = `${frameSrc}/${yellowSensingCoordinate}/${redSensingCoordinate}`;
+      console.log('newSrc', newSrc);
       setNewVideoState(arrIndex, newSrc);
     }
   };
