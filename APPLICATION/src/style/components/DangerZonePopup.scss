@@ -85,11 +85,9 @@ div.dangerZoneContainer{
           margin-top: 30px;
           position: relative;
           display: none;
-          //opacity: 0;
 
           &.btnBoxActive {
-            display: block !important;
-            //opacity: 1;
+            display: block;
           }
         }
 

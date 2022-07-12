@@ -8,7 +8,6 @@ import LandingPage from '../pages/LandingPage';
 import LayoutForm from '../components/layout/LayoutForm';
 import DetailViewPage from '../pages/DetailViewPage';
 import SensingViewPage from '../pages/SensingViewPage';
-import DesignSystem from '../DesignSystem';
 
 export default function App() {
   return (

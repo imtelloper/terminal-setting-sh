@@ -13,14 +13,10 @@ const dangerZonePopup = ({ openDangerZonePopup, closeDangerZonePopup }) => {
     setGreenText(e.currentTarget.value);
   };
 
-  // yellowText.length > 0 && greenText.length > 0
-  //   ? btnBoxEl.classList.add('bottomBtnBoxActive')
-  //   : btnBoxEl.classList.remove('bottomBtnBoxActive');
-
   const btnBoxEl = document.querySelector('.btnBox');
   yellowText.length > 0 && greenText.length > 0
-    ? btnBoxEl.classList.add('btnBoxActive')
-    : btnBoxEl.classList.remove('btnBoxActive');
+    ? btnBoxEl?.classList.add('btnBoxActive')
+    : btnBoxEl?.classList.remove('btnBoxActive');
 
   return (
     <div className="dangerZoneContainer">
