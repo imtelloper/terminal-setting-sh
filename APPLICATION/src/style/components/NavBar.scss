@@ -1,0 +1,198 @@
+@import '../../style/color.scss';
+
+div.mainTopContainer {
+  width: 100%;
+  height: 56px;
+  padding-right: 16px;
+  background-color: $dark;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid $dark;
+
+  div {
+    display: flex;
+    align-items: center;
+
+    div.hamBtnBox {
+      width: 56px;
+      height: 56px;
+      background-color: #050A12;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+
+      div.hamBtn {
+        width: 24px;
+        height: 24px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+
+        span {
+          width: 100%;
+          height: 2px;
+          background-color: $white;
+          transition: all 0.3s ease-in-out;
+        }
+
+        &.hamBtnActive .first {
+          transform: translateY(12px);
+        }
+
+        &.hamBtnActive .third {
+          transform: translateY(-11px);
+        }
+      }
+    }
+    button.logo {
+      all: unset;
+      width: 152px;
+      height: 56px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      img{
+        width: 96px;
+      }
+      &:after{
+        content: '';
+        width: 1px;
+        height: 20px;
+        background-color: rgba(255,255,255,0.3);
+        margin-left: 24px;
+      }
+    }
+
+    div.menuBar{
+      color: $white;
+      display: flex;
+      align-items: center;
+      margin-left: 4px;
+      &:after{
+        content: '';
+        width: 1px;
+        height: 20px;
+        background-color: rgba(255,255,255,0.3);
+        margin-left: 24px;
+      }
+      ul{
+        display: flex;
+        list-style: none;
+        li{
+          margin-right: 24px;
+          cursor: pointer;
+          display: flex;
+          align-items: center;
+          span{
+            margin-left: 8px;
+            font-size: 10px;
+          }
+          &:after{
+            content: '>';
+            color: rgba(255,255,255,0.3);
+            margin-left: 24px;
+            font-weight: 700;
+          }
+          &:last-child{
+            &:after{
+              display: none;
+            }
+          }
+        }
+        button{
+          transition: 0.3s;
+          &:hover{
+            background-color: rgba(255,255,255,0.3);
+          }
+        }
+      }
+    }
+  }
+
+  div.iconBox{
+    &:before{
+      content: '';
+      width: 1px;
+      height: 20px;
+      background-color: #626A7A;
+      margin-right: 12px;
+    }
+
+    button {
+      all: unset;
+      width: 40px;
+      height: 40px;
+      font-size: 18px;
+      cursor: pointer;
+      border: none;
+      color: white;
+      margin-right: 8px;
+      position: relative;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      &:last-child {
+        margin-right: 0;
+      }
+
+      span.box {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background-color: $white;
+        opacity: 0;
+        transition: 0.25s ease-in;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        position: absolute;
+
+        &:hover {
+          opacity: 0.12;
+        }
+
+      }
+
+      span.icon {
+        width: 40px;
+        height: 40px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+    }
+  }
+
+}
+  div.menuBox{
+    width: 100%;
+    height: 560px;
+    div.menuContent{
+      width: 100%;
+      height: 100%;
+      display: flex;
+      padding: 48px 0;
+      box-sizing: border-box;
+      div.AIBox{
+        width: 156px;
+        padding: 0 68px 0 52px;
+        border-right: 1px solid #d4d4d4;
+        div.titleBox{
+          display: flex;
+          flex-direction: column;
+          span{
+            &:first-child{
+              color: $blue-500;
+            }
+          }
+        }
+        ul{
+          list-style: none;
+        }
+      }
+    }
+  }

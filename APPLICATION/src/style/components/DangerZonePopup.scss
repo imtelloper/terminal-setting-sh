@@ -81,9 +81,14 @@ div.dangerZoneContainer{
           }
         }
       }
-        div.bottomBtnBox{
+        div.btnBox{
           margin-top: 30px;
           position: relative;
+          display: none;
+
+          &.btnBoxActive {
+            display: block;
+          }
         }
 
       button.closeBtn{

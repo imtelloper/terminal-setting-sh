@@ -90,6 +90,8 @@ button.iconBtnS{
     width: 16px;
     height: 16px;
     margin: 4px;
+    display: flex;
+    align-items: center;
   }
 }
 
@@ -107,6 +109,8 @@ button.iconBtnL{
     width: 24px;
     height: 24px;
     margin: 4px;
+    display: flex;
+    align-items: center;
   }
   span.txt{
     margin-left: 4px;

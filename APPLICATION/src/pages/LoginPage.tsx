@@ -97,7 +97,7 @@ const LoginPage = () => {
     // setUserInfo();
     // navigate('/main');
     // navigate('/login')
-    navigate('/observe');
+    // navigate('/observe');
     // navigate('/detail')
   }, []);
 

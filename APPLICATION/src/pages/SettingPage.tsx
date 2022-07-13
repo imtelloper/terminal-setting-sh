@@ -193,22 +193,29 @@ const SettingPage = () => {
           <div className="content">
             <Memory style={{ fontSize: '24px' }} />
             <span>연산장치</span>
-            <div className="toggleBtnBox">
-              <input
-                type="radio"
-                id="toggleBtn1"
-                name="toggleBtn"
-                defaultChecked
-              />
-              <label className="toggleBtn" htmlFor="toggleBtn1">
-                CPU
-              </label>
-              <input type="radio" id="toggleBtn2" name="toggleBtn" />
-              <label className="toggleBtn" htmlFor="toggleBtn2">
-                GPU
-              </label>
-              <div className="slider" />
+            <div className="toggle">
+              <input type="radio" id="radio1" name="radio" defaultChecked />
+              <label htmlFor="radio1">CPU</label>
+              <input type="radio" id="radio2" name="radio" />
+              <label htmlFor="radio2">GPU</label>
+              <span className="move" />
             </div>
+            {/* <div className="toggleBtnBox"> */}
+            {/*  <input */}
+            {/*    type="radio" */}
+            {/*    id="toggleBtn1" */}
+            {/*    name="toggleBtn" */}
+            {/*    defaultChecked */}
+            {/*  /> */}
+            {/*  <label className="toggleBtn" htmlFor="toggleBtn1"> */}
+            {/*    CPU */}
+            {/*  </label> */}
+            {/*  <input type="radio" id="toggleBtn2" name="toggleBtn" /> */}
+            {/*  <label className="toggleBtn" htmlFor="toggleBtn2"> */}
+            {/*    GPU */}
+            {/*  </label> */}
+            {/*  <span className="slider" /> */}
+            {/* </div> */}
             {/* <input */}
             {/*  id="toolTab7" */}
             {/*  type="radio" */}
@@ -263,65 +270,96 @@ const SettingPage = () => {
           <div className="content">
             <PermMedia style={{ fontSize: '24px' }} />
             <span>알람 이미지 저장</span>
-            <div className="saveToggleBtnBox">
-              <input
-                type="radio"
-                id="saveToggleBtn1"
-                name="saveToggleBtn"
-                defaultChecked
-              />
-              <label className="saveToggleBtn" htmlFor="saveToggleBtn1">
-                ON
-              </label>
-              <input type="radio" id="saveToggleBtn2" name="saveToggleBtn" />
-              <label className="toggleBtn" htmlFor="saveToggleBtn2">
-                OFF
-              </label>
-              <div className="slider2" />
+            {/* <div className="saveToggleBtnBox"> */}
+            {/*  <input */}
+            {/*    type="radio" */}
+            {/*    id="saveToggleBtn1" */}
+            {/*    name="saveToggleBtn" */}
+            {/*    defaultChecked */}
+            {/*  /> */}
+            {/*  <label className="saveToggleBtn" htmlFor="saveToggleBtn1"> */}
+            {/*    ON */}
+            {/*  </label> */}
+            {/*  <input type="radio" id="saveToggleBtn2" name="saveToggleBtn" /> */}
+            {/*  <label className="toggleBtn" htmlFor="saveToggleBtn2"> */}
+            {/*    OFF */}
+            {/*  </label> */}
+            {/*  <div className="slider2" /> */}
+            {/* </div> */}
+            <div className="imgSaveToggle">
+              <input type="radio" id="radio3" name="imgRadio" defaultChecked />
+              <label htmlFor="radio3">ON</label>
+              <input type="radio" id="radio4" name="imgRadio" />
+              <label htmlFor="radio4">OFF</label>
+              <span className="move" />
             </div>
           </div>
           <div className="content">
             <Textsms />
             <span>문자 알람</span>
-            <div className="messageToggleBtnBox">
+            {/* <div className="messageToggleBtnBox"> */}
+            {/*  <input */}
+            {/*    type="radio" */}
+            {/*    id="messageToggleBtn1" */}
+            {/*    name="messageToggleBtn" */}
+            {/*    defaultChecked */}
+            {/*  /> */}
+            {/*  <label className="messageToggleBtn" htmlFor="messageToggleBtn1"> */}
+            {/*    ON */}
+            {/*  </label> */}
+            {/*  <input */}
+            {/*    type="radio" */}
+            {/*    id="messageToggleBtn2" */}
+            {/*    name="messageToggleBtn" */}
+            {/*  /> */}
+            {/*  <label className="toggleBtn" htmlFor="messageToggleBtn2"> */}
+            {/*    OFF */}
+            {/*  </label> */}
+            {/*  <div className="slider2" /> */}
+            {/* </div> */}
+            <div className="messageToggle">
               <input
                 type="radio"
-                id="messageToggleBtn1"
-                name="messageToggleBtn"
+                id="radio5"
+                name="messageRadio"
                 defaultChecked
               />
-              <label className="messageToggleBtn" htmlFor="messageToggleBtn1">
-                ON
-              </label>
-              <input
-                type="radio"
-                id="messageToggleBtn2"
-                name="messageToggleBtn"
-              />
-              <label className="toggleBtn" htmlFor="messageToggleBtn2">
-                OFF
-              </label>
-              <div className="slider2" />
+              <label htmlFor="radio5">ON</label>
+              <input type="radio" id="radio6" name="messageRadio" />
+              <label htmlFor="radio6">OFF</label>
+              <span className="move" />
             </div>
           </div>
           <div className="content">
             <img src={KakaoIcon} alt="" />
             <span>카카오톡 알림</span>
-            <div className="kakaoToggleBtnBox">
+            {/* <div className="kakaoToggleBtnBox"> */}
+            {/*  <input */}
+            {/*    type="radio" */}
+            {/*    id="kakaoToggleBtn1" */}
+            {/*    name="kakaoToggleBtn" */}
+            {/*    defaultChecked */}
+            {/*  /> */}
+            {/*  <label className="kakaoToggleBtn" htmlFor="kakaoToggleBtn1"> */}
+            {/*    ON */}
+            {/*  </label> */}
+            {/*  <input type="radio" id="kakaoToggleBtn2" name="kakaoToggleBtn" /> */}
+            {/*  <label className="toggleBtn" htmlFor="kakaoToggleBtn2"> */}
+            {/*    OFF */}
+            {/*  </label> */}
+            {/*  <div className="slider2" /> */}
+            {/* </div> */}
+            <div className="kakaoToggle">
               <input
                 type="radio"
-                id="kakaoToggleBtn1"
-                name="kakaoToggleBtn"
+                id="radio7"
+                name="kakaoRadio"
                 defaultChecked
               />
-              <label className="kakaoToggleBtn" htmlFor="kakaoToggleBtn1">
-                ON
-              </label>
-              <input type="radio" id="kakaoToggleBtn2" name="kakaoToggleBtn" />
-              <label className="toggleBtn" htmlFor="kakaoToggleBtn2">
-                OFF
-              </label>
-              <div className="slider2" />
+              <label htmlFor="radio7">ON</label>
+              <input type="radio" id="radio8" name="kakaoRadio" />
+              <label htmlFor="radio8">OFF</label>
+              <span className="move" />
             </div>
           </div>
         </div>
