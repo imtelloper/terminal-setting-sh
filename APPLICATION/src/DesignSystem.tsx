@@ -5,7 +5,7 @@ import { IoArrowDownCircle } from 'react-icons/io5';
 const DesignSystem = () => {
   return (
     <>
-      {/* 버튼 사이즈별 btnXS btnS btnR btnL */}
+      {/* 버튼 사이즈별 btnXXS btnXS btnS btnR btnL */}
       {/* 버튼 색상별 default, normal, success, warning, danger, special 에 Primary, ES, Outlined, Text 클래스명을 조합하여 사용 */}
 
       {/* 아이콘 버튼 사이즈별 iconBtnXS iconBtnS iconBtnL */}
