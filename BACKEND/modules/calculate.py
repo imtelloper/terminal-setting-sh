@@ -4,72 +4,87 @@ import datetime
 import numpy as np
 from shapely.geometry import Point, Polygon
 
-GREEN = (0,255,0)
-YELLOW = (0,255,255)
-RED = (0,0,255)
-BLUE = (255,0,0)
 
+class HumanCalculator:
+    def __init__(self):
+        self.camImg = None
+        self.GREEN = (0, 255, 0)
+        self.YELLOW = (0, 255, 255)
+        self.RED = (0, 0, 255)
+        self.BLUE = (255, 0, 0)
 
-def calculate_human(cam, x1, y1, x2, y2, w, h, unit_num, rois):
-    point_in_poly1, point_in_poly2, human_box, sigs = [], [], [], []
-    # 사람 영역 계산
-    unit_x, unit_y = int(w / unit_num), int(h / unit_num)
-    for ix in range(unit_num + 1):
-        for iy in range(unit_num + 1):
-            hx, hy = int((unit_x * ix) + x1), int((unit_y * iy) + y1)
-            human_box.append((hx, hy))
+    def calculate_human(self, cam, x1, y1, x2, y2, w, h, unit_num, rois):
+        # print('unit_num',unit_num)
+        # print('roid',rois)
+        warning_signal = None
+        self.camImg = cam
+        point_in_poly1, point_in_poly2, human_box, sigs, results = [], [], [], [], []
+        # 사람 영역 계산
+        unit_x, unit_y = int(w / unit_num), int(h / unit_num)
+        for ix in range(unit_num + 1):
+            for iy in range(unit_num + 1):
+                hx, hy = int((unit_x * ix) + x1), int((unit_y * iy) + y1)
+                human_box.append((hx, hy))
 
-            # temp = human_temp(cam, x1, y1, x2, y2)
-    if rois[0]:
-        for human_roi in human_box:
-            human_point = Point(human_roi)
-            for roi in rois[0]:
-                roi = list((np.array(roi)).round(0))
-                poly = Polygon(roi)
-                point_in_poly1.append(human_point.within(poly))
+                # temp = human_temp(cam, x1, y1, x2, y2)
 
-    if rois[1]:
-        for human_roi in human_box:
-            human_point = Point(human_roi)
-            for roi in rois[1]:
-                roi = list((np.array(roi)).round(0))
-                poly = Polygon(roi)
-                point_in_poly2.append(human_point.within(poly))
+        # def camSigSetting(warnSig, color):
+        #     warning_signal = warnSig
+        #     camImg = cv2.rectangle(cam, (x1, y1), (x2, y2), color, 3)
+        #     sigs.append(warning_signal)
 
-    if not rois[0] and not rois[1]:
-        # cv2.putText(cam, temp, (x1, y1-10), cv2.FONT_HERSHEY_SIMPLEX, 0.9, GREEN, 2)
-        cv2.rectangle(cam, (x1, y1), (x2, y2), GREEN, 3)
-        warning_signal = 0
-        sigs.append(warning_signal)
+        # Yellow 영역 True or False push
+        for roi in rois:
+            roi1, roi2 = roi
+            if roi1:
+                for human_roi in human_box:
+                    human_point = Point(human_roi)
+                    rois1 = list((np.array(roi1)).round(0))
+                    poly = Polygon(rois1)
+                    point_in_poly1.append(human_point.within(poly))
 
-        # draw rectangle
-    if True in point_in_poly1 and True in point_in_poly2:
-        # cv2.putText(cam, temp, (x1, y1-8), cv2.FONT_HERSHEY_SIMPLEX, 0.7, RED, 2)
-        cv2.rectangle(cam, (x1, y1), (x2, y2), RED, 3)
-        warning_signal = 2
-        sigs.append(warning_signal)
+            if roi2:
+                for human_roi in human_box:
+                    human_point = Point(human_roi)
+                    rois2 = list((np.array(roi2)).round(0))
+                    poly = Polygon(rois2)
+                    point_in_poly2.append(human_point.within(poly))
 
-    if True in point_in_poly2 and not True in point_in_poly1:
-        # cv2.putText(cam, temp, (x1, y1-8), cv2.FONT_HERSHEY_SIMPLEX, 0.7, RED, 2)
-        cv2.rectangle(cam, (x1, y1), (x2, y2), RED, 3)
-        warning_signal = 2
-        sigs.append(warning_signal)
+            if not roi1 and not roi2:
+                warning_signal = 0
+                self.camImg = cv2.rectangle(self.camImg, (x1, y1), (x2, y2), self.GREEN, 3)
+                sigs.append(warning_signal)
+                # camSigSetting(0, GREEN)
 
-    if True in point_in_poly1 and not True in point_in_poly2:
-        # cv2.putText(cam, temp, (x1, y1-8), cv2.FONT_HERSHEY_SIMPLEX, 0.7, RED, 2)
-        cv2.rectangle(cam, (x1, y1), (x2, y2), YELLOW, 3)
-        warning_signal = 1
-        sigs.append(warning_signal)
+                # draw rectangle
+            elif True in point_in_poly1 and True in point_in_poly2:
+                warning_signal = 2
+                self.camImg = cv2.rectangle(self.camImg, (x1, y1), (x2, y2), self.RED, 3)
+                sigs.append(warning_signal)
+                # camSigSetting(2, RED)
 
-    if not True in point_in_poly1 and not True in point_in_poly2:
-        # cv2.putText(cam, temp, (x1, y1-10), cv2.FONT_HERSHEY_SIMPLEX, 0.7, GREEN, 2)
-        cv2.rectangle(cam, (x1, y1), (x2, y2), GREEN, 3)
-        warning_signal = 0
-        sigs.append(warning_signal)
+            elif True in point_in_poly2 and not True in point_in_poly1:
+                warning_signal = 2
+                self.camImg = cv2.rectangle(self.camImg, (x1, y1), (x2, y2), self.RED, 3)
+                sigs.append(warning_signal)
+                # camSigSetting(2, RED)
 
-    sig = max(sigs)
+            elif True in point_in_poly1 and not True in point_in_poly2:
+                warning_signal = 1
+                self.camImg = cv2.rectangle(self.camImg, (x1, y1), (x2, y2), self.YELLOW, 3)
+                sigs.append(warning_signal)
+                # camSigSetting(1, YELLOW)
 
-    return sig, cam
+            elif not True in point_in_poly1 and not True in point_in_poly2:
+                warning_signal = 0
+                self.camImg = cv2.rectangle(self.camImg, (x1, y1), (x2, y2), self.GREEN, 3)
+                sigs.append(warning_signal)
+                # camSigSetting(0, GREEN)
+
+            sig = max(sigs)
+            results.append([sig])
+
+        return results, self.camImg
 
 
 def save_files(img, save_path):
@@ -82,4 +97,3 @@ def save_files(img, save_path):
         with open(save_name, mode='w+b') as f:
             encoded_img.tofile(f)
     return save_name
-

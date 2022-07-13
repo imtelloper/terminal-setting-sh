@@ -31,7 +31,8 @@ then
   echo 'port is running'
   sudo service cron stop
   sudo service crond stop
-  kill -9 $PORT_WATCHER_PID $BACKEND_PID
+  sudo kill -9 $PORT_WATCHER_PID $BACKEND_PID
   sudo fuser -k 8000/tcp
+  sudo kill -9 $(sudo lsof -t -i:8000)
   ps aux | grep python
 fi
