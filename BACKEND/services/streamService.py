@@ -494,8 +494,6 @@ class StreamService:
                 # 관제 PC에 저장이 되어야함.
                 # video 녹화
                 if self.recordGate:
-                    # print('self.recordGate', self.recordGate)
-                    # print('self.videoRecordPath', self.videoRecordPath)
                     # VIDEO 저장 메서드
                     self.videoWriter.write(result_img)
                     # cv2.imshow('frame', result_img)
@@ -505,20 +503,8 @@ class StreamService:
                 # 스크린 캡쳐
                 if self.captureGate:
                     print('SCREEN CAPTURE SCREEN CAPTURE SCREEN CAPTURE SCREEN CAPTURE SCREEN CAPTURE SCREEN CAPTURE ')
-                    cv2.imwrite(self.screenShotRecordPath, result_img, params=[cv2.IMWRITE_PNG_COMPRESSION, 0])
+                    self.screenCaptureInsertData(result_img, 'Normal')
                     self.captureGate = False
-                    print(' self.trackerId', self.trackerId)
-                    print(' "img"', "img")
-                    print(' self.screenShotRecordPath', self.screenShotRecordPath)
-                    print(' sensingLevel', sensingLevel)
-                    getConnection()[self.dbName][config.TABLE_ARCHIVE].insert_one(
-                        {
-                            "trackerId": ObjectId(self.trackerId),
-                            "fileType": "img",
-                            "path": self.screenShotRecordPath,
-                            "safetyLevel": sensingLevel,
-                        },
-                    )
 
                 # 키보드 눌렀을시 이벤트 발생
                 if k == ord('s'):

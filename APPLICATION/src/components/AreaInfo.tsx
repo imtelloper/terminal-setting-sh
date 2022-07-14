@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import Robot from '../images/robot.png';
 import Crane from '../images/crane.png';
 import Videocam from '../images/videocam.png';
 import Warning from '../images/warning.png';
@@ -7,9 +6,9 @@ import BgImg from '../images/bg.png';
 import '../style/components/AreaInfo.scss';
 import { useNavigate } from 'react-router-dom';
 import useSWR from 'swr';
-import { getFetcher } from '../fetcher/fetcher';
 import axios from 'axios';
 import CurrentTime from './CurrentTime';
+import { flushSync } from 'react-dom';
 
 type AreaCard = {
   title: string;
@@ -230,14 +229,21 @@ const dummyData = [
 const AreaInfo = () => {
   const navigate = useNavigate();
   const today = new Date().toISOString().slice(0, 10);
-  const [getObserveState, setGetObserveState] = useState({
-    date: today,
-    // date: '2022-06-22',
-  });
+  const [getObserveState, setGetObserveState] = useState([
+    // {
+    //   area: 'H2 공장 크레인',
+    // },
+    // {
+    //   area: 'H6 공장 크레인',
+    // },
+    // {
+    //   area: 'H3 공장 크레인',
+    // },
+  ]);
   const findFetcher = (url: string) =>
-    axios.post(url, getObserveState).then((res) => res.data);
+    axios.post(url, { date: today }).then((res) => res.data);
 
-  const { data: swrObserveData, error } = useSWR<Array<Observe>>(
+  const { data: swrObserveData, error } = useSWR<Array<TrackerObserve>>(
     '/api/observe/find',
     findFetcher,
     {
@@ -295,7 +301,7 @@ const AreaInfo = () => {
       <div className="areaContent">
         <div className="areaTop">
           <div className="imgBox">
-            <img src={BgImg} />
+            <img src={BgImg} alt="" />
           </div>
         </div>
         <div className="areaBottom">
@@ -325,45 +331,84 @@ const AreaInfo = () => {
     </div>
   ));
 
-  // const cardSkeletonMap = (swrObserveData || dummyData).map((card, idx) => (
-  //   <div
-  //     className="cardSkeleton"
-  //     key={idx}
-  //     onClick={goObservePage}
-  //     datatype={idx.toString()}
-  //   >
-  //     {/* <h3>{card.area}</h3> */}
-  //     <div className="titleBox">
-  //       <span/>
-  //     </div>
-  //     <div className="areaContent">
-  //       <div className="areaTop">
-  //         <div className="imgBox"/>
-  //       </div>
-  //       <div className="areaBottom">
-  //         <div className="alarmBox">
-  //           {/* className : green yellow red inactive => alarmTxt 에 추가해주시면 됩니다! */}
-  //           <div className="alarmTxt"></div>
-  //           <div className="sensingBox">
-  //             <span>
-  //               1차 감지<p>{card.camSensing1}</p>
-  //             </span>
-  //             <span>
-  //               2차 감지<p>{card.camSensing2}</p>
-  //             </span>
-  //           </div>
-  //         </div>
-  //       </div>
-  //     </div>
-  //   </div>
-  // ));
-
   useEffect(() => {
     console.log('swrObserveData', swrObserveData);
-    swrObserveData?.forEach((obj) => {
-      console.log('obj', obj);
+
+    // date: "2022-07-13"
+    // groupNum: 2
+    // observeSwitch: false
+    // observeTime: "2022-07-13 08:27:01.800000"
+    // redCnt: 8
+    // safetyLevel: "Red"
+    // trackerId: "62c796f09715acf6931d4e6b"
+    // yellowCnt: 1
+    // area: "H1 공장 크레인"
+    // baseLine: 0
+    // calibImg: "string"
+    // camName: "크레인1"
+    // camPort: "cam1"
+    // computeDevice: "string"
+    // createdAt: "2022-07-08T02:31:12+00:00"
+    // dangerLine: "string"
+    // imgSaveSwitch: true
+    // kakaoSwitch: true
+    // messageSwitch: true
+    // savingPath: "string"
+    // sensingGroup1: "string"
+    // sensingGroup2: "string"
+    // sensingModel: "string"
+    // threshold: 80
+
+    swrObserveData?.forEach((observe, idx) => {
+      console.log('observe', observe);
+
+      axios
+        .get(`/api/tracker/${observe.trackerId}`)
+        .then((tracker) => {
+          console.log('idx', idx);
+          const trackerObj = tracker.data;
+          const newObserveData = { ...observe, ...trackerObj };
+          const { area, camName, camPort, groupNum } = newObserveData;
+          // console.log('newObserveData', newObserveData);
+          console.log('getObserveState', getObserveState);
+          // 없을 경우 undefined
+          console.log(
+            '이거늬 ? ',
+            getObserveState.find((obj) => obj.area === area)
+          );
+          // 없을 경우 -1
+          console.log(
+            '이거늬 2? ',
+            getObserveState.findIndex((obj) => obj.area === area)
+          );
+
+          const foundDataByArea = getObserveState.filter(
+            (obj) => obj.area === area
+          );
+
+          console.log('foundDataByArea', foundDataByArea);
+
+          const dataIdx = foundDataByArea?.findIndex(
+            (obj) => obj.groupNum === camPort
+          );
+
+          const newObjArr = getObserveState;
+          console.log('dataIdx', dataIdx);
+          if (dataIdx === -1 || dataIdx === undefined) {
+            newObjArr.push(newObserveData);
+          } else {
+            newObjArr[dataIdx] = newObserveData;
+          }
+          console.log('newObjArr', newObjArr);
+          flushSync(() => setGetObserveState(newObjArr));
+        })
+        .catch((err) => console.error(err));
     });
   }, [swrObserveData]);
+
+  useEffect(() => {
+    console.log('#####getObserveState', getObserveState);
+  }, [getObserveState]);
 
   return (
     <div className="areaInfoContainer">
@@ -381,7 +426,7 @@ const AreaInfo = () => {
                   <span className="bold">감시중인 구역</span>
                 </span>
                 <div className="icon">
-                  <img src={Videocam} />
+                  <img src={Videocam} alt="" />
                   <span className="blue">4</span>
                 </div>
               </div>
@@ -391,7 +436,7 @@ const AreaInfo = () => {
                   <span className="bold">감지된 위험</span>
                 </span>
                 <div className="icon">
-                  <img src={Warning} />
+                  <img src={Warning} alt="" />
                   <span className="red">3</span>
                 </div>
               </div>
@@ -400,7 +445,7 @@ const AreaInfo = () => {
         </div>
         <div className="infoRight">
           <div className="rightBox">
-            {/*<div className="areaCardWrap">{cardSkeletonMap}</div>*/}
+            {/* <div className="areaCardWrap">{cardSkeletonMap}</div> */}
             <div className="areaCardWrap">{areaCardsMap}</div>
           </div>
         </div>

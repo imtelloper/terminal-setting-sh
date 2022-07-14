@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from 'react';
+// @ts-ignore
+// eslint-disable-next-line import/no-unresolved
 import MaterialIcon from 'react-google-material-icons';
 import axios from 'axios';
+// eslint-disable-next-line import/no-unresolved
 import '../../styles/components/module/VerticalNav.scss';
 import { Link, useNavigate } from 'react-router-dom';
 import Api from '../../api/Api';
@@ -18,6 +21,7 @@ const VerticalNav = () => {
   const onClickTab = (e) => {
     const tabType = e.currentTarget.getAttribute('datatype');
     setTabStatus(tabType);
+    // eslint-disable-next-line default-case
     switch (tabType) {
       case 'Load':
         navigate('/load');
@@ -47,6 +51,7 @@ const VerticalNav = () => {
   const tabStatusChangeByUrlParam = () => {
     const getUrlParam = window.location.href.split('/');
     const urlParam = getUrlParam[getUrlParam.length - 1];
+    // eslint-disable-next-line default-case
     switch (urlParam) {
       case 'main':
         break;
@@ -101,6 +106,7 @@ const VerticalNav = () => {
     navText: string;
     callback: (any) => void;
   }) => (
+    // eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions
     <li
       className="verticalNavLi"
       datatype={data.datatype}
@@ -118,6 +124,7 @@ const VerticalNav = () => {
   return (
     <>
       <nav className={`verticalNav ${menuClicked && 'verticalMenuClicked'}`}>
+        {/* eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions */}
         <li
           className="logoBox verticalNavLi"
           datatype="logo"

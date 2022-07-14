@@ -18,3 +18,30 @@ type Observe = {
   camSensing1: number;
   camSensing2: number;
 };
+
+type TrackerObserve = {
+  date: string;
+  groupNum: number;
+  observeSwitch: boolean;
+  observeTime: string;
+  redCnt: number;
+  safetyLevel: string;
+  trackerId: string;
+  yellowCnt: number;
+  area: string;
+  baseLine: number;
+  calibImg: string;
+  camName: string;
+  camPort: string;
+  computeDevice: string;
+  createdAt: string;
+  dangerLine: string;
+  imgSaveSwitch: boolean;
+  kakaoSwitch: boolean;
+  messageSwitch: boolean;
+  savingPath: string;
+  sensingGroup1: string;
+  sensingGroup2: string;
+  sensingModel: string;
+  threshold: number;
+};

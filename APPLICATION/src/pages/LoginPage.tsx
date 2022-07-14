@@ -94,7 +94,7 @@ const LoginPage = () => {
 
   useEffect(() => {
     /* 토큰으로 로그인 정보를 불러와 세션에 셋팅함 */
-    // setUserInfo();
+    setUserInfo();
     // navigate('/main');
     // navigate('/login')
     // navigate('/observe');
@@ -105,7 +105,7 @@ const LoginPage = () => {
 
   useEffect(() => {
     console.log('swrState', swrState);
-    swrState?.user?.email && navigate('/');
+    swrState?.user?.email && navigate('/main');
   }, [swrState]);
 
   // if (loading) return <Loading />;
