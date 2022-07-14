@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import '../style/pages/SettingPage.scss';
 import '../style/DesignSystem.scss';
 import Api from '../api/Api';
@@ -94,10 +94,6 @@ const SettingPage = () => {
   // toolBtn 클릭 색상 변경
   const [currentClick, setCurrentClick] = useState(null);
   const [prevClick, setPrevClick] = useState(null);
-  // 밑에 세개
-  const [urlState, setUrlState] = useState([]);
-  const [videoSrcState, setVideoSrcState] = useState([]);
-  const [captureSrcState, setCaptureSrcState] = useState('');
 
   const getClick = (e) => {
     setCurrentClick(e.target.id);
@@ -131,9 +127,21 @@ const SettingPage = () => {
     const target = e.currentTarget;
     const { value } = target;
     const dType = target.getAttribute('datatype');
+    let inputVal = value;
+    console.log('handleChangeValue file', target.files);
+    console.log('handleChangeValue file', target.files[0].path);
+    console.log('handleChangeValue file', target.files[0].name);
     console.log('handleChangeValue value', value);
     console.log('handleChangeValue datatype', dType);
-    let inputVal = value;
+    if (dType === 'savingPath' && target.files) {
+      const splitedFilePath = target.files[0].path.split('/');
+      splitedFilePath.pop();
+      const absoluteFilePath = splitedFilePath.join('/');
+      console.log(absoluteFilePath);
+      (document.querySelector('#savingPathInput') as HTMLInputElement).value =
+        absoluteFilePath;
+    }
+
     dType === 'camName' &&
       (inputVal = (document.querySelector('#camNameInput') as HTMLInputElement)
         .value);
@@ -155,31 +163,39 @@ const SettingPage = () => {
       })
       .catch((err) => console.error(err));
 
-    Api.tracker
-      .saveData({
-        area: 'H2 로봇',
-        camPort: 'string',
-        camName: 'string',
-        computeDevice: 'string',
-        savingPath: 'string',
-        sensingModel: 'string',
-        calibImg: 'string',
-        baseLine: 0,
-        dangerLine: 'string',
-        sensingGroup1: 'string',
-        sensingGroup2: 'string',
-        threshold: 0,
-        imgSaveSwitch: true,
-        messageSwitch: true,
-        kakaoSwitch: true,
-      })
-      .then((res) => {
-        console.log('saveData res', res);
-      });
+    // Api.tracker
+    //   .saveData({
+    //     area: 'H3 프레스',
+    //     camPort: 'cam2',
+    //     camName: '프레스캠2',
+    //     computeDevice: 'string',
+    //     savingPath: 'string',
+    //     sensingModel: 'string',
+    //     calibImg: 'string',
+    //     baseLine: 0,
+    //     dangerLine: 'string',
+    //     sensingGroup1: 'string',
+    //     sensingGroup2: 'string',
+    //     threshold: 0,
+    //     imgSaveSwitch: true,
+    //     messageSwitch: true,
+    //     kakaoSwitch: true,
+    //   })
+    //   .then((res) => {
+    //     console.log('saveData res', res);
+    //   });
   }, []);
 
   useEffect(() => {
     console.log('camSettingState', camSettingState);
+    const camStateKeys = camSettingState.map((obj) => obj.area);
+    console.log('camStateKeys', camStateKeys);
+    const settingAreasState = [...new Set(camStateKeys)];
+    console.log('settingAreasState', settingAreasState);
+    const areaFilteredData = camSettingState.filter(
+      (obj) => obj.area === 'H2 로봇'
+    );
+    console.log('areaFilteredData', areaFilteredData);
   }, [camSettingState]);
 
   const modifyTrackerData = (objectId, data) => {
@@ -212,13 +228,23 @@ const SettingPage = () => {
           <div className="content">
             <Folder style={{ fontSize: '24px' }} />
             <span>저장폴더</span>
-            <input defaultValue={data.savingPath} />
-            <button
+            <input
+              id="savingPathInput"
+              type="text"
+              defaultValue={data.savingPath}
+            />
+            <input
+              id="inputFilePath"
+              type="file"
               className="btnR defaultPrimary"
-              onClick={handleChangeTrackerData}
-            >
+              datatype="savingPath"
+              onChange={handleChangeValue}
+              // @ts-ignore
+              webkitdirectory=""
+            />
+            <label id="inputFilePathLabel" htmlFor="inputFilePath">
               선택
-            </button>
+            </label>
           </div>
           <div className="content">
             <PhotoCamera style={{ fontSize: '24px' }} />

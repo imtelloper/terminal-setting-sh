@@ -5,13 +5,7 @@ export default class TrackerApi {
 
   saveData = async (data) => {
     try {
-      console.log('save data ', data);
-      const formData = new FormData();
-      Object.keys(data).forEach((key) => formData.append(key, data[key]));
-      console.log('this.apiTarget', this.apiTarget);
-      console.log('formData', formData);
-      const res = await axios.post(`/api/${this.apiTarget}`, formData);
-      console.log('res', res);
+      const res = await axios.post(`/api/${this.apiTarget}`, data);
       return res.status === 200 ? res.data : 'failed to save data';
     } catch (error) {
       console.error(error);
