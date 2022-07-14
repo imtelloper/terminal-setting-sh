@@ -35,3 +35,4 @@ playsound
 opencv-python==4.4.0.46
 opencv-contrib-python==4.4.0.46
 gunicorn
+paramiko
