@@ -22,7 +22,7 @@ service = ObserveService()
 dto = ObserveDto
 
 
-@router.post("/", response_description="데이터 저장")
+@router.post("", response_description="데이터 저장")
 async def saveData(data: Observe = Body(...)):
     jsonData = jsonable_encoder(data)
     resultData = await service.addOneData(jsonData)
@@ -37,10 +37,14 @@ async def getOneData(id):
 
 @router.post("/find", response_description='Json데이터로 찾아서 가져오기 body example -> { "date": "2022-06-22" } ')
 async def findData(data=Body(...)):
+    print('findData',data)
     jsonData = jsonable_encoder(data)
     serviceResult = await service.searchDatas(jsonData)
+    print('serviceResult,', serviceResult)
     resultArr = []
     for res in serviceResult:
+        print('res',res)
+        print('dto(**res)',dto(**res))
         resultArr.append(dto(**res))
     return resultArr
 

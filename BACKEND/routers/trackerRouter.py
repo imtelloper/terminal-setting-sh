@@ -25,9 +25,11 @@ dataModel = Tracker
 updateModel = UpdateTracker
 
 
-@router.post("/", response_description="데이터 저장")
+@router.post("", response_description="데이터 저장")
 async def saveData(data: dataModel = Body(...)):
+    print('tracker saveData data', data)
     jsonData = jsonable_encoder(data)
+    print('tracker saveData jsonData', jsonData)
     resultData = await service.addOneData(jsonData)
     return dto(**resultData)
 

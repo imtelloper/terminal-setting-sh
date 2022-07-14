@@ -8,6 +8,13 @@ class BaseDtoMixin(BaseModel):
         if "_id" in data:
             data["createdAt"] = data["_id"].generation_time
             data["_id"] = str(data["_id"])
+
+            if "trackerId" in data:
+                data["trackerId"] = str(data["trackerId"])
+
+            if "observeTime" in data:
+                data["observeTime"] = str(data["observeTime"])
+
         super().__init__(**data)
 
     id: Optional[str] = Field(alias="_id")

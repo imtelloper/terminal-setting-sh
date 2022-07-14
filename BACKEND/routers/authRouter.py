@@ -28,7 +28,7 @@ async def login(formData: OAuth2PasswordRequestForm = Depends()):
     if flag:
 
         accessToken = userService.createAccessToken(
-            data={"sub": email}, expiresDelta = timedelta(minutes=30) # 추후에 minutes dotenv에 추가하여 사용
+            data={"sub": email}, expiresDelta = timedelta(minutes=300) # 추후에 minutes dotenv에 추가하여 사용
         )
         return {"access_token": accessToken, "token_type": "bearer"}
     raise HTTPException(status_code=400, detail="do not creating token")

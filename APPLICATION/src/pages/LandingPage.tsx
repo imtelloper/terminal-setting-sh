@@ -9,8 +9,9 @@ const LandingPage = () => {
     setTimeout(() => {
       // navigate('/observe');
       // navigate('/main');
-      navigate('/detail');
-      // navigate('/setting')
+      // navigate('/detail');
+      navigate('/setting')
+      // navigate('/login');
     }, 300);
   }, []);
 

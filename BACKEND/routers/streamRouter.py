@@ -6,7 +6,6 @@ import cv2
 import time
 import traceback
 import numpy as np
-from modules.calculate import calculate_human
 from modules.yolov5.detect import detect
 import os
 import config
@@ -75,6 +74,9 @@ async def test():
         await service.getTrackerId()
         observeChk = await service.isTodayObserveExist(1)
         print('observeChk', observeChk)
+        print('observeChk type ', type(observeChk))
+        if type(observeChk) == dict:
+            print('hi')
         await service.addTodayCamData(observeChk, 1)
         return observeChk
 
@@ -113,17 +115,20 @@ async def streamVideoFirstAreaSet(groupNum, coordinate1, coordinate2):
         await service.getTrackerId()
         observeChk = await service.isTodayObserveExist(int(groupNum))
         await service.addTodayCamData(observeChk, int(groupNum))
-    coordinates1 = [[]]
-    coordinates2 = [[]]
+
+    coordinates1 = [[], []]
+
     setCoordinates(coordinate1, coordinates1, 1)
-    setCoordinates(coordinate2, coordinates2, 1)
+    setCoordinates(coordinate2, coordinates1, 2)
+
     print('streamVideoAreaSet 2data :', coordinates1)
-    print('streamVideoAreaSet 2data :', coordinates2)
-    return StreamingResponse(service.video_streaming(coordinates1, coordinates2),
+    return StreamingResponse(service.video_streaming(coordinates1),
                              media_type="multipart/x-mixed-replace; boundary=frame")
 
 
 # 두번째 그룹 좌표 설정
+# coordinate1 : 1차 그룹 yellow 좌표
+# coordinate2 : 1차 그룹 red 좌표
 @router.get("/area/{groupNum}/{coordinate1}/{coordinate2}/{coordinate3}/{coordinate4}", response_description="")
 async def streamVideoSecondAreaSet(groupNum, coordinate1, coordinate2, coordinate3, coordinate4):
     print('2차 감지 groupNum     ', groupNum)
@@ -140,8 +145,8 @@ async def streamVideoSecondAreaSet(groupNum, coordinate1, coordinate2, coordinat
     coordinates2 = [[], []]
 
     setCoordinates(coordinate1, coordinates1, 1)
-    setCoordinates(coordinate2, coordinates2, 1)
-    setCoordinates(coordinate3, coordinates1, 2)
+    setCoordinates(coordinate2, coordinates1, 2)
+    setCoordinates(coordinate3, coordinates2, 1)
     setCoordinates(coordinate4, coordinates2, 2)
 
     print('streamVideoAreaSet 2data :', coordinates1)

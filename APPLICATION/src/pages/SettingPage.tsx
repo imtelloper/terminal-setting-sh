@@ -1,9 +1,7 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import '../style/pages/SettingPage.scss';
 import '../style/DesignSystem.scss';
 import Api from '../api/Api';
-// import { camPort1Ip, camPort2Ip, camPort3Ip, camPort4Ip } from './ObservePage';
-// import { cssValue } from 'react-spinners/helpers';
 import {
   Folder,
   Memory,
@@ -37,7 +35,7 @@ const camDummyData: Array<CamSettingType> = [
     computeDevice: 'CPU',
     sensingModel: 'small',
     threshold: 70,
-    imgSaveSwitch: false,
+    imgSaveSwitch: true,
     messageSwitch: false,
     kakaoSwitch: false,
   },
@@ -47,10 +45,10 @@ const camDummyData: Array<CamSettingType> = [
     savingPath: '/home/',
     camName: 'H1 공장 크레인 우측 상단 캠',
     computeDevice: 'CPU',
-    sensingModel: 'small',
-    threshold: 70,
+    sensingModel: 'nano',
+    threshold: 80,
     imgSaveSwitch: false,
-    messageSwitch: false,
+    messageSwitch: true,
     kakaoSwitch: false,
   },
   {
@@ -60,7 +58,7 @@ const camDummyData: Array<CamSettingType> = [
     camName: 'H1 공장 크레인 왼쪽 상단 캠',
     computeDevice: 'CPU',
     sensingModel: 'small',
-    threshold: 70,
+    threshold: 90,
     imgSaveSwitch: false,
     messageSwitch: false,
     kakaoSwitch: false,
@@ -72,7 +70,7 @@ const camDummyData: Array<CamSettingType> = [
     camName: 'H1 공장 크레인 왼쪽 상단 캠',
     computeDevice: 'CPU',
     sensingModel: 'small',
-    threshold: 70,
+    threshold: 100,
     imgSaveSwitch: false,
     messageSwitch: false,
     kakaoSwitch: false,
@@ -96,10 +94,6 @@ const SettingPage = () => {
   // toolBtn 클릭 색상 변경
   const [currentClick, setCurrentClick] = useState(null);
   const [prevClick, setPrevClick] = useState(null);
-  // 밑에 세개
-  const [urlState, setUrlState] = useState([]);
-  const [videoSrcState, setVideoSrcState] = useState([]);
-  const [captureSrcState, setCaptureSrcState] = useState('');
 
   const getClick = (e) => {
     setCurrentClick(e.target.id);
@@ -133,35 +127,98 @@ const SettingPage = () => {
     const target = e.currentTarget;
     const { value } = target;
     const dType = target.getAttribute('datatype');
+    let inputVal = value;
+    console.log('handleChangeValue file', target.files);
+    console.log('handleChangeValue file', target.files[0].path);
+    console.log('handleChangeValue file', target.files[0].name);
     console.log('handleChangeValue value', value);
     console.log('handleChangeValue datatype', dType);
+    if (dType === 'savingPath' && target.files) {
+      const splitedFilePath = target.files[0].path.split('/');
+      splitedFilePath.pop();
+      const absoluteFilePath = splitedFilePath.join('/');
+      console.log(absoluteFilePath);
+      (document.querySelector('#savingPathInput') as HTMLInputElement).value =
+        absoluteFilePath;
+    }
+
+    dType === 'camName' &&
+      (inputVal = (document.querySelector('#camNameInput') as HTMLInputElement)
+        .value);
+    console.log(
+      (document.querySelector('#camNameInput') as HTMLInputElement).value
+    );
+    Api.tracker.modifyOneData('62c796f09715acf6931d4e6b', {
+      [dType]: inputVal,
+    });
   };
 
   useEffect(() => {
-    Api.tracker.getAllDatas().then((res) => {
-      console.log('Api.tracker.getAllDatas res', res, typeof res);
+    Api.tracker
+      .getAllDatas()
+      .then((res) => {
+        console.log('Api.tracker.getAllDatas res', res, typeof res);
 
-      typeof res !== 'string' && setCamSettingState(res);
-    });
+        typeof res !== 'string' && setCamSettingState(res);
+      })
+      .catch((err) => console.error(err));
+
+    // Api.tracker
+    //   .saveData({
+    //     area: 'H3 프레스',
+    //     camPort: 'cam2',
+    //     camName: '프레스캠2',
+    //     computeDevice: 'string',
+    //     savingPath: 'string',
+    //     sensingModel: 'string',
+    //     calibImg: 'string',
+    //     baseLine: 0,
+    //     dangerLine: 'string',
+    //     sensingGroup1: 'string',
+    //     sensingGroup2: 'string',
+    //     threshold: 0,
+    //     imgSaveSwitch: true,
+    //     messageSwitch: true,
+    //     kakaoSwitch: true,
+    //   })
+    //   .then((res) => {
+    //     console.log('saveData res', res);
+    //   });
   }, []);
 
   useEffect(() => {
     console.log('camSettingState', camSettingState);
+    const camStateKeys = camSettingState.map((obj) => obj.area);
+    console.log('camStateKeys', camStateKeys);
+    const settingAreasState = [...new Set(camStateKeys)];
+    console.log('settingAreasState', settingAreasState);
+    const areaFilteredData = camSettingState.filter(
+      (obj) => obj.area === 'H2 로봇'
+    );
+    console.log('areaFilteredData', areaFilteredData);
   }, [camSettingState]);
 
   const modifyTrackerData = (objectId, data) => {
-    Api.tracker.modifyOneData(objectId, data).then((res) => {
-      console.log('Api.tracker.modifyOneData res', res);
-    });
+    Api.tracker
+      .modifyOneData(objectId, data)
+      .then((res) => {
+        console.log('Api.tracker.modifyOneData res', res);
+      })
+      .catch((err) => console.error(err));
   };
 
   /* 어느 구역에서 몇번째 카메라인지 구역 설정 필요 */
 
   const handleChangeTrackerData = (e) => {
     const target = e.currentTarget;
+    const dType = target.getAttribute('datatype');
     console.log(target.parentNode);
     console.log(target.parentElement.parentElement);
+    console.log('dType', dType);
     // Api.tracker.modifyOneData({});
+    console.log(
+      (document.querySelector('#camNameInput') as HTMLInputElement).value
+    );
   };
 
   const camSettingMap = useMemo(() => {
@@ -171,21 +228,32 @@ const SettingPage = () => {
           <div className="content">
             <Folder style={{ fontSize: '24px' }} />
             <span>저장폴더</span>
-            <input defaultValue={data.savingPath} />
-            <button
+            <input
+              id="savingPathInput"
+              type="text"
+              defaultValue={data.savingPath}
+            />
+            <input
+              id="inputFilePath"
+              type="file"
               className="btnR defaultPrimary"
-              onClick={handleChangeTrackerData}
-            >
+              datatype="savingPath"
+              onChange={handleChangeValue}
+              // @ts-ignore
+              webkitdirectory=""
+            />
+            <label id="inputFilePathLabel" htmlFor="inputFilePath">
               선택
-            </button>
+            </label>
           </div>
           <div className="content">
             <PhotoCamera style={{ fontSize: '24px' }} />
             <span>카메라 이름</span>
-            <input defaultValue={data.camName} />
+            <input id="camNameInput" defaultValue={data.camName} />
             <button
+              datatype="camName"
               className="btnR defaultPrimary"
-              onClick={handleChangeTrackerData}
+              onClick={handleChangeValue}
             >
               적용
             </button>
@@ -194,50 +262,27 @@ const SettingPage = () => {
             <Memory style={{ fontSize: '24px' }} />
             <span>연산장치</span>
             <div className="toggle">
-              <input type="radio" id="radio1" name="radio" defaultChecked />
+              <input
+                datatype="computeDevice"
+                type="radio"
+                id="radio1"
+                name="radio"
+                onChange={handleChangeValue}
+                value="CPU"
+              />
               <label htmlFor="radio1">CPU</label>
-              <input type="radio" id="radio2" name="radio" />
+              <input
+                datatype="computeDevice"
+                type="radio"
+                id="radio2"
+                name="radio"
+                onChange={handleChangeValue}
+                value="GPU"
+                defaultChecked
+              />
               <label htmlFor="radio2">GPU</label>
               <span className="move" />
             </div>
-            {/* <div className="toggleBtnBox"> */}
-            {/*  <input */}
-            {/*    type="radio" */}
-            {/*    id="toggleBtn1" */}
-            {/*    name="toggleBtn" */}
-            {/*    defaultChecked */}
-            {/*  /> */}
-            {/*  <label className="toggleBtn" htmlFor="toggleBtn1"> */}
-            {/*    CPU */}
-            {/*  </label> */}
-            {/*  <input type="radio" id="toggleBtn2" name="toggleBtn" /> */}
-            {/*  <label className="toggleBtn" htmlFor="toggleBtn2"> */}
-            {/*    GPU */}
-            {/*  </label> */}
-            {/*  <span className="slider" /> */}
-            {/* </div> */}
-            {/* <input */}
-            {/*  id="toolTab7" */}
-            {/*  type="radio" */}
-            {/*  name="toolTabs" */}
-            {/*  datatype="computeDevice" */}
-            {/*  onChange={handleChangeValue} */}
-            {/*  value="GPU" */}
-            {/*  // checked={data.computeDevice === 'GPU' && true} */}
-            {/* /> */}
-            {/* <label htmlFor="toolTab7">GPU</label> */}
-            {/* <div /> */}
-            {/* <input */}
-            {/*  id="toolTab8" */}
-            {/*  type="radio" */}
-            {/*  name="toolTabs" */}
-            {/*  onChange={handleChangeValue} */}
-            {/*  datatype="computeDevice" */}
-            {/*  value="CPU" */}
-            {/*  // defaultChecked={data.computeDevice === 'CPU' && true} */}
-            {/*  // checked={data.computeDevice === 'CPU' && true} */}
-            {/* /> */}
-            {/* <label htmlFor="toolTab8">CPU</label> */}
           </div>
           <div className="content">
             <MdViewInAr style={{ fontSize: '24px' }} />
@@ -247,8 +292,9 @@ const SettingPage = () => {
               defaultValue={data.sensingModel}
               datatype="sensingModel"
             >
-              <option>Small</option>
-              <option>Big</option>
+              <option>nano</option>
+              <option>small</option>
+              <option>medium</option>
             </select>
             <button className="btnR defaultPrimary">선택</button>
           </div>
@@ -262,7 +308,10 @@ const SettingPage = () => {
               datatype="threshold"
             >
               <option>50</option>
+              <option>60</option>
               <option>70</option>
+              <option>80</option>
+              <option>90</option>
               <option>100</option>
             </select>
             <button className="btnR defaultPrimary">선택</button>
@@ -270,26 +319,25 @@ const SettingPage = () => {
           <div className="content">
             <PermMedia style={{ fontSize: '24px' }} />
             <span>알람 이미지 저장</span>
-            {/* <div className="saveToggleBtnBox"> */}
-            {/*  <input */}
-            {/*    type="radio" */}
-            {/*    id="saveToggleBtn1" */}
-            {/*    name="saveToggleBtn" */}
-            {/*    defaultChecked */}
-            {/*  /> */}
-            {/*  <label className="saveToggleBtn" htmlFor="saveToggleBtn1"> */}
-            {/*    ON */}
-            {/*  </label> */}
-            {/*  <input type="radio" id="saveToggleBtn2" name="saveToggleBtn" /> */}
-            {/*  <label className="toggleBtn" htmlFor="saveToggleBtn2"> */}
-            {/*    OFF */}
-            {/*  </label> */}
-            {/*  <div className="slider2" /> */}
-            {/* </div> */}
             <div className="imgSaveToggle">
-              <input type="radio" id="radio3" name="imgRadio" defaultChecked />
+              <input
+                datatype="imgSaveSwitch"
+                type="radio"
+                id="radio3"
+                name="imgRadio"
+                onChange={handleChangeValue}
+                value="on"
+              />
               <label htmlFor="radio3">ON</label>
-              <input type="radio" id="radio4" name="imgRadio" />
+              <input
+                datatype="imgSaveSwitch"
+                type="radio"
+                id="radio4"
+                name="imgRadio"
+                onChange={handleChangeValue}
+                value="off"
+                defaultChecked
+              />
               <label htmlFor="radio4">OFF</label>
               <span className="move" />
             </div>
@@ -297,35 +345,25 @@ const SettingPage = () => {
           <div className="content">
             <Textsms />
             <span>문자 알람</span>
-            {/* <div className="messageToggleBtnBox"> */}
-            {/*  <input */}
-            {/*    type="radio" */}
-            {/*    id="messageToggleBtn1" */}
-            {/*    name="messageToggleBtn" */}
-            {/*    defaultChecked */}
-            {/*  /> */}
-            {/*  <label className="messageToggleBtn" htmlFor="messageToggleBtn1"> */}
-            {/*    ON */}
-            {/*  </label> */}
-            {/*  <input */}
-            {/*    type="radio" */}
-            {/*    id="messageToggleBtn2" */}
-            {/*    name="messageToggleBtn" */}
-            {/*  /> */}
-            {/*  <label className="toggleBtn" htmlFor="messageToggleBtn2"> */}
-            {/*    OFF */}
-            {/*  </label> */}
-            {/*  <div className="slider2" /> */}
-            {/* </div> */}
             <div className="messageToggle">
               <input
+                datatype="messageSwitch"
                 type="radio"
                 id="radio5"
                 name="messageRadio"
-                defaultChecked
+                onChange={handleChangeValue}
+                value="on"
               />
               <label htmlFor="radio5">ON</label>
-              <input type="radio" id="radio6" name="messageRadio" />
+              <input
+                datatype="messageSwitch"
+                type="radio"
+                id="radio6"
+                name="messageRadio"
+                onChange={handleChangeValue}
+                value="off"
+                defaultChecked
+              />
               <label htmlFor="radio6">OFF</label>
               <span className="move" />
             </div>
@@ -333,31 +371,25 @@ const SettingPage = () => {
           <div className="content">
             <img src={KakaoIcon} alt="" />
             <span>카카오톡 알림</span>
-            {/* <div className="kakaoToggleBtnBox"> */}
-            {/*  <input */}
-            {/*    type="radio" */}
-            {/*    id="kakaoToggleBtn1" */}
-            {/*    name="kakaoToggleBtn" */}
-            {/*    defaultChecked */}
-            {/*  /> */}
-            {/*  <label className="kakaoToggleBtn" htmlFor="kakaoToggleBtn1"> */}
-            {/*    ON */}
-            {/*  </label> */}
-            {/*  <input type="radio" id="kakaoToggleBtn2" name="kakaoToggleBtn" /> */}
-            {/*  <label className="toggleBtn" htmlFor="kakaoToggleBtn2"> */}
-            {/*    OFF */}
-            {/*  </label> */}
-            {/*  <div className="slider2" /> */}
-            {/* </div> */}
             <div className="kakaoToggle">
               <input
+                datatype="kakaoSwitch"
                 type="radio"
                 id="radio7"
                 name="kakaoRadio"
-                defaultChecked
+                onChange={handleChangeValue}
+                value="on"
               />
               <label htmlFor="radio7">ON</label>
-              <input type="radio" id="radio8" name="kakaoRadio" />
+              <input
+                datatype="kakaoSwitch"
+                type="radio"
+                id="radio8"
+                name="kakaoRadio"
+                onChange={handleChangeValue}
+                value="off"
+                defaultChecked
+              />
               <label htmlFor="radio8">OFF</label>
               <span className="move" />
             </div>

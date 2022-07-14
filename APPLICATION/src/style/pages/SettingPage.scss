@@ -97,71 +97,25 @@ div.settingWrap {
               font-weight: bold;
             }
 
-            //div.toggleBtnBox,div.saveToggleBtnBox, div.messageToggleBtnBox, div.kakaoToggleBtnBox{
-            //  width: 112px;
-            //  height: 32px;
-            //  display: flex;
-            //  color: #979797;
-            //  background-color: $inactive;
-            //  font-size: 14px;
-            //  position: relative;
-            //  margin: 0;
-            //  border-radius: 8px;
-            //
-            //  input {
-            //    display: none;
-            //  }
-            //
-            //  label{
-            //    all: unset;
-            //    width: 50%;
-            //    height: 100%;
-            //    position: relative;
-            //    z-index: 1;
-            //    display: flex;
-            //    align-items: center;
-            //    justify-content: center;
-            //    cursor: pointer;
-            //    transition: 0.1s;
-            //  }
-            //
-            //  div.slider {
-            //    width: 56px;
-            //    height: 32px;
-            //    background-color: $blue-500;
-            //    margin: 0;
-            //    border-radius: 8px;
-            //    position: absolute;
-            //    z-index: 0;
-            //    transform: translateX(100%);
-            //    transition: 0.2s;
-            //  }
-            //
-            //  input[type="radio"]:nth-child(1):checked ~ div.slider {
-            //    transform: translateX(0%);
-            //  }
-            //
-            //  input[type="radio"]:checked + label{
-            //    color: $white;
-            //  }
-            //
-            //  div.slider2 {
-            //    width: 56px;
-            //    height: 32px;
-            //    background-color: #979797;
-            //    margin: 0;
-            //    border-radius: 8px;
-            //    position: absolute;
-            //    z-index: 0;
-            //    transform: translateX(100%);
-            //    transition: 0.2s;
-            //  }
-            //
-            //  input:nth-child(1):checked ~ div.slider2 {
-            //    transform: translateX(0%);
-            //    background-color: $blue-500;
-            //  }
-            //}
+            #inputFilePath{
+              display: none;
+            }
+            #inputFilePathLabel{
+              width: 68px;
+              margin-left: 8px;
+              background-color: #3366ff;
+              color: white;
+              height: 40px;
+              font-weight: 400;
+              border-radius: 8px;
+              padding: 0 16px;
+              box-sizing: border-box;
+              font-size: 14px;
+              cursor: pointer;
+              display: flex;
+              justify-content: center;
+              align-items: center;
+            }
 
             div.toggle, div.imgSaveToggle, div.messageToggle, div.kakaoToggle {
               width: 112px;

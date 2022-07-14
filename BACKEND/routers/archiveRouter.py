@@ -25,7 +25,7 @@ dataModel = Archive
 updateModel = UpdateArchive
 
 
-@router.post("/", response_description="데이터 저장")
+@router.post("", response_description="데이터 저장")
 async def saveData(data: dataModel = Body(...)):
     jsonData = jsonable_encoder(data)
     resultData = await service.addOneData(jsonData)

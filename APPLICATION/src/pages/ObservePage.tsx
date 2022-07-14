@@ -38,13 +38,24 @@ const initVideoFrameData: Array<ViedeoFrameType> = [
       visible: true,
       yellowSensingPercent: 1.37,
       redSensingPercent: 0.3,
-      coordinate: [],
+      coordinate: [
+        // [79, 137],
+        // [115, 145],
+        // [105, 192],
+        // [77, 192],
+      ],
     },
     secondCanvas: {
+      // visible: true,
       visible: false,
       yellowSensingPercent: 0.7,
       redSensingPercent: 0.3,
-      coordinate: [],
+      coordinate: [
+        // [345, 146],
+        // [364, 147],
+        // [360, 221],
+        // [344, 221],
+      ],
     },
   },
   {
@@ -102,8 +113,8 @@ const ObservePage = () => {
   const polygonDraw = new PolygonDraw();
   const camWidth = 512;
   const camHeight = 384;
-  const pointSize = 3;
-  const lineSize = 2.5;
+  const pointSize = 3; // 다각형 점의 크기
+  const lineSize = 2.5; // 다각형 선의 굵기
 
   const drawColor = {
     green: '#42f593',
@@ -140,25 +151,6 @@ const ObservePage = () => {
     setStateCoordinate(arrIndex, itemID, coordinate);
   };
 
-  /* 다각형 라인 그리기 */
-  const drawLines = (context, targetPoints, color = drawColor.green) => {
-    context.strokeStyle = color;
-    context.lineWidth = lineSize;
-    context.beginPath();
-    context.moveTo(...targetPoints[0]);
-    for (const [x, y] of targetPoints.slice(1)) context.lineTo(x, y);
-    context.closePath();
-    context.stroke();
-  };
-
-  /* 다각형의 점 찍기 */
-  const drawPoints = (context, x, y, color = drawColor.green) => {
-    context.beginPath();
-    context.arc(x, y, pointSize, 0, 2 * Math.PI, true);
-    context.fillStyle = color;
-    context.fill();
-  };
-
   const setNewVideoState = (arrIndex, newSrc) => {
     const newArr = videoFrameState;
     newArr[arrIndex].frameSrc = newSrc;
@@ -166,45 +158,41 @@ const ObservePage = () => {
     flushSync(() => setVideoFrameState(newArr));
   };
 
-  /*
-  칼리브레이션 정리
-  우선 캔버스에 두 점을 찍고 거리를 구한다.
-  구해진 거리가 몇 미터인지 설정한다.
-
-
-  */
   const draw = (canvas, clicked = false) => {
-    const greenCtx = canvas?.getContext('2d');
-    const yellowCtx = canvas?.getContext('2d');
     const redCtx = canvas?.getContext('2d');
+    const yellowCtx = canvas?.getContext('2d');
+    const greenCtx = canvas?.getContext('2d');
     const arrIndex = canvas?.getAttribute('tabIndex');
     const itemID = canvas?.getAttribute('itemID');
     greenCtx?.clearRect(0, 0, canvas.width, canvas.height);
 
     const { yellowSensingPercent, redSensingPercent, coordinate } =
       videoFrameState[arrIndex][itemID];
-    const yellowSensingPoints = [];
     const redSensingPoints = [];
+    const yellowSensingPoints = [];
+    const greenSensingPoints = [];
 
-    const calibrate = PolygonDraw.getDistanceRate(200, 10);
+    const calibrate = PolygonDraw.getDistanceRate(200, 5);
     console.log('calibrate', calibrate); // 13.2  ,  1m당 13.2px
-    const yellowSetMeter = 3; // 5m
+    const yellowSetMeter = 1; // 5m
     const yellowDistancePx = calibrate * yellowSetMeter; // 5m = 66px
+    const greenSetMeter = 2; // 5m
+    const greenDistancePx = calibrate * greenSetMeter; // 5m = 66px
 
     // 기준 좌표에서 각 66px만큼 더 커진
 
     /* 내분점 구하기 공식 참고 */
     let m1 = yellowSensingPercent;
     let n1 = 1 - m1;
-    const m2 = redSensingPercent;
-    const n2 = 1 - m2;
+    let m2 = redSensingPercent;
+    let n2 = 1 - m2;
 
     // 무게중심의 좌표값
     const centerX = polygonDraw.getCentroid(coordinate).x;
     const centerY = polygonDraw.getCentroid(coordinate).y;
 
     /* 무게 중식 찍기 */
-    drawPoints(greenCtx, centerX, centerY);
+    PolygonDraw.drawPoints(greenCtx, centerX, centerY, pointSize);
 
     /* 내분점 좌표 구하기 */
     const getInsideX = (m, n, x) => (m * x + n * centerX) / (m + n);
@@ -226,36 +214,62 @@ const ObservePage = () => {
 
       /* 기준선 거리와 calibration에서 구해진 meter당 px 값을 더한값을 기준선거리로 나누어 내분점의 비율을 구한다. */
       m1 = (standardLineDistance + yellowDistancePx) / standardLineDistance;
-      // console.log('m1', m1);
+      console.log('m1', m1);
       n1 = 1 - m1;
 
-      /* Green Zone 다각형점 찍기 */
-      drawPoints(greenCtx, x, y);
+      m2 = (standardLineDistance + greenDistancePx) / standardLineDistance;
+      console.log('m2', m2);
+      n2 = 1 - m2;
+
+      /* Red Zone 다각형점 찍기 */
+      redSensingPoints.push([Math.round(x), Math.round(y)]);
+      PolygonDraw.drawPoints(redCtx, x, y, pointSize, drawColor.red);
 
       /* Yellow Zone 다각형점 찍기 */
-      // const yellowInsideX = Math.round(getInsideX(m1, n1, x));
-      // const yellowInsideY = Math.round(getInsideY(m1, n1, y));
       const yellowInsideX = Math.round(getInsideX(m1, n1, x));
       const yellowInsideY = Math.round(getInsideY(m1, n1, y));
       yellowSensingPoints.push([yellowInsideX, yellowInsideY]);
-      drawPoints(yellowCtx, yellowInsideX, yellowInsideY, drawColor.yellow);
+      PolygonDraw.drawPoints(
+        yellowCtx,
+        yellowInsideX,
+        yellowInsideY,
+        pointSize,
+        drawColor.yellow
+      );
 
-      /* Red Zone 다각형점 찍기 */
-      const redInsideX = Math.round(getInsideX(m2, n2, x));
-      const redInsideY = Math.round(getInsideY(m2, n2, y));
-      redSensingPoints.push([redInsideX, redInsideY]);
-      drawPoints(redCtx, redInsideX, redInsideY, drawColor.red);
+      /* Green Zone 다각형점 찍기 */
+      const greenInsideX = Math.round(getInsideX(m2, n2, x));
+      const greenInsideY = Math.round(getInsideY(m2, n2, y));
+      greenSensingPoints.push([greenInsideX, greenInsideY]);
+      PolygonDraw.drawPoints(
+        greenCtx,
+        greenInsideX,
+        greenInsideY,
+        pointSize,
+        drawColor.green
+      );
     }
 
-    const yellowSensingCoordinate = yellowSensingPoints.join(',');
     const redSensingCoordinate = redSensingPoints.join(',');
+    const yellowSensingCoordinate = yellowSensingPoints.join(',');
+    const greenSensingCoordinate = greenSensingPoints.join(',');
 
-    /* Green Zone 라인  그리기 */
-    drawLines(greenCtx, coordinate);
-    /* Yellow Zone 라인  그리기 */
-    drawLines(yellowCtx, yellowSensingPoints, drawColor.yellow);
     /* Red Zone 라인  그리기 */
-    drawLines(redCtx, redSensingPoints, drawColor.red);
+    PolygonDraw.drawLines(redCtx, coordinate, lineSize, drawColor.red);
+    /* Yellow Zone 라인  그리기 */
+    PolygonDraw.drawLines(
+      yellowCtx,
+      yellowSensingPoints,
+      lineSize,
+      drawColor.yellow
+    );
+    /* Green Zone 라인  그리기 */
+    PolygonDraw.drawLines(
+      greenCtx,
+      greenSensingPoints,
+      lineSize,
+      drawColor.green
+    );
 
     if (coordinate.length < 3) return;
 
@@ -305,7 +319,7 @@ const ObservePage = () => {
     const match = coordinate?.findIndex(
       ([x0, y0]) => Math.abs(x0 - x) + Math.abs(y0 - y) <= 6
     );
-    if (match < 0) coordinate.push([x, y]);
+    if (match < 0) coordinate.push([Math.round(x), Math.round(y)]);
     else coordinate.splice(match, 1); // delete point when user clicks near it.
     const newArr = videoFrameState;
     newArr[arrIndex][itemID].coordinate = coordinate;
@@ -315,20 +329,19 @@ const ObservePage = () => {
     draw(canvas, true);
   };
 
-  const drawCallback = useCallback((ele) => draw(ele), [videoFrameState]);
 
   useEffect(() => {
-    // videoFrameState[0]?.frameSrc &&
-    //   console.log('videoFrameState[0].frameSrc', videoFrameState[0]?.frameSrc);
-    // videoFrameState[0]?.frameSrc &&
-    //   console.log(
-    //     'videoFrameState[0].firstCanvas.coordinate',
-    //     videoFrameState[0]?.firstCanvas.coordinate
-    //   );
-    // videoFrameState[0]?.frameSrc &&
-    //   videoFrameState[0]?.firstCanvas.coordinate.forEach((coord) => {
-    //     console.log('coord', coord);
-    //   });
+    videoFrameState[0]?.frameSrc &&
+      console.log('videoFrameState[0].frameSrc', videoFrameState[0]?.frameSrc);
+    videoFrameState[0]?.frameSrc &&
+      console.log(
+        'videoFrameState[0].firstCanvas.coordinate',
+        videoFrameState[0]?.firstCanvas.coordinate
+      );
+    videoFrameState[0]?.frameSrc &&
+      videoFrameState[0]?.firstCanvas.coordinate.forEach((coord) => {
+        console.log('coord', coord);
+      });
 
     if (videoFrameState[0]) {
       const coor1 = videoFrameState[0]?.secondCanvas?.coordinate[0];
@@ -354,19 +367,6 @@ const ObservePage = () => {
       <div className="iframeBox" key={idx}>
         <div className="iframeTitle">
           <span>CAM{(idx + 1).toString()}</span>
-          {/* <span */}
-          {/*  className="iframeRecording" */}
-          {/*  onClick={() => { */}
-          {/*    axios.get( */}
-          {/*      `${data.frameSrc.split(':81')[0]}:81/api/util/reboot/`, */}
-          {/*      { */}
-          {/*        withCredentials: false, */}
-          {/*      } */}
-          {/*    ); */}
-          {/*  }} */}
-          {/* > */}
-          {/*  Refresh({data.frameSrc}) */}
-          {/* </span> */}
           <span className="iframeRecording">
             {camTabState - 1 === idx && recordState && 'Recording...'}
           </span>
@@ -442,15 +442,6 @@ const ObservePage = () => {
       );
     }
     return tabArr;
-  };
-
-  const createCanvas = (e) => {
-    const target = e.currentTarget;
-    const dType = parseInt(target.getAttribute('datatype'), 10);
-    const newArr = videoFrameState;
-    // newArr[dType].yellowCanvasVisible = true;
-    flushSync(() => setVideoFrameState([]));
-    flushSync(() => setVideoFrameState(newArr));
   };
 
   // // 녹화

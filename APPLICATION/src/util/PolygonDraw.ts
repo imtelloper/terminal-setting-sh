@@ -58,4 +58,28 @@ export default class PolygonDraw {
   static getDistanceRate = (twoPointsDistance, lineDistance) => {
     return twoPointsDistance / lineDistance;
   };
+
+  /* 다각형의 점 찍기 */
+  static drawPoints = (context, x, y, pointSize: number, color = '#42f593') => {
+    context.beginPath();
+    context.arc(x, y, pointSize, 0, 2 * Math.PI, true);
+    context.fillStyle = color;
+    context.fill();
+  };
+
+  /* 다각형 라인 그리기 */
+  static drawLines = (
+    context,
+    targetPoints,
+    lineSize: number,
+    color = '#42f593'
+  ) => {
+    context.strokeStyle = color;
+    context.lineWidth = lineSize;
+    context.beginPath();
+    context.moveTo(...targetPoints[0]);
+    for (const [x, y] of targetPoints.slice(1)) context.lineTo(x, y);
+    context.closePath();
+    context.stroke();
+  };
 }
