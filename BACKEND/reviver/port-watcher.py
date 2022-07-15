@@ -19,19 +19,21 @@ def runPortChecker():
         if result == 0:
             print("Port is Open")
         else:
-            print("")
             print("Port is not Open")
+            # backend 8000 port가 안돌아가고 있으면 실행시킴.
             os.system("pwd")
             os.system("python /home/interx/SAFETY-AI/BACKEND/main.py")
 
+
 def doTask():
-    "new session create"
+    # new session create
     os.setsid()
     os.open("/dev/null", os.O_RDWR)
     os.dup(0)
     os.dup(0)
 
     runPortChecker()
+
 
 def runDaemon():
     try:
@@ -46,6 +48,7 @@ def runDaemon():
         sys.exit()
 
     doTask()
+
 
 if __name__ == '__main__':
     runDaemon()
