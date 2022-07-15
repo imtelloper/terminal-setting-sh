@@ -11,6 +11,7 @@ const LandingPage = () => {
       navigate('/main');
       // navigate('/detail');
       // navigate('/setting');
+      // navigate('/setting')
       // navigate('/login');
     }, 300);
   }, []);
