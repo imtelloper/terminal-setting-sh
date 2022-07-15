@@ -10,7 +10,8 @@ Front에서도 DB를 수정하면 observer에서도 .... stream service에서 wh
 
 def send_api(path, method):
     global response
-    API_HOST = "http://127.0.0.1:8000"
+    # API_HOST = "http://127.0.0.1:8000"
+    API_HOST = "http://192.168.0.3:81"
     url = API_HOST + path
     headers = {'Content-Type': 'application/json', 'charset': 'UTF-8', 'Accept': '*/*'}
     body = {
@@ -28,7 +29,5 @@ def send_api(path, method):
     except Exception as ex:
         print(ex)
 
-
 # 호출 예시
 send_api("/api/stream/area/133,86,386,96,382,290,122,292/202,146,311,150,309,233,198,234", "GET")
-
