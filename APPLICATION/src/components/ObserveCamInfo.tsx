@@ -97,29 +97,29 @@ const ObserveCamInfo = ({
     flushSync(() => setVideoFrameState(newArr));
   };
 
-  const groupBoxComponent = (camInfoStateInfo, idx) => (
+  const groupBoxComponent = (camInfoStateInfo, idx, groupNum) => (
     <div className="observeCamInfoContainer">
       <div className="observeBox">
         <div className="groupBox">
-          <span className="groupName">{`Group${idx}`}</span>
+          <span className="groupName">{`Group${groupNum}`}</span>
           <div className="switchToggle">
             <input
               datatype="messageSwitch"
               type="radio"
-              id="radio1"
+              id={`toggleOnRadio${idx}`}
               name="messageRadio"
               value="on"
               defaultChecked
             />
-            <label htmlFor="radio1">ON</label>
+            <label htmlFor={`toggleOnRadio${idx}`}>ON</label>
             <input
               datatype="messageSwitch"
               type="radio"
-              id="radio2"
+              id={`toggleOffRadio${idx}`}
               name="messageRadio"
               value="off"
             />
-            <label htmlFor="radio2">OFF</label>
+            <label htmlFor={`toggleOffRadio${idx}`}>OFF</label>
             <span className="move" />
           </div>
         </div>
@@ -177,10 +177,10 @@ const ObserveCamInfo = ({
       >
         <div className="safetyContentBox">
           {videoFrameState[idx]?.firstCanvas?.visible &&
-            groupBoxComponent(info, 1)}
+            groupBoxComponent(info, idx+1, 1)}
 
           {videoFrameState[idx]?.secondCanvas?.visible &&
-            groupBoxComponent(info, 2)}
+            groupBoxComponent(info, idx+1, 2)}
 
           <div className="safetyCreateBtnBox">
             <button
