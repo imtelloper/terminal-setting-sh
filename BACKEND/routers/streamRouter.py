@@ -105,6 +105,12 @@ async def videoRecordOff():
     return service.setRecordGateClose()
 
 
+# 녹화 저장
+@router.get("/save", response_description="")
+async def saveVideo():
+    return service.saveFile()
+
+
 # 첫번째 그룹 좌표 설정
 @router.get("/area/{groupNum}/{coordinate1}/{coordinate2}/", response_description="")
 async def streamVideoFirstAreaSet(groupNum, coordinate1, coordinate2):
