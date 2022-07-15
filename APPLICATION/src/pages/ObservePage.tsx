@@ -8,6 +8,9 @@ import Api from '../api/Api';
 import CreateBtn from '../components/CreateBtn';
 import PolygonDraw from '../util/PolygonDraw';
 import { Settings } from '@material-ui/icons';
+import { useSWRState } from '../fetcher/useSWRState';
+import useSWR from 'swr';
+import { getFetcher } from '../fetcher/fetcher';
 
 export const camPort1Ip = '192.168.0.3';
 export const camPort2Ip = '192.168.0.24';
@@ -116,19 +119,43 @@ const ObservePage = () => {
   const camHeight = 384;
   const pointSize = 3; // 다각형 점의 크기
   const lineSize = 2.5; // 다각형 선의 굵기
-
+  const today = new Date().toISOString().slice(0, 10);
   const drawColor = {
     green: '#42f593',
     yellow: '#FFFA7C',
     red: '#FF374B',
   };
-
+  const { data: swrState, mutate: setSwrState } = useSWRState();
   const [txtChangeState, setTxtChangeState] = useState('녹화시작');
   const [videoFrameState, setVideoFrameState] =
     useState<Array<ViedeoFrameType>>(initVideoFrameData);
 
+  const [getObserveState, setGetObserveState] = useState([]);
+
   const [camTabState, setCamTabState] = useState(1);
   const [recordState, setRecordState] = useState(false);
+  const findFetcher = (url: string) =>
+    axios.post(url, { area: swrState.curTrackerArea }).then((res) => res.data);
+
+  const { data: swrTrackerData, error: swrTrackerErr } = useSWR<
+    Array<TrackerObserve>
+  >('/api/tracker/find', findFetcher, {
+    refreshInterval: 1000,
+  });
+
+  // const findFetcher = (url: string) =>
+  //   axios
+  //     .post(url, {
+  //       date: today,
+  //       trackerId: swrState.curAreaTrackerId,
+  //     })
+  //     .then((res) => res.data);
+  //
+  // const { data: swrObserveData, error } = useSWR<Array<TrackerObserve>>(
+  //   '/api/observe/find',
+  //   findFetcher,
+  //   { refreshInterval: 1000 }
+  // );
 
   const handleActive = (e) => {
     const target = e.currentTarget;
@@ -370,6 +397,57 @@ const ObservePage = () => {
     });
   }, [videoFrameState]);
 
+  const setProcessedSwrData = () => {
+    const processedData = [];
+    swrTrackerData.forEach(async (tracker, idx) => {
+      await Api.observe
+        .findData({
+          trackerId: tracker._id,
+          date: today,
+        })
+        .then((observe) => {
+          if (observe?.length > 0) {
+            const processedObserve = observe.map((obj) => {
+              return { ...tracker, ...obj };
+            });
+            processedData.push(...processedObserve);
+            console.log('🌺🌺🌺processedData', processedData);
+            flushSync(() => setGetObserveState([...processedData]));
+          }
+        });
+    });
+  };
+
+  useEffect(() => {
+    console.log(
+      'swrStateswrStateswrStateswrStateswrStateswrState curTrackerArea',
+      swrState.curTrackerArea
+    );
+  }, [swrState]);
+
+  // useEffect(() => {
+  //   console.log(
+  //     'swrObserveDataswrObserveDataswrObserveDataswrObserveData',
+  //     swrObserveData
+  //   );
+  // }, [swrObserveData]);
+
+  useEffect(() => {
+    swrTrackerData?.length > 0 && setProcessedSwrData();
+  }, [swrTrackerData]);
+
+  // useEffect(() => {
+  //   console.log('swrTrackerData', swrTrackerData);
+  //   swrTrackerData?.length > 0 && setGetObserveState([]);
+  // }, [swrTrackerData]);
+
+  useEffect(() => {
+    console.log('🌽🌽🌽🌽🌽getObserveState', getObserveState);
+    if (getObserveState.length === 0) {
+      swrTrackerData?.length > 0 && setProcessedSwrData();
+    }
+  }, [getObserveState]);
+
   const videoFrameMap = useMemo(() => {
     return videoFrameState.map((data: ViedeoFrameType, idx) => (
       <div className="iframeBox" key={idx}>
@@ -487,7 +565,7 @@ const ObservePage = () => {
         <div className="leftBox">
           <div className="titleBox">
             <span className="subTitle">Place</span>
-            <span className="mainTitle">H1 공장 크레인</span>
+            <span className="mainTitle">{swrState.curTrackerArea}</span>
           </div>
           <div className="safetyTabWrap">
             <div className="safetyTabBox">{getTabEles()}</div>

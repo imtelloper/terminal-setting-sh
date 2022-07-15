@@ -10,6 +10,7 @@ type SwrStateType = {
   user: {
     email: string;
   };
+  curTrackerArea: string;
   observe: Observe;
   camInfo: {
     cam1: CamInfo;
@@ -23,6 +24,7 @@ let state: SwrStateType = {
   user: {
     email: '',
   },
+  curTrackerArea: '',
   observe: {
     area: 'H3 공장 크레인',
     camPort: 'cam1',
