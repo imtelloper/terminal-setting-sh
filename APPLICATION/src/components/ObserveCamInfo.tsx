@@ -4,6 +4,8 @@ import { useNavigate } from 'react-router-dom';
 import { flushSync } from 'react-dom';
 import Delete from '../images/delete.png';
 import { AiOutlinePlusCircle } from 'react-icons/ai';
+import { Feedback, HighlightOff } from '@material-ui/icons';
+import { MdDangerous, MdOutlineTaskAlt } from 'react-icons/md';
 
 type Props = {
   videoFrameState: Array<any>;
@@ -100,12 +102,49 @@ const ObserveCamInfo = ({
       <div className="observeBox">
         <div className="groupBox">
           <span className="groupName">{`Group${idx}`}</span>
-          <button className="switchBtn on">ON</button>
-          {/* <button className="switchBtn off">OFF</button> */}
+          <div className="switchToggle">
+            <input
+              datatype="messageSwitch"
+              type="radio"
+              id="radio1"
+              name="messageRadio"
+              value="on"
+              defaultChecked
+            />
+            <label htmlFor="radio1">ON</label>
+            <input
+              datatype="messageSwitch"
+              type="radio"
+              id="radio2"
+              name="messageRadio"
+              value="off"
+            />
+            <label htmlFor="radio2">OFF</label>
+            <span className="move" />
+          </div>
         </div>
         <div className="btnBox">
-          {/* className : green yellow red inactive => alarmTxt에 추가해주시면 됩니다! */}
-          <div className="alarmTxt green">안전합니다.</div>
+          {/* className : 색상별 green yellow red inactive */}
+          <div className="alarmTxt green">
+            <MdOutlineTaskAlt style={{ fontSize: '32px' }} />
+            <span>안전합니다.</span>
+          </div>
+
+          {/* <div className="alarmTxt yellow"> */}
+          {/*  <Feedback style={{ fontSize: '32px' }}/> */}
+          {/*  <span>작업자 진입 확인</span> */}
+          {/* </div> */}
+
+          {/*<div className="alarmTxt red">*/}
+          {/*  <MdDangerous style={{ fontSize: '32px' }} />*/}
+          {/*  <span>작업자 위험 반경 진입</span>*/}
+          {/*</div>*/}
+
+          {/*<div className="alarmTxt inactive">*/}
+          {/*  <HighlightOff style={{ fontSize: '32px' }} />*/}
+          {/*  <span>비활성화 되었습니다.</span>*/}
+          {/*</div>*/}
+
           <div className="sensingBox">
             <span>
               1차 감지<p>{camInfoStateInfo.sensingCnt}</p>
@@ -116,21 +155,14 @@ const ObserveCamInfo = ({
           </div>
         </div>
         <div className="safetyBtnBox">
-          <button className="saveParameter" onClick={saveParameter}>
-            설정 저장
-          </button>
-          <button className="callParameter" onClick={callParameter}>
-            설정 불러오기
-          </button>
-          <button
-            className="safetyBtn safetyResetBtn"
-            onClick={handleErrorReset}
-          >
-            에러 리셋
-          </button>
-          <button className="safetyBtn safetyDeleteBtn" onClick={handleDelete}>
-            <img src={Delete} alt="" />
-          </button>
+          <div>
+            <button onClick={saveParameter}>저장</button>
+            <button onClick={callParameter}>불러오기</button>
+            <button onClick={handleErrorReset}>상태 리셋</button>
+            <button onClick={handleDelete}>
+              <img src={Delete} alt="" />
+            </button>
+          </div>
         </div>
       </div>
     </div>

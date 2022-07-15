@@ -7,10 +7,10 @@ const LandingPage = () => {
 
   useEffect(() => {
     setTimeout(() => {
-      // navigate('/observe');
+      navigate('/observe');
       // navigate('/main');
       // navigate('/detail');
-      navigate('/setting')
+      // navigate('/setting');
       // navigate('/login');
     }, 300);
   }, []);

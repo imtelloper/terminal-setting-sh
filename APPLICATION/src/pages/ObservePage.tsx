@@ -7,6 +7,7 @@ import axios from 'axios';
 import Api from '../api/Api';
 import CreateBtn from '../components/CreateBtn';
 import PolygonDraw from '../util/PolygonDraw';
+import { Settings } from '@material-ui/icons';
 
 export const camPort1Ip = '192.168.0.3';
 export const camPort2Ip = '192.168.0.24';
@@ -121,11 +122,19 @@ const ObservePage = () => {
     yellow: '#FFFA7C',
     red: '#FF374B',
   };
+
+  const [txtChangeState, setTxtChangeState] = useState('녹화시작');
   const [videoFrameState, setVideoFrameState] =
     useState<Array<ViedeoFrameType>>(initVideoFrameData);
 
   const [camTabState, setCamTabState] = useState(1);
   const [recordState, setRecordState] = useState(false);
+
+  const handleActive = (e) => {
+    const target = e.currentTarget;
+    target.classList.toggle('txtActive');
+    target.classList.toggle('hoverCircleActive');
+  };
 
   const getStateCoordinate = (arrIndex, itemID) =>
     videoFrameState[arrIndex][itemID].coordinate;
@@ -329,7 +338,6 @@ const ObservePage = () => {
     draw(canvas, true);
   };
 
-
   useEffect(() => {
     videoFrameState[0]?.frameSrc &&
       console.log('videoFrameState[0].frameSrc', videoFrameState[0]?.frameSrc);
@@ -368,7 +376,7 @@ const ObservePage = () => {
         <div className="iframeTitle">
           <span>CAM{(idx + 1).toString()}</span>
           <span className="iframeRecording">
-            {camTabState - 1 === idx && recordState && 'Recording...'}
+            {camTabState - 1 === idx && recordState && 'REC'}
           </span>
         </div>
         {data.firstCanvas.visible && (
@@ -483,7 +491,7 @@ const ObservePage = () => {
           </div>
           <div className="safetyTabWrap">
             <div className="safetyTabBox">{getTabEles()}</div>
-            <div className="safetyContainer">
+            <div className="safetyTabContainer">
               <ObserveCamInfo
                 videoFrameState={videoFrameState}
                 setVideoFrameState={setVideoFrameState}
@@ -493,19 +501,23 @@ const ObservePage = () => {
               />
             </div>
             <div className="bottomBtnBox">
-              <button className="bottomBtn" onClick={handleRecordVideo}>
-                RECORD
-              </button>
+              <div className="recordBtnBox">
+                <button className="recordBtn" onClick={handleRecordVideo}>
+                  <div />
+                  <div className="hoverCircle" onClick={handleActive} />
+                </button>
+                <span onClick={handleActive}>{txtChangeState}</span>
+              </div>
               <button
-                className="bottomBtn"
+                className="settingBtn"
                 onClick={() => {
-                  // navigate('/detail');
+                  navigate('/detail');
                   // Api.stream
                   //   .stopRecordVideo()
                   //   .catch((err) => console.error(err));
                 }}
               >
-                SAVE
+                <Settings />
               </button>
             </div>
           </div>

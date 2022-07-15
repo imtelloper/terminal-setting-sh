@@ -1,161 +1,454 @@
+@import "../color.scss";
+
 div.detailViewContainer {
   width: 100%;
   height: 100%;
-  background-color: #fff;
-  color: #555;
-  margin: 0;
-  box-sizing: border-box;
   display: flex;
-  justify-content: center;
-  align-items: center;
-  position: relative;
 
-  div.leftCon {
-    margin-right: 30px;
-    div.title {
-      font-size: 36px;
-      font-weight: bold;
-    }
+  div.detailLeft {
+    width: 444px;
+    margin-right: 16px;
+    position: relative;
 
-    input {
-      display: none;
-    }
-
-    label {
-      display: inline-block;
-      margin: 10px 30px 0 0;
-      position: relative;
-      cursor: pointer;
-    }
-
-    input:checked + label {
-      font-weight: bold;
-    }
-
-    div.realTimeBox {
-      width: 540px;
-      min-height: 400px;
+    &:after {
+      content: '';
+      width: 1px;
       height: 100%;
-      border: 1px solid #555555;
-      padding: 10px;
-      margin-top: 10px;
-      position: relative;
-      display: none;
+      background-color: #bbbbbb;
+      position: absolute;
+      top: 0;
+      right: -16px;
+    }
 
-      select {
-        width: 400px;
-        height: 30px;
+    div.leftBox {
+      width: calc(100% - 16px);
+      height: calc(100% - 32px);
+      margin: 16px;
+      display: flex;
+      flex-direction: column;
+
+      div.titleBox {
+        width: 100%;
+        height: 172px;
+        padding: 40px;
+        box-sizing: border-box;
+        display: flex;
+        flex-direction: column;
+
+        span.subTitle {
+          margin-bottom: 8px;
+          color: #878E9B;
+        }
+
+        span.mainTitle {
+          font-size: 28px;
+          font-weight: 700;
+        }
       }
 
-      ul {
-        padding: 20px;
-        li {
-          list-style: square;
-          margin: 10px 0;
+      div.detailTabWrap {
+        height: calc(100% - 156px);
+        background: $white;
+        border-bottom: 1px solid $line;
+        box-sizing: border-box;
+        border-radius: 8px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
 
-          span.green {
-            color: green;
+        div.detailTabBox {
+          width: 100%;
+          height: 48px;
+          line-height: 48px;
+          display: flex;
+          align-items: center;
+          justify-content: space-around;
+          border-top-left-radius: 8px;
+          border-top-right-radius: 8px;
+
+          input {
+            display: none;
+
+            &:checked + label {
+              color: $blue-500;
+              border-bottom: 4px solid $blue-500;
+            }
+          }
+
+          label {
+            width: 100%;
+            color: $inactive-text;
+            font-weight: 700;
+            text-align: center;
+            height: 100%;
+            box-sizing: border-box;
+            cursor: pointer;
           }
         }
-        div.sensingBox{
+
+        div.detailTabContainer {
+          width: 100%;
+          height: 100%;
+          //flex: 1;
+          overflow-y: auto;
           display: flex;
-          li{
-            margin-right: 30px;
+          flex-direction: column;
+          align-items: center;
+          background-color: pink;
+
+          section {
+            width: 100%;
+
+            div.detailCreateBtnBox {
+              width: 100%;
+              height: 40px;
+              padding: 24px;
+              box-sizing: border-box;
+
+              button.detailCreateBtn {
+                all: unset;
+                width: 100%;
+                height: 40px;
+                border-radius: 8px;
+                background-color: $blue-100;
+                color: $blue-500;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                cursor: pointer;
+
+                span {
+                  margin-right: 4px;
+                }
+              }
+            }
           }
         }
       }
 
       div.bottomBtnBox {
         width: 100%;
-        display: flex;
-        justify-content: space-around;
-        position: absolute;
-        bottom: 30px;
-      }
-    }
+        height: 88px;
+        border-bottom-left-radius: 8px;
+        border-bottom-right-radius: 8px;
+        background-color: $dark;
+        border-top: 1px solid $line;
+        box-sizing: border-box;
+        position: relative;
 
-    div.recordBox {
-      width: 540px;
-      min-height: 400px;
-      height: 100%;
-      border: 1px solid #555555;
-      padding: 10px;
-      margin-top: 10px;
-      position: relative;
-      display: none;
+        div.recordBtnBox {
+          width: 100%;
+          height: 100%;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          position: relative;
 
-      p {
-        width: 100%;
-        margin-bottom: 10px;
-      }
+          button.recordBtn {
+            all: unset;
+            width: 84px;
+            height: 84px;
+            background-color: $dark;
+            border-radius: 50%;
+            position: absolute;
+            top: -16px;
+            left: 50%;
+            transform: translate(-50%, 0);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
 
-      div.alertBox {
-        border-top: 1.5px dashed #bbbbbb;
-        padding-top: 10px;
+            &:hover .hoverCircle {
+              width: 20px;
+              height: 20px;
+              background-color: $error-500;
+              border-radius: 50%;
+            }
 
-        p {
-          margin-bottom: 10px;
+            div {
+              &:first-child {
+                width: 48px;
+                height: 48px;
+                background-color: $white;
+                border-radius: 50%;
+              }
+
+              &:last-child {
+                width: 14px;
+                height: 14px;
+                background-color: #979797;
+                border-radius: 2px;
+                position: absolute;
+                transition-duration: 0.2s;
+                &.hoverCircleActive{
+                  width: 26px;
+                  height: 26px;
+                  border-radius: 50%;
+                  background-color: $error-500;
+                  transition-duration: 0.2s;
+                }
+              }
+            }
+          }
 
           span {
-            margin-right: 10px;
+            color: $white;
+            display: block;
+            position: absolute;
+            bottom: 6px;
+            &.txtActive{
+              color: $error-500;
+            }
+          }
+        }
+
+        button.settingBtn {
+          all: unset;
+          width: 40px;
+          height: 40px;
+          color: $white;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          position: absolute;
+          top: 50%;
+          right: 24px;
+          z-index: 9;
+          transform: translate(0, -50%);
+          cursor: pointer;
+        }
+      }
+    }
+  }
+
+  div.detailRight {
+    width: calc(75% - 16px);
+    height: 100%;
+
+    div.rightBox {
+      width: calc(100% - 16px);
+      height: 100%;
+      margin: 16px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      div.iframeContent {
+        //min-width: 1048px;
+        width: 1048px;
+        height: 888px;
+        position: relative;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        //border: 2px solid #555555;
+        div.iframeBox {
+          width: 512px;
+          height: 432px;
+          background-color: $white;
+          border-radius: 8px;
+          position: relative;
+          box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.2);
+          //border: 2px solid black;
+
+          div.iframeTitle {
+            height: 48px;
+            font-size: 18px;
+            padding-left: 24px;
+            padding-right: 24px;
+            border-bottom: 1px solid $line;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: relative;
           }
 
-          span.red {
-            color: crimson;
+          canvas {
+            all: unset;
+            width: 100%;
+            height: calc(100% - 48px);
+            position: absolute;
+
           }
 
-          span.yellow {
-            color: #ffc000;
+          canvas.firstCanvas {
+            z-index: 1;
+            //border: 2px solid #0CBEF4;
+          }
+
+          canvas.secondCanvas {
+            z-index: 2;
+            //border: 2px solid red;
+          }
+
+          iframe {
+            border: none;
           }
         }
       }
     }
   }
-    div.iframeBox{
-      width: 1024px;
-      height: 768px;
-      position: relative;
-      canvas{
-        width: 100%;
-        height: 100%;
-        position: absolute;
-        z-index: 2;
-        border: 1px solid #555;
-        box-sizing: border-box;
-      }
-      iframe{
-        width: 100%;
-        height: 100%;
-        position: absolute;
-        z-index: 1;
-        border: 1px solid #555;
-        box-sizing: border-box;
-      }
-    }
-
-  button {
-    width: 50px;
-    font-size: 15px;
-    background-color: #292929;
-    color: white;
-    border-radius: 5px;
-    cursor: pointer;
-    margin-left: 10px;
-  }
-
-  button:hover {
-    background-color: white;
-    color: black;
-  }
-
-  button.off {
-    display: none;
-  }
-}
-
-#menuTab1:checked ~ .realTimeBox,
-#menuTab2:checked ~ .recordBox {
-  display: block;
 }
 
 
+//div.detailViewContainer {
+//  width: 100%;
+//  height: 100%;
+//  background-color: #fff;
+//  color: #555;
+//  margin: 0;
+//  box-sizing: border-box;
+//  display: flex;
+//  justify-content: center;
+//  align-items: center;
+//  position: relative;
+//
+//  div.leftCon {
+//    margin-right: 30px;
+//    div.title {
+//      font-size: 36px;
+//      font-weight: bold;
+//    }
+//
+//    input {
+//      display: none;
+//    }
+//
+//    label {
+//      display: inline-block;
+//      margin: 10px 30px 0 0;
+//      position: relative;
+//      cursor: pointer;
+//    }
+//
+//    input:checked + label {
+//      font-weight: bold;
+//    }
+//
+//    div.realTimeBox {
+//      width: 540px;
+//      min-height: 400px;
+//      height: 100%;
+//      border: 1px solid #555555;
+//      padding: 10px;
+//      margin-top: 10px;
+//      position: relative;
+//      display: none;
+//
+//      select {
+//        width: 400px;
+//        height: 30px;
+//      }
+//
+//      ul {
+//        padding: 20px;
+//        li {
+//          list-style: square;
+//          margin: 10px 0;
+//
+//          span.green {
+//            color: green;
+//          }
+//        }
+//        div.sensingBox{
+//          display: flex;
+//          li{
+//            margin-right: 30px;
+//          }
+//        }
+//      }
+//
+//      div.bottomBtnBox {
+//        width: 100%;
+//        display: flex;
+//        justify-content: space-around;
+//        position: absolute;
+//        bottom: 30px;
+//      }
+//    }
+//
+//    div.recordBox {
+//      width: 540px;
+//      min-height: 400px;
+//      height: 100%;
+//      border: 1px solid #555555;
+//      padding: 10px;
+//      margin-top: 10px;
+//      position: relative;
+//      display: none;
+//
+//      p {
+//        width: 100%;
+//        margin-bottom: 10px;
+//      }
+//
+//      div.alertBox {
+//        border-top: 1.5px dashed #bbbbbb;
+//        padding-top: 10px;
+//
+//        p {
+//          margin-bottom: 10px;
+//
+//          span {
+//            margin-right: 10px;
+//          }
+//
+//          span.red {
+//            color: crimson;
+//          }
+//
+//          span.yellow {
+//            color: #ffc000;
+//          }
+//        }
+//      }
+//    }
+//  }
+//    div.iframeBox{
+//      width: 1024px;
+//      height: 768px;
+//      position: relative;
+//      canvas{
+//        width: 100%;
+//        height: 100%;
+//        position: absolute;
+//        z-index: 2;
+//        border: 1px solid #555;
+//        box-sizing: border-box;
+//      }
+//      iframe{
+//        width: 100%;
+//        height: 100%;
+//        position: absolute;
+//        z-index: 1;
+//        border: 1px solid #555;
+//        box-sizing: border-box;
+//      }
+//    }
+//
+//  button {
+//    width: 50px;
+//    font-size: 15px;
+//    background-color: #292929;
+//    color: white;
+//    border-radius: 5px;
+//    cursor: pointer;
+//    margin-left: 10px;
+//  }
+//
+//  button:hover {
+//    background-color: white;
+//    color: black;
+//  }
+//
+//  button.off {
+//    display: none;
+//  }
+//}
+//
+//#menuTab1:checked ~ .realTimeBox,
+//#menuTab2:checked ~ .recordBox {
+//  display: block;
+//}
+//
+//

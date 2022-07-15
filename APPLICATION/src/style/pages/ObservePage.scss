@@ -22,7 +22,7 @@ div.observeContainer {
 
     div.leftBox {
       width: calc(100% - 16px);
-      height: calc(100% - 88px);
+      height: calc(100% - 32px);
       margin: 16px;
       display: flex;
       flex-direction: column;
@@ -35,7 +35,7 @@ div.observeContainer {
         display: flex;
         flex-direction: column;
 
-         span.subTitle{
+        span.subTitle {
           margin-bottom: 8px;
           color: #878E9B;
         }
@@ -86,7 +86,7 @@ div.observeContainer {
           }
         }
 
-        div.safetyContainer {
+        div.safetyTabContainer {
           width: 100%;
           height: 100%;
           //flex: 1;
@@ -103,15 +103,16 @@ div.observeContainer {
           //  background-color: #FFF8D4;
           //}
 
-          section{
+          section {
             width: 100%;
 
-            div.safetyCreateBtnBox{
+            div.safetyCreateBtnBox {
               width: 100%;
               height: 40px;
               padding: 24px;
               box-sizing: border-box;
-              button.safetyCreateBtn{
+
+              button.safetyCreateBtn {
                 all: unset;
                 width: 100%;
                 height: 40px;
@@ -122,7 +123,8 @@ div.observeContainer {
                 justify-content: center;
                 align-items: center;
                 cursor: pointer;
-                span{
+
+                span {
                   margin-right: 4px;
                 }
               }
@@ -134,32 +136,94 @@ div.observeContainer {
       div.bottomBtnBox {
         width: 100%;
         height: 88px;
-        padding: 24px;
+        border-bottom-left-radius: 8px;
+        border-bottom-right-radius: 8px;
+        background-color: $dark;
         border-top: 1px solid $line;
         box-sizing: border-box;
-        display: flex;
-        justify-content: space-between;
+        position: relative;
 
-        button {
+        div.recordBtnBox {
+          width: 100%;
+          height: 100%;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          position: relative;
+
+          button.recordBtn {
+            all: unset;
+            width: 84px;
+            height: 84px;
+            background-color: $dark;
+            border-radius: 50%;
+            position: absolute;
+            top: -16px;
+            left: 50%;
+            transform: translate(-50%, 0);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+
+            &:hover .hoverCircle {
+              width: 20px;
+              height: 20px;
+              background-color: $error-500;
+              border-radius: 50%;
+            }
+
+            div {
+              &:first-child {
+                width: 48px;
+                height: 48px;
+                background-color: $white;
+                border-radius: 50%;
+              }
+
+              &:last-child {
+                width: 14px;
+                height: 14px;
+                background-color: #979797;
+                border-radius: 2px;
+                position: absolute;
+                transition-duration: 0.2s;
+                &.hoverCircleActive{
+                  width: 26px;
+                  height: 26px;
+                  background-color: $error-500;
+                }
+              }
+            }
+          }
+
+          span {
+            color: $white;
+            display: block;
+            position: absolute;
+            bottom: 6px;
+            &.hoverCircleActive{
+              width: 26px;
+              height: 26px;
+              background-color: $error-500;
+            }
+          }
+        }
+
+        button.settingBtn {
           all: unset;
-          width: calc(50% - 8px);
+          width: 40px;
           height: 40px;
-          border-radius: 8px;
+          color: $white;
           display: flex;
           justify-content: center;
           align-items: center;
-          border-top: 1px solid $line;
+          position: absolute;
+          top: 50%;
+          right: 24px;
+          z-index: 9;
+          transform: translate(0, -50%);
           cursor: pointer;
-
-          &:first-child {
-            border: 1px solid $line;
-          }
-
-          &:last-child {
-            margin-left: 16px;
-            color: $white;
-            background-color: $info;
-          }
         }
       }
     }
@@ -167,7 +231,7 @@ div.observeContainer {
 
   div.observeRight {
     width: calc(75% - 16px);
-    height: calc(100% - 88px);
+    height: 100%;
 
     div.rightBox {
       width: calc(100% - 16px);
@@ -191,7 +255,7 @@ div.observeContainer {
           background-color: $white;
           border-radius: 8px;
           position: relative;
-          box-shadow: 2px 2px 3px rgba(0,0,0,0.2);
+          box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.2);
           //border: 2px solid black;
 
           div.iframeTitle {
