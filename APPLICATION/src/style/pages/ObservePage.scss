@@ -181,6 +181,7 @@ div.observeContainer {
                 border-radius: 50%;
               }
 
+              //안에 작은 네모
               &:last-child {
                 width: 14px;
                 height: 14px;
@@ -191,6 +192,7 @@ div.observeContainer {
                 &.hoverCircleActive{
                   width: 26px;
                   height: 26px;
+                  border-radius: 50%;
                   background-color: $error-500;
                 }
               }
