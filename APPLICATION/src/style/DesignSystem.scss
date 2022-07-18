@@ -65,7 +65,7 @@ button.btnL{
 }
 
 //icon button
-button.iconBtnXS{
+button.iconBtnS{
   all: unset;
   height: 24px;
   background-color: $inactive;
@@ -76,7 +76,7 @@ button.iconBtnXS{
 }
 
 
-button.iconBtnS{
+button.iconBtnR{
   all: unset;
   height: 36px;
   border-radius: 8px;
@@ -86,7 +86,7 @@ button.iconBtnS{
   display: flex;
   align-items: center;
   font-size: 14px;
-  span.iconS{
+  span.iconR{
     width: 16px;
     height: 16px;
     margin: 4px;
