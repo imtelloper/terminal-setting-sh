@@ -16,19 +16,19 @@ const CurrentTime = () => {
   //   second: '2-digit',
   // });
 
-  const year = today.toLocaleDateString('ko-KO',{
+  const year = today.toLocaleDateString('ko-KO', {
     year: 'numeric',
   });
 
-  const month = today.toLocaleDateString('ko-KR',{
+  const month = today.toLocaleDateString('ko-KR', {
     month: '2-digit',
   });
 
-  const day = today.toLocaleDateString('ko-KO',{
+  const day = today.toLocaleDateString('ko-KO', {
     day: '2-digit',
   });
 
-  const weekday = today.toLocaleDateString('ko-KO',{
+  const weekday = today.toLocaleDateString('ko-KO', {
     weekday: 'long',
   });
 
@@ -44,18 +44,26 @@ const CurrentTime = () => {
   //   second: '2-digit',
   // });
 
-  const hours = ('0' + today.getHours()).slice(-2);
-  const minutes = ('0' + today.getMinutes()).slice(-2);
-  const seconds = ('0' + today.getSeconds()).slice(-2);
-  const timeString = hours + ':' + minutes  + ':' + seconds;
-
-  console.log(timeString);
+  const hours = `0${today.getHours()}`.slice(-2);
+  const minutes = `0${today.getMinutes()}`.slice(-2);
+  const seconds = `0${today.getSeconds()}`.slice(-2);
+  const timeString = `${hours}:${minutes}:${seconds}`;
 
   return (
     <div className="currentTimeContainer">
-      <p>{year.slice(0,4)}</p>
-      <p>{month.slice(0,2)}<span>/</span>{day.slice(0,2)} <p>{weekday}</p></p>
-      <p>{hours}<span>:</span>{minutes}<span>:</span>{seconds}</p>
+      <p>{year.slice(0, 4)}</p>
+      <p>
+        {month.slice(0, 2)}
+        <span>/</span>
+        {day.slice(0, 2)} <p>{weekday}</p>
+      </p>
+      <p>
+        {hours}
+        <span>:</span>
+        {minutes}
+        <span>:</span>
+        {seconds}
+      </p>
     </div>
   );
 };

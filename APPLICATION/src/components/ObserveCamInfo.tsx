@@ -19,6 +19,7 @@ const ObserveCamInfo = ({
   camTabState,
   recordState,
   setRecordState,
+  getObserveState,
 }) => {
   const navigate = useNavigate();
   const [camInfoState, setCamInfoState] = useState([
@@ -97,7 +98,7 @@ const ObserveCamInfo = ({
     flushSync(() => setVideoFrameState(newArr));
   };
 
-  const groupBoxComponent = (camInfoStateInfo, idx, groupNum) => (
+  const groupBoxComponent = (info, idx, groupNum) => (
     <div className="observeCamInfoContainer">
       <div className="observeBox">
         <div className="groupBox">
@@ -135,22 +136,22 @@ const ObserveCamInfo = ({
           {/*  <span>작업자 진입 확인</span> */}
           {/* </div> */}
 
-          {/*<div className="alarmTxt red">*/}
-          {/*  <MdDangerous style={{ fontSize: '32px' }} />*/}
-          {/*  <span>작업자 위험 반경 진입</span>*/}
-          {/*</div>*/}
+          {/* <div className="alarmTxt red"> */}
+          {/*  <MdDangerous style={{ fontSize: '32px' }} /> */}
+          {/*  <span>작업자 위험 반경 진입</span> */}
+          {/* </div> */}
 
-          {/*<div className="alarmTxt inactive">*/}
-          {/*  <HighlightOff style={{ fontSize: '32px' }} />*/}
-          {/*  <span>비활성화 되었습니다.</span>*/}
-          {/*</div>*/}
+          {/* <div className="alarmTxt inactive"> */}
+          {/*  <HighlightOff style={{ fontSize: '32px' }} /> */}
+          {/*  <span>비활성화 되었습니다.</span> */}
+          {/* </div> */}
 
           <div className="sensingBox">
             <span>
-              1차 감지<p>{camInfoStateInfo.sensingCnt}</p>
+              1차 감지<p>{info.yellowCnt}</p>
             </span>
             <span>
-              2차 감지<p>{camInfoStateInfo.sensingCnt}</p>
+              2차 감지<p>{info.redCnt}</p>
             </span>
           </div>
         </div>
@@ -168,8 +169,17 @@ const ObserveCamInfo = ({
     </div>
   );
 
+  useEffect(() => {
+    console.log('🌸getObserveState', getObserveState);
+    const existCameras = [
+      ...new Set(getObserveState.map((obj) => obj.camPort)),
+    ];
+    /*  */
+    console.log('existCameras', existCameras);
+  }, [getObserveState]);
+
   const camInfosMap = useMemo(() => {
-    return camInfoState.map((info, idx) => (
+    return getObserveState.map((info, idx) => (
       <section
         id={`safetyContent${idx + 1}`}
         className="safetyContents"
@@ -177,10 +187,10 @@ const ObserveCamInfo = ({
       >
         <div className="safetyContentBox">
           {videoFrameState[idx]?.firstCanvas?.visible &&
-            groupBoxComponent(info, idx+1, 1)}
+            groupBoxComponent(info, idx + 1, 1)}
 
           {videoFrameState[idx]?.secondCanvas?.visible &&
-            groupBoxComponent(info, idx+1, 2)}
+            groupBoxComponent(info, idx + 1, 2)}
 
           <div className="safetyCreateBtnBox">
             <button
@@ -197,7 +207,7 @@ const ObserveCamInfo = ({
         </div>
       </section>
     ));
-  }, [camInfoState, videoFrameState]);
+  }, [getObserveState, videoFrameState]);
 
   useEffect(() => {
     const camTabs = Array.from(document.querySelectorAll('.safetyContents'));

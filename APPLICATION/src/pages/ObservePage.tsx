@@ -12,9 +12,9 @@ import { useSWRState } from '../fetcher/useSWRState';
 import useSWR from 'swr';
 import { getFetcher } from '../fetcher/fetcher';
 
-export const camPort1Ip = '192.168.0.3';
-export const camPort2Ip = '192.168.0.24';
-export const camPort3Ip = '192.168.0.18';
+export const camPort1Ip = '192.168.0.7';
+export const camPort2Ip = '192.168.0.26';
+export const camPort3Ip = '192.168.0.36';
 export const camPort4Ip = '192.168.0.30';
 
 type ViedeoFrameType = {
@@ -448,6 +448,7 @@ const ObservePage = () => {
     }
   }, [getObserveState]);
 
+  /* 카메라 영상 스트림 */
   const videoFrameMap = useMemo(() => {
     return videoFrameState.map((data: ViedeoFrameType, idx) => (
       <div className="iframeBox" key={idx}>
@@ -576,6 +577,7 @@ const ObservePage = () => {
                 camTabState={camTabState}
                 recordState={recordState}
                 setRecordState={setRecordState}
+                getObserveState={getObserveState}
               />
             </div>
             <div className="bottomBtnBox">
