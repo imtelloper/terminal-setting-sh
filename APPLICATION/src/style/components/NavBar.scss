@@ -12,7 +12,6 @@ div.header {
   top: 0px;
   left: 0px;
   z-index: 10;
-  display: none;
   div.block{
     width: 1px;
     height: 20px;
@@ -23,7 +22,7 @@ div.header {
     cursor: pointer;
     position: relative;
     ul.dropdown-list{
-      //display: none;
+      display: none;
       color: $black;
       background-color: $white;
       border-radius: 8px;

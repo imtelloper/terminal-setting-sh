@@ -520,6 +520,7 @@ class StreamService:
             except Exception as e:
                 print('예외가 발생했습니다.', e)
                 print(traceback.format_exc())
+
     def saveFile(self):
         def VideoWrite():
             try:
@@ -596,6 +597,7 @@ class StreamService:
         sftp.close()
         transprot.close()
 
-        msg = "Record"
+
+        msg = "Saved"
 
         return msg

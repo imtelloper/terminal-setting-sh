@@ -86,6 +86,11 @@ async def test():
 async def screenCapture():
     return service.setCaptureGateOpen()
 
+# 영상 저장
+@router.get("/save", response_description="")
+async def saveVideo():
+    return service.saveFile()
+
 
 # 녹화 시작
 @router.get("/record-on", response_description="")
