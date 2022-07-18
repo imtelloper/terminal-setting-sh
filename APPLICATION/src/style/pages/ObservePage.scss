@@ -66,15 +66,6 @@ div.observeContainer {
           border-top-left-radius: 8px;
           border-top-right-radius: 8px;
 
-          input {
-            display: none;
-
-            &:checked + label {
-              color: $blue-500;
-              border-bottom: 4px solid $blue-500;
-            }
-          }
-
           label {
             width: 100%;
             color: $inactive-text;
@@ -83,6 +74,16 @@ div.observeContainer {
             height: 100%;
             box-sizing: border-box;
             cursor: pointer;
+            border-bottom: 1px solid #d4d4d4;
+          }
+
+          input {
+            display: none;
+
+            &:checked + label {
+              color: $blue-500;
+              border-bottom: 4px solid $blue-500;
+            }
           }
         }
 
@@ -270,6 +271,17 @@ div.observeContainer {
             justify-content: space-between;
             align-items: center;
             position: relative;
+            span.iframeRecording{
+              display: flex;
+              align-items: center;
+              &.recIconActive{
+                width: 16px;
+                height: 16px;
+                border-radius: 50%;
+                background-color: $error-500;
+                margin-right: 4px;
+              }
+            }
           }
 
           canvas {

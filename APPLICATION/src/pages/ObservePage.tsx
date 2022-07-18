@@ -132,8 +132,11 @@ const ObservePage = () => {
 
   const handleActive = (e) => {
     const target = e.currentTarget;
+    const iframeRecordingEl = document.querySelector('.iframeRecording');
     target.classList.toggle('txtActive');
     target.classList.toggle('hoverCircleActive');
+    setTxtChangeState('녹화중');
+    iframeRecordingEl.classList.toggle('recIconActive');
   };
 
   const getStateCoordinate = (arrIndex, itemID) =>
@@ -376,7 +379,7 @@ const ObservePage = () => {
         <div className="iframeTitle">
           <span>CAM{(idx + 1).toString()}</span>
           <span className="iframeRecording">
-            {camTabState - 1 === idx && recordState && 'REC'}
+            {camTabState - 1 === idx && recordState && <span>REC</span>}
           </span>
         </div>
         {data.firstCanvas.visible && (
@@ -502,11 +505,11 @@ const ObservePage = () => {
             </div>
             <div className="bottomBtnBox">
               <div className="recordBtnBox">
-                <button className="recordBtn" onClick={handleRecordVideo}>
+                <button className="recordBtn">
                   <div />
                   <div className="hoverCircle" onClick={handleActive} />
                 </button>
-                <span onClick={handleActive}>{txtChangeState}</span>
+                <span className="recordTxt">{txtChangeState}</span>
               </div>
               <button
                 className="settingBtn"
