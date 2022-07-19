@@ -172,6 +172,31 @@ const ObservePage = () => {
     target.classList.toggle('hoverCircleActive');
     setTxtChangeState('녹화중');
     iframeRecordingEl.classList.toggle('recIconActive');
+    console.log('camTabState', camTabState);
+    let ip = null;
+    switch (camTabState) {
+      case 1:
+        ip = camPort1Ip;
+        break;
+      case 2:
+        ip = camPort2Ip;
+        break;
+      case 3:
+        ip = camPort3Ip;
+        break;
+      case 4:
+        ip = camPort4Ip;
+        break;
+      default:
+        ip = camPort1Ip;
+    }
+    if (!recordState) {
+      Api.stream.startRecordVideo(ip);
+      setRecordState(true);
+    } else {
+      Api.stream.stopRecordVideo(ip);
+      setRecordState(false);
+    }
   };
 
   const getStateCoordinate = (arrIndex: number, itemID: string) =>
