@@ -159,11 +159,9 @@ const ObservePage = () => {
 
   const handleActive = (e) => {
     const target = e.currentTarget;
-    const iframeRecordingEl = document.querySelector('.iframeRecording');
     target.classList.toggle('txtActive');
     target.classList.toggle('hoverCircleActive');
     setTxtChangeState('녹화중');
-    iframeRecordingEl.classList.toggle('recIconActive');
   };
 
   const getStateCoordinate = (arrIndex, itemID) =>
@@ -421,13 +419,13 @@ const ObservePage = () => {
     });
   };
 
-  useEffect(() => {
-    console.log(
-      'swrStateswrStateswrStateswrStateswrStateswrState curTrackerArea',
-      swrState.curTrackerArea
-    );
-  }, [swrState]);
-
+  // useEffect(() => {
+  //   console.log(
+  //     'swrStateswrStateswrStateswrStateswrStateswrState curTrackerArea',
+  //     swrState.curTrackerArea
+  //   );
+  // }, [swrState]);
+  //
   // useEffect(() => {
   //   console.log(
   //     'swrObserveDataswrObserveDataswrObserveDataswrObserveData',
@@ -439,13 +437,13 @@ const ObservePage = () => {
     swrTrackerData?.length > 0 && setProcessedSwrData();
   }, [swrTrackerData]);
 
-  // useEffect(() => {
-  //   console.log('swrTrackerData', swrTrackerData);
-  //   swrTrackerData?.length > 0 && setGetObserveState([]);
-  // }, [swrTrackerData]);
+  useEffect(() => {
+    // console.log('swrTrackerData', swrTrackerData);
+    swrTrackerData?.length > 0 && setGetObserveState([]);
+  }, [swrTrackerData]);
 
   useEffect(() => {
-    console.log('🌽🌽🌽🌽🌽getObserveState', getObserveState);
+    // console.log('🌽🌽🌽🌽🌽getObserveState', getObserveState);
     if (getObserveState.length === 0) {
       swrTrackerData?.length > 0 && setProcessedSwrData();
     }
@@ -457,7 +455,10 @@ const ObservePage = () => {
         <div className="iframeTitle">
           <span>CAM{(idx + 1).toString()}</span>
           <span className="iframeRecording">
-            {camTabState - 1 === idx && recordState && <span>REC</span>}
+            {/* {camTabState - 1 === idx && recordState && ( */}
+            {/*  <div style={{ width: '16px', height: '16px', color: 'red' }}>REC</div> */}
+            {/* )} */}
+            {camTabState - 1 === idx && recordState && <div>REC</div>}
           </span>
         </div>
         {data.firstCanvas.visible && (

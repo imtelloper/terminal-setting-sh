@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import '../style/pages/DetailViewPage.scss';
 import '../style/DesignSystem.scss';
+import '../style/pages/DetailViewPage.scss';
 import DangerZonePopup from '../components/DangerZonePopup';
-import { IoIosWarning } from 'react-icons/io';
 import CalibrationPopup from '../components/CalibrationPopup';
 import { MdDangerous, MdModeEdit, MdOutlineTaskAlt } from 'react-icons/md';
 import { Feedback, Tune } from '@material-ui/icons';
@@ -234,7 +233,7 @@ const DetailViewPage = () => {
             </div>
 
             <div className="bottomBtnBox">
-              <button className="iconR normal">취소</button>
+              <button className="iconR normalPrimary">취소</button>
               <button className="iconR defaultPrimary">확인</button>
             </div>
           </div>
