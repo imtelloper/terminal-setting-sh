@@ -403,7 +403,20 @@ const SettingPage = () => {
     <div className="settingWrap">
       <div className="settingContainer">
         <div className="settingTitle">
-          <span>Settings</span>
+          <div className="titleLeft">
+            <span>Settings</span>
+            <span>/</span>
+            <span>H1 공장 크레인</span>
+          </div>
+          <div className="titleRight">
+            <span>캠 그룹 선택</span>
+            <select>
+              <option>H1 공장 크레인</option>
+              <option>H2 공장 크레인</option>
+              <option>H3 공장 크레인</option>
+              <option>H4 공장 크레인</option>
+            </select>
+          </div>
         </div>
         <div className="settingBox">
           <input

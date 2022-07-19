@@ -1,100 +1,206 @@
-div.dangerZoneContainer{
-  width: 100%;
+@import "../color.scss";
+
+div.dangerZoneContainer {
+  width: 100vw;
   height: 100vh;
-  background-color: rgba(0,0,0,0.3);
+  background-color: rgba(0, 0, 0, 0.3);
   border: 1px solid #555555;
   display: flex;
   align-items: center;
   justify-content: center;
-  position: absolute;
+  position: fixed;
+  top: 0;
+  left: 0;
   z-index: 10;
-  div.dangerZoneBox{
-    max-width: 500px;
+
+  div.dangerBox {
+    max-width: 700px;
     width: 100%;
-    max-height: 400px;
-    height: 100%;
-    background-color: #fff;
-    position: relative;
-    border: 1px solid #555555;
-    div.title{
+    height: 548px;
+    background-color: $white;
+    border: 1px solid #d4d4d4;
+    border-radius: 8px;
+    position: absolute;
+
+    div.dangerTitle {
       width: 100%;
-      background-color: #555555;
-      color: #fff;
-      padding: 10px 0;
-      font-size: 36px;
+      height: 48px;
+      font-size: 18px;
       display: flex;
       align-items: center;
-      justify-content: center;
+      padding-left: 24px;
+      box-sizing: border-box;
+      border-bottom: 1px solid #d4d4d4;
     }
-    div.contentBox{
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      span{
-        padding: 15px 0;
-      }
-      div.content{
+
+    div.contentBox {
+      width: 100%;
+      height: calc(100% - 48px);
+      position: relative;
+
+      div.contentBoxTop{
         width: 100%;
+        height: 332px;
         display: flex;
-        justify-content: space-between;
-        padding: 20px;
-        box-sizing: border-box;
-        ul{
-          width: 50%;
-          li{
-            margin-bottom: 10px;
-            input{
-              width: 50px;
-              height: 25px;
-              margin-right: 5px;
+        div.left{
+          width: 40%;
+          height: 100%;
+          display: flex;
+          align-items: center;
+          justify-content: end;
+          div.dangerZoneImg{
+            width: 248px;
+            height: 248px;
+            position: relative;
+            background: center / contain url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='249' height='248.999' viewBox='0 0 249 248.999'%3E%3Cg id='위험구간' transform='translate(0.5 0.5)'%3E%3Cpath id='합치기_20' data-name='합치기 20' d='M17343.342,9995h-224.684a6,6,0,1,1-7.658-7.659V9762.658a6,6,0,1,1,7.658-7.66h224.686a6,6,0,1,1,7.658,7.658v224.687a6,6,0,1,1-7.66,7.658Zm0-4a6.006,6.006,0,0,1,3.656-3.656V9762.658a6.01,6.01,0,0,1-3.658-3.657h-224.684a6.009,6.009,0,0,1-3.656,3.655v224.687a6.019,6.019,0,0,1,3.656,3.655Z' transform='translate(-17107 -9751)' fill='%23e2e2e2' stroke='rgba(0,0,0,0)' stroke-miterlimit='10' stroke-width='1'/%3E%3Cpath id='합치기_23' data-name='합치기 23' d='M18112.338,9775H17967.66a6,6,0,1,1-7.66-7.654V9622.656a6,6,0,1,1,7.658-7.659h144.686a6,6,0,1,1,7.654,7.664v144.68a6,6,0,1,1-7.66,7.654Zm.006-3.993a6,6,0,0,1,3.656-3.661V9622.656a6,6,0,0,1-3.656-3.657h-144.686a6,6,0,0,1-3.656,3.657v144.685a6.007,6.007,0,0,1,3.658,3.661Z' transform='translate(-17916 -9571)' fill='%23e2e2e2' stroke='rgba(0,0,0,0)' stroke-miterlimit='10' stroke-width='1'/%3E%3Cpath id='합치기_22' data-name='합치기 22' d='M17183.34,9835h-64.682a6,6,0,1,1-7.656-7.66v-64.68a6,6,0,1,1,7.656-7.659h64.682a6,6,0,1,1,7.66,7.658v64.682a6,6,0,1,1-7.66,7.659Zm0-4a6.018,6.018,0,0,1,3.658-3.659v-64.68a6.018,6.018,0,0,1-3.658-3.659h-64.686a6.018,6.018,0,0,1-3.658,3.659v64.68a6.018,6.018,0,0,1,3.658,3.659Z' transform='translate(-17027 -9671)' fill='%23e2e2e2' stroke='rgba(0,0,0,0)' stroke-miterlimit='10' stroke-width='1'/%3E%3C/g%3E%3C/svg%3E%0A") no-repeat;
+            &.greenZoneImg{
+              background: center / contain url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='249' height='248.999' viewBox='0 0 249 248.999'%3E%3Cg id='위험구간' transform='translate(0.5 0.5)'%3E%3Cpath id='합치기_20' data-name='합치기 20' d='M17343.342,9995h-224.684a6,6,0,1,1-7.658-7.659V9762.658a6,6,0,1,1,7.658-7.66h224.686a6,6,0,1,1,7.658,7.658v224.687a6,6,0,1,1-7.66,7.658Zm0-4a6.006,6.006,0,0,1,3.656-3.656V9762.658a6.01,6.01,0,0,1-3.658-3.657h-224.684a6.009,6.009,0,0,1-3.656,3.655v224.687a6.019,6.019,0,0,1,3.656,3.655Z' transform='translate(-17107 -9751)' fill='%237EEA92' stroke='rgba(0,0,0,0)' stroke-miterlimit='10' stroke-width='1'/%3E%3Cpath id='합치기_23' data-name='합치기 23' d='M18112.338,9775H17967.66a6,6,0,1,1-7.66-7.654V9622.656a6,6,0,1,1,7.658-7.659h144.686a6,6,0,1,1,7.654,7.664v144.68a6,6,0,1,1-7.66,7.654Zm.006-3.993a6,6,0,0,1,3.656-3.661V9622.656a6,6,0,0,1-3.656-3.657h-144.686a6,6,0,0,1-3.656,3.657v144.685a6.007,6.007,0,0,1,3.658,3.661Z' transform='translate(-17916 -9571)' fill='%23E2E2E2' stroke='rgba(0,0,0,0)' stroke-miterlimit='10' stroke-width='1'/%3E%3Cpath id='합치기_22' data-name='합치기 22' d='M17183.34,9835h-64.682a6,6,0,1,1-7.656-7.66v-64.68a6,6,0,1,1,7.656-7.659h64.682a6,6,0,1,1,7.66,7.658v64.682a6,6,0,1,1-7.66,7.659Zm0-4a6.018,6.018,0,0,1,3.658-3.659v-64.68a6.018,6.018,0,0,1-3.658-3.659h-64.686a6.018,6.018,0,0,1-3.658,3.659v64.68a6.018,6.018,0,0,1,3.658,3.659Z' transform='translate(-17027 -9671)' fill='%23FF503D' stroke='rgba(0,0,0,0)' stroke-miterlimit='10' stroke-width='1'/%3E%3Cpath id='_g' data-name=' g' d='M237.686,237.622l-1.482-8.417-2.109,2.109-61.444-61.538,2.062-2.062-8.417-1.482,1.482,8.417,2.045-2.044,61.444,61.537-2,2Z' fill='%237EEA92'/%3E%3C/g%3E%3C/svg%3E") no-repeat;
+              z-index: 1;
+            }
+            &.yellowZoneImg{
+              background: center / contain url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='249' height='248.999' viewBox='0 0 249 248.999'%3E%3Cg id='위험구간' transform='translate(0.5 0.5)'%3E%3Cpath id='합치기_20' data-name='합치기 20' d='M17343.342,9995h-224.684a6,6,0,1,1-7.658-7.659V9762.658a6,6,0,1,1,7.658-7.66h224.686a6,6,0,1,1,7.658,7.658v224.687a6,6,0,1,1-7.66,7.658Zm0-4a6.006,6.006,0,0,1,3.656-3.656V9762.658a6.01,6.01,0,0,1-3.658-3.657h-224.684a6.009,6.009,0,0,1-3.656,3.655v224.687a6.019,6.019,0,0,1,3.656,3.655Z' transform='translate(-17107 -9751)' fill='%23E2E2E2' stroke='rgba(0,0,0,0)' stroke-miterlimit='10' stroke-width='1'/%3E%3Cpath id='합치기_23' data-name='합치기 23' d='M18112.338,9775H17967.66a6,6,0,1,1-7.66-7.654V9622.656a6,6,0,1,1,7.658-7.659h144.686a6,6,0,1,1,7.654,7.664v144.68a6,6,0,1,1-7.66,7.654Zm.006-3.993a6,6,0,0,1,3.656-3.661V9622.656a6,6,0,0,1-3.656-3.657h-144.686a6,6,0,0,1-3.656,3.657v144.685a6.007,6.007,0,0,1,3.658,3.661Z' transform='translate(-17916 -9571)' fill='%23FFCA2B' stroke='rgba(0,0,0,0)' stroke-miterlimit='10' stroke-width='1'/%3E%3Cpath id='합치기_22' data-name='합치기 22' d='M17183.34,9835h-64.682a6,6,0,1,1-7.656-7.66v-64.68a6,6,0,1,1,7.656-7.659h64.682a6,6,0,1,1,7.66,7.658v64.682a6,6,0,1,1-7.66,7.659Zm0-4a6.018,6.018,0,0,1,3.658-3.659v-64.68a6.018,6.018,0,0,1-3.658-3.659h-64.686a6.018,6.018,0,0,1-3.658,3.659v64.68a6.018,6.018,0,0,1,3.658,3.659Z' transform='translate(-17027 -9671)' fill='%23FF503D' stroke='rgba(0,0,0,0)' stroke-miterlimit='10' stroke-width='1'/%3E%3Cpath id='y' d='M197.719,197.655l-1.482-8.417-2.129,2.128L172.627,169.8l2.087-2.087-8.417-1.482,1.482,8.417,2.019-2.019,21.482,21.564-1.978,1.978Z' fill='%23FFCA2B'/%3E%3C/g%3E%3C/svg%3E") no-repeat;
+              z-index: 2;
             }
           }
         }
-        div.box{
-          width: 35%;
-          position: relative;
-          div{
-            &:first-child{
-              width: 100%;
-              height: 100%;
-              border: 2px solid green;
-              position: absolute;
+        div.right{
+          width: 60%;
+          height: 100%;
+          padding: 0 24px 0 36px;
+          box-sizing: border-box;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          div.rightCon{
+            width: 344px;
+            height: 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            span{
+              &:after{
+                content: '';
+                width: 16px;
+                height: 16px;
+                border-radius: 50%;
+                background-color: $success-500;
+                &:last-child{
+                  background-color: $warning-500;
+                }
+              }
             }
-            &:nth-child(2){
-              width: 70%;
-              height: 70%;
-              border: 2px solid #ffc000;
-              position: absolute;
-              top: 50%;
-              left: 50%;
-              transform: translate(-50%, -50%);
+            &:not(:last-child){
+              margin-bottom: 12px;
             }
-            &:last-child{
-              width: 40%;
-              height: 40%;
-              border: 2px solid red;
+            button{
+              border: none;
+              width: 212px;
+              height: 40px;
+              border-radius: 8px;
+              background-color: $error-500;
+              color: #fff;
+              display: flex;
+              justify-content: center;
+              align-items: center;
+              cursor: pointer;
+            }
+
+            input{
+              all: unset;
+              width: 212px;
+              height: 40px;
+              border-radius: 8px;
+              padding-right: 24px;
+              box-sizing: border-box;
+              background-color: $inactive;
+              display: flex;
+              justify-content: center;
+              align-items: center;
+              text-align: right;
+              position: relative;
+              &::placeholder{
+                color: $inactive-text;
+              }
+            }
+
+            input.yellowInput{
+              &.btnBoxActive{
+                background-color: #fff;
+                border: 1px solid #d4d4d4;
+              }
+            }
+
+            input.greenInput{
+              &.btnBoxActive{
+                background-color: #fff;
+                border: 1px solid #d4d4d4;
+              }
+            }
+            label{
               position: absolute;
-              top: 50%;
-              left: 50%;
-              transform: translate(-50%, -50%);
+              right: 40px;
+              color: $inactive-text;
+              &.labelActive{
+                color: $dark;
+              }
             }
           }
         }
       }
-        div.btnBox{
-          margin-top: 30px;
-          position: relative;
-          display: none;
 
-          &.btnBoxActive {
-            display: block;
+      div.contentBoxBottom{
+        width: 100%;
+        height: 172px;
+
+        div.txtBox{
+          width: 100%;
+          height: 84px;
+          border-top: 1px solid #d4d4d4;
+          border-bottom: 1px solid #d4d4d4;
+          padding: 0 24px;
+          box-sizing: border-box;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          span{
+            width: 100%;
+            &:first-child {
+              margin-bottom: 12px;
+            }
           }
         }
-
-      button.closeBtn{
-        position: absolute;
-        bottom: 30px;
+        div.bottomBtnBox {
+          width: 100%;
+          height: 88px;
+          padding: 24px;
+          box-sizing: border-box;
+          display: flex;
+          justify-content: end;
+          button{
+            all: unset;
+            width: 80px;
+            height: 40px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 8px;
+            border: 1px solid #d4d4d4;
+            &:last-child{
+              color: $inactive-text;
+              background-color: $inactive;
+              margin-left: 8px;
+              &.btnActive{
+                color: $white;
+                background-color: $blue-500;
+              }
+            }
+          }
+        }
       }
     }
   }
 }
+

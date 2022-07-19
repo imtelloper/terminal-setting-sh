@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from 'react';
+import '../style/DesignSystem.scss';
 import '../style/pages/DetailViewPage.scss';
 import DangerZonePopup from '../components/DangerZonePopup';
-import { IoIosWarning } from 'react-icons/io';
 import CalibrationPopup from '../components/CalibrationPopup';
+import { MdDangerous, MdModeEdit, MdOutlineTaskAlt } from 'react-icons/md';
+import { Feedback, Tune } from '@material-ui/icons';
 
 const DetailViewPage = () => {
   const [isOpenDangerZoneState, setIsOpenDangerZoneState] = useState(false);
@@ -53,88 +55,186 @@ const DetailViewPage = () => {
               <label className="label2" htmlFor="menuTab2">
                 이력조회
               </label>
-            </div>
-            <div className="detailTabContainer">
               <select>
                 <option>Group 1</option>
                 <option>Group 2</option>
                 <option>Group 3</option>
                 <option>Group 4</option>
               </select>
-              <ul>
-                <li>
-                  <span>Safety Level: </span>
-                  <span className="green">Green</span>
-                </li>
-                <li>
-                  <span>안전펜스 가동시간: </span>
-                  <span className="bold">32분</span>
-                </li>
-                <div className="sensingBox">
-                  <li>
-                    <span>1차 감지: </span>
-                    <span className="bold">3</span>
-                  </li>
-                  <li>
-                    <span>2차 감지: </span>
-                    <span className="bold">3</span>
-                  </li>
-                </div>
-                <li>
-                  <span>영역 재설정</span>
-                  <button>설정</button>
-                </li>
-                <li>
-                  <span>Calibration 설정</span>
-                  <button onClick={openCalibrationPopup}>설정</button>
-                </li>
-                <li>
-                  <span>위험구간 설정</span>
-                  <button onClick={openDangerZonePopup}>설정</button>
-                </li>
-              </ul>
+              <div className="tabContent realTimeBox">
+                <div className="realTimeContent">
+                  {/* className : 색상별 green yellow red inactive */}
+                  <div className="alarmTxt green">
+                    <MdOutlineTaskAlt style={{ fontSize: '32px' }} />
+                    <span>안전합니다.</span>
+                  </div>
 
-              <div className="bottomBtnBox">
-                <button>확인</button>
-                <button>취소</button>
+                  {/* <div className="alarmTxt yellow"> */}
+                  {/*  <Feedback style={{ fontSize: '32px' }}/> */}
+                  {/*  <span>작업자 진입 확인</span> */}
+                  {/* </div> */}
+
+                  {/* <div className="alarmTxt red"> */}
+                  {/*  <MdDangerous style={{ fontSize: '32px' }} /> */}
+                  {/*  <span>작업자 위험 반경 진입</span> */}
+                  {/* </div> */}
+
+                  {/* <div className="alarmTxt inactive"> */}
+                  {/*  <HighlightOff style={{ fontSize: '32px' }} /> */}
+                  {/*  <span>비활성화 되었습니다.</span> */}
+                  {/* </div> */}
+
+                  <div className="sensingBox">
+                    <span>
+                      1차 감지<p>7</p>
+                    </span>
+                    <span>
+                      2차 감지<p>8</p>
+                    </span>
+                  </div>
+                </div>
+                <div className="realTimeBox">
+                  <span>안전펜스 가동시간</span>
+                  <span>1일 19시간 58분</span>
+                </div>
+              </div>
+              <div className="tabContent historyBox">
+                <div className="sensingBox">
+                  <span>
+                    1차 감지<p>7</p>
+                  </span>
+                  <span>
+                    2차 감지<p>8</p>
+                  </span>
+                </div>
+                <div className="historyTimeBox">
+                  <div>
+                    <span>생성시간</span>
+                    <span>
+                      2022-05-28<span>14:10:18</span>
+                    </span>
+                  </div>
+                  <div>
+                    <span>가동 시간</span>
+                    <span>32분</span>
+                  </div>
+                </div>
+
+                <div className="alertBox">
+                  <div className="alertContent">
+                    <p>
+                      <span>
+                        <MdDangerous
+                          style={{ fontSize: '20px', color: '#ff530d' }}
+                        />
+                        <span className="red">RED 2차 감지</span>
+                      </span>
+                      <span>2022-05-28</span>
+                      <span>14:10:18</span>
+                    </p>
+                    <p>
+                      <span>
+                        <Feedback
+                          style={{ fontSize: '20px', color: '#ffca2b' }}
+                        />
+                        <span className="yellow">YELLOW 2차 감지</span>
+                      </span>
+                      <span>2022-05-28</span>
+                      <span>14:10:18</span>
+                    </p>
+                    <p>
+                      <span>
+                        <Feedback
+                          style={{ fontSize: '20px', color: '#ffca2b' }}
+                        />
+                        <span className="yellow">YELLOW 2차 감지</span>
+                      </span>
+                      <span>2022-05-28</span>
+                      <span>14:10:18</span>
+                    </p>
+                    <p>
+                      <span>
+                        <Feedback
+                          style={{ fontSize: '20px', color: '#ffca2b' }}
+                        />
+                        <span className="yellow">YELLOW 2차 감지</span>
+                      </span>
+                      <span>2022-05-28</span>
+                      <span>14:10:18</span>
+                    </p>
+                    <p>
+                      <span>
+                        <Feedback
+                          style={{ fontSize: '20px', color: '#ffca2b' }}
+                        />
+                        <span className="yellow">YELLOW 2차 감지</span>
+                      </span>
+                      <span>2022-05-28</span>
+                      <span>14:10:18</span>
+                    </p>
+                    <p>
+                      <span>
+                        <Feedback
+                          style={{ fontSize: '20px', color: '#ffca2b' }}
+                        />
+                        <span className="yellow">YELLOW 2차 감지</span>
+                      </span>
+                      <span>2022-05-28</span>
+                      <span>14:10:18</span>
+                    </p>
+                    <p>
+                      <span>
+                        <Feedback
+                          style={{ fontSize: '20px', color: '#ffca2b' }}
+                        />
+                        <span className="yellow">YELLOW 2차 감지</span>
+                      </span>
+                      <span>2022-05-28</span>
+                      <span>14:10:18</span>
+                    </p>
+                    <p>
+                      <span>
+                        <Feedback
+                          style={{ fontSize: '20px', color: '#ffca2b' }}
+                        />
+                        <span className="yellow">YELLOW 2차 감지</span>
+                      </span>
+                      <span>2022-05-28</span>
+                      <span>14:10:18</span>
+                    </p>
+                    <p>
+                      <span>
+                        <Feedback
+                          style={{ fontSize: '20px', color: '#ffca2b' }}
+                        />
+                        <span className="yellow">YELLOW 2차 감지</span>
+                      </span>
+                      <span>2022-05-28</span>
+                      <span>14:10:18</span>
+                    </p>
+                  </div>
+                </div>
               </div>
             </div>
-            <div className="recordBox">
-              <p>
-                <span>생성시간: </span>
-                <span>2022-05-28 14:10:18</span>
-              </p>
-              <p>
-                <span>가동 시간: </span>
-                <span>32분</span>
-              </p>
-              <p>
-                <span>총 감지 수: </span>
-                <span>3회</span>
-              </p>
-              <div className="alertBox">
-                <p>
-                  <span>
-                    <IoIosWarning />
-                  </span>
-                  <span className="red">Red</span>
-                  <span>2022-05-28 14:10:18</span>
-                </p>
-                <p>
-                  <span>
-                    <IoIosWarning />
-                  </span>
-                  <span className="red">Red</span>
-                  <span>2022-05-28 14:10:18</span>
-                </p>
-                <p>
-                  <span>
-                    <IoIosWarning />
-                  </span>
-                  <span className="yellow">Yellow</span>
-                  <span>2022-05-28 14:10:18</span>
-                </p>
-              </div>
+
+            <div className="settingBtnBox">
+              <button>
+                <MdModeEdit style={{ fontSize: '38px' }} />
+                <span>영역 재설정</span>
+              </button>
+              <button onClick={openCalibrationPopup}>
+                <Tune style={{ fontSize: '38px' }} />
+                <span>Calibration 설정</span>
+              </button>
+              <button onClick={openDangerZonePopup}>
+                <MdDangerous style={{ fontSize: '38px' }} />
+                <span>위험구간 설정</span>
+              </button>
+            </div>
+
+            <div className="bottomBtnBox">
+              <button className="iconR normalPrimary">취소</button>
+              <button className="iconR defaultPrimary">확인</button>
             </div>
           </div>
 
@@ -154,8 +254,9 @@ const DetailViewPage = () => {
       </div>
 
       <div className="detailRight">
-        <div className="rigthBox">
+        <div className="rightBox">
           <div className="iframeBox">
+            <div className="iframeTitle">CAM2</div>
             <canvas className="polygonCanvas" typeof="coordinate3" />
             <iframe
               title="stream1"
