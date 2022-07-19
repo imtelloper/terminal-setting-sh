@@ -167,11 +167,10 @@ const ObservePage = () => {
 
   const handleActive = (e) => {
     const target = e.currentTarget;
-    const iframeRecordingEl = document.querySelector('.iframeRecording');
     target.classList.toggle('txtActive');
     target.classList.toggle('hoverCircleActive');
     setTxtChangeState('녹화중');
-    iframeRecordingEl.classList.toggle('recIconActive');
+    // iframeRecordingEl.classList.toggle('recIconActive');
     console.log('camTabState', camTabState);
     let ip = null;
     switch (camTabState) {
@@ -495,7 +494,10 @@ const ObservePage = () => {
         <div className="iframeTitle">
           <span>CAM{(idx + 1).toString()}</span>
           <span className="iframeRecording">
-            {camTabState - 1 === idx && recordState && <span>REC</span>}
+            {/* {camTabState - 1 === idx && recordState && ( */}
+            {/*  <div style={{ width: '16px', height: '16px', color: 'red' }}>REC</div> */}
+            {/* )} */}
+            {camTabState - 1 === idx && recordState && <div>REC</div>}
           </span>
         </div>
         {data.firstCanvas.visible && (

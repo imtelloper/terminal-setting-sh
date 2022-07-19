@@ -4,7 +4,7 @@ import { IoArrowDownCircle } from 'react-icons/io5';
 
 const DesignSystem = () => {
   return (
-    <>
+    <div className="btnBox">
       {/* 버튼 사이즈별 btnXXS btnXS btnS btnR btnL */}
       {/* 버튼 색상별 default, normal, success, warning, danger, special 에 Primary, ES, Outlined, Text 클래스명을 조합하여 사용 */}
 
@@ -62,7 +62,7 @@ const DesignSystem = () => {
       <br />
       <button className="btnL specialGhost">BUTTON</button>
       <br />
-    </>
+    </div>
   );
 };
 
