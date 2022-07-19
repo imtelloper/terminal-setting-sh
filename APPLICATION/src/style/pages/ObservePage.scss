@@ -104,14 +104,16 @@ div.observeContainer {
           //  background-color: #FFF8D4;
           //}
 
-          section {
+          section.safetyContents {
             width: 100%;
+            display: none;
 
             div.safetyCreateBtnBox {
               width: 100%;
               height: 40px;
               padding: 24px;
               box-sizing: border-box;
+              //display: none;
 
               button.safetyCreateBtn {
                 all: unset;
@@ -131,6 +133,10 @@ div.observeContainer {
               }
             }
           }
+          section.safetyContents:nth-child(1){
+            display: block;
+          }
+
         }
       }
 
