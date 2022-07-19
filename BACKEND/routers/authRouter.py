@@ -10,8 +10,14 @@ router = APIRouter(tags=['users'])
 
 userService = UserService()
 
-@router.post("/signUp", status_code=status.HTTP_201_CREATED, description=""" 회원가입 API 입니다.""")
+@router.post("/signUp", status_code=status.HTTP_201_CREATED)
 async def signUp(newUser: NewUser):
+    """
+    회원가입 API
+
+    - **email**: 아이디(이메일)
+    - **pw**: 비밀번호
+    """
     hashPw = bcrypt.hashpw(newUser.pw.encode("utf-8"), bcrypt.gensalt())
     newUser = jsonable_encoder(newUser)
     newUser['pw'] = hashPw
@@ -19,8 +25,18 @@ async def signUp(newUser: NewUser):
     return UsersDto(**userResult)
 
 # 로그인 할때 쓰는 api
-@router.post("/token", response_model=Token, description=""" 로그인 API 입니다. """)
+@router.post("/token", response_model=Token)
 async def login(formData: OAuth2PasswordRequestForm = Depends()):
+    """
+    로그인 API
+
+    - **grant_type**:
+    - **email**: 아이디(이메일)
+    - **pw**: 비밀번호
+    - **scope**:
+    - **client_id**:
+    - **client_secret**:
+    """
 # async def login(formData:NewUser):
     email = formData.username
     pw = formData.password
@@ -35,6 +51,9 @@ async def login(formData: OAuth2PasswordRequestForm = Depends()):
 
 @router.get("/detail")
 async def userDetail(currentUser: NewUser = Depends(userService.getCurrentUser)):
+    """
+    사용자 상세 정보
+    """
     print('userDetail currentUser : ', currentUser)
     return UsersDto(**currentUser)
 

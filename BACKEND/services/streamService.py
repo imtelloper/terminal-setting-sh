@@ -501,6 +501,45 @@ class StreamService:
                 else:
                     cv2.destroyAllWindows()
 
+                    # 관제 PC에 파일 저장
+                    host = "192.168.0.4"
+                    port = 22  # 고정
+                    transprot = paramiko.transport.Transport(host, port)
+                    userId = "interx"
+                    password = 'interx12!'
+
+                    # 연결
+                    transprot.connect(username=userId, password=password)
+                    sftp = paramiko.SFTPClient.from_transport(transprot)
+
+                    try:
+                        sftp.chdir(self.videoFolderPath)
+                    except IOError:
+                        sftp.chdir(self.savePath)
+                        sftp.mkdir(self.currentDate)
+                        sftp.chdir(self.currentDate)
+                        sftp.mkdir(self.camArea)
+                        sftp.chdir(self.camArea)
+                        sftp.mkdir(self.camPort)
+                        sftp.chdir(self.camPort)
+                        sftp.mkdir("video")
+                        sftp.mkdir("capture")
+
+                    # Upload - 파일 업로드
+                    remotepath = self.videoRecordPath
+                    localpath = self.videoRecordPath
+                    sftp.put(localpath, remotepath)
+
+                    # Get - 파일 다운로드
+                    sftp.get(remotepath,
+                             localpath)
+
+                    os.remove(self.videoRecordPath)
+
+                    # Close
+                    sftp.close()
+                    transprot.close()
+
                 # 스크린 캡쳐
                 if self.captureGate:
                     print('SCREEN CAPTURE SCREEN CAPTURE SCREEN CAPTURE SCREEN CAPTURE SCREEN CAPTURE SCREEN CAPTURE ')
@@ -521,6 +560,7 @@ class StreamService:
                 print('예외가 발생했습니다.', e)
                 print(traceback.format_exc())
 
+
     def saveFile(self):
         def VideoWrite():
             try:
@@ -531,18 +571,13 @@ class StreamService:
                 return
 
             # 폭, 높이 값을 카메라속성에 맞춤
-            # cap.set(probID, 속성값) 은 출력될 값들을 지정해주는 것이고
-            # cap.get(probID) 는 해당 속성에 대한 값을 받아오는 것임.
-            # 아래의 폭과 높이는 웹캠의 속성을 그대로 가져와 사용하는것.
-            width = int(cap.get(3))
-            height = int(cap.get(4))
+            width = self.camWidth
+            height = self.camHeight
 
-            # 코덱정보를 나타냄 아래의 두줄과 같이 사용할 수 있음.
-            # 둘중 어느것을 쓰든 상관없음.
-            fourcc = cv2.VideoWriter_fourcc(*'mp4v')
-            # fourcc = cv2.VideoWriter_fourcc('D','I','V','X')
+            # 코덱정보
+            fourcc = self.fcc
 
-            # 비디오 저장을 위한 객체를 생성해줌.
+            # 비디오 저장을 위한 객체를 생성
             out = cv2.VideoWriter('SaveVideo.mp4', fourcc, 20.0, (width, height))
 
             while (True):
@@ -552,7 +587,7 @@ class StreamService:
                     print("비디오 읽기 오류")
                     break
 
-                # 비디오 프레임이 정확하게 촬영되었으면 화면에 출력하여줌
+                # 비디오 프레임이 정확하게 촬영되었으면 화면에 출력
                 cv2.imshow('video', frame)
                 # 비디오 프레임이 제대로 출력되면 해당파일에 프레임을 저장
                 out.write(frame)
@@ -570,10 +605,9 @@ class StreamService:
 
         VideoWrite()
 
-
         # 관제 PC에 파일 저장
-        host = "192.168.0.3"
-        port = 22  # 그냥 22 넣어주면 됩니다.
+        host = "192.168.0.4"
+        port = 22  # 고정
         transprot = paramiko.transport.Transport(host, port)
         userId = "interx"
         password = 'interx12!'
@@ -582,9 +616,23 @@ class StreamService:
         transprot.connect(username=userId, password=password)
         sftp = paramiko.SFTPClient.from_transport(transprot)
 
+        try:
+            sftp.chdir(self.videoFolderPath)
+        except IOError:
+            sftp.chdir(self.savePath)
+            sftp.mkdir(self.currentDate)
+            sftp.chdir(self.currentDate)
+            sftp.mkdir(self.camArea)
+            sftp.chdir(self.camArea)
+            sftp.mkdir(self.camPort)
+            sftp.chdir(self.camPort)
+            sftp.mkdir("video")
+            sftp.mkdir("capture")
+
         # Upload - 파일 업로드
-        remotepath = '/home/interx/SaveVideo.mp4'  # sftp에 업로드 될때 파일 경로와 파일이름(이렇게 저장이 됨)을 써줍니다.
-        localpath = '/home/interx/SAFETY-AI/BACKEND/SaveVideo.mp4'  # local피시의 파일 경로와 파일이름(pc에 저장되어있는 파일이름)을 써줍니다.
+        remotepath = self.videoRecordPath
+        # self.videoRecordPath
+        localpath = '/home/interx/SAFETY-AI/BACKEND/SaveVideo.mp4'
         sftp.put(localpath, remotepath)
 
         # Get - 파일 다운로드
@@ -597,7 +645,7 @@ class StreamService:
         sftp.close()
         transprot.close()
 
+
         msg = "Saved"
 
         return msg
-

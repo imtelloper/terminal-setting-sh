@@ -1,18 +1,38 @@
 import numpy as np
 import cv2
 import time
+import pymongo
 
-vcap = cv2.VideoCapture('http://19.168.0.3:81/api/stream/area/2/65,110,128,108,95,283,58,285/76,149,111,144,92,243,70,247/285,121,356,121,349,303,275,304/298,159,340,158,335,265,291,268')
+mongodbUri = "mongodb://interx:interx12!@192.168.0.4:27017/interx"
+connection = pymongo.MongoClient(mongodbUri)
+dbSafety = connection.get_database("safety")
+
+resultData = dbSafety["tracker"].find_one({"area": "H1 공장 크레인", "camPort": "cam1"})
+
+
+sensingGroup1 = resultData["sensingGroup1"]
+sensingGroup2 = resultData["sensingGroup2"]
+
+if sensingGroup2 is not None:
+    sensingGroup = "2/{}/{}".format(sensingGroup1, sensingGroup2)
+else:
+    sensingGroup = "1/{}".format(sensingGroup1)
+
+sensingGroup = sensingGroup.replace('&', "/")
+
+print('http://192.168.0.4:81/api/stream/area/' + sensingGroup)
+
+vcap = cv2.VideoCapture('http://192.168.0.4:81/api/stream/area/' + sensingGroup)
 
 # if vcap is not None
 print(vcap.read()[0])
 setVcapBool = True
-while(setVcapBool):
+while (setVcapBool):
     time.sleep(1)
     if vcap.read()[0] == False:
         print('재시')
         vcap = cv2.VideoCapture(
-            'http://192.168.0.3:81/api/stream/area/2/65,110,128,108,95,283,58,285/76,149,111,144,92,243,70,247/285,121,356,121,349,303,275,304/298,159,340,158,335,265,291,268')
+            'http://192.168.0.4:81/api/stream/area/' + sensingGroup)
         print(vcap.read()[0])
     else:
         setVcapBool = False
@@ -27,7 +47,6 @@ while (True):
     else:
         print("Frame is None")
         break
-
 
 # When everything done, release the capture
 vcap.release()
