@@ -254,6 +254,7 @@ div.areaInfoContainer {
                     display: flex;
 
                     span {
+                      display: block;
                       width: calc(50% - 4px);
                       height: 48px;
                       display: flex;
@@ -275,7 +276,7 @@ div.areaInfoContainer {
                         color: $white;
                       }
 
-                      p {
+                      div {
                         font-size: 28px;
                       }
                     }

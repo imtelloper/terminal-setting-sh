@@ -51,19 +51,19 @@ const CurrentTime = () => {
 
   return (
     <div className="currentTimeContainer">
-      <p>{year.slice(0, 4)}</p>
-      <p>
+      <span>{year.slice(0, 4)}</span>
+      <span>
         {month.slice(0, 2)}
-        <span>/</span>
-        {day.slice(0, 2)} <p>{weekday}</p>
-      </p>
-      <p>
+        <div>/</div>
+        {day.slice(0, 2)} <span>{weekday}</span>
+      </span>
+      <span>
         {hours}
-        <span>:</span>
+        <div>:</div>
         {minutes}
-        <span>:</span>
+        <div>:</div>
         {seconds}
-      </p>
+      </span>
     </div>
   );
 };

@@ -3,7 +3,7 @@ div.currentTimeContainer{
   font-size: 20px;
   margin-top: 40px;
   margin-left: 40px;
-  p{
+  span{
     &:first-child{
       font-size: 40px;
       font-weight: 700;
@@ -13,10 +13,10 @@ div.currentTimeContainer{
       font-size: 62px;
       font-weight: 700;
       display: flex;
-      span{
+      div{
         font-weight: 400;
       }
-      p{
+      span{
         font-size: 20px;
         color: #878E9B;
         margin-left: 10px;
@@ -26,6 +26,7 @@ div.currentTimeContainer{
     &:last-child{
       font-size: 40px;
       font-weight: 700;
+      display: flex;
       span{
         color: #878E9B;
       }

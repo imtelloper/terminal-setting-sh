@@ -334,10 +334,10 @@ const AreaInfo = () => {
               <div className="alarmTxt green">{card?.alarmTxt}</div>
               <div className="sensingBox">
                 <span>
-                  1차 감지<p>{card?.camSensing1}</p>
+                  1차 감지<div>{card?.camSensing1}</div>
                 </span>
                 <span>
-                  2차 감지<p>{card?.camSensing2}</p>
+                  2차 감지<div>{card?.camSensing2}</div>
                 </span>
               </div>
             </div>
