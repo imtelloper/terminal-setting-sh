@@ -311,6 +311,7 @@ const AreaInfo = () => {
         {/* <h3>{card.area}</h3> */}
         <div className="titleBox">
           <span>{card?.area}</span>
+          <span>{card?.trackerId}</span>
         </div>
         <div className="areaContent">
           <div className="areaTop">
@@ -321,7 +322,7 @@ const AreaInfo = () => {
           <div className="areaBottom">
             <div className="camBox">
               <div className="camPort">
-                CAM <span>{card?.camPort}</span>
+                CAM <span>{card?.camPort?.substr(3, 1)}</span>
               </div>
               <div className="activeBadge">
                 <div className="circle" />
@@ -381,12 +382,30 @@ const AreaInfo = () => {
           date: today,
         })
         .then((observe) => {
+          console.log('tracker._id', tracker._id);
+          console.log('observe', observe);
+          /* 오늘 날짜로의 감지 데이터가 있으면 실행 */
           if (observe?.length > 0) {
             const processedObserve = observe.map((obj) => {
               return { ...tracker, ...obj };
             });
+
             processedData.push(...processedObserve);
             console.log('🌺🌺🌺processedData', processedData);
+            processedData.sort((prev, next) => {
+              if (prev.area > next.area) return 1;
+              if (prev.area < next.area) return -1;
+              return 0;
+            });
+            flushSync(() => setGetObserveState([...processedData]));
+          } else {
+            processedData.push(tracker);
+            console.log('🌳🌳🌳processedData', processedData);
+            processedData.sort((prev, next) => {
+              if (prev.area > next.area) return 1;
+              if (prev.area < next.area) return -1;
+              return 0;
+            });
             flushSync(() => setGetObserveState([...processedData]));
           }
         });
@@ -394,6 +413,7 @@ const AreaInfo = () => {
   };
 
   useEffect(() => {
+    console.log('swrTrackerData?.length', swrTrackerData?.length);
     swrTrackerData?.length > 0 && setProcessedSwrData();
   }, [swrTrackerData]);
 

@@ -8,6 +8,7 @@ const LayoutForm = ({ children }) => {
   const { data: swrState, mutate: setSwrState } = useSWRState();
 
   useEffect(() => {
+    console.log('🍄🍄🍄🍄🍄🍄🍄🍄🍄🍄🍄🍄🍄🍄🍄🍄🍄api search');
     for (let i = 1; i < 50; i++) {
       axios
         .get(`http://192.168.0.${i}:81/api/util/info`, { timeout: 500 })
