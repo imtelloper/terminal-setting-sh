@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import Crane from '../images/crane.png';
 import Videocam from '../images/videocam.png';
 import Warning from '../images/warning.png';
@@ -12,6 +12,7 @@ import { flushSync } from 'react-dom';
 import { useSWRState } from '../fetcher/useSWRState';
 import { getFetcher } from '../fetcher/fetcher';
 import Api from '../api/Api';
+import { number } from 'prop-types';
 
 type AreaCard = {
   title: string;
@@ -304,13 +305,13 @@ const AreaInfo = () => {
       <div
         className="areaCardBox"
         key={idx}
-        itemType={card?.area}
+        itemType={Object.keys(card)}
         onClick={goObservePage}
         datatype={idx.toString()}
       >
         {/* <h3>{card.area}</h3> */}
         <div className="titleBox">
-          <span>{card?.area}</span>
+          <span>{Object.keys(card)}</span>
           <span>{card?.trackerId}</span>
         </div>
         <div className="areaContent">
@@ -322,7 +323,7 @@ const AreaInfo = () => {
           <div className="areaBottom">
             <div className="camBox">
               <div className="camPort">
-                CAM <span>{card?.camPort?.substr(3, 1)}</span>
+                CAM <span>{card[[Object.keys(card)]]?.length}</span>
               </div>
               <div className="activeBadge">
                 <div className="circle" />
@@ -331,13 +332,27 @@ const AreaInfo = () => {
             </div>
             <div className="alarmBox">
               {/* className : green yellow red inactive => alarmTxt 에 추가해주시면 됩니다! */}
-              <div className="alarmTxt green">{card?.alarmTxt}</div>
+              <div
+                className={`alarmTxt ${
+                  card[[Object.keys(card)]]?.safetyLevel === 'Red'
+                    ? 'red'
+                    : card[[Object.keys(card)]]?.safetyLevel === 'Yellow'
+                    ? 'yellow'
+                    : 'green'
+                }`}
+              >
+                {card[[Object.keys(card)]]?.safetyLevel === 'Red'
+                  ? '작업자 위험 반경 진입'
+                  : card[[Object.keys(card)]]?.safetyLevel === 'Yellow'
+                  ? '작업자 진입'
+                  : '안전합니다.'}
+              </div>
               <div className="sensingBox">
                 <span>
-                  1차 감지<div>{card?.camSensing1}</div>
+                  1차 감지<p>{card[Object.keys(card)]?.yellowCnt}</p>
                 </span>
                 <span>
-                  2차 감지<div>{card?.camSensing2}</div>
+                  2차 감지<p>{card[Object.keys(card)]?.redCnt}</p>
                 </span>
               </div>
             </div>
@@ -347,34 +362,10 @@ const AreaInfo = () => {
     ));
   }, [getObserveState]);
 
-  const setProcessedData = async () => {
-    swrObserveData?.forEach((observe, idx) => {
-      axios
-        .get(`/api/tracker/${observe.trackerId}`)
-        .then((tracker) => {
-          const trackerObj = tracker.data;
-          const newObserveData = { ...observe, ...trackerObj };
-          const { area, camName, camPort, groupNum } = newObserveData;
-          // 없을 경우 undefined
-          // 없을 경우 -1
-          const foundDataByArea = getObserveState.filter(
-            (obj) => obj.area === area
-          );
-          const dataIdx = foundDataByArea?.findIndex(
-            (obj) => obj.groupNum === camPort
-          );
-          const newObjArr = getObserveState;
-          if (dataIdx === -1 || dataIdx === undefined)
-            newObjArr.push(newObserveData);
-          else newObjArr[dataIdx] = newObserveData;
-          flushSync(() => setGetObserveState([...newObjArr]));
-        })
-        .catch((err) => console.error(err));
-    });
-  };
-
-  const setProcessedSwrData = () => {
+  const setProcessedSwrData = useCallback(() => {
     const processedData = [];
+    const areaData = [...new Set(swrTrackerData?.map((obj) => obj.area))];
+
     swrTrackerData.forEach(async (tracker, idx) => {
       await Api.observe
         .findData({
@@ -382,8 +373,6 @@ const AreaInfo = () => {
           date: today,
         })
         .then((observe) => {
-          console.log('tracker._id', tracker._id);
-          console.log('observe', observe);
           /* 오늘 날짜로의 감지 데이터가 있으면 실행 */
           if (observe?.length > 0) {
             const processedObserve = observe.map((obj) => {
@@ -391,43 +380,65 @@ const AreaInfo = () => {
             });
 
             processedData.push(...processedObserve);
-            console.log('🌺🌺🌺processedData', processedData);
             processedData.sort((prev, next) => {
               if (prev.area > next.area) return 1;
               if (prev.area < next.area) return -1;
               return 0;
             });
-            flushSync(() => setGetObserveState([...processedData]));
-          } else {
-            processedData.push(tracker);
-            console.log('🌳🌳🌳processedData', processedData);
-            processedData.sort((prev, next) => {
-              if (prev.area > next.area) return 1;
-              if (prev.area < next.area) return -1;
-              return 0;
+
+            const areaFilteredObj = [];
+
+            areaData.forEach((area) => {
+              areaFilteredObj.push({
+                [area]: [
+                  ...processedData.filter((obj) => {
+                    return obj.area === area;
+                  }),
+                ],
+              });
             });
-            flushSync(() => setGetObserveState([...processedData]));
+            areaData.forEach((area, idx) => {
+              if (areaFilteredObj[idx][area]?.length > 0) {
+                const safetyLevelSet = [
+                  ...new Set(
+                    areaFilteredObj[idx][area].map((obj) => obj.safetyLevel)
+                  ),
+                ];
+                areaFilteredObj[idx][area] = {
+                  safetyLevel: safetyLevelSet.includes('Red')
+                    ? 'Red'
+                    : safetyLevelSet.includes('Yellow')
+                    ? 'Yellow'
+                    : 'Green',
+                  redCnt: areaFilteredObj[idx][area]
+                    .map((obj) => obj.redCnt)
+                    .reduce((acc, cur) => acc + cur),
+                  yellowCnt: areaFilteredObj[idx][area]
+                    .map((obj) => obj.yellowCnt)
+                    .reduce((acc, cur) => acc + cur),
+                };
+              }
+            });
+            console.log('2 💐💐💐💐💐', areaFilteredObj);
+            // flushSync(() => setGetObserveState([...processedData]));
+            flushSync(() => setGetObserveState([...areaFilteredObj]));
           }
         });
     });
-  };
+  }, [swrTrackerData, swrObserveData]);
 
   useEffect(() => {
-    console.log('swrTrackerData?.length', swrTrackerData?.length);
-    swrTrackerData?.length > 0 && setProcessedSwrData();
-  }, [swrTrackerData]);
-
-  // useEffect(() => {
-  //   console.log('swrTrackerData', swrTrackerData);
-  //   swrTrackerData?.length > 0 && setGetObserveState([]);
-  // }, [swrTrackerData]);
-
-  useEffect(() => {
-    console.log('#####getObserveState', getObserveState);
+    // console.log('#####getObserveState', getObserveState);
+    // console.log('🌸🌸🌸 swrObserveData', swrObserveData);
     if (getObserveState.length === 0) {
       swrTrackerData?.length > 0 && setProcessedSwrData();
     }
   }, [getObserveState]);
+
+  useEffect(() => {
+    // console.log('swrTrackerData?.length', swrTrackerData?.length);
+    swrTrackerData?.length > 0 && setProcessedSwrData();
+  }, [swrTrackerData, swrObserveData]);
 
   return (
     <div className="areaInfoContainer">

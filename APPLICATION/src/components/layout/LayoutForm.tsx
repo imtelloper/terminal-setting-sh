@@ -9,16 +9,14 @@ const LayoutForm = ({ children }) => {
 
   useEffect(() => {
     console.log('🍄🍄🍄🍄🍄🍄🍄🍄🍄🍄🍄🍄🍄🍄🍄🍄🍄api search');
-    for (let i = 1; i < 50; i++) {
-      axios
-        .get(`http://192.168.0.${i}:81/api/util/info`, { timeout: 500 })
-        .then((res) => {
-          console.log('cam info:', res.data);
-          // const resultData = res.data
-          // resultData.camPort
-        })
-        .catch((err) => '');
-    }
+    // for (let i = 1; i < 100; i++) {
+    //   axios
+    //     .get(`http://192.168.0.${i}:81/api/util/info`, { timeout: 500 })
+    //     .then((res) => {
+    //       console.log('cam info:', res.data);
+    //     })
+    //     .catch((err) => '');
+    // }
   }, []);
 
   return (
