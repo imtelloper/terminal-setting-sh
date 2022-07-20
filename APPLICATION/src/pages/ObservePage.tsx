@@ -497,7 +497,7 @@ const ObservePage = () => {
             {/* {camTabState - 1 === idx && recordState && ( */}
             {/*  <div style={{ width: '16px', height: '16px', color: 'red' }}>REC</div> */}
             {/* )} */}
-            {camTabState - 1 === idx && recordState && <div>REC</div>}
+            {camTabState - 1 === idx && recordState && <div><span/>REC</div>}
           </span>
         </div>
         {data.firstCanvas.visible && (
