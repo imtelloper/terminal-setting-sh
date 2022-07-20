@@ -66,184 +66,12 @@ const dummyData = [
     sensingModel: null,
     alarmTxt: '작업자 진입 확인',
   },
-  {
-    activate: true,
-    alarms: '없음',
-    area: 'H3 공장크레인',
-    camCoordinate1: null,
-    camCoordinate2: null,
-    camName: null,
-    camPort: '4',
-    camSafetyLevel: 'Green',
-    camSensing1: '0',
-    camSensing2: '7',
-    computeDevice: null,
-    createdAt: '2022-06-28T00:12:52+00:00',
-    date: '2022-06-28',
-    savingPath: null,
-    sensingModel: null,
-    alarmTxt: '안전합니다.',
-  },
-  {
-    activate: true,
-    alarms: '없음',
-    area: 'H4 공장크레인',
-    camCoordinate1: null,
-    camCoordinate2: null,
-    camName: null,
-    camPort: '4',
-    camSafetyLevel: 'Green',
-    camSensing1: '9999',
-    camSensing2: '7',
-    computeDevice: null,
-    createdAt: '2022-06-28T00:12:52+00:00',
-    date: '2022-06-28',
-    savingPath: null,
-    sensingModel: null,
-    alarmTxt: '작업자 위험 반경 진입',
-  },
-  {
-    activate: true,
-    alarms: '없음',
-    area: 'H5 공장크레인',
-    camCoordinate1: null,
-    camCoordinate2: null,
-    camName: null,
-    camPort: '',
-    camSafetyLevel: 'Green',
-    camSensing1: '0',
-    camSensing2: '7',
-    computeDevice: null,
-    createdAt: '2022-06-28T00:12:52+00:00',
-    date: '2022-06-28',
-    savingPath: null,
-    sensingModel: null,
-    alarmTxt: '안전합니다.',
-  },
-  {
-    activate: true,
-    alarms: '없음',
-    area: 'H6 공장크레인',
-    camCoordinate1: null,
-    camCoordinate2: null,
-    camName: null,
-    camPort: '',
-    camSafetyLevel: 'Green',
-    camSensing1: null,
-    camSensing2: null,
-    computeDevice: null,
-    createdAt: '2022-06-28T00:12:52+00:00',
-    date: '2022-06-28',
-    savingPath: null,
-    sensingModel: null,
-    alarmTxt: '비활성 되었습니다.',
-  },
-  {
-    activate: true,
-    alarms: '없음',
-    area: 'H7 공장크레인',
-    camCoordinate1: null,
-    camCoordinate2: null,
-    camName: null,
-    camPort: '',
-    camSafetyLevel: 'Green',
-    camSensing1: null,
-    camSensing2: null,
-    computeDevice: null,
-    createdAt: '2022-06-28T00:12:52+00:00',
-    date: '2022-06-28',
-    savingPath: null,
-    sensingModel: null,
-    alarmTxt: '안전합니다.',
-  },
-  {
-    activate: true,
-    alarms: '없음',
-    area: '',
-    camCoordinate1: null,
-    camCoordinate2: null,
-    camName: null,
-    camPort: '',
-    camSafetyLevel: 'Green',
-    camSensing1: null,
-    camSensing2: null,
-    computeDevice: null,
-    createdAt: '2022-06-28T00:12:52+00:00',
-    date: '2022-06-28',
-    savingPath: null,
-    sensingModel: null,
-    alarmTxt: '안전합니다.',
-  },
-  {
-    activate: true,
-    alarms: '없음',
-    area: '',
-    camCoordinate1: null,
-    camCoordinate2: null,
-    camName: null,
-    camPort: '',
-    camSafetyLevel: 'Green',
-    camSensing1: null,
-    camSensing2: null,
-    computeDevice: null,
-    createdAt: '2022-06-28T00:12:52+00:00',
-    date: '2022-06-28',
-    savingPath: null,
-    sensingModel: null,
-    alarmTxt: '안전합니다.',
-  },
-  {
-    activate: true,
-    alarms: '없음',
-    area: '',
-    camCoordinate1: null,
-    camCoordinate2: null,
-    camName: null,
-    camPort: '',
-    camSafetyLevel: 'Green',
-    camSensing1: null,
-    camSensing2: null,
-    computeDevice: null,
-    createdAt: '2022-06-28T00:12:52+00:00',
-    date: '2022-06-28',
-    savingPath: null,
-    sensingModel: null,
-    alarmTxt: '안전합니다.',
-  },
-  {
-    activate: true,
-    alarms: '없음',
-    area: '',
-    camCoordinate1: null,
-    camCoordinate2: null,
-    camName: null,
-    camPort: '',
-    camSafetyLevel: 'Green',
-    camSensing1: null,
-    camSensing2: null,
-    computeDevice: null,
-    createdAt: '2022-06-28T00:12:52+00:00',
-    date: '2022-06-28',
-    savingPath: null,
-    sensingModel: null,
-    alarmTxt: '안전합니다.',
-  },
 ];
 
 const AreaInfo = () => {
   const navigate = useNavigate();
   const today = new Date().toISOString().slice(0, 10);
-  const [getObserveState, setGetObserveState] = useState([
-    {
-      area: 'H2 공장 크레인',
-    },
-    {
-      area: 'H6 공장 크레인',
-    },
-    {
-      area: 'H3 공장 크레인',
-    },
-  ]);
+  const [getObserveState, setGetObserveState] = useState([]);
   const { data: swrState, mutate: setSwrState } = useSWRState();
 
   const findFetcher = (url: string) =>
@@ -293,75 +121,14 @@ const AreaInfo = () => {
   const goObservePage = (e) => {
     const target = e.currentTarget;
     const dType = target.getAttribute('datatype');
-    const targetArea = target.getAttribute('itemType');
+    const targetArea = target.getAttribute('itemID');
     console.log('dType', dType);
     console.log('targetArea', targetArea);
     setSwrState({ ...swrState, curTrackerArea: targetArea });
     navigate('/observe');
   };
 
-  const areaCardsMap = useMemo(() => {
-    return (getObserveState || dummyData).map((card, idx) => (
-      <div
-        className="areaCardBox"
-        key={idx}
-        itemType={Object.keys(card)}
-        onClick={goObservePage}
-        datatype={idx.toString()}
-      >
-        {/* <h3>{card.area}</h3> */}
-        <div className="titleBox">
-          <span>{Object.keys(card)}</span>
-          <span>{card?.trackerId}</span>
-        </div>
-        <div className="areaContent">
-          <div className="areaTop">
-            <div className="imgBox">
-              <img src={BgImg} alt="" />
-            </div>
-          </div>
-          <div className="areaBottom">
-            <div className="camBox">
-              <div className="camPort">
-                CAM <span>{card[[Object.keys(card)]]?.length}</span>
-              </div>
-              <div className="activeBadge">
-                <div className="circle" />
-                <span>ACTIVE</span>
-              </div>
-            </div>
-            <div className="alarmBox">
-              {/* className : green yellow red inactive => alarmTxt 에 추가해주시면 됩니다! */}
-              <div
-                className={`alarmTxt ${
-                  card[[Object.keys(card)]]?.safetyLevel === 'Red'
-                    ? 'red'
-                    : card[[Object.keys(card)]]?.safetyLevel === 'Yellow'
-                    ? 'yellow'
-                    : 'green'
-                }`}
-              >
-                {card[[Object.keys(card)]]?.safetyLevel === 'Red'
-                  ? '작업자 위험 반경 진입'
-                  : card[[Object.keys(card)]]?.safetyLevel === 'Yellow'
-                  ? '작업자 진입'
-                  : '안전합니다.'}
-              </div>
-              <div className="sensingBox">
-                <span>
-                  1차 감지<p>{card[Object.keys(card)]?.yellowCnt}</p>
-                </span>
-                <span>
-                  2차 감지<p>{card[Object.keys(card)]?.redCnt}</p>
-                </span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    ));
-  }, [getObserveState]);
-
+  /* tracker데이터들을 메인 페이지에 맞게 데이터 가공해서 셋팅해주는 메서드‼️ */
   const setProcessedSwrData = useCallback(() => {
     const processedData = [];
     const areaData = [...new Set(swrTrackerData?.map((obj) => obj.area))];
@@ -375,11 +142,13 @@ const AreaInfo = () => {
         .then((observe) => {
           /* 오늘 날짜로의 감지 데이터가 있으면 실행 */
           if (observe?.length > 0) {
+            /* 오늘 날짜의 observe 데이터와 tracker 데이터 결합 */
             const processedObserve = observe.map((obj) => {
               return { ...tracker, ...obj };
             });
 
             processedData.push(...processedObserve);
+            /* 정렬 */
             processedData.sort((prev, next) => {
               if (prev.area > next.area) return 1;
               if (prev.area < next.area) return -1;
@@ -387,23 +156,23 @@ const AreaInfo = () => {
             });
 
             const areaFilteredObj = [];
-
+            /* 구역 이름을 객체의 키 값으로 먼저 생성 */
             areaData.forEach((area) => {
               areaFilteredObj.push({
-                [area]: [
-                  ...processedData.filter((obj) => {
-                    return obj.area === area;
-                  }),
-                ],
+                [area]: [...processedData.filter((obj) => obj.area === area)],
               });
             });
+
+            /* 구역 이름 키에 해당 객체 투입 */
             areaData.forEach((area, idx) => {
               if (areaFilteredObj[idx][area]?.length > 0) {
+                /* 해당 구역의 안전 레벨들을 고유값으로 셋팅 */
                 const safetyLevelSet = [
                   ...new Set(
                     areaFilteredObj[idx][area].map((obj) => obj.safetyLevel)
                   ),
                 ];
+                /* 각 구역에 safetyLevel, redCnt, yellowCnt 셋팅 */
                 areaFilteredObj[idx][area] = {
                   safetyLevel: safetyLevelSet.includes('Red')
                     ? 'Red'
@@ -430,15 +199,91 @@ const AreaInfo = () => {
   useEffect(() => {
     // console.log('#####getObserveState', getObserveState);
     // console.log('🌸🌸🌸 swrObserveData', swrObserveData);
-    if (getObserveState.length === 0) {
+    /* getObserveState 데이터가 있을때 한번 가공 데이터 셋팅 */
+    if (getObserveState.length === 0)
       swrTrackerData?.length > 0 && setProcessedSwrData();
-    }
   }, [getObserveState]);
 
   useEffect(() => {
     // console.log('swrTrackerData?.length', swrTrackerData?.length);
+    /* db에서 tracker 데이터가 바뀔때마다 가공 데이터 셋팅 */
     swrTrackerData?.length > 0 && setProcessedSwrData();
   }, [swrTrackerData, swrObserveData]);
+
+  const areaCardsMap = useMemo(() => {
+    return (getObserveState || dummyData).map((card, idx) => {
+      const getObjectKey = Object.keys(card);
+      return (
+        <div
+          className="areaCardBox"
+          key={idx}
+          itemID={getObjectKey.toString()}
+          onClick={goObservePage}
+          datatype={idx.toString()}
+        >
+          {/* <h3>{card.area}</h3> */}
+          <div className="titleBox">
+            <span>{Object.keys(card)}</span>
+            {/* @ts-ignore */}
+            <span>{card?.trackerId}</span>
+          </div>
+          <div className="areaContent">
+            <div className="areaTop">
+              <div className="imgBox">
+                <img src={BgImg} alt="" />
+              </div>
+            </div>
+            <div className="areaBottom">
+              <div className="camBox">
+                <div className="camPort">
+                  {/* @ts-ignore */}
+                  CAM <span>{card[[getObjectKey]]?.length}</span>
+                </div>
+                <div className="activeBadge">
+                  <div className="circle" />
+                  <span>ACTIVE</span>
+                </div>
+              </div>
+              <div className="alarmBox">
+                {/* className : green yellow red inactive => alarmTxt 에 추가해주시면 됩니다! */}
+                <div
+                  className={`alarmTxt ${
+                    // @ts-ignore
+                    card[[getObjectKey]]?.safetyLevel === 'Red'
+                      ? 'red'
+                      : // @ts-ignore
+                      card[[getObjectKey]]?.safetyLevel === 'Yellow'
+                      ? 'yellow'
+                      : 'green'
+                  }`}
+                >
+                  {
+                    // @ts-ignore
+                    card[[getObjectKey]]?.safetyLevel === 'Red'
+                      ? '작업자 위험 반경 진입'
+                      : // @ts-ignore
+                      card[[getObjectKey]]?.safetyLevel === 'Yellow'
+                      ? '작업자 진입'
+                      : '안전합니다.'
+                  }
+                </div>
+                <div className="sensingBox">
+                  <span>
+                    {/* @ts-ignore */}
+                    1차 감지<p>{card[getObjectKey]?.yellowCnt}</p>
+                  </span>
+                  <span>
+                    {/* @ts-ignore */}
+                    2차 감지<p>{card[getObjectKey]?.redCnt}</p>
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      );
+    });
+  }, [getObserveState]);
 
   return (
     <div className="areaInfoContainer">

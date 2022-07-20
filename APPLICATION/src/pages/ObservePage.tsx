@@ -11,6 +11,7 @@ import { Settings } from '@material-ui/icons';
 import { useSWRState } from '../fetcher/useSWRState';
 import useSWR from 'swr';
 import { getFetcher } from '../fetcher/fetcher';
+import CoordinateTool from '../util/CoordinateTool';
 
 export const camPort1Ip = '192.168.0.7';
 export const camPort2Ip = '192.168.0.26';
@@ -148,16 +149,10 @@ const ObservePage = () => {
 
   const { data: swrTrackerData, error: swrTrackerErr } = useSWR<
     Array<TrackerObserve>
-  >('/api/tracker/find', findFetcher, {
-    refreshInterval: 1000,
-  });
+  >('/api/tracker/find', findFetcher, { refreshInterval: 1000 });
 
   const observeFindFetcher = (url: string) =>
-    axios
-      .post(url, {
-        date: today,
-      })
-      .then((res) => res.data);
+    axios.post(url, { date: today }).then((res) => res.data);
 
   const { data: swrObserveData, error } = useSWR(
     '/api/observe/find',
@@ -165,12 +160,8 @@ const ObservePage = () => {
     { refreshInterval: 1000 }
   );
 
-  const handleActive = (e) => {
-    const target = e.currentTarget;
-    target.classList.toggle('txtActive');
-    target.classList.toggle('hoverCircleActive');
-    setTxtChangeState('녹화중');
-    // iframeRecordingEl.classList.toggle('recIconActive');
+  // 녹화
+  const handleRecordVideo = () => {
     console.log('camTabState', camTabState);
     let ip = null;
     switch (camTabState) {
@@ -196,6 +187,14 @@ const ObservePage = () => {
       Api.stream.stopRecordVideo(ip);
       setRecordState(false);
     }
+  };
+
+  const handleActive = (e) => {
+    const target = e.currentTarget;
+    target.classList.toggle('txtActive');
+    target.classList.toggle('hoverCircleActive');
+    setTxtChangeState('녹화중');
+    handleRecordVideo();
   };
 
   const getStateCoordinate = (arrIndex: number, itemID: string) =>
@@ -238,8 +237,8 @@ const ObservePage = () => {
     greenCtx?.clearRect(0, 0, canvas.width, canvas.height);
     redCtx?.clearRect(0, 0, canvas.width, canvas.height);
     yellowCtx?.clearRect(0, 0, canvas.width, canvas.height);
-
     const { coordinate } = videoFrameState[arrIndex][itemID];
+    const { red, yellow, green } = drawColor;
     const redSensingPoints = [];
     const yellowSensingPoints = [];
     const greenSensingPoints = [];
@@ -251,7 +250,6 @@ const ObservePage = () => {
     const greenDistancePx = calibrate * greenSetMeter; // 5m = 66px
 
     // 기준 좌표에서 각 66px만큼 더 커진
-
     /* 내분점 구하기 공식 참고 */
     let m1;
     let n1;
@@ -293,31 +291,31 @@ const ObservePage = () => {
       n2 = 1 - m2;
 
       /* Red Zone 다각형점 찍기 */
-      redSensingPoints.push([Math.round(x), Math.round(y)]);
-      PolygonDraw.drawPoints(redCtx, x, y, pointSize, drawColor.red);
-
-      /* Yellow Zone 다각형점 찍기 */
-      const yellowInsideX = Math.round(getInsideX(m1, n1, x));
-      const yellowInsideY = Math.round(getInsideY(m1, n1, y));
-      yellowSensingPoints.push([yellowInsideX, yellowInsideY]);
-      PolygonDraw.drawPoints(
-        yellowCtx,
-        yellowInsideX,
-        yellowInsideY,
+      PolygonDraw.setPolygonPoints(
+        redSensingPoints,
+        x,
+        y,
+        redCtx,
         pointSize,
-        drawColor.yellow
+        red
       );
-
-      /* Green Zone 다각형점 찍기 */
-      const greenInsideX = Math.round(getInsideX(m2, n2, x));
-      const greenInsideY = Math.round(getInsideY(m2, n2, y));
-      greenSensingPoints.push([greenInsideX, greenInsideY]);
-      PolygonDraw.drawPoints(
-        greenCtx,
-        greenInsideX,
-        greenInsideY,
+      /* Yellow Zone 다각형점 찍기 */
+      PolygonDraw.setPolygonPoints(
+        yellowSensingPoints,
+        getInsideX(m1, n1, x),
+        getInsideY(m1, n1, y),
+        yellowCtx,
         pointSize,
-        drawColor.green
+        yellow
+      );
+      /* Green Zone 다각형점 찍기 */
+      PolygonDraw.setPolygonPoints(
+        greenSensingPoints,
+        getInsideX(m2, n2, x),
+        getInsideY(m2, n2, y),
+        greenCtx,
+        pointSize,
+        green
       );
     }
 
@@ -326,21 +324,11 @@ const ObservePage = () => {
     const greenSensingCoordinate = greenSensingPoints.join(',');
 
     /* Red Zone 라인  그리기 */
-    PolygonDraw.drawLines(redCtx, coordinate, lineSize, drawColor.red);
+    PolygonDraw.drawLines(redCtx, coordinate, lineSize, red);
     /* Yellow Zone 라인  그리기 */
-    PolygonDraw.drawLines(
-      yellowCtx,
-      yellowSensingPoints,
-      lineSize,
-      drawColor.yellow
-    );
+    PolygonDraw.drawLines(yellowCtx, yellowSensingPoints, lineSize, yellow);
     /* Green Zone 라인  그리기 */
-    PolygonDraw.drawLines(
-      greenCtx,
-      greenSensingPoints,
-      lineSize,
-      drawColor.green
-    );
+    PolygonDraw.drawLines(greenCtx, greenSensingPoints, lineSize, green);
 
     if (coordinate.length < 3) return;
 
@@ -365,12 +353,17 @@ const ObservePage = () => {
         trackerId &&
         Api.tracker.modifyOneData(trackerId, { sensingGroup1: sensingGroup });
     } else {
-      console.log('secondCanvas');
+      console.log('222222 🍓 secondCanvas');
+      console.log('frameSrc', frameSrc);
       const splitedSrc = frameSrc.split('/');
+      console.log('splitedSrc', splitedSrc);
       const firstSensingCoord = splitedSrc.slice(7, 9);
+      console.log('firstSensingCoord', firstSensingCoord);
       splitedSrc.length = 6;
       splitedSrc.push('2');
+      console.log('splitedSrc', splitedSrc);
       frameSrc = splitedSrc.concat(firstSensingCoord).join('/');
+      console.log('frameSrc', frameSrc);
       const newSrc = `${frameSrc}/${yellowSensingCoordinate}/${redSensingCoordinate}`;
       console.log('newSrc', newSrc);
       clicked && setNewVideoSrcState(arrIndex, newSrc);
@@ -410,28 +403,11 @@ const ObservePage = () => {
     draw(canvas, true, trackerId);
   };
 
-  const coordinateMaker = (coordNums: []) => {
-    const totalCoords = [];
-    let coordinate: Array<number> = [];
-    coordNums?.forEach((num) => {
-      coordinate.push(parseInt(num, 10));
-      // coordinate.push(num);
-      if (coordinate.length === 2) {
-        totalCoords.push(coordinate);
-        coordinate = [];
-      }
-    });
-    return totalCoords;
-  };
-
   const setProcessedSwrData = () => {
     const processedData = [];
     swrTrackerData.forEach(async (tracker, idx) => {
       await Api.observe
-        .findData({
-          trackerId: tracker._id,
-          date: today,
-        })
+        .findData({ trackerId: tracker._id, date: today })
         .then((observe) => {
           if (observe?.length > 0) {
             const processedObserve = observe.map((obj) => {
@@ -439,18 +415,12 @@ const ObservePage = () => {
             });
             processedData.push(...processedObserve);
             // console.log('🌺🌺🌺processedData', processedData);
-
+            /* 정렬 */
             processedData.sort((prev, next) => {
-              if (
-                `${prev.camPort}${prev.groupNum}` >
-                `${next.camPort}${next.groupNum}`
-              )
-                return 1;
-              if (
-                `${prev.camPort}${prev.groupNum}` <
-                `${next.camPort}${next.groupNum}`
-              )
-                return -1;
+              const prevVal = `${prev.camPort}${prev.groupNum}`;
+              const nextVal = `${next.camPort}${next.groupNum}`;
+              if (prevVal > nextVal) return 1;
+              if (prevVal < nextVal) return -1;
               return 0;
             });
 
@@ -459,25 +429,25 @@ const ObservePage = () => {
               const { camPort, trackerId } = obj;
               const camIdx = camPort.at(-1) - 1;
               // console.log('camIdx', camIdx);
-
               curVideoFrameState[camIdx].trackerId = trackerId;
 
-              const group1Coord = coordinateMaker(
+              const group1Coord = CoordinateTool.coordinateMaker(
                 obj.sensingGroup1.split('&')[2]?.split(',')
               );
-              // console.log('🌸group1Coord', group1Coord);
+              const fstCanvas = curVideoFrameState[camIdx].firstCanvas;
               /* DB에 저장된 좌표값을 기준으로 좌표값이 있다면 visible true */
-              curVideoFrameState[camIdx].firstCanvas.visible =
-                group1Coord.length > 0;
-              curVideoFrameState[camIdx].firstCanvas.coordinate = group1Coord;
+              fstCanvas.visible = group1Coord.length > 0;
+              fstCanvas.coordinate = group1Coord;
 
-              const group2Coord = coordinateMaker(
+              const group2Coord = CoordinateTool.coordinateMaker(
                 obj.sensingGroup2.split('&')[2]?.split(',')
               );
+              const secCanvas = curVideoFrameState[camIdx].secondCanvas;
+              secCanvas.visible = group2Coord.length > 0;
+              secCanvas.coordinate = group2Coord;
+
+              // console.log('🌸group1Coord', group1Coord);
               // console.log('🌸group2Coord', group2Coord);
-              curVideoFrameState[camIdx].secondCanvas.visible =
-                group2Coord.length > 0;
-              curVideoFrameState[camIdx].secondCanvas.coordinate = group2Coord;
             });
             flushSync(() => setVideoFrameState([]));
             flushSync(() => setVideoFrameState(curVideoFrameState));
@@ -486,6 +456,82 @@ const ObservePage = () => {
         });
     });
   };
+
+  const visibilityCamInfo = (e) => {
+    const target = e.currentTarget;
+    const dType = target.getAttribute('datatype');
+    const camTabs = Array.from(document.querySelectorAll('.safetyContents'));
+    camTabs.forEach((ele: HTMLElement) => (ele.style.display = 'none'));
+
+    const safetyContents = document.querySelector(
+      `#safetyContent${dType}`
+    ) as HTMLTableSectionElement;
+    if (safetyContents) safetyContents.style.display = 'block';
+
+    setCamTabState(parseInt(dType, 10));
+  };
+
+  const getTabEles = () => {
+    const tabArr = [];
+    for (let i = 0; i < 4; i++) {
+      tabArr.push(
+        <div className="safetyTabBox" key={i}>
+          <input
+            className="safetyTab"
+            id={`safetyTab${i + 1}`}
+            datatype={(i + 1).toString()}
+            type="radio"
+            name="tabs"
+            defaultChecked={i === 0 && true}
+            onChange={visibilityCamInfo}
+          />
+          <label className="safeLabel" htmlFor={`safetyTab${i + 1}`}>
+            {`Cam${i + 1}`}
+          </label>
+        </div>
+      );
+    }
+    return tabArr;
+  };
+
+  useEffect(() => {
+    console.log('📀📀📀📀videoFrameState', videoFrameState);
+    // videoFrameState.forEach((obj) => {
+    //   console.log('frameSrc', obj.frameSrc);
+    //   console.log('firstCanvas.visible', obj.firstCanvas.visible);
+    //   console.log('firstCanvas.coordinate', obj.firstCanvas.coordinate);
+    //   console.log('secondCanvas.visible', obj.secondCanvas.visible);
+    //   console.log('secondCanvas.coordinate', obj.secondCanvas.coordinate);
+    // });
+
+    // redSensingCoordinate 227,111,268,148,226,141
+
+    if (videoFrameState[0]) {
+      const coor1 = videoFrameState[0]?.secondCanvas?.coordinate[0];
+      const coor2 = videoFrameState[0]?.secondCanvas?.coordinate[1];
+      coor1 &&
+        coor2 &&
+        console.log(
+          '2차그룹으로 거리재기 확인',
+          PolygonDraw.getTwoPointsDistance(coor1, coor2)
+        );
+    }
+
+    // console.log('rate', PolygonDraw.getDistanceRate(165, 12.5));
+
+    document.querySelectorAll('.polygonCanvas').forEach((ele) => draw(ele));
+  }, [videoFrameState]);
+
+  useEffect(() => {
+    // console.log('🌽🌽🌽🌽🌽getObserveState', getObserveState);
+    if (getObserveState.length === 0)
+      swrTrackerData?.length > 0 && setProcessedSwrData();
+  }, [getObserveState]);
+
+  useEffect(() => {
+    // console.log('swrTrackerData', swrTrackerData);
+    swrTrackerData?.length > 0 && setProcessedSwrData();
+  }, [swrTrackerData, swrObserveData]);
 
   /* 카메라 영상 스트림 */
   const videoFrameMap = useMemo(() => {
@@ -497,7 +543,12 @@ const ObservePage = () => {
             {/* {camTabState - 1 === idx && recordState && ( */}
             {/*  <div style={{ width: '16px', height: '16px', color: 'red' }}>REC</div> */}
             {/* )} */}
-            {camTabState - 1 === idx && recordState && <div><span/>REC</div>}
+            {camTabState - 1 === idx && recordState && (
+              <div>
+                <span />
+                REC
+              </div>
+            )}
           </span>
         </div>
         {data.firstCanvas.visible && (
@@ -536,116 +587,6 @@ const ObservePage = () => {
     ));
   }, [videoFrameState, recordState]);
 
-  const visibilityCamInfo = (e) => {
-    const target = e.currentTarget;
-    const dType = target.getAttribute('datatype');
-    const camTabs = Array.from(document.querySelectorAll('.safetyContents'));
-    camTabs.forEach((ele: HTMLElement) => {
-      ele.style.display = 'none';
-    });
-
-    const safetyContents = document.querySelector(
-      `#safetyContent${dType}`
-    ) as HTMLTableSectionElement;
-    if (safetyContents) safetyContents.style.display = 'block';
-
-    setCamTabState(parseInt(dType, 10));
-  };
-
-  const getTabEles = () => {
-    const tabArr = [];
-    for (let i = 0; i < 4; i++) {
-      tabArr.push(
-        <div className="safetyTabBox" key={i}>
-          <input
-            className="safetyTab"
-            id={`safetyTab${i + 1}`}
-            datatype={(i + 1).toString()}
-            type="radio"
-            name="tabs"
-            defaultChecked={i === 0 && true}
-            onChange={visibilityCamInfo}
-          />
-          <label className="safeLabel" htmlFor={`safetyTab${i + 1}`}>
-            {`Cam${i + 1}`}
-          </label>
-        </div>
-      );
-    }
-    return tabArr;
-  };
-
-  // // 녹화
-  const handleRecordVideo = () => {
-    console.log('camTabState', camTabState);
-    let ip = null;
-    switch (camTabState) {
-      case 1:
-        ip = camPort1Ip;
-        break;
-      case 2:
-        ip = camPort2Ip;
-        break;
-      case 3:
-        ip = camPort3Ip;
-        break;
-      case 4:
-        ip = camPort4Ip;
-        break;
-      default:
-        ip = camPort1Ip;
-    }
-    if (!recordState) {
-      Api.stream.startRecordVideo(ip);
-      setRecordState(true);
-    } else {
-      Api.stream.stopRecordVideo(ip);
-      setRecordState(false);
-    }
-  };
-
-  useEffect(() => {
-    console.log('📀📀📀📀videoFrameState', videoFrameState);
-    // videoFrameState.forEach((obj) => {
-    //   console.log('frameSrc', obj.frameSrc);
-    //   console.log('firstCanvas.visible', obj.firstCanvas.visible);
-    //   console.log('firstCanvas.coordinate', obj.firstCanvas.coordinate);
-    //   console.log('secondCanvas.visible', obj.secondCanvas.visible);
-    //   console.log('secondCanvas.coordinate', obj.secondCanvas.coordinate);
-    // });
-
-    // redSensingCoordinate 227,111,268,148,226,141
-
-    if (videoFrameState[0]) {
-      const coor1 = videoFrameState[0]?.secondCanvas?.coordinate[0];
-      const coor2 = videoFrameState[0]?.secondCanvas?.coordinate[1];
-      coor1 &&
-        coor2 &&
-        console.log(
-          '2차그룹으로 거리재기 확인',
-          PolygonDraw.getTwoPointsDistance(coor1, coor2)
-        );
-    }
-
-    // console.log('rate', PolygonDraw.getDistanceRate(165, 12.5));
-
-    document.querySelectorAll('.polygonCanvas').forEach((ele, idx) => {
-      draw(ele);
-    });
-  }, [videoFrameState]);
-
-  useEffect(() => {
-    // console.log('🌽🌽🌽🌽🌽getObserveState', getObserveState);
-    if (getObserveState.length === 0) {
-      swrTrackerData?.length > 0 && setProcessedSwrData();
-    }
-  }, [getObserveState]);
-
-  useEffect(() => {
-    // console.log('swrTrackerData', swrTrackerData);
-    swrTrackerData?.length > 0 && setProcessedSwrData();
-  }, [swrTrackerData, swrObserveData]);
-
   return (
     <div id="observeContainer" className="observeContainer">
       <div className="observeLeft">
@@ -677,12 +618,7 @@ const ObservePage = () => {
               </div>
               <button
                 className="settingBtn"
-                onClick={() => {
-                  navigate('/detail');
-                  // Api.stream
-                  //   .stopRecordVideo()
-                  //   .catch((err) => console.error(err));
-                }}
+                onClick={() => navigate('/detail')}
               >
                 <Settings />
               </button>
