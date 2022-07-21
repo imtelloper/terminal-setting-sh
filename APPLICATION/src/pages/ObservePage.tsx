@@ -169,7 +169,7 @@ const ObservePage = () => {
     const target = e.currentTarget;
     target.classList.toggle('txtActive');
     target.classList.toggle('hoverCircleActive');
-    setTxtChangeState('녹화중');
+    setTxtChangeState((prev) => (prev === '녹화시작' ? '녹화중' : '녹화시작'));
     console.log('camTabState', camTabState);
     let ip = null;
     switch (camTabState) {
