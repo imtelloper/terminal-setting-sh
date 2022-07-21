@@ -9,20 +9,19 @@ dbSafety = connection.get_database("safety")
 
 resultData = dbSafety["tracker"].find_one({"area": "H1 공장 크레인", "camPort": "cam1"})
 
+split_grp1, split_grp2 = resultData["sensingGroup1"].split('&'), resultData["sensingGroup2"].split('&')
 
-sensingGroup1 = resultData["sensingGroup1"]
-sensingGroup2 = resultData["sensingGroup2"]
+sensingGroup1 = split_grp1[1]+'/'+split_grp1[2]
+sensingGroup2 = split_grp2[1]+'/'+split_grp2[2]
 
 if sensingGroup2 is not None:
     sensingGroup = "2/{}/{}".format(sensingGroup1, sensingGroup2)
 else:
     sensingGroup = "1/{}".format(sensingGroup1)
 
-sensingGroup = sensingGroup.replace('&', "/")
+print('http://127.0.0.1:8000/api/stream/area/' + sensingGroup)
 
-print('http://192.168.0.4:81/api/stream/area/' + sensingGroup)
-
-vcap = cv2.VideoCapture('http://192.168.0.4:81/api/stream/area/' + sensingGroup)
+vcap = cv2.VideoCapture('http://127.0.0.1:8000/api/stream/area/' + sensingGroup)
 
 # if vcap is not None
 print(vcap.read()[0])
@@ -32,7 +31,7 @@ while (setVcapBool):
     if vcap.read()[0] == False:
         print('재시')
         vcap = cv2.VideoCapture(
-            'http://192.168.0.4:81/api/stream/area/' + sensingGroup)
+            'http://127.0.0.1:8000/api/stream/area/' + sensingGroup)
         print(vcap.read()[0])
     else:
         setVcapBool = False

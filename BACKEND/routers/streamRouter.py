@@ -97,14 +97,6 @@ async def screenCapture():
     """
     return service.setCaptureGateOpen()
 
-# 스크린샷 캡쳐
-@router.get("/save", response_description="")
-async def screenCapture():
-    """
-    영상 저장
-    """
-    return service.saveFile()
-
 
 # 녹화 시작
 @router.get("/record-on", response_description="")
@@ -115,7 +107,7 @@ async def videoRecordOn():
     - **Response body** -> true : 영상 녹화 시작
     - **Response body** -> false : 영상 녹화 종료
     --------------------------------------------
-    - **trackerId**: 영상 저장 데이터베이스 _id
+    - **trackerId**: ObjectID
     - **videoPath**: 영상 저장 경로
     """
     serviceResult = service.setRecordGateOpen()
@@ -203,3 +195,5 @@ async def streamVideoSecondAreaSet(groupNum, coordinate1, coordinate2, coordinat
     print('streamVideoAreaSet 2data :', coordinates2)
     return StreamingResponse(service.video_streaming(coordinates1, coordinates2),
                              media_type="multipart/x-mixed-replace; boundary=frame")
+
+
