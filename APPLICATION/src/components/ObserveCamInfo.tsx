@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react';
+import '../style/DesignSystem.scss';
 import '../style/pages/ObserveCamInfo.scss';
 import { useNavigate } from 'react-router-dom';
 import { flushSync } from 'react-dom';
@@ -195,14 +196,16 @@ const ObserveCamInfo = ({
         <div className="safetyBtnBox">
           <div>
             <button
+              className="btnR normalPrimary"
               onClick={saveParameter}
               datatype={stateInfo?.[groupNum]?.trackerId}
             >
               저장
             </button>
-            <button onClick={callParameter}>불러오기</button>
-            <button onClick={handleErrorReset}>상태 리셋</button>
+            <button className="btnR normalPrimary" onClick={callParameter}>불러오기</button>
+            <button className="btnR normalPrimary" onClick={handleErrorReset}>상태 리셋</button>
             <button
+              className="btnR normalPrimary"
               onClick={handleDelete}
               itemID={stateInfo?.[groupNum]?.trackerId}
               datatype={groupNum}
@@ -232,14 +235,15 @@ const ObserveCamInfo = ({
 
           <div className="safetyCreateBtnBox">
             <button
-              className="safetyCreateBtn"
+              className="safetyCreateBtn btnL normalPrimary"
               datatype={idx.toString()}
               onClick={createCanvas}
             >
-              <span>
-                <AiOutlinePlusCircle />
-              </span>
-              <span>{idx + 1} ADD</span>
+              그룹 생성하기
+              {/*<span>*/}
+              {/*  <AiOutlinePlusCircle />*/}
+              {/*</span>*/}
+              {/*<span>{idx + 1} ADD</span>*/}
             </button>
           </div>
         </div>
