@@ -59,6 +59,7 @@ div.observeContainer {
         div.safetyTabBox {
           width: 100%;
           height: 48px;
+          font-weight: 400;
           line-height: 48px;
           display: flex;
           align-items: center;
@@ -69,7 +70,7 @@ div.observeContainer {
           label {
             width: 100%;
             color: $inactive-text;
-            font-weight: 700;
+            font-weight: 500;
             text-align: center;
             height: 100%;
             box-sizing: border-box;
@@ -108,26 +109,21 @@ div.observeContainer {
           //  background-color: #FFF8D4;
           //}
 
-          section {
+          section.safetyContents {
             width: 100%;
+            display: none;
 
             div.safetyCreateBtnBox {
               width: 100%;
               height: 40px;
               padding: 24px;
               box-sizing: border-box;
+              display: flex;
+              justify-content: center;
+              //display: none;
 
               button.safetyCreateBtn {
-                all: unset;
-                width: 100%;
-                height: 40px;
-                border-radius: 8px;
-                background-color: $blue-100;
-                color: $blue-500;
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                cursor: pointer;
+                margin-top: 80px;
 
                 span {
                   margin-right: 4px;
@@ -135,6 +131,10 @@ div.observeContainer {
               }
             }
           }
+          section.safetyContents:nth-child(1){
+            display: block;
+          }
+
         }
       }
 
@@ -278,22 +278,23 @@ div.observeContainer {
             span.iframeRecording{
               width: 100%;
               height: 30px;
-              background-color: pink;
+              display: flex;
+              align-items: center;
+              justify-content: end;
+              position: relative;
               div{
-                width: 10px;
-                height: 10px;
-                background-color: thistle;
+                display: flex;
+                align-items: center;
+                span{
+                  display: block;
+                  width: 16px;
+                  height: 16px;
+                  border-radius: 50%;
+                  background-color: $error-500;
+                  margin-right: 4px;
+                  animation: recIcon 1.5s infinite ease-in-out;
+                }
               }
-              //display: flex;
-              //align-items: center;
-              //span{
-              //  display: block;
-              //  width: 16px;
-              //  height: 16px;
-              //  border-radius: 50%;
-              //  background-color: $error-500;
-              //  margin-right: 4px;
-              //}
             }
           }
 
@@ -321,5 +322,17 @@ div.observeContainer {
         }
       }
     }
+  }
+}
+
+@keyframes recIcon {
+  0%{
+    opacity: 0.2;
+  }
+  50%{
+    opacity: 0.8;
+  }
+  100%{
+    opacity: 1;
   }
 }

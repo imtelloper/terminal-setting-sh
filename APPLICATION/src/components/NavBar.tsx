@@ -166,7 +166,7 @@ const NaviBar = () => {
           </div>
           <div className="btn-dropdown">
             <span>
-              <Settings />
+              <Settings onClick={() => navigate('/setting')} />
             </span>
             <ul className="dropdown-list">
               <li>menu1</li>

@@ -22,6 +22,9 @@ module.exports = {
     'no-plusplus': 'off',
     'react-hooks/exhaustive-deps': 'off',
     'react/prop-types': 'off',
+    'no-nested-ternary': 'off',
+    'no-underscore-dangle': 'off',
+    '@typescript-eslint/no-shadow': 'off',
   },
   parserOptions: {
     ecmaVersion: 2020,

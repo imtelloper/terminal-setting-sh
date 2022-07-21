@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react';
+import '../style/DesignSystem.scss';
 import '../style/pages/ObserveCamInfo.scss';
 import { useNavigate } from 'react-router-dom';
 import { flushSync } from 'react-dom';
@@ -6,6 +7,7 @@ import Delete from '../images/delete.png';
 import { AiOutlinePlusCircle } from 'react-icons/ai';
 import { Feedback, HighlightOff } from '@material-ui/icons';
 import { MdDangerous, MdOutlineTaskAlt } from 'react-icons/md';
+import Api from '../api/Api';
 
 type Props = {
   videoFrameState: Array<any>;
@@ -20,14 +22,10 @@ const ObserveCamInfo = ({
   recordState,
   setRecordState,
   getObserveState,
+  setNewVideoSrcState,
 }) => {
   const navigate = useNavigate();
-  const [camInfoState, setCamInfoState] = useState([
-    { safetyLevel: 'Green', sensingCnt: 0 },
-    { safetyLevel: 'Red', sensingCnt: 1 },
-    { safetyLevel: 'Yellow', sensingCnt: 2 },
-    { safetyLevel: 'Green', sensingCnt: 3 },
-  ]);
+  const [camInfoState, setCamInfoState] = useState([]);
   const [ipState, setIpState] = useState('');
 
   const saveParameter = () => {
@@ -56,8 +54,28 @@ const ObserveCamInfo = ({
   };
 
   // 그룹안 삭제
-  const handleDelete = () => {
+  const handleDelete = (e) => {
     console.log('handleDelete');
+    const target = e.currentTarget;
+    const trackerId = target.getAttribute('itemID');
+    const groupNum = target.getAttribute('datatype');
+    console.log('handle delete trackerId', trackerId);
+    console.log('handle delete groupNum', groupNum);
+
+    Api.tracker.modifyOneData(trackerId, {
+      [`sensingGroup${groupNum}`]: '',
+    });
+    /* 현재 비디오 스테이트 url 기본 url로 변경 */
+    const targetIdx = videoFrameState.findIndex(
+      (obj) => obj.trackerId === trackerId
+    );
+
+    if (videoFrameState[targetIdx]) {
+      let { frameSrc } = videoFrameState[targetIdx];
+      frameSrc = `${frameSrc.split(':81')[0]}:81`;
+      setNewVideoSrcState(targetIdx, frameSrc);
+      // 해당 옵저브 데이터 삭제 필요
+    }
   };
 
   // 그룹안 리셋
@@ -98,7 +116,41 @@ const ObserveCamInfo = ({
     flushSync(() => setVideoFrameState(newArr));
   };
 
-  const groupBoxComponent = (info, idx, groupNum) => (
+  /* INIT EFFECT */
+  useEffect(() => {
+    const camTabs = Array.from(document.querySelectorAll('.safetyContents'));
+    console.log('camTabs', camTabs);
+    camTabs.forEach((ele: HTMLElement, idx) => {
+      if (idx !== 0) {
+        ele.style.display = 'none';
+      }
+    });
+  }, []);
+
+  useEffect(() => {
+    // console.log('ObserveCamInfo');
+    // console.log('🌸getObserveState', getObserveState);
+
+    const newCamInfoState = [{}, {}, {}, {}];
+    /* getObserveState 가공 후 camInfoState에 셋팅 */
+    getObserveState.forEach((obj) => {
+      const { camPort, groupNum } = obj;
+      const camIndex = parseInt(camPort.at(-1), 10) - 1;
+      newCamInfoState[camIndex] = {
+        ...newCamInfoState[camIndex],
+        [groupNum]: obj,
+      };
+    });
+
+    console.log('🪴🪴🪴🪴☘️ newCamInfoState', newCamInfoState);
+    newCamInfoState.length > 0 && setCamInfoState(newCamInfoState);
+  }, [getObserveState]);
+
+  // useEffect(() => {
+  //   console.log('love dive 🌝🌝🌝🌝🌝 camInfoState', camInfoState);
+  // }, [camInfoState]);
+
+  const groupBoxComponent = (stateInfo, stateIdx, groupNum) => (
     <div className="observeCamInfoContainer">
       <div className="observeBox">
         <div className="groupBox">
@@ -107,20 +159,20 @@ const ObserveCamInfo = ({
             <input
               datatype="messageSwitch"
               type="radio"
-              id={`toggleOnRadio${idx}`}
+              id={`toggleOnRadio${stateIdx}`}
               name="messageRadio"
               value="on"
               defaultChecked
             />
-            <label htmlFor={`toggleOnRadio${idx}`}>ON</label>
+            <label htmlFor={`toggleOnRadio${stateIdx}`}>ON</label>
             <input
               datatype="messageSwitch"
               type="radio"
-              id={`toggleOffRadio${idx}`}
+              id={`toggleOffRadio${stateIdx}`}
               name="messageRadio"
               value="off"
             />
-            <label htmlFor={`toggleOffRadio${idx}`}>OFF</label>
+            <label htmlFor={`toggleOffRadio${stateIdx}`}>OFF</label>
             <span className="move" />
           </div>
         </div>
@@ -128,39 +180,36 @@ const ObserveCamInfo = ({
           {/* className : 색상별 green yellow red inactive */}
           <div className="alarmTxt green">
             <MdOutlineTaskAlt style={{ fontSize: '32px' }} />
+            {/* 작업자 진입 확인 / 작업자 위험 반경 진입 / 비활성화 되었습니다. */}
             <span>안전합니다.</span>
           </div>
 
-          {/* <div className="alarmTxt yellow"> */}
-          {/*  <Feedback style={{ fontSize: '32px' }}/> */}
-          {/*  <span>작업자 진입 확인</span> */}
-          {/* </div> */}
-
-          {/* <div className="alarmTxt red"> */}
-          {/*  <MdDangerous style={{ fontSize: '32px' }} /> */}
-          {/*  <span>작업자 위험 반경 진입</span> */}
-          {/* </div> */}
-
-          {/* <div className="alarmTxt inactive"> */}
-          {/*  <HighlightOff style={{ fontSize: '32px' }} /> */}
-          {/*  <span>비활성화 되었습니다.</span> */}
-          {/* </div> */}
-
           <div className="sensingBox">
             <span>
-              1차 감지<p>{info.yellowCnt}</p>
+              1차 감지<p>{stateInfo?.[groupNum]?.yellowCnt}</p>
             </span>
             <span>
-              2차 감지<p>{info.redCnt}</p>
+              2차 감지<p>{stateInfo?.[groupNum]?.redCnt}</p>
             </span>
           </div>
         </div>
         <div className="safetyBtnBox">
           <div>
-            <button onClick={saveParameter}>저장</button>
-            <button onClick={callParameter}>불러오기</button>
-            <button onClick={handleErrorReset}>상태 리셋</button>
-            <button onClick={handleDelete}>
+            <button
+              className="btnR normalPrimary"
+              onClick={saveParameter}
+              datatype={stateInfo?.[groupNum]?.trackerId}
+            >
+              저장
+            </button>
+            <button className="btnR normalPrimary" onClick={callParameter}>불러오기</button>
+            <button className="btnR normalPrimary" onClick={handleErrorReset}>상태 리셋</button>
+            <button
+              className="btnR normalPrimary"
+              onClick={handleDelete}
+              itemID={stateInfo?.[groupNum]?.trackerId}
+              datatype={groupNum}
+            >
               <img src={Delete} alt="" />
             </button>
           </div>
@@ -169,17 +218,9 @@ const ObserveCamInfo = ({
     </div>
   );
 
-  useEffect(() => {
-    console.log('🌸getObserveState', getObserveState);
-    const existCameras = [
-      ...new Set(getObserveState.map((obj) => obj.camPort)),
-    ];
-    /*  */
-    console.log('existCameras', existCameras);
-  }, [getObserveState]);
-
+  /* getObserveState를 가공하여 4개의 캠 셋트로 만들고 다시 해야된다. */
   const camInfosMap = useMemo(() => {
-    return getObserveState.map((info, idx) => (
+    return camInfoState?.map((info, idx) => (
       <section
         id={`safetyContent${idx + 1}`}
         className="safetyContents"
@@ -194,29 +235,21 @@ const ObserveCamInfo = ({
 
           <div className="safetyCreateBtnBox">
             <button
-              className="safetyCreateBtn"
+              className="safetyCreateBtn btnL normalPrimary"
               datatype={idx.toString()}
               onClick={createCanvas}
             >
-              <span>
-                <AiOutlinePlusCircle />
-              </span>
-              <span>ADD</span>
+              그룹 생성하기
+              {/*<span>*/}
+              {/*  <AiOutlinePlusCircle />*/}
+              {/*</span>*/}
+              {/*<span>{idx + 1} ADD</span>*/}
             </button>
           </div>
         </div>
       </section>
     ));
-  }, [getObserveState, videoFrameState]);
-
-  useEffect(() => {
-    const camTabs = Array.from(document.querySelectorAll('.safetyContents'));
-    camTabs.forEach((ele: HTMLElement, idx) => {
-      if (idx !== 0) {
-        ele.style.display = 'none';
-      }
-    });
-  }, []);
+  }, [camInfoState, videoFrameState]);
 
   return <>{camInfosMap}</>;
 };
