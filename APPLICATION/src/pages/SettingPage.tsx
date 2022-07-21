@@ -170,12 +170,12 @@ const SettingPage = () => {
   useEffect(() => {
     console.log('camSettingState', camSettingState);
 
-    const areaFilteredData = camSettingState.filter(
+    const areaFilteredData = camSettingState?.filter(
       (obj) => obj.area === 'H2 로봇'
     );
     console.log('areaFilteredData', areaFilteredData);
 
-    if (camSettingState.length > 0) {
+    if (camSettingState?.length > 0) {
       console.log('🍊🍊🍊');
       initSettingUI();
     }

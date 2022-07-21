@@ -170,7 +170,6 @@ const ObservePage = () => {
     target.classList.toggle('txtActive');
     target.classList.toggle('hoverCircleActive');
     setTxtChangeState('녹화중');
-    // iframeRecordingEl.classList.toggle('recIconActive');
     console.log('camTabState', camTabState);
     let ip = null;
     switch (camTabState) {
@@ -497,7 +496,12 @@ const ObservePage = () => {
             {/* {camTabState - 1 === idx && recordState && ( */}
             {/*  <div style={{ width: '16px', height: '16px', color: 'red' }}>REC</div> */}
             {/* )} */}
-            {camTabState - 1 === idx && recordState && <div><span/>REC</div>}
+            {camTabState - 1 === idx && recordState && (
+              <div>
+                <span />
+                REC
+              </div>
+            )}
           </span>
         </div>
         {data.firstCanvas.visible && (
