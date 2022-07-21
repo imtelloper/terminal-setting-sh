@@ -20,6 +20,7 @@ type Observe = {
 };
 
 type TrackerObserve = {
+  _id: string;
   date: string;
   groupNum: number;
   observeSwitch: boolean;

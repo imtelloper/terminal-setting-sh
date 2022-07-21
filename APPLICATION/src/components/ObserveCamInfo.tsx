@@ -59,6 +59,9 @@ const ObserveCamInfo = ({
     const target = e.currentTarget;
     const trackerId = target.getAttribute('itemID');
     const groupNum = target.getAttribute('datatype');
+    console.log('handle delete trackerId', trackerId);
+    console.log('handle delete groupNum', groupNum);
+
     Api.tracker.modifyOneData(trackerId, {
       [`sensingGroup${groupNum}`]: '',
     });
@@ -66,10 +69,13 @@ const ObserveCamInfo = ({
     const targetIdx = videoFrameState.findIndex(
       (obj) => obj.trackerId === trackerId
     );
-    let { frameSrc } = videoFrameState[targetIdx];
-    frameSrc = `${frameSrc.split(':81')[0]}:81`;
-    setNewVideoSrcState(targetIdx, frameSrc);
-    // 해당 옵저브 데이터 삭제 필요
+
+    if (videoFrameState[targetIdx]) {
+      let { frameSrc } = videoFrameState[targetIdx];
+      frameSrc = `${frameSrc.split(':81')[0]}:81`;
+      setNewVideoSrcState(targetIdx, frameSrc);
+      // 해당 옵저브 데이터 삭제 필요
+    }
   };
 
   // 그룹안 리셋
@@ -109,6 +115,40 @@ const ObserveCamInfo = ({
     flushSync(() => setVideoFrameState([]));
     flushSync(() => setVideoFrameState(newArr));
   };
+
+  /* INIT EFFECT */
+  useEffect(() => {
+    const camTabs = Array.from(document.querySelectorAll('.safetyContents'));
+    console.log('camTabs', camTabs);
+    camTabs.forEach((ele: HTMLElement, idx) => {
+      if (idx !== 0) {
+        ele.style.display = 'none';
+      }
+    });
+  }, []);
+
+  useEffect(() => {
+    // console.log('ObserveCamInfo');
+    // console.log('🌸getObserveState', getObserveState);
+
+    const newCamInfoState = [{}, {}, {}, {}];
+    /* getObserveState 가공 후 camInfoState에 셋팅 */
+    getObserveState.forEach((obj) => {
+      const { camPort, groupNum } = obj;
+      const camIndex = parseInt(camPort.at(-1), 10) - 1;
+      newCamInfoState[camIndex] = {
+        ...newCamInfoState[camIndex],
+        [groupNum]: obj,
+      };
+    });
+
+    console.log('🪴🪴🪴🪴☘️ newCamInfoState', newCamInfoState);
+    newCamInfoState.length > 0 && setCamInfoState(newCamInfoState);
+  }, [getObserveState]);
+
+  // useEffect(() => {
+  //   console.log('love dive 🌝🌝🌝🌝🌝 camInfoState', camInfoState);
+  // }, [camInfoState]);
 
   const groupBoxComponent = (stateInfo, stateIdx, groupNum) => (
     <div className="observeCamInfoContainer">
@@ -178,27 +218,6 @@ const ObserveCamInfo = ({
     </div>
   );
 
-  useEffect(() => {
-    // console.log('ObserveCamInfo');
-    // console.log('🌸getObserveState', getObserveState);
-    const newCamInfoState = [{}, {}, {}, {}];
-    getObserveState.forEach((obj) => {
-      const { camPort, groupNum } = obj;
-      const camIndex = parseInt(camPort.at(-1), 10) - 1;
-      newCamInfoState[camIndex] = {
-        ...newCamInfoState[camIndex],
-        [groupNum]: obj,
-      };
-    });
-
-    // console.log('🪴🪴🪴🪴☘️ newCamInfoState', newCamInfoState);
-    newCamInfoState.length > 0 && setCamInfoState(newCamInfoState);
-  }, [getObserveState]);
-
-  // useEffect(() => {
-  //   console.log('love dive 🌝🌝🌝🌝🌝 camInfoState', camInfoState);
-  // }, [camInfoState]);
-
   /* getObserveState를 가공하여 4개의 캠 셋트로 만들고 다시 해야된다. */
   const camInfosMap = useMemo(() => {
     return camInfoState?.map((info, idx) => (
@@ -231,16 +250,6 @@ const ObserveCamInfo = ({
       </section>
     ));
   }, [camInfoState, videoFrameState]);
-
-  useEffect(() => {
-    const camTabs = Array.from(document.querySelectorAll('.safetyContents'));
-    console.log('camTabs', camTabs);
-    camTabs.forEach((ele: HTMLElement, idx) => {
-      if (idx !== 0) {
-        ele.style.display = 'none';
-      }
-    });
-  }, []);
 
   return <>{camInfosMap}</>;
 };

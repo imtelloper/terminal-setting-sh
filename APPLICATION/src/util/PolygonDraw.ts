@@ -82,4 +82,11 @@ export default class PolygonDraw {
     context.closePath();
     context.stroke();
   };
+
+  static setPolygonPoints = (pointsArray, x, y, ctx, size, color) => {
+    const roundedX = Math.round(x);
+    const roundedY = Math.round(y);
+    pointsArray.push([roundedX, roundedY]);
+    this.drawPoints(ctx, roundedX, roundedY, size, color);
+  };
 }
