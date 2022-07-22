@@ -656,7 +656,8 @@ const ObservePage = () => {
         <div className="leftBox">
           <div className="titleBox">
             <span className="subTitle">Place</span>
-            <span className="mainTitle">{swrState.curTrackerArea}</span>
+            {/*<span className="mainTitle">{swrState.curTrackerArea}</span>*/}
+            <span className="mainTitle">데이터 들어갈자리</span>
           </div>
           <div className="safetyTabWrap">
             <div className="safetyTabBox">{getTabEles()}</div>

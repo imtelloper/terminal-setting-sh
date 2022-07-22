@@ -29,7 +29,56 @@ type CamSettingType = {
   _id: string;
 };
 
-const camDummyData: Array<CamSettingType> = [];
+const camDummyData: Array<CamSettingType> = [
+  {
+    area: 'H1 공장 크레인',
+    camPort: 'cam1',
+    savingPath: '/home/',
+    camName: 'H1 공장 크레인 좌측 상단 캠',
+    computeDevice: 'CPU',
+    sensingModel: 'small',
+    threshold: 70,
+    imgSaveSwitch: false,
+    messageSwitch: false,
+    kakaoSwitch: false,
+  },
+  {
+    area: 'H1 공장 크레인',
+    camPort: 'cam2',
+    savingPath: '/home/',
+    camName: 'H1 공장 크레인 우측 상단 캠',
+    computeDevice: 'CPU',
+    sensingModel: 'small',
+    threshold: 70,
+    imgSaveSwitch: false,
+    messageSwitch: false,
+    kakaoSwitch: false,
+  },
+  {
+    area: 'H1 공장 크레인',
+    camPort: 'cam3',
+    savingPath: '/home/',
+    camName: 'H1 공장 크레인 왼쪽 상단 캠',
+    computeDevice: 'CPU',
+    sensingModel: 'small',
+    threshold: 70,
+    imgSaveSwitch: false,
+    messageSwitch: false,
+    kakaoSwitch: false,
+  },
+  {
+    area: 'H1 공장 크레인',
+    camPort: 'cam4',
+    savingPath: '/home/',
+    camName: 'H1 공장 크레인 왼쪽 상단 캠',
+    computeDevice: 'CPU',
+    sensingModel: 'small',
+    threshold: 70,
+    imgSaveSwitch: false,
+    messageSwitch: false,
+    kakaoSwitch: false,
+  },
+];
 
 /*
 tracker들을 가져와서 area를 고유값으로 select option에 셋팅

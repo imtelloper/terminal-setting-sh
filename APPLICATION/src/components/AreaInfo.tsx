@@ -211,78 +211,80 @@ const AreaInfo = () => {
   }, [swrTrackerData, swrObserveData]);
 
   const areaCardsMap = useMemo(() => {
-    return (getObserveState || dummyData).map((card, idx) => {
-      const getObjectKey = Object.keys(card);
-      return (
-        <div
-          className="areaCardBox"
-          key={idx}
-          itemID={getObjectKey.toString()}
-          onClick={goObservePage}
-          datatype={idx.toString()}
-        >
-          {/* <h3>{card.area}</h3> */}
-          <div className="titleBox">
-            <span>{Object.keys(card)}</span>
-            {/* @ts-ignore */}
-            <span>{card?.trackerId}</span>
-          </div>
-          <div className="areaContent">
-            <div className="areaTop">
-              <div className="imgBox">
-                <img src={BgImg} alt="" />
+    return (getObserveState.length > 0 ? getObserveState : dummyData).map(
+      (card, idx) => {
+        const getObjectKey = Object.keys(card);
+        return (
+          <div
+            className="areaCardBox"
+            key={idx}
+            itemID={getObjectKey.toString()}
+            onClick={goObservePage}
+            datatype={idx.toString()}
+          >
+            {/* <h3>{card.area}</h3> */}
+            <div className="titleBox">
+              {/*<span>{Object.keys(card)}</span>*/}
+              {/* @ts-ignore */}
+              <span>{card?.trackerId}</span>
+            </div>
+            <div className="areaContent">
+              <div className="areaTop">
+                <div className="imgBox">
+                  <img src={BgImg} alt="" />
+                </div>
+              </div>
+              <div className="areaBottom">
+                <div className="camBox">
+                  <div className="camPort">
+                    {/* @ts-ignore */}
+                    CAM <span>{card[[getObjectKey]]?.length}</span>
+                  </div>
+                  <div className="activeBadge">
+                    <div className="circle" />
+                    <span>ACTIVE</span>
+                  </div>
+                </div>
+                <div className="alarmBox">
+                  {/* className : green yellow red inactive => alarmTxt 에 추가해주시면 됩니다! */}
+                  <div
+                    className={`alarmTxt ${
+                      // @ts-ignore
+                      card[[getObjectKey]]?.safetyLevel === 'Red'
+                        ? 'red'
+                        : // @ts-ignore
+                        card[[getObjectKey]]?.safetyLevel === 'Yellow'
+                        ? 'yellow'
+                        : 'green'
+                    }`}
+                  >
+                    {
+                      // @ts-ignore
+                      card[[getObjectKey]]?.safetyLevel === 'Red'
+                        ? '작업자 위험 반경 진입'
+                        : // @ts-ignore
+                        card[[getObjectKey]]?.safetyLevel === 'Yellow'
+                        ? '작업자 진입'
+                        : '안전합니다.'
+                    }
+                  </div>
+                  <div className="sensingBox">
+                    <span>
+                      {/* @ts-ignore */}
+                      1차 감지<p>{card[getObjectKey]?.yellowCnt}</p>
+                    </span>
+                    <span>
+                      {/* @ts-ignore */}
+                      2차 감지<p>{card[getObjectKey]?.redCnt}</p>
+                    </span>
+                  </div>
+                </div>
               </div>
             </div>
-            <div className="areaBottom">
-              <div className="camBox">
-                <div className="camPort">
-                  {/* @ts-ignore */}
-                  CAM <span>{card[[getObjectKey]]?.length}</span>
-                </div>
-                <div className="activeBadge">
-                  <div className="circle" />
-                  <span>ACTIVE</span>
-                </div>
-              </div>
-              <div className="alarmBox">
-                {/* className : green yellow red inactive => alarmTxt 에 추가해주시면 됩니다! */}
-                <div
-                  className={`alarmTxt ${
-                    // @ts-ignore
-                    card[[getObjectKey]]?.safetyLevel === 'Red'
-                      ? 'red'
-                      : // @ts-ignore
-                      card[[getObjectKey]]?.safetyLevel === 'Yellow'
-                      ? 'yellow'
-                      : 'green'
-                  }`}
-                >
-                  {
-                    // @ts-ignore
-                    card[[getObjectKey]]?.safetyLevel === 'Red'
-                      ? '작업자 위험 반경 진입'
-                      : // @ts-ignore
-                      card[[getObjectKey]]?.safetyLevel === 'Yellow'
-                      ? '작업자 진입'
-                      : '안전합니다.'
-                  }
-                </div>
-                <div className="sensingBox">
-                  <span>
-                    {/* @ts-ignore */}
-                    1차 감지<p>{card[getObjectKey]?.yellowCnt}</p>
-                  </span>
-                  <span>
-                    {/* @ts-ignore */}
-                    2차 감지<p>{card[getObjectKey]?.redCnt}</p>
-                  </span>
-                </div>
-              </div>
-            </div>
           </div>
-        </div>
-      );
-    });
+        );
+      }
+    );
   }, [getObserveState]);
 
   return (
