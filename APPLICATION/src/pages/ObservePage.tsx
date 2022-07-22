@@ -9,7 +9,6 @@ import PolygonDraw from '../util/PolygonDraw';
 import { Settings } from '@material-ui/icons';
 import { useSWRState } from '../fetcher/useSWRState';
 import useSWR from 'swr';
-import dayjs from 'dayjs';
 
 export const camPort1Ip = '192.168.0.7';
 export const camPort2Ip = '192.168.0.26';
