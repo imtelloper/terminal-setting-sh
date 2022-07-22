@@ -13,6 +13,7 @@ import { useSWRState } from '../fetcher/useSWRState';
 import { getFetcher } from '../fetcher/fetcher';
 import Api from '../api/Api';
 import { number } from 'prop-types';
+import dayjs from 'dayjs';
 
 type AreaCard = {
   title: string;
@@ -70,7 +71,7 @@ const dummyData = [
 
 const AreaInfo = () => {
   const navigate = useNavigate();
-  const today = new Date().toISOString().slice(0, 10);
+  const today = dayjs().format('YYYY-MM-DD');
   const [getObserveState, setGetObserveState] = useState([]);
   const { data: swrState, mutate: setSwrState } = useSWRState();
 
@@ -133,6 +134,7 @@ const AreaInfo = () => {
     const processedData = [];
     const areaData = [...new Set(swrTrackerData?.map((obj) => obj.area))];
 
+    /* 메인 화면에 리스트들이 안뜨는 이유는 오늘 날짜의 observe 데이터가 없어서 그렇다. */
     swrTrackerData.forEach(async (tracker, idx) => {
       await Api.observe
         .findData({
@@ -140,6 +142,7 @@ const AreaInfo = () => {
           date: today,
         })
         .then((observe) => {
+          console.log('observe',observe);
           /* 오늘 날짜로의 감지 데이터가 있으면 실행 */
           if (observe?.length > 0) {
             /* 오늘 날짜의 observe 데이터와 tracker 데이터 결합 */
@@ -197,16 +200,17 @@ const AreaInfo = () => {
   }, [swrTrackerData, swrObserveData]);
 
   useEffect(() => {
-    // console.log('#####getObserveState', getObserveState);
-    // console.log('🌸🌸🌸 swrObserveData', swrObserveData);
+    console.log('#####getObserveState', getObserveState);
+    console.log('🌸🌸🌸 swrObserveData', swrObserveData);
     /* getObserveState 데이터가 있을때 한번 가공 데이터 셋팅 */
     if (getObserveState.length === 0)
       swrTrackerData?.length > 0 && setProcessedSwrData();
   }, [getObserveState]);
 
   useEffect(() => {
-    // console.log('swrTrackerData?.length', swrTrackerData?.length);
+    console.log('swrTrackerData?.length', swrTrackerData?.length);
     /* db에서 tracker 데이터가 바뀔때마다 가공 데이터 셋팅 */
+    swrTrackerData?.length > 0 && console.log('swrTrackerData', swrTrackerData);
     swrTrackerData?.length > 0 && setProcessedSwrData();
   }, [swrTrackerData, swrObserveData]);
 

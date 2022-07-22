@@ -11,9 +11,9 @@ import { useSWRState } from '../fetcher/useSWRState';
 import useSWR from 'swr';
 import dayjs from 'dayjs';
 
-export const camPort1Ip = '192.168.0.7';
+export const camPort1Ip = '192.168.0.4';
 export const camPort2Ip = '192.168.0.26';
-export const camPort3Ip = '192.168.0.36';
+export const camPort3Ip = '192.168.0.18';
 export const camPort4Ip = '192.168.0.30';
 
 type ViedeoFrameType = {
@@ -71,10 +71,10 @@ const initVideoFrameData: Array<ViedeoFrameType> = [
       yellowSensingPercent: 0.7,
       redSensingPercent: 0.3,
       coordinate: [
-        [242, 122],
-        [298, 139],
-        [296, 189],
-        [239, 191],
+        // [242, 122],
+        // [298, 139],
+        // [296, 189],
+        // [239, 191],
       ],
     },
     secondCanvas: {
