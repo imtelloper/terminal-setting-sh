@@ -169,7 +169,7 @@ const ObservePage = () => {
     const recordTxtEl = document.querySelector('.recordTxt');
     target.classList.toggle('txtActive');
     target.classList.toggle('hoverCircleActive');
-    setTxtChangeState((prev) => (prev === '녹화시작' ? '녹화중' : '녹화시작'));
+    setTxtChangeState((prev) => (prev === '녹화중' ? '녹화시작' : '녹화중'));
     recordTxtEl.classList.toggle('txtColorActive');
     console.log('camTabState', camTabState);
     let ip = null;
