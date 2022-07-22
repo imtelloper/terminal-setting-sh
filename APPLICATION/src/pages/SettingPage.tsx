@@ -26,7 +26,7 @@ type CamSettingType = {
   imgSaveSwitch: boolean;
   messageSwitch: boolean;
   kakaoSwitch: boolean;
-  _id: string;
+  // _id: string;
 };
 
 const camDummyData: Array<CamSettingType> = [
@@ -77,7 +77,7 @@ const camDummyData: Array<CamSettingType> = [
     imgSaveSwitch: false,
     messageSwitch: false,
     kakaoSwitch: false,
-  },
+  }
 ];
 
 /*

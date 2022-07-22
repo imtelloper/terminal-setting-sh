@@ -9,7 +9,7 @@ import PolygonDraw from '../util/PolygonDraw';
 import { Settings } from '@material-ui/icons';
 import { useSWRState } from '../fetcher/useSWRState';
 import useSWR from 'swr';
-// import dayjs from 'dayjs';
+import dayjs from 'dayjs';
 
 export const camPort1Ip = '192.168.0.7';
 export const camPort2Ip = '192.168.0.26';
@@ -166,9 +166,11 @@ const ObservePage = () => {
 
   const handleActive = (e) => {
     const target = e.currentTarget;
+    const recordTxtEl = document.querySelector('.recordTxt');
     target.classList.toggle('txtActive');
     target.classList.toggle('hoverCircleActive');
     setTxtChangeState((prev) => (prev === '녹화시작' ? '녹화중' : '녹화시작'));
+    recordTxtEl.classList.toggle('txtColorActive');
     console.log('camTabState', camTabState);
     let ip = null;
     switch (camTabState) {
@@ -194,6 +196,11 @@ const ObservePage = () => {
       Api.stream.stopRecordVideo(ip);
       setRecordState(false);
     }
+  };
+
+  const handleTxtColor = (e) => {
+    const target = e.currentTarget;
+    target.classList.toggle('txtColorActive');
   };
 
   const getStateCoordinate = (arrIndex: number, itemID: string) =>
@@ -657,7 +664,7 @@ const ObservePage = () => {
         <div className="leftBox">
           <div className="titleBox">
             <span className="subTitle">Place</span>
-            {/*<span className="mainTitle">{swrState.curTrackerArea}</span>*/}
+            {/* <span className="mainTitle">{swrState.curTrackerArea}</span> */}
             <span className="mainTitle">데이터 들어갈자리</span>
           </div>
           <div className="safetyTabWrap">
