@@ -1,16 +1,15 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { flushSync } from 'react-dom';
 import '../style/pages/ObservePage.scss';
 import { useNavigate } from 'react-router-dom';
 import ObserveCamInfo from '../components/ObserveCamInfo';
 import axios from 'axios';
 import Api from '../api/Api';
-import CreateBtn from '../components/CreateBtn';
 import PolygonDraw from '../util/PolygonDraw';
 import { Settings } from '@material-ui/icons';
 import { useSWRState } from '../fetcher/useSWRState';
 import useSWR from 'swr';
-import { getFetcher } from '../fetcher/fetcher';
+import dayjs from 'dayjs';
 
 export const camPort1Ip = '192.168.0.7';
 export const camPort2Ip = '192.168.0.26';
@@ -128,7 +127,7 @@ const ObservePage = () => {
   const camHeight = 384;
   const pointSize = 3; // 다각형 점의 크기
   const lineSize = 2.5; // 다각형 선의 굵기
-  const today = new Date().toISOString().slice(0, 10);
+  const today = dayjs().format('YYYY-MM-DD');
   const drawColor = {
     green: '#42f593',
     yellow: '#FFFA7C',
@@ -426,6 +425,8 @@ const ObservePage = () => {
   const setProcessedSwrData = () => {
     const processedData = [];
     swrTrackerData.forEach(async (tracker, idx) => {
+      console.log('장난 tracker._id', tracker._id);
+      console.log('하니 today', today);
       await Api.observe
         .findData({
           trackerId: tracker._id,
@@ -437,8 +438,8 @@ const ObservePage = () => {
               return { ...tracker, ...obj };
             });
             processedData.push(...processedObserve);
-            // console.log('🌺🌺🌺processedData', processedData);
-
+            console.log('🌺🌺🌺processedData', processedData);
+            /* 정렬 */
             processedData.sort((prev, next) => {
               if (
                 `${prev.camPort}${prev.groupNum}` >
