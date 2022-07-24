@@ -1,4 +1,11 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react';
+// @ts-ignore
+import React, {
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+  useTransition,
+} from 'react';
 import '../style/pages/SettingPage.scss';
 import '../style/DesignSystem.scss';
 import Api from '../api/Api';
@@ -16,6 +23,7 @@ import { useSWRState } from '../fetcher/useSWRState';
 import { flushSync } from 'react-dom';
 
 type CamSettingType = {
+  _id: string;
   area: string;
   camPort: string;
   savingPath: string;
@@ -31,6 +39,7 @@ type CamSettingType = {
 
 const camDummyData: Array<CamSettingType> = [
   {
+    _id: '',
     area: 'H1 공장 크레인',
     camPort: 'cam1',
     savingPath: '/home/',
@@ -43,6 +52,7 @@ const camDummyData: Array<CamSettingType> = [
     kakaoSwitch: false,
   },
   {
+    _id: '',
     area: 'H1 공장 크레인',
     camPort: 'cam2',
     savingPath: '/home/',
@@ -55,6 +65,7 @@ const camDummyData: Array<CamSettingType> = [
     kakaoSwitch: false,
   },
   {
+    _id: '',
     area: 'H1 공장 크레인',
     camPort: 'cam3',
     savingPath: '/home/',
@@ -67,6 +78,7 @@ const camDummyData: Array<CamSettingType> = [
     kakaoSwitch: false,
   },
   {
+    _id: '',
     area: 'H1 공장 크레인',
     camPort: 'cam4',
     savingPath: '/home/',
@@ -77,7 +89,7 @@ const camDummyData: Array<CamSettingType> = [
     imgSaveSwitch: false,
     messageSwitch: false,
     kakaoSwitch: false,
-  }
+  },
 ];
 
 /*
@@ -91,6 +103,7 @@ const SettingPage = () => {
   const { data: swrState, mutate: setSwrState } = useSWRState();
   const [camAreasState, setCamAreasState] = useState<Array<string>>([]);
   const [curCamAreaState, setCurCamAreaState] = useState('');
+  const [isPending, startTransition] = useTransition();
 
   const initSettingUI = () => {
     camSettingState.forEach((obj) => {
@@ -202,13 +215,14 @@ const SettingPage = () => {
           const settingAreasState: Array<string> = [...new Set(camStateKeys)];
           console.log('settingAreasState', settingAreasState);
           setCamAreasState(settingAreasState);
-          (
-            document.querySelector('#settingAreaTitle') as HTMLSpanElement
-          ).textContent = settingAreasState[0];
-
-          (
-            document.querySelector('#settingCamAreaSelect') as HTMLSelectElement
-          ).value = settingAreasState[0];
+          const settingAreaTitle = document.querySelector(
+            '#settingAreaTitle'
+          ) as HTMLSpanElement;
+          settingAreaTitle.textContent = settingAreasState[0];
+          const settingCamAreaSelect = document.querySelector(
+            '#settingCamAreaSelect'
+          ) as HTMLSelectElement;
+          settingCamAreaSelect.value = settingAreasState[0];
 
           setCurCamAreaState(settingAreasState[0]);
         }

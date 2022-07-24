@@ -25,6 +25,7 @@ module.exports = {
     'no-nested-ternary': 'off',
     'no-underscore-dangle': 'off',
     '@typescript-eslint/no-shadow': 'off',
+    'prefer-destructuring': 'off',
   },
   parserOptions: {
     ecmaVersion: 2020,
