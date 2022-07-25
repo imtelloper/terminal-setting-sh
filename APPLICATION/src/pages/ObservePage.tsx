@@ -13,7 +13,7 @@ import dayjs from 'dayjs';
 
 export const camPort1Ip = '192.168.0.4';
 export const camPort2Ip = '192.168.0.26';
-export const camPort3Ip = '192.168.0.18';
+export const camPort3Ip = '192.168.0.36';
 export const camPort4Ip = '192.168.0.30';
 
 type ViedeoFrameType = {
@@ -664,8 +664,8 @@ const ObservePage = () => {
         <div className="leftBox">
           <div className="titleBox">
             <span className="subTitle">Place</span>
-            {/* <span className="mainTitle">{swrState.curTrackerArea}</span> */}
-            <span className="mainTitle">데이터 들어갈자리</span>
+            <span className="mainTitle">{swrState.curTrackerArea}</span>
+            {/* <span className="mainTitle">데이터 들어갈자리</span> */}
           </div>
           <div className="safetyTabWrap">
             <div className="safetyTabBox">{getTabEles()}</div>
