@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import Crane from '../images/crane.png';
 import Videocam from '../images/videocam.png';
 import Warning from '../images/warning.png';
@@ -12,6 +12,8 @@ import { flushSync } from 'react-dom';
 import { useSWRState } from '../fetcher/useSWRState';
 import { getFetcher } from '../fetcher/fetcher';
 import Api from '../api/Api';
+import { number } from 'prop-types';
+import dayjs from 'dayjs';
 
 type AreaCard = {
   title: string;
@@ -65,184 +67,12 @@ const dummyData = [
     sensingModel: null,
     alarmTxt: '작업자 진입 확인',
   },
-  {
-    activate: true,
-    alarms: '없음',
-    area: 'H3 공장크레인',
-    camCoordinate1: null,
-    camCoordinate2: null,
-    camName: null,
-    camPort: '4',
-    camSafetyLevel: 'Green',
-    camSensing1: '0',
-    camSensing2: '7',
-    computeDevice: null,
-    createdAt: '2022-06-28T00:12:52+00:00',
-    date: '2022-06-28',
-    savingPath: null,
-    sensingModel: null,
-    alarmTxt: '안전합니다.',
-  },
-  {
-    activate: true,
-    alarms: '없음',
-    area: 'H4 공장크레인',
-    camCoordinate1: null,
-    camCoordinate2: null,
-    camName: null,
-    camPort: '4',
-    camSafetyLevel: 'Green',
-    camSensing1: '9999',
-    camSensing2: '7',
-    computeDevice: null,
-    createdAt: '2022-06-28T00:12:52+00:00',
-    date: '2022-06-28',
-    savingPath: null,
-    sensingModel: null,
-    alarmTxt: '작업자 위험 반경 진입',
-  },
-  {
-    activate: true,
-    alarms: '없음',
-    area: 'H5 공장크레인',
-    camCoordinate1: null,
-    camCoordinate2: null,
-    camName: null,
-    camPort: '',
-    camSafetyLevel: 'Green',
-    camSensing1: '0',
-    camSensing2: '7',
-    computeDevice: null,
-    createdAt: '2022-06-28T00:12:52+00:00',
-    date: '2022-06-28',
-    savingPath: null,
-    sensingModel: null,
-    alarmTxt: '안전합니다.',
-  },
-  {
-    activate: true,
-    alarms: '없음',
-    area: 'H6 공장크레인',
-    camCoordinate1: null,
-    camCoordinate2: null,
-    camName: null,
-    camPort: '',
-    camSafetyLevel: 'Green',
-    camSensing1: null,
-    camSensing2: null,
-    computeDevice: null,
-    createdAt: '2022-06-28T00:12:52+00:00',
-    date: '2022-06-28',
-    savingPath: null,
-    sensingModel: null,
-    alarmTxt: '비활성 되었습니다.',
-  },
-  {
-    activate: true,
-    alarms: '없음',
-    area: 'H7 공장크레인',
-    camCoordinate1: null,
-    camCoordinate2: null,
-    camName: null,
-    camPort: '',
-    camSafetyLevel: 'Green',
-    camSensing1: null,
-    camSensing2: null,
-    computeDevice: null,
-    createdAt: '2022-06-28T00:12:52+00:00',
-    date: '2022-06-28',
-    savingPath: null,
-    sensingModel: null,
-    alarmTxt: '안전합니다.',
-  },
-  {
-    activate: true,
-    alarms: '없음',
-    area: '',
-    camCoordinate1: null,
-    camCoordinate2: null,
-    camName: null,
-    camPort: '',
-    camSafetyLevel: 'Green',
-    camSensing1: null,
-    camSensing2: null,
-    computeDevice: null,
-    createdAt: '2022-06-28T00:12:52+00:00',
-    date: '2022-06-28',
-    savingPath: null,
-    sensingModel: null,
-    alarmTxt: '안전합니다.',
-  },
-  {
-    activate: true,
-    alarms: '없음',
-    area: '',
-    camCoordinate1: null,
-    camCoordinate2: null,
-    camName: null,
-    camPort: '',
-    camSafetyLevel: 'Green',
-    camSensing1: null,
-    camSensing2: null,
-    computeDevice: null,
-    createdAt: '2022-06-28T00:12:52+00:00',
-    date: '2022-06-28',
-    savingPath: null,
-    sensingModel: null,
-    alarmTxt: '안전합니다.',
-  },
-  {
-    activate: true,
-    alarms: '없음',
-    area: '',
-    camCoordinate1: null,
-    camCoordinate2: null,
-    camName: null,
-    camPort: '',
-    camSafetyLevel: 'Green',
-    camSensing1: null,
-    camSensing2: null,
-    computeDevice: null,
-    createdAt: '2022-06-28T00:12:52+00:00',
-    date: '2022-06-28',
-    savingPath: null,
-    sensingModel: null,
-    alarmTxt: '안전합니다.',
-  },
-  {
-    activate: true,
-    alarms: '없음',
-    area: '',
-    camCoordinate1: null,
-    camCoordinate2: null,
-    camName: null,
-    camPort: '',
-    camSafetyLevel: 'Green',
-    camSensing1: null,
-    camSensing2: null,
-    computeDevice: null,
-    createdAt: '2022-06-28T00:12:52+00:00',
-    date: '2022-06-28',
-    savingPath: null,
-    sensingModel: null,
-    alarmTxt: '안전합니다.',
-  },
 ];
 
 const AreaInfo = () => {
   const navigate = useNavigate();
-  const today = new Date().toISOString().slice(0, 10);
-  const [getObserveState, setGetObserveState] = useState([
-    {
-      area: 'H2 공장 크레인',
-    },
-    {
-      area: 'H6 공장 크레인',
-    },
-    {
-      area: 'H3 공장 크레인',
-    },
-  ]);
+  const today = dayjs().format('YYYY-MM-DD');
+  const [getObserveState, setGetObserveState] = useState([]);
   const { data: swrState, mutate: setSwrState } = useSWRState();
 
   const findFetcher = (url: string) =>
@@ -283,7 +113,7 @@ const AreaInfo = () => {
               </span>
             </span>
           </div>`;
-        document.querySelector('section').appendChild(addContent);
+        document.querySelector('section')?.appendChild(addContent);
         // document.querySelector("section").createElement(addContent);
       }, 1000);
     }
@@ -292,88 +122,19 @@ const AreaInfo = () => {
   const goObservePage = (e) => {
     const target = e.currentTarget;
     const dType = target.getAttribute('datatype');
-    const targetArea = target.getAttribute('itemType');
+    const targetArea = target.getAttribute('itemID');
     console.log('dType', dType);
     console.log('targetArea', targetArea);
     setSwrState({ ...swrState, curTrackerArea: targetArea });
     navigate('/observe');
   };
 
-  const areaCardsMap = useMemo(() => {
-    return (getObserveState || dummyData).map((card, idx) => (
-      <div
-        className="areaCardBox"
-        key={idx}
-        itemType={card?.area}
-        onClick={goObservePage}
-        datatype={idx.toString()}
-      >
-        {/* <h3>{card.area}</h3> */}
-        <div className="titleBox">
-          <span>{card?.area}</span>
-        </div>
-        <div className="areaContent">
-          <div className="areaTop">
-            <div className="imgBox">
-              <img src={BgImg} alt="" />
-            </div>
-          </div>
-          <div className="areaBottom">
-            <div className="camBox">
-              <div className="camPort">
-                CAM <span>{card?.camPort}</span>
-              </div>
-              <div className="activeBadge">
-                <div className="circle" />
-                <span>ACTIVE</span>
-              </div>
-            </div>
-            <div className="alarmBox">
-              {/* className : green yellow red inactive => alarmTxt 에 추가해주시면 됩니다! */}
-              <div className="alarmTxt green">{card?.alarmTxt}</div>
-              <div className="sensingBox">
-                <span>
-                  1차 감지<p>{card?.camSensing1}</p>
-                </span>
-                <span>
-                  2차 감지<p>{card?.camSensing2}</p>
-                </span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    ));
-  }, [getObserveState]);
-
-  const setProcessedData = async () => {
-    swrObserveData?.forEach((observe, idx) => {
-      axios
-        .get(`/api/tracker/${observe.trackerId}`)
-        .then((tracker) => {
-          const trackerObj = tracker.data;
-          const newObserveData = { ...observe, ...trackerObj };
-          const { area, camName, camPort, groupNum } = newObserveData;
-          // 없을 경우 undefined
-          // 없을 경우 -1
-          const foundDataByArea = getObserveState.filter(
-            (obj) => obj.area === area
-          );
-          const dataIdx = foundDataByArea?.findIndex(
-            (obj) => obj.groupNum === camPort
-          );
-          const newObjArr = getObserveState;
-          if (dataIdx === -1 || dataIdx === undefined)
-            newObjArr.push(newObserveData);
-          else newObjArr[dataIdx] = newObserveData;
-          flushSync(() => setGetObserveState([...newObjArr]));
-        })
-        .catch((err) => console.error(err));
-    });
-  };
-
-  const setProcessedSwrData = () => {
+  /* tracker데이터들을 메인 페이지에 맞게 데이터 가공해서 셋팅해주는 메서드‼️ */
+  const setProcessedSwrData = useCallback(() => {
     const processedData = [];
+    const areaData = [...new Set(swrTrackerData?.map((obj) => obj.area))];
+    console.log('areaData', areaData);
+    /* 메인 화면에 리스트들이 안뜨는 이유는 오늘 날짜의 observe 데이터가 없어서 그렇다. */
     swrTrackerData.forEach(async (tracker, idx) => {
       await Api.observe
         .findData({
@@ -381,32 +142,170 @@ const AreaInfo = () => {
           date: today,
         })
         .then((observe) => {
+          console.log('observe', observe);
+          let processedObserve = [];
+          /* 오늘 날짜로의 감지 데이터가 있으면 실행 */
           if (observe?.length > 0) {
-            const processedObserve = observe.map((obj) => {
+            /* 오늘 날짜의 observe 데이터와 tracker 데이터 결합 */
+            processedObserve = observe.map((obj) => {
               return { ...tracker, ...obj };
             });
-            processedData.push(...processedObserve);
-            console.log('🌺🌺🌺processedData', processedData);
-            flushSync(() => setGetObserveState([...processedData]));
+          } else {
+            processedObserve = [{ ...tracker }];
           }
+          console.log('processedObserve', processedObserve);
+          processedData.push(...processedObserve);
+          /* 정렬 */
+          processedData.sort((prev, next) => {
+            if (prev.area > next.area) return 1;
+            if (prev.area < next.area) return -1;
+            return 0;
+          });
+          console.log('😊 processedData', processedData);
+          const areaFilteredObj = [];
+          /* 구역 이름을 객체의 키 값으로 먼저 생성 */
+          areaData.forEach((area) => {
+            areaFilteredObj.push({
+              [area]: [...processedData.filter((obj) => obj.area === area)],
+            });
+          });
+
+          /* 구역 이름 키에 해당 객체 투입 */
+          areaData.forEach((area, idx) => {
+            const areaObj = areaFilteredObj[idx][area];
+            if (areaObj?.length > 0) {
+              /* 해당 구역의 안전 레벨들을 고유값으로 셋팅 */
+              const safetyLevelSet = [
+                ...new Set(areaObj?.map((obj) => obj.safetyLevel)),
+              ];
+              console.log('🥰 safetyLevelSet', safetyLevelSet);
+              console.log('areaObj', areaObj);
+              console.log(
+                '[...new Set(areaObj.map((obj) => obj.observeSwitch))]',
+                [...new Set(areaObj.map((obj) => obj.observeSwitch))]
+              );
+              /* 각 구역에 safetyLevel, redCnt, yellowCnt 셋팅 */
+              areaFilteredObj[idx][area] = {
+                activate: [...new Set(areaObj.map((obj) => obj.observeSwitch))],
+                camCnt: [...new Set(areaObj.map((obj) => obj.camPort))].length,
+                safetyLevel: safetyLevelSet?.includes('Red')
+                  ? 'Red'
+                  : safetyLevelSet?.includes('Yellow')
+                  ? 'Yellow'
+                  : 'Green',
+                redCnt: areaObj
+                  .map((obj) => (isNaN(obj?.redCnt) ? 0 : obj?.redCnt))
+                  .reduce((acc: number, cur: number) => acc + cur),
+                yellowCnt: areaObj
+                  .map((obj) => (isNaN(obj?.yellowCnt) ? 0 : obj?.yellowCnt))
+                  .reduce((acc: number, cur: number) => acc + cur),
+              };
+            }
+          });
+          console.log('2 💐💐💐💐💐', areaFilteredObj);
+
+          // {
+          //   safetyLevel: string,
+          //   redCnt: 0,
+          //   yellowCnt: 0
+          // }
+          flushSync(() => setGetObserveState([...areaFilteredObj]));
         });
     });
-  };
-
-  useEffect(() => {
-    swrTrackerData?.length > 0 && setProcessedSwrData();
-  }, [swrTrackerData]);
-
-  // useEffect(() => {
-  //   console.log('swrTrackerData', swrTrackerData);
-  //   swrTrackerData?.length > 0 && setGetObserveState([]);
-  // }, [swrTrackerData]);
+  }, [swrTrackerData, swrObserveData]);
 
   useEffect(() => {
     console.log('#####getObserveState', getObserveState);
-    if (getObserveState.length === 0) {
+    console.log('🌸🌸🌸 swrObserveData', swrObserveData);
+    /* getObserveState 데이터가 있을때 한번 가공 데이터 셋팅 */
+    if (getObserveState.length === 0)
       swrTrackerData?.length > 0 && setProcessedSwrData();
-    }
+  }, [getObserveState]);
+
+  useEffect(() => {
+    console.log('swrTrackerData?.length', swrTrackerData?.length);
+    /* db에서 tracker 데이터가 바뀔때마다 가공 데이터 셋팅 */
+    swrTrackerData?.length > 0 && console.log('swrTrackerData', swrTrackerData);
+    swrTrackerData?.length > 0 && setProcessedSwrData();
+  }, [swrTrackerData, swrObserveData]);
+
+  const areaCardsMap = useMemo(() => {
+    return (getObserveState.length > 0 ? getObserveState : dummyData).map(
+      (card, idx) => {
+        // const getObjectKey = Object.keys(card)[idx]?.toString();
+        const getObjectKey = Object.keys(card)[0].toString();
+        console.log('card', card);
+        console.log('getObjectKey', getObjectKey);
+
+        return (
+          <div
+            className="areaCardBox"
+            key={idx}
+            itemID={getObjectKey}
+            onClick={goObservePage}
+            datatype={idx.toString()}
+          >
+            <h3>{card.area}</h3>
+            <div className="titleBox">
+              <span>{getObjectKey}</span>
+            </div>
+            <div className="areaContent">
+              <div className="areaTop">
+                <div className="imgBox">
+                  <img src={BgImg} alt="" />
+                </div>
+              </div>
+              <div className="areaBottom">
+                <div className="camBox">
+                  <div className="camPort">
+                    {/* @ts-ignore */}
+                    CAM <span>{card[getObjectKey]?.camCnt}</span>
+                  </div>
+                  <div className="activeBadge">
+                    <div className="circle" />
+                    <span>ACTIVE</span>
+                  </div>
+                </div>
+                <div className="alarmBox">
+                  {/* className : green yellow red inactive => alarmTxt 에 추가해주시면 됩니다! */}
+                  <div
+                    className={`alarmTxt ${
+                      // @ts-ignore
+                      card[getObjectKey]?.safetyLevel === 'Red'
+                        ? 'red'
+                        : // @ts-ignore
+                        card[getObjectKey]?.safetyLevel === 'Yellow'
+                        ? 'yellow'
+                        : 'green'
+                    }`}
+                  >
+                    {
+                      // @ts-ignore
+                      card[getObjectKey]?.safetyLevel === 'Red'
+                        ? '작업자 위험 반경 진입'
+                        : // @ts-ignore
+                        card[getObjectKey]?.safetyLevel === 'Yellow'
+                        ? '작업자 진입'
+                        : '안전합니다.'
+                    }
+                  </div>
+                  <div className="sensingBox">
+                    <span>
+                      {/* @ts-ignore */}
+                      1차 감지<p>{card[getObjectKey]?.yellowCnt}</p>
+                    </span>
+                    <span>
+                      {/* @ts-ignore */}
+                      2차 감지<p>{card[getObjectKey]?.redCnt}</p>
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        );
+      }
+    );
   }, [getObserveState]);
 
   return (

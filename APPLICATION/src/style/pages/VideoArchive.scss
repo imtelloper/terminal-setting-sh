@@ -1,0 +1,97 @@
+@import '../../style/color.scss';
+div.videoArchiveWrap{
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  div.videoArchiveContainer{
+    width: calc(100% - 48px);
+    height: calc(100% - 48px);
+    background-color: #FFF8D4;
+    div.videoTitleBox{
+      width: 100%;
+
+      div.title{
+        display: flex;
+        align-items: center;
+        font-size: 28px;
+        font-weight: 700;
+        span{
+          margin-left: 12px;
+        }
+      }
+
+      div.titleCon{
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        margin: 12px 0 28px 0;
+        div.left{
+          display: flex;
+          align-items: center;
+          div.leftCon{
+            height: 40px;
+            display: flex;
+            align-items: center;
+            margin-right: 16px;
+            span{
+              margin-right: 16px;
+            }
+            select{
+              width: 180px;
+              height: 40px;
+              background-color: $white;
+              border-radius: 8px;
+            }
+            select.arraySelect{
+              width: 112px;
+            }
+            input{
+              all: unset;
+              width: 138px;
+              height: 40px;
+              background-color: $white;
+              border: 1px solid #d4d4d4;
+              border-radius: 8px;
+              text-align: center;
+              &::placeholder{
+                color: $inactive-text;
+              }
+            }
+          }
+          div.dateBox{
+            span{
+              margin-left: 8px;
+            }
+          }
+        }
+        div.right{
+          display: flex;
+          button{
+            margin-left: 8px;
+          }
+        }
+      }
+    }
+    div.videoContentBox{
+      width: 100%;
+      background-color: thistle;
+      div.videoContent{
+        width: 100%;
+        height: 256px;
+        display: flex;
+        justify-content: space-between;
+        div.videoBox{
+          width: calc((100% - 112px)/8);
+          height: 100%;
+          background-color: #d4d4d4;
+          margin: 0 16px 16px 0;
+          &:last-child{
+            margin-right: 0;
+          }
+        }
+      }
+    }
+  }
+}

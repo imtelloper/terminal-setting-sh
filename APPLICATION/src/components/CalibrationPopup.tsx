@@ -1,15 +1,34 @@
 import React, { useState } from 'react';
+import '../style/DesignSystem.scss';
 import '../style/components/CalibrationPopup.scss';
 import { Undo } from '@material-ui/icons';
 import { MdDesignServices } from 'react-icons/md';
 
 const CalibrationPopup = ({ openCalibrationPopup, closeCalibrationPopup }) => {
-  // const [isOpenState, setIsOpenState] = useState(false);
-  //
-  // const handleClick = (e) => {
-  //   const target = e.currentTarget;
-  //   setIsOpenState(!isOpenState);
-  // };
+  const [numState, setNumState] = useState('');
+
+  const handleBg = () => {
+    const alarmBox = document.querySelector('.alarmBox');
+    alarmBox.classList.add('alarmBoxActive');
+  };
+
+  const handleNum = (e) => {
+    setNumState(e.currentTarget.value);
+  };
+
+  // input박스에 숫자 입력시 활성화
+  const numInputEl = document.querySelector('.numInput');
+  const numLabelEl = document.querySelector('.numLabel');
+  const checkBtnEl = document.querySelector('.contentBox .checkBtn');
+  if (numState.length > 0) {
+    numInputEl?.classList.add('inputActive');
+    numLabelEl?.classList.add('labelActive');
+    checkBtnEl?.classList.add('btnActive');
+  } else {
+    numInputEl?.classList.remove('inputActive');
+    numLabelEl?.classList.remove('labelActive');
+    checkBtnEl?.classList.remove('btnActive');
+  }
 
   return (
     <div className="calibrationZoneContainer">
@@ -25,21 +44,41 @@ const CalibrationPopup = ({ openCalibrationPopup, closeCalibrationPopup }) => {
               <span className="iconR">
                 <MdDesignServices style={{ fontSize: '24px' }} />
               </span>
-              <span className="txt">기준선 그리기</span>
+              <span className="txt" onClick={handleBg}>
+                기준선 그리기
+              </span>
             </button>
           </div>
           <div className="settingBox">
             <button>
               <Undo />
-              다시 그리기
+              <span>다시 그리기</span>
             </button>
             <div>
-              <input type="text" placeholder="00.0 m" />
+              <span>기준선 길이</span>
+              <input
+                id="numInput"
+                className="numInput"
+                type="text"
+                placeholder="00.0"
+                onChange={handleNum}
+                value={numState}
+              />
+              <label htmlFor="numInput" className="numLabel">
+                m
+              </label>
             </div>
           </div>
           <div className="bottomBtnBox">
-            <button onClick={closeCalibrationPopup}>취소</button>
-            <button>확인</button>
+            <button
+              className="btnR normalPrimary"
+              onClick={closeCalibrationPopup}
+            >
+              취소
+            </button>
+            <button className="checkBtn" onChange={handleNum}>
+              확인
+            </button>
           </div>
         </div>
         {/* <div className="contentBox"> */}

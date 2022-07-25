@@ -1,36 +1,36 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { flushSync } from 'react-dom';
 import '../style/pages/ObservePage.scss';
 import { useNavigate } from 'react-router-dom';
 import ObserveCamInfo from '../components/ObserveCamInfo';
 import axios from 'axios';
 import Api from '../api/Api';
-import CreateBtn from '../components/CreateBtn';
 import PolygonDraw from '../util/PolygonDraw';
 import { Settings } from '@material-ui/icons';
 import { useSWRState } from '../fetcher/useSWRState';
 import useSWR from 'swr';
-import { getFetcher } from '../fetcher/fetcher';
+import dayjs from 'dayjs';
 
-export const camPort1Ip = '192.168.0.3';
-export const camPort2Ip = '192.168.0.24';
-export const camPort3Ip = '192.168.0.18';
+export const camPort1Ip = '192.168.0.4';
+export const camPort2Ip = '192.168.0.26';
+export const camPort3Ip = '192.168.0.36';
 export const camPort4Ip = '192.168.0.30';
 
 type ViedeoFrameType = {
   canvasClass: string;
   frameSrc: string;
+  trackerId: string;
   firstCanvas: {
     visible: boolean;
     yellowSensingPercent: number;
     redSensingPercent: number;
-    coordinate: Array<any>;
+    coordinate: Array<Array<number>>;
   };
   secondCanvas: {
     visible: boolean;
     yellowSensingPercent: number;
     redSensingPercent: number;
-    coordinate: Array<any>;
+    coordinate: Array<Array<number>>;
   };
 };
 
@@ -38,38 +38,44 @@ const initVideoFrameData: Array<ViedeoFrameType> = [
   {
     canvasClass: 'polygonCanvas1',
     frameSrc: `http://${camPort1Ip}:81`,
+    trackerId: '',
     firstCanvas: {
-      visible: true,
+      visible: false,
       yellowSensingPercent: 1.37,
       redSensingPercent: 0.3,
       coordinate: [
-        // [79, 137],
-        // [115, 145],
-        // [105, 192],
-        // [77, 192],
+        // [185, 236],
+        // [90, 93],
+        // [186, 109],
+        // [268, 203],
       ],
     },
     secondCanvas: {
-      // visible: true,
       visible: false,
       yellowSensingPercent: 0.7,
       redSensingPercent: 0.3,
       coordinate: [
-        // [345, 146],
-        // [364, 147],
-        // [360, 221],
-        // [344, 221],
+        // [185, 236],
+        // [90, 93],
+        // [186, 109],
+        // [268, 203],
       ],
     },
   },
   {
     canvasClass: 'polygonCanvas2',
     frameSrc: `http://${camPort2Ip}:81`,
+    trackerId: '',
     firstCanvas: {
-      visible: false,
+      visible: true,
       yellowSensingPercent: 0.7,
       redSensingPercent: 0.3,
-      coordinate: [],
+      coordinate: [
+        // [242, 122],
+        // [298, 139],
+        // [296, 189],
+        // [239, 191],
+      ],
     },
     secondCanvas: {
       visible: false,
@@ -81,6 +87,7 @@ const initVideoFrameData: Array<ViedeoFrameType> = [
   {
     canvasClass: 'polygonCanvas3',
     frameSrc: `http://${camPort3Ip}:81`,
+    trackerId: '',
     firstCanvas: {
       visible: false,
       yellowSensingPercent: 0.7,
@@ -97,6 +104,7 @@ const initVideoFrameData: Array<ViedeoFrameType> = [
   {
     canvasClass: 'polygonCanvas4',
     frameSrc: `http://${camPort4Ip}:81`,
+    trackerId: '',
     firstCanvas: {
       visible: false,
       yellowSensingPercent: 0.7,
@@ -119,7 +127,7 @@ const ObservePage = () => {
   const camHeight = 384;
   const pointSize = 3; // 다각형 점의 크기
   const lineSize = 2.5; // 다각형 선의 굵기
-  const today = new Date().toISOString().slice(0, 10);
+  const today = dayjs().format('YYYY-MM-DD');
   const drawColor = {
     green: '#42f593',
     yellow: '#FFFA7C',
@@ -143,40 +151,69 @@ const ObservePage = () => {
     refreshInterval: 1000,
   });
 
-  // const findFetcher = (url: string) =>
-  //   axios
-  //     .post(url, {
-  //       date: today,
-  //       trackerId: swrState.curAreaTrackerId,
-  //     })
-  //     .then((res) => res.data);
-  //
-  // const { data: swrObserveData, error } = useSWR<Array<TrackerObserve>>(
-  //   '/api/observe/find',
-  //   findFetcher,
-  //   { refreshInterval: 1000 }
-  // );
+  const observeFindFetcher = (url: string) =>
+    axios
+      .post(url, {
+        date: today,
+      })
+      .then((res) => res.data);
+
+  const { data: swrObserveData, error } = useSWR(
+    '/api/observe/find',
+    observeFindFetcher,
+    { refreshInterval: 1000 }
+  );
 
   const handleActive = (e) => {
     const target = e.currentTarget;
-    const iframeRecordingEl = document.querySelector('.iframeRecording');
+    const recordTxtEl = document.querySelector('.recordTxt');
     target.classList.toggle('txtActive');
     target.classList.toggle('hoverCircleActive');
-    setTxtChangeState('녹화중');
-    iframeRecordingEl.classList.toggle('recIconActive');
+    setTxtChangeState((prev) => (prev === '녹화중' ? '녹화시작' : '녹화중'));
+    recordTxtEl.classList.toggle('txtColorActive');
+    console.log('camTabState', camTabState);
+    let ip = null;
+    switch (camTabState) {
+      case 1:
+        ip = camPort1Ip;
+        break;
+      case 2:
+        ip = camPort2Ip;
+        break;
+      case 3:
+        ip = camPort3Ip;
+        break;
+      case 4:
+        ip = camPort4Ip;
+        break;
+      default:
+        ip = camPort1Ip;
+    }
+    if (!recordState) {
+      Api.stream.startRecordVideo(ip);
+      setRecordState(true);
+    } else {
+      Api.stream.stopRecordVideo(ip);
+      setRecordState(false);
+    }
   };
 
-  const getStateCoordinate = (arrIndex, itemID) =>
+  const handleTxtColor = (e) => {
+    const target = e.currentTarget;
+    target.classList.toggle('txtColorActive');
+  };
+
+  const getStateCoordinate = (arrIndex: number, itemID: string) =>
     videoFrameState[arrIndex][itemID].coordinate;
 
-  const setStateCoordinate = (arrIndex, itemID, coordinate) => {
+  const setStateCoordinate = (arrIndex: number, itemID: string, coordinate) => {
     const newArr = videoFrameState;
     newArr[arrIndex][itemID].coordinate = coordinate;
     flushSync(() => setVideoFrameState([]));
     flushSync(() => setVideoFrameState(newArr));
   };
 
-  const polySort = (arrIndex, itemID) => {
+  const polySort = (arrIndex: number, itemID: string) => {
     const coordinate = getStateCoordinate(arrIndex, itemID);
     const centre = [
       coordinate.reduce((sum, p) => sum + p[0], 0) / coordinate.length,
@@ -190,42 +227,42 @@ const ObservePage = () => {
     setStateCoordinate(arrIndex, itemID, coordinate);
   };
 
-  const setNewVideoState = (arrIndex, newSrc) => {
+  const setNewVideoSrcState = (arrIndex: number, newSrc: string) => {
     const newArr = videoFrameState;
     newArr[arrIndex].frameSrc = newSrc;
     flushSync(() => setVideoFrameState([]));
     flushSync(() => setVideoFrameState(newArr));
   };
 
-  const draw = (canvas, clicked = false) => {
+  const draw = (canvas, clicked = false, trackerId = '') => {
     const redCtx = canvas?.getContext('2d');
     const yellowCtx = canvas?.getContext('2d');
     const greenCtx = canvas?.getContext('2d');
     const arrIndex = canvas?.getAttribute('tabIndex');
     const itemID = canvas?.getAttribute('itemID');
     greenCtx?.clearRect(0, 0, canvas.width, canvas.height);
+    redCtx?.clearRect(0, 0, canvas.width, canvas.height);
+    yellowCtx?.clearRect(0, 0, canvas.width, canvas.height);
 
-    const { yellowSensingPercent, redSensingPercent, coordinate } =
-      videoFrameState[arrIndex][itemID];
+    const { coordinate } = videoFrameState[arrIndex][itemID];
     const redSensingPoints = [];
     const yellowSensingPoints = [];
     const greenSensingPoints = [];
-
     const calibrate = PolygonDraw.getDistanceRate(200, 5);
-    console.log('calibrate', calibrate); // 13.2  ,  1m당 13.2px
-    const yellowSetMeter = 1; // 5m
+    // console.log('calibrate', calibrate); // 13.2  ,  1m당 13.2px
+    const yellowSetMeter = 0.6; // 5m
     const yellowDistancePx = calibrate * yellowSetMeter; // 5m = 66px
-    const greenSetMeter = 2; // 5m
+    const greenSetMeter = 1.2; // 5m
     const greenDistancePx = calibrate * greenSetMeter; // 5m = 66px
 
     // 기준 좌표에서 각 66px만큼 더 커진
 
     /* 내분점 구하기 공식 참고 */
-    let m1 = yellowSensingPercent;
-    let n1 = 1 - m1;
-    let m2 = redSensingPercent;
-    let n2 = 1 - m2;
-
+    let m1;
+    let n1;
+    let m2;
+    let n2;
+    // console.log('😡 coordinate', coordinate);
     // 무게중심의 좌표값
     const centerX = polygonDraw.getCentroid(coordinate).x;
     const centerY = polygonDraw.getCentroid(coordinate).y;
@@ -253,11 +290,11 @@ const ObservePage = () => {
 
       /* 기준선 거리와 calibration에서 구해진 meter당 px 값을 더한값을 기준선거리로 나누어 내분점의 비율을 구한다. */
       m1 = (standardLineDistance + yellowDistancePx) / standardLineDistance;
-      console.log('m1', m1);
+      // console.log('m1', m1);
       n1 = 1 - m1;
 
       m2 = (standardLineDistance + greenDistancePx) / standardLineDistance;
-      console.log('m2', m2);
+      // console.log('m2', m2);
       n2 = 1 - m2;
 
       /* Red Zone 다각형점 찍기 */
@@ -315,27 +352,36 @@ const ObservePage = () => {
     let { frameSrc } = videoFrameState[arrIndex];
     if (!clicked) return;
 
+    const sensingGroup = [
+      greenSensingCoordinate,
+      yellowSensingCoordinate,
+      redSensingCoordinate,
+    ].join('&');
+
+    console.log('sensingGroup', sensingGroup);
+    console.log('👗👗👗 itemID', itemID);
     if (itemID === 'firstCanvas') {
       console.log('firstCanvas');
       frameSrc = `${frameSrc.split(':81')[0]}:81`;
       const newSrc = `${frameSrc}/api/stream/area/1/${yellowSensingCoordinate}/${redSensingCoordinate}/`;
       console.log('newSrc', newSrc);
-      setNewVideoState(arrIndex, newSrc);
+      clicked && setNewVideoSrcState(arrIndex, newSrc);
+      clicked &&
+        trackerId &&
+        Api.tracker.modifyOneData(trackerId, { sensingGroup1: sensingGroup });
     } else {
       console.log('secondCanvas');
       const splitedSrc = frameSrc.split('/');
-      console.log('splitedSrc', splitedSrc);
       const firstSensingCoord = splitedSrc.slice(7, 9);
-      console.log('firstSensingCoord', firstSensingCoord);
-
       splitedSrc.length = 6;
       splitedSrc.push('2');
-
       frameSrc = splitedSrc.concat(firstSensingCoord).join('/');
-      console.log('frameSrc', frameSrc);
       const newSrc = `${frameSrc}/${yellowSensingCoordinate}/${redSensingCoordinate}`;
       console.log('newSrc', newSrc);
-      setNewVideoState(arrIndex, newSrc);
+      clicked && setNewVideoSrcState(arrIndex, newSrc);
+      clicked &&
+        trackerId &&
+        Api.tracker.modifyOneData(trackerId, { sensingGroup2: sensingGroup });
     }
   };
 
@@ -346,9 +392,10 @@ const ObservePage = () => {
     /* firstCanvas | secondCanvas */
     const itemID = canvas?.getAttribute('itemID');
     const bbox = canvas.getBoundingClientRect(); // viewport 기준으로 나의 위치 알려줌
+    const trackerId = canvas.id;
 
-    // offsetLeft:원소의 왼쪽 바깥쪽 테두리 에서 원 소 를 포함 하 는 왼쪽 안쪽 테두리 사이 의 픽 셀 거리 까지 입 니 다.
-    // offsetTop:요소의 상단 경계선 에서 요 소 를 포함 하 는 상단 경계선 사이 의 픽 셀 거리 까지.
+    // offsetLeft:원소의 왼쪽 바깥쪽 테두리 에서 원소를 포함하는 왼쪽 안쪽 테두리 사이의 픽셀 거리까지 입니다.
+    // offsetTop:요소의 상단 경계선 에서 요소를 포함하는 상단 경계선 사이의 픽셀 거리 까지.
     const x = e.clientX - bbox.left;
     const y = e.clientY - bbox.top;
     const { coordinate } = videoFrameState[arrIndex][itemID];
@@ -365,44 +412,28 @@ const ObservePage = () => {
     flushSync(() => setVideoFrameState([]));
     flushSync(() => setVideoFrameState(newArr));
     flushSync(() => polySort(arrIndex, itemID));
-    draw(canvas, true);
+    draw(canvas, true, trackerId);
   };
 
-  useEffect(() => {
-    videoFrameState[0]?.frameSrc &&
-      console.log('videoFrameState[0].frameSrc', videoFrameState[0]?.frameSrc);
-    videoFrameState[0]?.frameSrc &&
-      console.log(
-        'videoFrameState[0].firstCanvas.coordinate',
-        videoFrameState[0]?.firstCanvas.coordinate
-      );
-    videoFrameState[0]?.frameSrc &&
-      videoFrameState[0]?.firstCanvas.coordinate.forEach((coord) => {
-        console.log('coord', coord);
-      });
-
-    if (videoFrameState[0]) {
-      const coor1 = videoFrameState[0]?.secondCanvas?.coordinate[0];
-      const coor2 = videoFrameState[0]?.secondCanvas?.coordinate[1];
-      coor1 &&
-        coor2 &&
-        console.log(
-          '2차그룹으로 거리재기 확인',
-          PolygonDraw.getTwoPointsDistance(coor1, coor2)
-        );
-    }
-
-    console.log('rate', PolygonDraw.getDistanceRate(165, 12.5));
-
-    document.querySelectorAll('.polygonCanvas').forEach((ele, idx) => {
-      draw(ele);
-      // drawCallback(ele);
+  const coordinateMaker = (coordNums: []) => {
+    const totalCoords = [];
+    let coordinate: Array<number> = [];
+    coordNums?.forEach((num) => {
+      coordinate.push(parseInt(num, 10));
+      // coordinate.push(num);
+      if (coordinate.length === 2) {
+        totalCoords.push(coordinate);
+        coordinate = [];
+      }
     });
-  }, [videoFrameState]);
+    return totalCoords;
+  };
 
   const setProcessedSwrData = () => {
     const processedData = [];
     swrTrackerData.forEach(async (tracker, idx) => {
+      console.log('장난 tracker._id', tracker._id);
+      console.log('하니 today', today);
       await Api.observe
         .findData({
           trackerId: tracker._id,
@@ -415,49 +446,70 @@ const ObservePage = () => {
             });
             processedData.push(...processedObserve);
             console.log('🌺🌺🌺processedData', processedData);
+            /* 정렬 */
+            processedData.sort((prev, next) => {
+              if (
+                `${prev.camPort}${prev.groupNum}` >
+                `${next.camPort}${next.groupNum}`
+              )
+                return 1;
+              if (
+                `${prev.camPort}${prev.groupNum}` <
+                `${next.camPort}${next.groupNum}`
+              )
+                return -1;
+              return 0;
+            });
+
+            const curVideoFrameState = videoFrameState;
+            processedData.forEach((obj) => {
+              const { camPort, trackerId } = obj;
+              const camIdx = camPort.at(-1) - 1;
+              // console.log('camIdx', camIdx);
+
+              curVideoFrameState[camIdx].trackerId = trackerId;
+
+              const group1Coord = coordinateMaker(
+                obj.sensingGroup1.split('&')[2]?.split(',')
+              );
+              // console.log('🌸group1Coord', group1Coord);
+              /* DB에 저장된 좌표값을 기준으로 좌표값이 있다면 visible true */
+              curVideoFrameState[camIdx].firstCanvas.visible =
+                group1Coord.length > 0;
+              curVideoFrameState[camIdx].firstCanvas.coordinate = group1Coord;
+
+              const group2Coord = coordinateMaker(
+                obj.sensingGroup2.split('&')[2]?.split(',')
+              );
+              // console.log('🌸group2Coord', group2Coord);
+              curVideoFrameState[camIdx].secondCanvas.visible =
+                group2Coord.length > 0;
+              curVideoFrameState[camIdx].secondCanvas.coordinate = group2Coord;
+            });
+            flushSync(() => setVideoFrameState([]));
+            flushSync(() => setVideoFrameState(curVideoFrameState));
             flushSync(() => setGetObserveState([...processedData]));
           }
         });
     });
   };
 
-  useEffect(() => {
-    console.log(
-      'swrStateswrStateswrStateswrStateswrStateswrState curTrackerArea',
-      swrState.curTrackerArea
-    );
-  }, [swrState]);
-
-  // useEffect(() => {
-  //   console.log(
-  //     'swrObserveDataswrObserveDataswrObserveDataswrObserveData',
-  //     swrObserveData
-  //   );
-  // }, [swrObserveData]);
-
-  useEffect(() => {
-    swrTrackerData?.length > 0 && setProcessedSwrData();
-  }, [swrTrackerData]);
-
-  // useEffect(() => {
-  //   console.log('swrTrackerData', swrTrackerData);
-  //   swrTrackerData?.length > 0 && setGetObserveState([]);
-  // }, [swrTrackerData]);
-
-  useEffect(() => {
-    console.log('🌽🌽🌽🌽🌽getObserveState', getObserveState);
-    if (getObserveState.length === 0) {
-      swrTrackerData?.length > 0 && setProcessedSwrData();
-    }
-  }, [getObserveState]);
-
+  /* 카메라 영상 스트림 */
   const videoFrameMap = useMemo(() => {
     return videoFrameState.map((data: ViedeoFrameType, idx) => (
       <div className="iframeBox" key={idx}>
         <div className="iframeTitle">
           <span>CAM{(idx + 1).toString()}</span>
           <span className="iframeRecording">
-            {camTabState - 1 === idx && recordState && <span>REC</span>}
+            {/* {camTabState - 1 === idx && recordState && ( */}
+            {/*  <div style={{ width: '16px', height: '16px', color: 'red' }}>REC</div> */}
+            {/* )} */}
+            {camTabState - 1 === idx && recordState && (
+              <div>
+                <span />
+                REC
+              </div>
+            )}
           </span>
         </div>
         {data.firstCanvas.visible && (
@@ -467,6 +519,7 @@ const ObservePage = () => {
             itemID="firstCanvas"
             width={camWidth}
             height={camHeight}
+            id={data.trackerId}
             onClick={canvasClick}
           />
         )}
@@ -477,6 +530,7 @@ const ObservePage = () => {
             itemID="secondCanvas"
             width={camWidth}
             height={camHeight}
+            id={data.trackerId}
             onClick={canvasClick}
           />
         )}
@@ -501,11 +555,11 @@ const ObservePage = () => {
     camTabs.forEach((ele: HTMLElement) => {
       ele.style.display = 'none';
     });
-    (
-      document.querySelector(
-        `#safetyContent${dType}`
-      ) as HTMLTableSectionElement
-    ).style.display = 'block';
+
+    const safetyContents = document.querySelector(
+      `#safetyContent${dType}`
+    ) as HTMLTableSectionElement;
+    if (safetyContents) safetyContents.style.display = 'block';
 
     setCamTabState(parseInt(dType, 10));
   };
@@ -562,6 +616,48 @@ const ObservePage = () => {
     }
   };
 
+  useEffect(() => {
+    console.log('📀📀📀📀videoFrameState', videoFrameState);
+    // videoFrameState.forEach((obj) => {
+    //   console.log('frameSrc', obj.frameSrc);
+    //   console.log('firstCanvas.visible', obj.firstCanvas.visible);
+    //   console.log('firstCanvas.coordinate', obj.firstCanvas.coordinate);
+    //   console.log('secondCanvas.visible', obj.secondCanvas.visible);
+    //   console.log('secondCanvas.coordinate', obj.secondCanvas.coordinate);
+    // });
+
+    // redSensingCoordinate 227,111,268,148,226,141
+
+    if (videoFrameState[0]) {
+      const coor1 = videoFrameState[0]?.secondCanvas?.coordinate[0];
+      const coor2 = videoFrameState[0]?.secondCanvas?.coordinate[1];
+      coor1 &&
+        coor2 &&
+        console.log(
+          '2차그룹으로 거리재기 확인',
+          PolygonDraw.getTwoPointsDistance(coor1, coor2)
+        );
+    }
+
+    // console.log('rate', PolygonDraw.getDistanceRate(165, 12.5));
+
+    document.querySelectorAll('.polygonCanvas').forEach((ele, idx) => {
+      draw(ele);
+    });
+  }, [videoFrameState]);
+
+  useEffect(() => {
+    // console.log('🌽🌽🌽🌽🌽getObserveState', getObserveState);
+    if (getObserveState.length === 0) {
+      swrTrackerData?.length > 0 && setProcessedSwrData();
+    }
+  }, [getObserveState]);
+
+  useEffect(() => {
+    // console.log('swrTrackerData', swrTrackerData);
+    swrTrackerData?.length > 0 && setProcessedSwrData();
+  }, [swrTrackerData, swrObserveData]);
+
   return (
     <div id="observeContainer" className="observeContainer">
       <div className="observeLeft">
@@ -569,6 +665,7 @@ const ObservePage = () => {
           <div className="titleBox">
             <span className="subTitle">Place</span>
             <span className="mainTitle">{swrState.curTrackerArea}</span>
+            {/* <span className="mainTitle">데이터 들어갈자리</span> */}
           </div>
           <div className="safetyTabWrap">
             <div className="safetyTabBox">{getTabEles()}</div>
@@ -579,6 +676,8 @@ const ObservePage = () => {
                 camTabState={camTabState}
                 recordState={recordState}
                 setRecordState={setRecordState}
+                getObserveState={getObserveState}
+                setNewVideoSrcState={setNewVideoSrcState}
               />
             </div>
             <div className="bottomBtnBox">
