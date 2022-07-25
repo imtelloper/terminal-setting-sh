@@ -92,6 +92,17 @@ async def saveVideo():
     return service.saveFile()
 
 
+# 감지 중 날짜가 다음날로 넘어 갔을때 safetyLevel, observeSwitch 값들은 이월 시켜 줘야 한다.
+# 오늘 날짜의 observe data 추가
+@router.get("/add-observe-data/{groupNum}", response_description="")
+async def addObserveData(groupNum):
+    if isInternetConnected():
+        await service.getTrackerId()
+        observeChk = await service.isTodayObserveExist(int(groupNum))
+        await service.addTodayCamData(observeChk, int(groupNum))
+    return observeChk
+
+
 # 녹화 시작
 @router.get("/record-on", response_description="")
 async def videoRecordOn():
