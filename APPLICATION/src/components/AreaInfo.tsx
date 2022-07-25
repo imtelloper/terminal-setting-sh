@@ -13,6 +13,7 @@ import { useSWRState } from '../fetcher/useSWRState';
 import { getFetcher } from '../fetcher/fetcher';
 import Api from '../api/Api';
 import { number } from 'prop-types';
+import dayjs from 'dayjs';
 
 type AreaCard = {
   title: string;
@@ -70,7 +71,7 @@ const dummyData = [
 
 const AreaInfo = () => {
   const navigate = useNavigate();
-  const today = new Date().toISOString().slice(0, 10);
+  const today = dayjs().format('YYYY-MM-DD');
   const [getObserveState, setGetObserveState] = useState([]);
   const { data: swrState, mutate: setSwrState } = useSWRState();
 
@@ -133,6 +134,7 @@ const AreaInfo = () => {
     const processedData = [];
     const areaData = [...new Set(swrTrackerData?.map((obj) => obj.area))];
 
+    /* 메인 화면에 리스트들이 안뜨는 이유는 오늘 날짜의 observe 데이터가 없어서 그렇다. */
     swrTrackerData.forEach(async (tracker, idx) => {
       await Api.observe
         .findData({
@@ -140,6 +142,7 @@ const AreaInfo = () => {
           date: today,
         })
         .then((observe) => {
+          console.log('observe',observe);
           /* 오늘 날짜로의 감지 데이터가 있으면 실행 */
           if (observe?.length > 0) {
             /* 오늘 날짜의 observe 데이터와 tracker 데이터 결합 */
@@ -197,92 +200,95 @@ const AreaInfo = () => {
   }, [swrTrackerData, swrObserveData]);
 
   useEffect(() => {
-    // console.log('#####getObserveState', getObserveState);
-    // console.log('🌸🌸🌸 swrObserveData', swrObserveData);
+    console.log('#####getObserveState', getObserveState);
+    console.log('🌸🌸🌸 swrObserveData', swrObserveData);
     /* getObserveState 데이터가 있을때 한번 가공 데이터 셋팅 */
     if (getObserveState.length === 0)
       swrTrackerData?.length > 0 && setProcessedSwrData();
   }, [getObserveState]);
 
   useEffect(() => {
-    // console.log('swrTrackerData?.length', swrTrackerData?.length);
+    console.log('swrTrackerData?.length', swrTrackerData?.length);
     /* db에서 tracker 데이터가 바뀔때마다 가공 데이터 셋팅 */
+    swrTrackerData?.length > 0 && console.log('swrTrackerData', swrTrackerData);
     swrTrackerData?.length > 0 && setProcessedSwrData();
   }, [swrTrackerData, swrObserveData]);
 
   const areaCardsMap = useMemo(() => {
-    return (getObserveState || dummyData).map((card, idx) => {
-      const getObjectKey = Object.keys(card);
-      return (
-        <div
-          className="areaCardBox"
-          key={idx}
-          itemID={getObjectKey.toString()}
-          onClick={goObservePage}
-          datatype={idx.toString()}
-        >
-          {/* <h3>{card.area}</h3> */}
-          <div className="titleBox">
-            <span>{Object.keys(card)}</span>
-            {/* @ts-ignore */}
-            <span>{card?.trackerId}</span>
-          </div>
-          <div className="areaContent">
-            <div className="areaTop">
-              <div className="imgBox">
-                <img src={BgImg} alt="" />
+    return (getObserveState.length > 0 ? getObserveState : dummyData).map(
+      (card, idx) => {
+        const getObjectKey = Object.keys(card);
+        return (
+          <div
+            className="areaCardBox"
+            key={idx}
+            itemID={getObjectKey.toString()}
+            onClick={goObservePage}
+            datatype={idx.toString()}
+          >
+            {/* <h3>{card.area}</h3> */}
+            <div className="titleBox">
+              {/*<span>{Object.keys(card)}</span>*/}
+              {/* @ts-ignore */}
+              <span>{card?.trackerId}</span>
+            </div>
+            <div className="areaContent">
+              <div className="areaTop">
+                <div className="imgBox">
+                  <img src={BgImg} alt="" />
+                </div>
+              </div>
+              <div className="areaBottom">
+                <div className="camBox">
+                  <div className="camPort">
+                    {/* @ts-ignore */}
+                    CAM <span>{card[[getObjectKey]]?.length}</span>
+                  </div>
+                  <div className="activeBadge">
+                    <div className="circle" />
+                    <span>ACTIVE</span>
+                  </div>
+                </div>
+                <div className="alarmBox">
+                  {/* className : green yellow red inactive => alarmTxt 에 추가해주시면 됩니다! */}
+                  <div
+                    className={`alarmTxt ${
+                      // @ts-ignore
+                      card[[getObjectKey]]?.safetyLevel === 'Red'
+                        ? 'red'
+                        : // @ts-ignore
+                        card[[getObjectKey]]?.safetyLevel === 'Yellow'
+                        ? 'yellow'
+                        : 'green'
+                    }`}
+                  >
+                    {
+                      // @ts-ignore
+                      card[[getObjectKey]]?.safetyLevel === 'Red'
+                        ? '작업자 위험 반경 진입'
+                        : // @ts-ignore
+                        card[[getObjectKey]]?.safetyLevel === 'Yellow'
+                        ? '작업자 진입'
+                        : '안전합니다.'
+                    }
+                  </div>
+                  <div className="sensingBox">
+                    <span>
+                      {/* @ts-ignore */}
+                      1차 감지<p>{card[getObjectKey]?.yellowCnt}</p>
+                    </span>
+                    <span>
+                      {/* @ts-ignore */}
+                      2차 감지<p>{card[getObjectKey]?.redCnt}</p>
+                    </span>
+                  </div>
+                </div>
               </div>
             </div>
-            <div className="areaBottom">
-              <div className="camBox">
-                <div className="camPort">
-                  {/* @ts-ignore */}
-                  CAM <span>{card[[getObjectKey]]?.length}</span>
-                </div>
-                <div className="activeBadge">
-                  <div className="circle" />
-                  <span>ACTIVE</span>
-                </div>
-              </div>
-              <div className="alarmBox">
-                {/* className : green yellow red inactive => alarmTxt 에 추가해주시면 됩니다! */}
-                <div
-                  className={`alarmTxt ${
-                    // @ts-ignore
-                    card[[getObjectKey]]?.safetyLevel === 'Red'
-                      ? 'red'
-                      : // @ts-ignore
-                      card[[getObjectKey]]?.safetyLevel === 'Yellow'
-                      ? 'yellow'
-                      : 'green'
-                  }`}
-                >
-                  {
-                    // @ts-ignore
-                    card[[getObjectKey]]?.safetyLevel === 'Red'
-                      ? '작업자 위험 반경 진입'
-                      : // @ts-ignore
-                      card[[getObjectKey]]?.safetyLevel === 'Yellow'
-                      ? '작업자 진입'
-                      : '안전합니다.'
-                  }
-                </div>
-                <div className="sensingBox">
-                  <span>
-                    {/* @ts-ignore */}
-                    1차 감지<p>{card[getObjectKey]?.yellowCnt}</p>
-                  </span>
-                  <span>
-                    {/* @ts-ignore */}
-                    2차 감지<p>{card[getObjectKey]?.redCnt}</p>
-                  </span>
-                </div>
-              </div>
-            </div>
           </div>
-        </div>
-      );
-    });
+        );
+      }
+    );
   }, [getObserveState]);
 
   return (

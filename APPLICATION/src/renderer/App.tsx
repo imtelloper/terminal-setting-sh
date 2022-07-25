@@ -8,6 +8,8 @@ import LandingPage from '../pages/LandingPage';
 import LayoutForm from '../components/layout/LayoutForm';
 import DetailViewPage from '../pages/DetailViewPage';
 import SensingViewPage from '../pages/SensingViewPage';
+import VideoArchivePage from '../pages/VideoArchivePage';
+import ImgArchivePage from '../pages/ImgArchivePage';
 
 export default function App() {
   return (
@@ -21,6 +23,8 @@ export default function App() {
           <Route path="/detail" element={<DetailViewPage />} />
           <Route path="/sensingView" element={<SensingViewPage />} />
           <Route path="/login" element={<LoginPage />} />
+          <Route path="/videoArchive" element={<VideoArchivePage />} />
+          <Route path="/imgArchive" element={<ImgArchivePage />} />
         </Routes>
       </LayoutForm>
     </Router>

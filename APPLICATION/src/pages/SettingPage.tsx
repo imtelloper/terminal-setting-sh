@@ -1,4 +1,11 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react';
+// @ts-ignore
+import React, {
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+  useTransition,
+} from 'react';
 import '../style/pages/SettingPage.scss';
 import '../style/DesignSystem.scss';
 import Api from '../api/Api';
@@ -16,6 +23,7 @@ import { useSWRState } from '../fetcher/useSWRState';
 import { flushSync } from 'react-dom';
 
 type CamSettingType = {
+  _id: string;
   area: string;
   camPort: string;
   savingPath: string;
@@ -26,10 +34,63 @@ type CamSettingType = {
   imgSaveSwitch: boolean;
   messageSwitch: boolean;
   kakaoSwitch: boolean;
-  _id: string;
+  // _id: string;
 };
 
-const camDummyData: Array<CamSettingType> = [];
+const camDummyData: Array<CamSettingType> = [
+  {
+    _id: '',
+    area: 'H1 공장 크레인',
+    camPort: 'cam1',
+    savingPath: '/home/',
+    camName: 'H1 공장 크레인 좌측 상단 캠',
+    computeDevice: 'CPU',
+    sensingModel: 'small',
+    threshold: 70,
+    imgSaveSwitch: false,
+    messageSwitch: false,
+    kakaoSwitch: false,
+  },
+  {
+    _id: '',
+    area: 'H1 공장 크레인',
+    camPort: 'cam2',
+    savingPath: '/home/',
+    camName: 'H1 공장 크레인 우측 상단 캠',
+    computeDevice: 'CPU',
+    sensingModel: 'small',
+    threshold: 70,
+    imgSaveSwitch: false,
+    messageSwitch: false,
+    kakaoSwitch: false,
+  },
+  {
+    _id: '',
+    area: 'H1 공장 크레인',
+    camPort: 'cam3',
+    savingPath: '/home/',
+    camName: 'H1 공장 크레인 왼쪽 상단 캠',
+    computeDevice: 'CPU',
+    sensingModel: 'small',
+    threshold: 70,
+    imgSaveSwitch: false,
+    messageSwitch: false,
+    kakaoSwitch: false,
+  },
+  {
+    _id: '',
+    area: 'H1 공장 크레인',
+    camPort: 'cam4',
+    savingPath: '/home/',
+    camName: 'H1 공장 크레인 왼쪽 상단 캠',
+    computeDevice: 'CPU',
+    sensingModel: 'small',
+    threshold: 70,
+    imgSaveSwitch: false,
+    messageSwitch: false,
+    kakaoSwitch: false,
+  },
+];
 
 /*
 tracker들을 가져와서 area를 고유값으로 select option에 셋팅
@@ -42,6 +103,7 @@ const SettingPage = () => {
   const { data: swrState, mutate: setSwrState } = useSWRState();
   const [camAreasState, setCamAreasState] = useState<Array<string>>([]);
   const [curCamAreaState, setCurCamAreaState] = useState('');
+  const [isPending, startTransition] = useTransition();
 
   const initSettingUI = () => {
     camSettingState.forEach((obj) => {
@@ -153,13 +215,14 @@ const SettingPage = () => {
           const settingAreasState: Array<string> = [...new Set(camStateKeys)];
           console.log('settingAreasState', settingAreasState);
           setCamAreasState(settingAreasState);
-          (
-            document.querySelector('#settingAreaTitle') as HTMLSpanElement
-          ).textContent = settingAreasState[0];
-
-          (
-            document.querySelector('#settingCamAreaSelect') as HTMLSelectElement
-          ).value = settingAreasState[0];
+          const settingAreaTitle = document.querySelector(
+            '#settingAreaTitle'
+          ) as HTMLSpanElement;
+          settingAreaTitle.textContent = settingAreasState[0];
+          const settingCamAreaSelect = document.querySelector(
+            '#settingCamAreaSelect'
+          ) as HTMLSelectElement;
+          settingCamAreaSelect.value = settingAreasState[0];
 
           setCurCamAreaState(settingAreasState[0]);
         }

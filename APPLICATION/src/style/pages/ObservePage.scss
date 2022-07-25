@@ -204,7 +204,7 @@ div.observeContainer {
             }
           }
 
-          span {
+          span.recordTxt {
             color: $white;
             display: block;
             position: absolute;
@@ -213,6 +213,9 @@ div.observeContainer {
               width: 26px;
               height: 26px;
               background-color: $error-500;
+            }
+            &.txtColorActive{
+              color: $error-500;
             }
           }
         }
