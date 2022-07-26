@@ -1,14 +1,16 @@
 @import '../../style/color.scss';
-div.videoArchiveWrap{
+div.imgArchiveWrap{
   width: 100%;
   height: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
-  div.videoArchiveContainer{
+  position: relative;
+  div.imgArchiveContainer{
     width: calc(100% - 48px);
     height: calc(100% - 48px);
-    div.videoTitleBox{
+    position: relative;
+    div.imgTitleBox{
       width: 100%;
 
       div.title{
@@ -26,14 +28,17 @@ div.videoArchiveWrap{
         display: flex;
         justify-content: space-between;
         margin: 12px 0 28px 0;
+
         div.left{
           display: flex;
           align-items: center;
+
           div.leftCon{
             height: 40px;
             display: flex;
             align-items: center;
             margin-right: 16px;
+            cursor: pointer;
             span{
               margin-right: 16px;
             }
@@ -75,17 +80,20 @@ div.videoArchiveWrap{
         }
       }
     }
-    div.videoContentBox{
+
+    //1. gridView
+    div.imgGridView{
       width: 100%;
       height: calc(100% - 192px);
       position: relative;
-      div.videoContent{
+      //display: none;
+      div.imgContent{
         width: 100%;
         height: 33.33%;
         display: flex;
         justify-content: space-between;
         position: relative;
-        div.videoBox{
+        div.imgBox{
           width: calc((100% - 112px)/8);
           height: calc(100% - 10.66px);
           background-color: $white;
@@ -103,7 +111,7 @@ div.videoArchiveWrap{
             left: 16px;
             z-index: 10;
           }
-          div.videoImg{
+          div.imgImg{
             width: 100%;
             height: 62.5%;
             background-color: pink;
@@ -111,7 +119,7 @@ div.videoArchiveWrap{
             border-top-right-radius: 8px;
             cursor: pointer;
           }
-          div.videoTitle{
+          div.imgTitle{
             width: 100%;
             height: 37.5%;
             padding: 16px;
@@ -133,11 +141,11 @@ div.videoArchiveWrap{
           }
         }
         //스켈레톤 박스 css
-        div.s_videoBox{
-          div.s_videoImg{
+        div.s_imgBox{
+          div.s_imgImg{
             background-color: #E2E2E2;
           }
-          div.s_videoTitle{
+          div.s_imgTitle{
             width: 100%;
             span{
               display: block;
@@ -151,14 +159,144 @@ div.videoArchiveWrap{
                 top: 32px;
                 left: 16px;
               }
-
             }
           }
         }
       }
+      &.gridActive{
+        display: block;
+        z-index: 3;
+      }
     }
+
+    //2. viewHeadline
+    div.viewHeadline{
+      width: 100%;
+      height: calc(100% - 192px);
+      position: relative;
+      background-color: #0A1A7A;
+      display: none;
+      div.imgContent{
+        width: 100%;
+        height: 100%;
+        overflow-y: scroll;
+        div.imgBox{
+          width: 100%;
+          height: 40px;
+          display: flex;
+          align-items: center;
+          padding: 0 30px;
+          box-sizing: border-box;
+
+          &:first-child{
+            height: 52px;
+          }
+          &:nth-child(2n){
+            background-color: rgba(255,255,255,0.6);
+          }
+          &:nth-child(2n+1){
+            background-color: $background;
+          }
+          div{
+            display: flex;
+            align-items: center;
+          }
+          div.imgInput{
+            width: 10%;
+          }
+          div.imgTitle{
+            width: 30%;
+            span{
+              margin-left: 8px;
+            }
+          }
+          div.imgDate{
+            width: 30%;
+          }
+          div.imgSize{
+            width: 20%;
+          }
+          div.imgGroup{
+            width: 10%;
+          }
+        }
+        &::-webkit-scrollbar{
+          display: none;
+        }
+      }
+      &.headlineActive{
+        display: block;
+        z-index: 3;
+      }
+    }
+
+    //3.listView
+    div.listView{
+      width: 100%;
+      height: calc(100% - 192px);
+      position: relative;
+      display: none;
+
+      div.imgContent{
+        width: 100%;
+        height: 100%;
+        overflow-y: scroll;
+        div.imgBox{
+          width: 100%;
+          height: 80px;
+          display: flex;
+          align-items: center;
+          padding: 0 30px;
+          box-sizing: border-box;
+          margin-bottom: 20px;
+          &:first-child{
+            height: 52px;
+            margin-bottom: 0;
+          }
+          div{
+            height: 100%;
+            display: flex;
+            align-items: center;
+          }
+          div.imgInput{
+            width: 5%;
+          }
+          div.imgPreview{
+            width: 10%;
+            img{
+              width: 116px;
+              height: 80px;
+            }
+          }
+          div.imgTitle{
+            width: 30%;
+            span{
+              margin-left: 8px;
+            }
+          }
+          div.imgDate{
+            width: 25%;
+          }
+          div.imgSize{
+            width: 20%;
+          }
+          div.imgGroup{
+            width: 10%;
+          }
+        }
+        &::-webkit-scrollbar{
+          display: none;
+        }
+      }
+      &.listViewActive{
+        display: block;
+        z-index: 3;
+      }
+    }
+
     div.bottomBtnBox{
       margin: 24px 0;
+      position: relative;
     }
   }
 }
