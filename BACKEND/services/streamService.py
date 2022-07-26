@@ -434,14 +434,13 @@ class StreamService:
                     # print('detect')
                     for bbox in humans:
                         x1, y1, x2, y2 = tuple([int(_) for _ in bbox])
-                        bboxes.append([x1, y1, x2, y2])
                         w, h = x2 - x1, y2 - y1
+                        bboxes.append([x1, y1, x2, y2, w, h])
                         track_bbox = (x1, y1, w, h)
                         # tracking signal
                         multi_tracker.add(cv2.TrackerCSRT_create(), self.camImg, track_bbox)
                         track_signal = True
-                        rsigs, self.camImg = self.humanCalcurator.calculate_human(self.camImg, x1, y1, x2, y2, w, h,
-                                                                                  unit_num, rois)
+                    rsigs, self.camImg = self.humanCalcurator.calculate_human(self.camImg, bboxes, unit_num, rois)
                         # print('warn_sig', warn_sig) # 0:안전, 1: 옐로우1차, 2: 2차 레드
                     result_img = self.camImg
                 else:
@@ -454,9 +453,8 @@ class StreamService:
                             for i, t_bbox in enumerate(t_bboxes):
                                 x1, y1, w, h = tuple([int(_) for _ in t_bbox])
                                 x2, y2 = x1 + w, y1 + h
-                                bboxes.append([x1, y1, x2, y2])
-                                rsigs, result_img = self.humanCalcurator.calculate_human(self.camImg, x1, y1, x2, y2, w,
-                                                                                         h, unit_num, rois)
+                                bboxes.append([x1, y1, x2, y2, w, h])
+                            rsigs, result_img = self.humanCalcurator.calculate_human(self.camImg, bboxes, unit_num, rois)
                                 # print('warn_sig',warn_sig) # 0:안전, 1: 옐로우1차, 2: 2차 레드
                             result_img = self.camImg
                     else:
@@ -465,19 +463,32 @@ class StreamService:
                 fstGroupSensing = None
                 secGroupSensing = None
 
-                if len(rsigs) > 0:
-                    print('rsigs :', rsigs)
-                    print('첫번째 그룹 ', max(rsigs[0]))
-                    fstGroupSensing = max(rsigs[0])
+                print('rsigs :', rsigs)
+                testSigs = [[0,1], [2,0], [2,0]]
+                fstGroup =[]
+                secGroup =[]
+                if len(rsigs)>0 and len(rsigs[0])>0:
+                    for person in rsigs:
+                        print('person',person)
+                        fstGroup.append(person[0])
+                        if len(person)>1:
+                            secGroup.append(person[1])
 
-                if len(rsigs) > 1:
-                    print('두번째 그룹 ', max(rsigs[1]))
-                    secGroupSensing = max(rsigs[1])
+                print('첫번째 사람들만', fstGroup)
+                print('두번째 사람들만', secGroup)
+
+                if len(fstGroup) > 0 :
+                    print('첫번째 그룹 ', max(fstGroup))
+                    fstGroupSensing = max(fstGroup)
+
+                if len(secGroup) > 0:
+                    print('두번째 그룹 ', max(secGroup))
+                    secGroupSensing = max(secGroup)
 
                 # timeCnt가 낮을수록 Yellow, Red 업데이트 속도 빨라짐. 너무 빠르면 성능에 문제 있을 수 있음
                 if timeCnt == 8 and len(str(self.todayFstCamDataId)) > 0:
-                    print('#########################################################timeCnt :', timeCnt)
-                    timeCnt = 0
+                    print('첫번째 그룹 입니다 #####################################timeCnt :', timeCnt)
+                    # timeCnt = 0
                     '''
                     1차 감지, 2차 감지에 따라 안전 등급 수정 
                     '''
@@ -507,7 +518,10 @@ class StreamService:
                                     self.screenCaptureInsertData(result_img, 'Red')
                             fstSensingLevel = 'RED'
 
+                # print('str(self.todaySecCamDataId)', str(self.todaySecCamDataId))
                 if timeCnt == 8 and len(str(self.todaySecCamDataId)) > 0:
+                    print('두번 그룹 입니다 #####################################timeCnt :', timeCnt)
+                    # timeCnt = 0
                     if secGroupSensing is not None:
                         if secGroupSensing == 0:
                             print('2 SEC GREEN SEC GREEN SEC GREEN SEC GREEN SEC GREEN SEC GREEN 2')
@@ -531,6 +545,9 @@ class StreamService:
                                     self.updateCurrentLevelCnt(self.todaySecCamDataId, 'Red', self.secRedCnt)
                                     self.screenCaptureInsertData(result_img, 'Red')
                             secSensingLevel = 'RED'
+
+                if timeCnt == 8:
+                    timeCnt = 0
 
                 if len(result_img) <= 0: continue
                 result_img = np.array(result_img)

@@ -1,0 +1,302 @@
+@import '../../style/color.scss';
+div.imgArchiveWrap{
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  div.imgArchiveContainer{
+    width: calc(100% - 48px);
+    height: calc(100% - 48px);
+    position: relative;
+    div.imgTitleBox{
+      width: 100%;
+
+      div.title{
+        display: flex;
+        align-items: center;
+        font-size: 28px;
+        font-weight: 700;
+        span{
+          margin-left: 12px;
+        }
+      }
+
+      div.titleCon{
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        margin: 12px 0 28px 0;
+
+        div.left{
+          display: flex;
+          align-items: center;
+
+          div.leftCon{
+            height: 40px;
+            display: flex;
+            align-items: center;
+            margin-right: 16px;
+            cursor: pointer;
+            span{
+              margin-right: 16px;
+            }
+            select{
+              width: 180px;
+              height: 40px;
+              background-color: $white;
+              border: 1px solid #d4d4d4;
+              border-radius: 8px;
+              padding: 0 12px;
+            }
+            select.arraySelect{
+              width: 112px;
+            }
+            input{
+              all: unset;
+              width: 138px;
+              height: 40px;
+              background-color: $white;
+              border: 1px solid #d4d4d4;
+              border-radius: 8px;
+              text-align: center;
+              &::placeholder{
+                color: $inactive-text;
+              }
+            }
+          }
+          div.dateBox{
+            span{
+              margin-left: 8px;
+            }
+          }
+        }
+        div.right{
+          display: flex;
+          button{
+            margin-left: 8px;
+          }
+        }
+      }
+    }
+
+    //1. gridView
+    div.imgGridView{
+      width: 100%;
+      height: calc(100% - 192px);
+      position: relative;
+      //display: none;
+      div.imgContent{
+        width: 100%;
+        height: 33.33%;
+        display: flex;
+        justify-content: space-between;
+        position: relative;
+        div.imgBox{
+          width: calc((100% - 112px)/8);
+          height: calc(100% - 10.66px);
+          background-color: $white;
+          border-radius: 8px;
+          margin-right: 16px;
+          position: relative;
+          &:last-child{
+            margin-right: 0;
+          }
+          input{
+            width: 16px;
+            height: 16px;
+            position: absolute;
+            top: 16px;
+            left: 16px;
+            z-index: 10;
+          }
+          div.imgImg{
+            width: 100%;
+            height: 62.5%;
+            background-color: pink;
+            border-top-left-radius: 8px;
+            border-top-right-radius: 8px;
+            cursor: pointer;
+          }
+          div.imgTitle{
+            width: 100%;
+            height: 37.5%;
+            padding: 16px;
+            box-sizing: border-box;
+            position: relative;
+            cursor: pointer;
+            span{
+              display: block;
+              &:first-child{
+                width: 100%;
+              }
+              &:last-child{
+                position: absolute;
+                right: 16px;
+                bottom: 16px;
+                color: $inactive-text;
+              }
+            }
+          }
+        }
+        //스켈레톤 박스 css
+        div.s_imgBox{
+          div.s_imgImg{
+            background-color: #E2E2E2;
+          }
+          div.s_imgTitle{
+            width: 100%;
+            span{
+              display: block;
+              height: 16px;
+              background-color: #E2E2E2;
+              &:first-child{
+                width: 100%;
+              }
+              &:last-child{
+                width: 45%;
+                top: 32px;
+                left: 16px;
+              }
+            }
+          }
+        }
+      }
+      &.gridActive{
+        display: block;
+        z-index: 3;
+      }
+    }
+
+    //2. viewHeadline
+    div.viewHeadline{
+      width: 100%;
+      height: calc(100% - 192px);
+      position: relative;
+      background-color: #0A1A7A;
+      display: none;
+      div.imgContent{
+        width: 100%;
+        height: 100%;
+        overflow-y: scroll;
+        div.imgBox{
+          width: 100%;
+          height: 40px;
+          display: flex;
+          align-items: center;
+          padding: 0 30px;
+          box-sizing: border-box;
+
+          &:first-child{
+            height: 52px;
+          }
+          &:nth-child(2n){
+            background-color: rgba(255,255,255,0.6);
+          }
+          &:nth-child(2n+1){
+            background-color: $background;
+          }
+          div{
+            display: flex;
+            align-items: center;
+          }
+          div.imgInput{
+            width: 10%;
+          }
+          div.imgTitle{
+            width: 30%;
+            span{
+              margin-left: 8px;
+            }
+          }
+          div.imgDate{
+            width: 30%;
+          }
+          div.imgSize{
+            width: 20%;
+          }
+          div.imgGroup{
+            width: 10%;
+          }
+        }
+        &::-webkit-scrollbar{
+          display: none;
+        }
+      }
+      &.headlineActive{
+        display: block;
+        z-index: 3;
+      }
+    }
+
+    //3.listView
+    div.listView{
+      width: 100%;
+      height: calc(100% - 192px);
+      position: relative;
+      display: none;
+
+      div.imgContent{
+        width: 100%;
+        height: 100%;
+        overflow-y: scroll;
+        div.imgBox{
+          width: 100%;
+          height: 80px;
+          display: flex;
+          align-items: center;
+          padding: 0 30px;
+          box-sizing: border-box;
+          margin-bottom: 20px;
+          &:first-child{
+            height: 52px;
+            margin-bottom: 0;
+          }
+          div{
+            height: 100%;
+            display: flex;
+            align-items: center;
+          }
+          div.imgInput{
+            width: 5%;
+          }
+          div.imgPreview{
+            width: 10%;
+            img{
+              width: 116px;
+              height: 80px;
+            }
+          }
+          div.imgTitle{
+            width: 30%;
+            span{
+              margin-left: 8px;
+            }
+          }
+          div.imgDate{
+            width: 25%;
+          }
+          div.imgSize{
+            width: 20%;
+          }
+          div.imgGroup{
+            width: 10%;
+          }
+        }
+        &::-webkit-scrollbar{
+          display: none;
+        }
+      }
+      &.listViewActive{
+        display: block;
+        z-index: 3;
+      }
+    }
+
+    div.bottomBtnBox{
+      margin: 24px 0;
+      position: relative;
+    }
+  }
+}
