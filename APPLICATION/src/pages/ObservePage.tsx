@@ -11,7 +11,7 @@ import { useSWRState } from '../fetcher/useSWRState';
 import useSWR from 'swr';
 import dayjs from 'dayjs';
 
-export const camPort1Ip = '192.168.0.7';
+export const camPort1Ip = '192.168.0.4';
 export const camPort2Ip = '192.168.0.26';
 export const camPort3Ip = '192.168.0.36';
 export const camPort4Ip = '192.168.0.30';
@@ -71,10 +71,10 @@ const initVideoFrameData: Array<ViedeoFrameType> = [
       yellowSensingPercent: 0.7,
       redSensingPercent: 0.3,
       coordinate: [
-        [242, 122],
-        [298, 139],
-        [296, 189],
-        [239, 191],
+        // [242, 122],
+        // [298, 139],
+        // [296, 189],
+        // [239, 191],
       ],
     },
     secondCanvas: {
@@ -664,8 +664,8 @@ const ObservePage = () => {
         <div className="leftBox">
           <div className="titleBox">
             <span className="subTitle">Place</span>
-            {/* <span className="mainTitle">{swrState.curTrackerArea}</span> */}
-            <span className="mainTitle">데이터 들어갈자리</span>
+            <span className="mainTitle">{swrState.curTrackerArea}</span>
+            {/* <span className="mainTitle">데이터 들어갈자리</span> */}
           </div>
           <div className="safetyTabWrap">
             <div className="safetyTabBox">{getTabEles()}</div>
