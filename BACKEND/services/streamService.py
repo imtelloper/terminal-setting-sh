@@ -1,4 +1,5 @@
 import os
+import pipes
 import platform
 import time
 import cv2
@@ -17,6 +18,8 @@ from bson import ObjectId
 from util import *
 from fastapi.responses import JSONResponse
 import paramiko
+import time
+import subprocess
 
 
 # W: 256 H: 192
@@ -331,6 +334,50 @@ class StreamService:
             dev_port += 1
         return available_ports, working_ports, non_working_ports
 
+    # 관제 PC에 파일 저장
+    def saveFile(self, folderPath, recordPath):
+        #관제 PC
+        host = "192.168.0.4"
+        port = 22  # 고정
+        transport = paramiko.transport.Transport(host, port)
+        userId = "interx"
+        password = "interx12!"
+
+        # 연결
+        transport.connect(username=userId, password=password)
+        sftp = paramiko.SFTPClient.from_transport(transport)
+
+        # 관제 PC 내 폴더 생성
+        try:
+            sftp.chdir(folderPath)
+        except IOError:
+            sftp.chdir(self.savePath)
+            sftp.mkdir(self.currentDate)
+            sftp.chdir(self.currentDate)
+            sftp.mkdir(self.camArea)
+            sftp.chdir(self.camArea)
+            sftp.mkdir(self.camPort)
+            sftp.chdir(self.camPort)
+            sftp.mkdir("video")
+            sftp.mkdir("capture")
+
+        # Upload - 파일 업로드
+        remotepath = recordPath
+        localpath = recordPath
+
+        if os.path.isfile(localpath):
+            sftp.put(localpath, remotepath)
+
+            # Get - 파일 다운로드
+            sftp.get(remotepath,
+                     localpath)
+
+            os.remove(localpath)
+
+        # Close
+        sftp.close()
+        transport.close()
+
     def video_streaming(self, coordinates1=[], coordinates2=[]):
         print('video_streaming video check : ', self.currentPort)
         if self.currentPort is None: os.system("fuser -k 8000/tcp")
@@ -514,21 +561,25 @@ class StreamService:
                 if self.recordGate:
                     # VIDEO 저장 메서드
                     self.videoWriter.write(result_img)
+                    print(self.recordGate)
                     # cv2.imshow('frame', result_img)
                 else:
                     cv2.destroyAllWindows()
+                    self.saveFile(self.videoFolderPath, self.videoRecordPath)
 
                 # 스크린 캡쳐
                 if self.captureGate:
                     print('SCREEN CAPTURE SCREEN CAPTURE SCREEN CAPTURE SCREEN CAPTURE SCREEN CAPTURE SCREEN CAPTURE ')
                     self.screenCaptureInsertData(result_img, 'Normal')
                     self.captureGate = False
+                    self.saveFile(self.screenShotFolderPath, self.screenShotRecordPath)
 
-                # 키보드 눌렀을시 이벤트 발생
+                # 키보드 눌렀을 시 이벤트 발생
                 if k == ord('s'):
                     print("Screenshot saved...")
                     # 이미지 저장 메서드
                     cv2.imwrite(self.screenShotRecordPath, result_img, params=[cv2.IMWRITE_PNG_COMPRESSION, 0])
+                    self.saveFile(self.screenShotFolderPath, self.screenShotRecordPath)
                 elif k == ord('q'):
                     break
 
@@ -537,84 +588,3 @@ class StreamService:
             except Exception as e:
                 print('예외가 발생했습니다.', e)
                 print(traceback.format_exc())
-
-    def saveFile(self):
-        def VideoWrite():
-            try:
-                print("카메라 구동")
-                cap = cv2.VideoCapture(2)
-            except:
-                print("카메라 구동실패")
-                return
-
-            # 폭, 높이 값을 카메라속성에 맞춤
-            # cap.set(probID, 속성값) 은 출력될 값들을 지정해주는 것이고
-            # cap.get(probID) 는 해당 속성에 대한 값을 받아오는 것임.
-            # 아래의 폭과 높이는 웹캠의 속성을 그대로 가져와 사용하는것.
-            width = int(cap.get(3))
-            height = int(cap.get(4))
-
-            # 코덱정보를 나타냄 아래의 두줄과 같이 사용할 수 있음.
-            # 둘중 어느것을 쓰든 상관없음.
-            fourcc = cv2.VideoWriter_fourcc(*'mp4v')
-            # fourcc = cv2.VideoWriter_fourcc('D','I','V','X')
-
-            # 비디오 저장을 위한 객체를 생성해줌.
-            out = cv2.VideoWriter('SaveVideo.mp4', fourcc, 20.0, (width, height))
-
-            while (True):
-                ret, frame = cap.read()
-
-                if not ret:
-                    print("비디오 읽기 오류")
-                    break
-
-                # 비디오 프레임이 정확하게 촬영되었으면 화면에 출력하여줌
-                cv2.imshow('video', frame)
-                # 비디오 프레임이 제대로 출력되면 해당파일에 프레임을 저장
-                out.write(frame)
-
-                # ESC키값을 입력받으면 녹화종료 메세지와 함께 녹화종료
-                k = cv2.waitKey(1)
-                if (k == 27):
-                    print('녹화 종료')
-                    break
-
-            # 비디와 관련 장치들을 다 닫아줌.
-            cap.release()
-            out.release()
-            cv2.destroyAllWindows()
-
-        VideoWrite()
-
-
-        # 관제 PC에 파일 저장
-        host = "192.168.0.3"
-        port = 22  # 그냥 22 넣어주면 됩니다.
-        transprot = paramiko.transport.Transport(host, port)
-        userId = "interx"
-        password = 'interx12!'
-
-        # 연결
-        transprot.connect(username=userId, password=password)
-        sftp = paramiko.SFTPClient.from_transport(transprot)
-
-        # Upload - 파일 업로드
-        remotepath = '/home/interx/SaveVideo.mp4'  # sftp에 업로드 될때 파일 경로와 파일이름(이렇게 저장이 됨)을 써줍니다.
-        localpath = '/home/interx/SAFETY-AI/BACKEND/SaveVideo.mp4'  # local피시의 파일 경로와 파일이름(pc에 저장되어있는 파일이름)을 써줍니다.
-        sftp.put(localpath, remotepath)
-
-        # Get - 파일 다운로드
-        sftp.get(remotepath,
-                 localpath)
-
-        os.remove('SaveVideo.mp4')
-
-        # Close
-        sftp.close()
-        transprot.close()
-
-        msg = "Saved"
-
-        return msg
-

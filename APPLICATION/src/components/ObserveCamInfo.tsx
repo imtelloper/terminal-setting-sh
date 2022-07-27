@@ -106,11 +106,9 @@ const ObserveCamInfo = ({
       newArr[dType].secondCanvas.visible
     );
     // 첫번째 그룹이 있다면 두번째 그룹 생성
-    if (newArr[dType].firstCanvas.visible === false) {
+    if (newArr[dType].firstCanvas.visible === false)
       newArr[dType].firstCanvas.visible = true;
-    } else {
-      newArr[dType].secondCanvas.visible = true;
-    }
+    else newArr[dType].secondCanvas.visible = true;
 
     flushSync(() => setVideoFrameState([]));
     flushSync(() => setVideoFrameState(newArr));
@@ -119,23 +117,21 @@ const ObserveCamInfo = ({
   /* INIT EFFECT */
   useEffect(() => {
     const camTabs = Array.from(document.querySelectorAll('.safetyContents'));
-    console.log('camTabs', camTabs);
     camTabs.forEach((ele: HTMLElement, idx) => {
-      if (idx !== 0) {
-        ele.style.display = 'none';
-      }
+      if (idx !== 0) ele.style.display = 'none';
     });
   }, []);
 
   useEffect(() => {
     // console.log('ObserveCamInfo');
-    // console.log('🌸getObserveState', getObserveState);
+    console.log('🌸getObserveState', getObserveState);
 
     const newCamInfoState = [{}, {}, {}, {}];
     /* getObserveState 가공 후 camInfoState에 셋팅 */
     getObserveState.forEach((obj) => {
       const { camPort, groupNum } = obj;
       const camIndex = parseInt(camPort.at(-1), 10) - 1;
+
       newCamInfoState[camIndex] = {
         ...newCamInfoState[camIndex],
         [groupNum]: obj,
@@ -146,9 +142,9 @@ const ObserveCamInfo = ({
     newCamInfoState.length > 0 && setCamInfoState(newCamInfoState);
   }, [getObserveState]);
 
-  // useEffect(() => {
-  //   console.log('love dive 🌝🌝🌝🌝🌝 camInfoState', camInfoState);
-  // }, [camInfoState]);
+  useEffect(() => {
+    console.log('love dive 🌝🌝🌝🌝🌝 camInfoState', camInfoState);
+  }, [camInfoState]);
 
   const groupBoxComponent = (stateInfo, stateIdx, groupNum) => (
     <div className="observeCamInfoContainer">
@@ -202,8 +198,12 @@ const ObserveCamInfo = ({
             >
               저장
             </button>
-            <button className="btnR normalPrimary" onClick={callParameter}>불러오기</button>
-            <button className="btnR normalPrimary" onClick={handleErrorReset}>상태 리셋</button>
+            <button className="btnR normalPrimary" onClick={callParameter}>
+              불러오기
+            </button>
+            <button className="btnR normalPrimary" onClick={handleErrorReset}>
+              상태 리셋
+            </button>
             <button
               className="btnR normalPrimary"
               onClick={handleDelete}
@@ -240,10 +240,6 @@ const ObserveCamInfo = ({
               onClick={createCanvas}
             >
               그룹 생성하기
-              {/*<span>*/}
-              {/*  <AiOutlinePlusCircle />*/}
-              {/*</span>*/}
-              {/*<span>{idx + 1} ADD</span>*/}
             </button>
           </div>
         </div>

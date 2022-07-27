@@ -1,15 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import '../style/components/DangerZonePopup.scss';
-import dangerZoneImg from '../images/dangerImg.png';
-import { MdDesignServices } from 'react-icons/md';
-import { Undo } from '@material-ui/icons';
+// import dangerZoneImg from '../images/dangerImg.png';
+// import { MdDesignServices } from 'react-icons/md';
+// import { Undo } from '@material-ui/icons';
 import { useNavigate } from 'react-router-dom';
 import CalibrationPopup from './CalibrationPopup';
 
-const dangerZonePopup = ({ closeDangerZonePopup }) => {
+const DangerZonePopup = ({ openDangerZonePopup, closeDangerZonePopup }) => {
   const navigate = useNavigate();
   const [isOpenCalibrationState, setIsOpenCalibrationState] = useState(false);
   const [yellowTextState, setYellowTextState] = useState('');
+  // eslint-disable-next-line react-hooks/rules-of-hooks
   const [greenTextState, setGreenTextState] = useState('');
 
   const openCalibrationPopup = () => {
@@ -49,7 +50,6 @@ const dangerZonePopup = ({ closeDangerZonePopup }) => {
     greenInputEl?.classList.remove('btnBoxActive');
     zoneImgEl?.classList.remove('greenZoneImg');
   }
-
 
   yellowTextState.length > 0 && greenTextState.length > 0
     ? checkBtnEl?.classList.add('btnActive')
@@ -136,4 +136,4 @@ const dangerZonePopup = ({ closeDangerZonePopup }) => {
   );
 };
 
-export default dangerZonePopup;
+export default DangerZonePopup;

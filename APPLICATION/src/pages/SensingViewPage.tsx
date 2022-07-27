@@ -1,7 +1,12 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import '../style/pages/SensingView.scss';
 import Api from '../api/Api';
-import { camPort1Ip, camPort2Ip, camPort3Ip, camPort4Ip } from './ObservePage';
+import {
+  camPort1Ip,
+  camPort2Ip,
+  camPort3Ip,
+  camPort4Ip,
+} from '../initDatas/initVideoFrameData';
 
 const SensingViewPage = () => {
   const [urlState, setUrlState] = useState([]);

@@ -75,6 +75,20 @@ export default class ArchiveApi {
     }
   };
 
+  getDetailRangeData = async (data) => {
+    try {
+      console.log('data', data);
+      const res = await axios.post(
+        `/api/${this.apiTarget}/find-range-data`,
+        data
+      );
+      return res.status === 200 ? res.data : 'failed to modify data';
+    } catch (error) {
+      console.error(error);
+      return 'failed to get range data';
+    }
+  };
+
   getCount = async (data) => {
     try {
       const res = await axios.get(`/api/${this.apiTarget}/count/`);

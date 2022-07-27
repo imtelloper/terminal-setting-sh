@@ -34,6 +34,7 @@ import serial
 import socket
 from services.streamService import StreamService
 
+
 # load_dotenv(dotenv_path=f".{os.getenv('DOT_ENV', 'test')}.env")
 # logging.config.fileConfig("logging.conf", disable_existing_loggers=False)
 logger = logging.getLogger(__name__)
@@ -106,3 +107,5 @@ async def onAppStart():
 @app.on_event("shutdown")
 async def onAppShutdown():
     await disconnectMongo()
+
+

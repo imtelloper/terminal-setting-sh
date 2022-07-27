@@ -9,6 +9,7 @@ __all__ = [
     "deleteOne",
     "dataCount",
     "findRange",
+    "detailFindRange",
 ]
 
 
@@ -21,7 +22,7 @@ def find(database: str, collection: str):
 
 
 def findDatas(database: str, collection: str, param: dict):
-    return getConnection()[database][collection].find(param).limit(1000)
+    return getConnection()[database][collection].find(param).limit(100)
 
 
 async def findOne(database: str, collection: str, param: dict):
@@ -42,3 +43,7 @@ def dataCount(database: str, collection: str):
 
 def findRange(database: str, collection: str, startNum: int, limitNum: int):
     return getConnection()[database][collection].find({}).sort("_id", -1).skip(startNum).limit(limitNum)
+
+
+def detailFindRange(database: str, collection: str, param: dict, startNum: int, limitNum: int):
+    return getConnection()[database][collection].find(param).sort("_id", -1).skip(startNum).limit(limitNum)

@@ -1,5 +1,5 @@
 export default class PolygonDraw {
-  getCentroid = (points) => {
+  static getCentroid = (points) => {
     let area = 0;
     let cx = 0;
     let cy = 0;
@@ -34,7 +34,7 @@ export default class PolygonDraw {
     };
   };
 
-  squaredPolar = (point, centre) => {
+  static squaredPolar = (point, centre) => {
     return [
       Math.atan2(point[1] - centre[1], point[0] - centre[0]),
       (point[0] - centre[0]) ** 2 + (point[1] - centre[1]) ** 2, // Square of distance

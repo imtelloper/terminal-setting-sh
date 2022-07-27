@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import '../style/DesignSystem.scss';
 import '../style/components/CalibrationPopup.scss';
 import { Undo } from '@material-ui/icons';
@@ -16,19 +16,21 @@ const CalibrationPopup = ({ openCalibrationPopup, closeCalibrationPopup }) => {
     setNumState(e.currentTarget.value);
   };
 
-  // input박스에 숫자 입력시 활성화
-  const numInputEl = document.querySelector('.numInput');
-  const numLabelEl = document.querySelector('.numLabel');
-  const checkBtnEl = document.querySelector('.contentBox .checkBtn');
-  if (numState.length > 0) {
-    numInputEl?.classList.add('inputActive');
-    numLabelEl?.classList.add('labelActive');
-    checkBtnEl?.classList.add('btnActive');
-  } else {
-    numInputEl?.classList.remove('inputActive');
-    numLabelEl?.classList.remove('labelActive');
-    checkBtnEl?.classList.remove('btnActive');
-  }
+  useEffect(() => {
+    // input박스에 숫자 입력시 활성화
+    const numInputEl = document.querySelector('.numInput');
+    const numLabelEl = document.querySelector('.numLabel');
+    const checkBtnEl = document.querySelector('.contentBox .checkBtn');
+    if (numState.length > 0) {
+      numInputEl?.classList.add('inputActive');
+      numLabelEl?.classList.add('labelActive');
+      checkBtnEl?.classList.add('btnActive');
+    } else {
+      numInputEl?.classList.remove('inputActive');
+      numLabelEl?.classList.remove('labelActive');
+      checkBtnEl?.classList.remove('btnActive');
+    }
+  }, []);
 
   return (
     <div className="calibrationZoneContainer">
