@@ -336,6 +336,8 @@ class StreamService:
 
     # 관제 PC에 파일 저장
     def saveFile(self, folderPath, recordPath):
+        print('###### folderPath',folderPath)
+        print('###### recordPath',recordPath)
         #관제 PC
         host = "192.168.0.4"
         port = 22  # 고정
@@ -565,21 +567,21 @@ class StreamService:
                     # cv2.imshow('frame', result_img)
                 else:
                     cv2.destroyAllWindows()
-                    self.saveFile(self.videoFolderPath, self.videoRecordPath)
+                    # self.saveFile(self.videoFolderPath, self.videoRecordPath)
 
                 # 스크린 캡쳐
                 if self.captureGate:
                     print('SCREEN CAPTURE SCREEN CAPTURE SCREEN CAPTURE SCREEN CAPTURE SCREEN CAPTURE SCREEN CAPTURE ')
                     self.screenCaptureInsertData(result_img, 'Normal')
                     self.captureGate = False
-                    self.saveFile(self.screenShotFolderPath, self.screenShotRecordPath)
+                    # self.saveFile(self.screenShotFolderPath, self.screenShotRecordPath)
 
                 # 키보드 눌렀을 시 이벤트 발생
                 if k == ord('s'):
                     print("Screenshot saved...")
                     # 이미지 저장 메서드
                     cv2.imwrite(self.screenShotRecordPath, result_img, params=[cv2.IMWRITE_PNG_COMPRESSION, 0])
-                    self.saveFile(self.screenShotFolderPath, self.screenShotRecordPath)
+                    # self.saveFile(self.screenShotFolderPath, self.screenShotRecordPath)
                 elif k == ord('q'):
                     break
 
