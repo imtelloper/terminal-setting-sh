@@ -12,62 +12,8 @@ import { flushSync } from 'react-dom';
 import { useSWRState } from '../fetcher/useSWRState';
 import { getFetcher } from '../fetcher/fetcher';
 import Api from '../api/Api';
-import { number } from 'prop-types';
 import dayjs from 'dayjs';
-
-type AreaCard = {
-  title: string;
-  imgSrc: string;
-  zoneState: string;
-  zoneColor: string;
-  camName: string;
-  camState: string;
-  alrmColor: string;
-  alarmMessage: string;
-  firstName: string;
-  firstState: string;
-  secondName: string;
-  secondState: string;
-  alarmTxt: string;
-};
-const dummyData = [
-  {
-    activate: true,
-    alarms: '없음',
-    area: 'H1 공장크레인',
-    camCoordinate1: null,
-    camCoordinate2: null,
-    camName: null,
-    camPort: '4',
-    camSafetyLevel: 'Green',
-    camSensing1: '7',
-    camSensing2: '7',
-    computeDevice: null,
-    createdAt: '2022-06-28T00:12:52+00:00',
-    date: '2022-06-28',
-    savingPath: null,
-    sensingModel: null,
-    alarmTxt: '안전합니다.',
-  },
-  {
-    activate: true,
-    alarms: '없음',
-    area: 'H2 공장크레인',
-    camCoordinate1: null,
-    camCoordinate2: null,
-    camName: null,
-    camPort: '4',
-    camSafetyLevel: 'Green',
-    camSensing1: '2',
-    camSensing2: '7',
-    computeDevice: null,
-    createdAt: '2022-06-28T00:12:52+00:00',
-    date: '2022-06-28',
-    savingPath: null,
-    sensingModel: null,
-    alarmTxt: '작업자 진입 확인',
-  },
-];
+import { areaInfoDummyData } from '../initDatas/areaInfoDummyData';
 
 const AreaInfo = () => {
   const navigate = useNavigate();
@@ -90,41 +36,12 @@ const AreaInfo = () => {
     refreshInterval: 1000,
   });
 
-  let count = 20;
-  window.onscroll = (e) => {
-    if (window.innerHeight + window.scrollY >= document.body.offsetHeight) {
-      setTimeout(() => {
-        const addContent = document.createElement('div');
-        addContent.classList.add('areaCardBox');
-        addContent.innerHTML = `<h3>H${++count} 공장 크레인</h3>
-          <div className="areaContent">
-            <div className="areaImgContent">
-              <img src={Crane} />
-              <div className="areaZone areaZoneGreen">
-                Green Zone
-              </div>
-            </div>
-            <div className="areaTextContent">
-              <span className="camContent">Cam(2):<span>Active</span></span>
-              <span>Alarms:</span><span>없음</span>
-              <div className="detectContent">
-                <span>1차 감지: <span>0</span></span>
-                <span>2차 감지: <span>0</span></span>
-              </span>
-            </span>
-          </div>`;
-        document.querySelector('section')?.appendChild(addContent);
-        // document.querySelector("section").createElement(addContent);
-      }, 1000);
-    }
-  };
-
   const goObservePage = (e) => {
     const target = e.currentTarget;
     const dType = target.getAttribute('datatype');
     const targetArea = target.getAttribute('itemID');
-    console.log('dType', dType);
-    console.log('targetArea', targetArea);
+    // console.log('dType', dType);
+    // console.log('targetArea', targetArea);
     setSwrState({ ...swrState, curTrackerArea: targetArea });
     navigate('/observe');
   };
@@ -133,7 +50,7 @@ const AreaInfo = () => {
   const setProcessedSwrData = useCallback(() => {
     const processedData = [];
     const areaData = [...new Set(swrTrackerData?.map((obj) => obj.area))];
-    console.log('areaData', areaData);
+    // console.log('areaData', areaData);
     /* 메인 화면에 리스트들이 안뜨는 이유는 오늘 날짜의 observe 데이터가 없어서 그렇다. */
     swrTrackerData.forEach(async (tracker, idx) => {
       await Api.observe
@@ -142,7 +59,7 @@ const AreaInfo = () => {
           date: today,
         })
         .then((observe) => {
-          console.log('observe', observe);
+          // console.log('observe', observe);
           let processedObserve = [];
           /* 오늘 날짜로의 감지 데이터가 있으면 실행 */
           if (observe?.length > 0) {
@@ -153,7 +70,7 @@ const AreaInfo = () => {
           } else {
             processedObserve = [{ ...tracker }];
           }
-          console.log('processedObserve', processedObserve);
+          // console.log('processedObserve', processedObserve);
           processedData.push(...processedObserve);
           /* 정렬 */
           processedData.sort((prev, next) => {
@@ -161,7 +78,7 @@ const AreaInfo = () => {
             if (prev.area < next.area) return -1;
             return 0;
           });
-          console.log('😊 processedData', processedData);
+          // console.log('😊 processedData', processedData);
           const areaFilteredObj = [];
           /* 구역 이름을 객체의 키 값으로 먼저 생성 */
           areaData.forEach((area) => {
@@ -178,12 +95,7 @@ const AreaInfo = () => {
               const safetyLevelSet = [
                 ...new Set(areaObj?.map((obj) => obj.safetyLevel)),
               ];
-              console.log('🥰 safetyLevelSet', safetyLevelSet);
-              console.log('areaObj', areaObj);
-              console.log(
-                '[...new Set(areaObj.map((obj) => obj.observeSwitch))]',
-                [...new Set(areaObj.map((obj) => obj.observeSwitch))]
-              );
+              // console.log('🥰 safetyLevelSet', safetyLevelSet);
               /* 각 구역에 safetyLevel, redCnt, yellowCnt 셋팅 */
               areaFilteredObj[idx][area] = {
                 activate: [...new Set(areaObj.map((obj) => obj.observeSwitch))],
@@ -202,7 +114,7 @@ const AreaInfo = () => {
               };
             }
           });
-          console.log('2 💐💐💐💐💐', areaFilteredObj);
+          // console.log('2 💐💐💐💐💐', areaFilteredObj);
 
           // {
           //   safetyLevel: string,
@@ -214,98 +126,126 @@ const AreaInfo = () => {
     });
   }, [swrTrackerData, swrObserveData]);
 
+  /* INIT EFFECT */
   useEffect(() => {
-    console.log('#####getObserveState', getObserveState);
-    console.log('🌸🌸🌸 swrObserveData', swrObserveData);
+    let count = 20;
+    window.onscroll = (e) => {
+      if (window.innerHeight + window.scrollY >= document.body.offsetHeight) {
+        setTimeout(() => {
+          const addContent = document.createElement('div');
+          addContent.classList.add('areaCardBox');
+          addContent.innerHTML = `<h3>H${++count} 공장 크레인</h3>
+          <div className="areaContent">
+            <div className="areaImgContent">
+              <img src={Crane} />
+              <div className="areaZone areaZoneGreen">
+                Green Zone
+              </div>
+            </div>
+            <div className="areaTextContent">
+              <span className="camContent">Cam(2):<span>Active</span></span>
+              <span>Alarms:</span><span>없음</span>
+              <div className="detectContent">
+                <span>1차 감지: <span>0</span></span>
+                <span>2차 감지: <span>0</span></span>
+              </span>
+            </span>
+          </div>`;
+          document.querySelector('section')?.appendChild(addContent);
+          // document.querySelector("section").createElement(addContent);
+        }, 1000);
+      }
+    };
+  }, []);
+
+  useEffect(() => {
+    // console.log('#####getObserveState', getObserveState);
+    // console.log('🌸🌸🌸 swrObserveData', swrObserveData);
     /* getObserveState 데이터가 있을때 한번 가공 데이터 셋팅 */
     if (getObserveState.length === 0)
       swrTrackerData?.length > 0 && setProcessedSwrData();
   }, [getObserveState]);
 
   useEffect(() => {
-    console.log('swrTrackerData?.length', swrTrackerData?.length);
+    // console.log('swrTrackerData?.length', swrTrackerData?.length);
     /* db에서 tracker 데이터가 바뀔때마다 가공 데이터 셋팅 */
-    swrTrackerData?.length > 0 && console.log('swrTrackerData', swrTrackerData);
+    // swrTrackerData?.length > 0 && console.log('swrTrackerData', swrTrackerData);
     swrTrackerData?.length > 0 && setProcessedSwrData();
   }, [swrTrackerData, swrObserveData]);
 
   const areaCardsMap = useMemo(() => {
-    return (getObserveState.length > 0 ? getObserveState : dummyData).map(
-      (card, idx) => {
-        // const getObjectKey = Object.keys(card)[idx]?.toString();
-        const getObjectKey = Object.keys(card)[0].toString();
-        console.log('card', card);
-        console.log('getObjectKey', getObjectKey);
-
-        return (
-          <div
-            className="areaCardBox"
-            key={idx}
-            itemID={getObjectKey}
-            onClick={goObservePage}
-            datatype={idx.toString()}
-          >
-            <h3>{card.area}</h3>
-            <div className="titleBox">
-              <span>{getObjectKey}</span>
+    return (
+      getObserveState.length > 0 ? getObserveState : areaInfoDummyData
+    ).map((card, idx) => {
+      const getObjectKey = Object.keys(card)[0].toString();
+      return (
+        <div
+          className="areaCardBox"
+          key={idx}
+          itemID={getObjectKey}
+          onClick={goObservePage}
+          datatype={idx.toString()}
+        >
+          <h3>{card.area}</h3>
+          <div className="titleBox">
+            <span>{getObjectKey}</span>
+          </div>
+          <div className="areaContent">
+            <div className="areaTop">
+              <div className="imgBox">
+                <img src={BgImg} alt="" />
+              </div>
             </div>
-            <div className="areaContent">
-              <div className="areaTop">
-                <div className="imgBox">
-                  <img src={BgImg} alt="" />
+            <div className="areaBottom">
+              <div className="camBox">
+                <div className="camPort">
+                  {/* @ts-ignore */}
+                  CAM <span>{card[getObjectKey]?.camCnt}</span>
+                </div>
+                <div className="activeBadge">
+                  <div className="circle" />
+                  <span>ACTIVE</span>
                 </div>
               </div>
-              <div className="areaBottom">
-                <div className="camBox">
-                  <div className="camPort">
-                    {/* @ts-ignore */}
-                    CAM <span>{card[getObjectKey]?.camCnt}</span>
-                  </div>
-                  <div className="activeBadge">
-                    <div className="circle" />
-                    <span>ACTIVE</span>
-                  </div>
+              <div className="alarmBox">
+                {/* className : green yellow red inactive => alarmTxt 에 추가해주시면 됩니다! */}
+                <div
+                  className={`alarmTxt ${
+                    // @ts-ignore
+                    card[getObjectKey]?.safetyLevel === 'Red'
+                      ? 'red'
+                      : // @ts-ignore
+                      card[getObjectKey]?.safetyLevel === 'Yellow'
+                      ? 'yellow'
+                      : 'green'
+                  }`}
+                >
+                  {
+                    // @ts-ignore
+                    card[getObjectKey]?.safetyLevel === 'Red'
+                      ? '작업자 위험 반경 진입'
+                      : // @ts-ignore
+                      card[getObjectKey]?.safetyLevel === 'Yellow'
+                      ? '작업자 진입'
+                      : '안전합니다.'
+                  }
                 </div>
-                <div className="alarmBox">
-                  {/* className : green yellow red inactive => alarmTxt 에 추가해주시면 됩니다! */}
-                  <div
-                    className={`alarmTxt ${
-                      // @ts-ignore
-                      card[getObjectKey]?.safetyLevel === 'Red'
-                        ? 'red'
-                        : // @ts-ignore
-                        card[getObjectKey]?.safetyLevel === 'Yellow'
-                        ? 'yellow'
-                        : 'green'
-                    }`}
-                  >
-                    {
-                      // @ts-ignore
-                      card[getObjectKey]?.safetyLevel === 'Red'
-                        ? '작업자 위험 반경 진입'
-                        : // @ts-ignore
-                        card[getObjectKey]?.safetyLevel === 'Yellow'
-                        ? '작업자 진입'
-                        : '안전합니다.'
-                    }
-                  </div>
-                  <div className="sensingBox">
-                    <span>
-                      {/* @ts-ignore */}
-                      1차 감지<p>{card[getObjectKey]?.yellowCnt}</p>
-                    </span>
-                    <span>
-                      {/* @ts-ignore */}
-                      2차 감지<p>{card[getObjectKey]?.redCnt}</p>
-                    </span>
-                  </div>
+                <div className="sensingBox">
+                  <span>
+                    {/* @ts-ignore */}
+                    1차 감지<p>{card[getObjectKey]?.yellowCnt}</p>
+                  </span>
+                  <span>
+                    {/* @ts-ignore */}
+                    2차 감지<p>{card[getObjectKey]?.redCnt}</p>
+                  </span>
                 </div>
               </div>
             </div>
           </div>
-        );
-      }
-    );
+        </div>
+      );
+    });
   }, [getObserveState]);
 
   return (

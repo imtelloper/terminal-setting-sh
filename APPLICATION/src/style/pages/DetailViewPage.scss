@@ -54,7 +54,8 @@ div.detailViewContainer {
 
         div.detailTabBox {
           width: 100%;
-          height: calc(100% - 212px);
+          height: calc(100% - 384px);
+          //height: calc(100% - 212px);
           position: relative;
 
           input {
@@ -69,7 +70,7 @@ div.detailViewContainer {
             align-items: center;
             justify-content: center;
             border-bottom: 1px solid #d4d4d4;
-
+            cursor: pointer;
             &:nth-child(2) {
               border-top-left-radius: 8px;
             }
@@ -91,6 +92,7 @@ div.detailViewContainer {
             border-radius: 8px;
             padding: 0 12px;
             margin: 24px;
+            cursor: pointer;
           }
 
           div.tabContent {
@@ -161,7 +163,6 @@ div.detailViewContainer {
                   font-size: 14px;
                   font-weight: 700;
                   border-radius: 8px;
-                  cursor: pointer;
 
                   &:first-child {
                     margin-bottom: 8px;
@@ -217,7 +218,6 @@ div.detailViewContainer {
                 font-size: 14px;
                 font-weight: 700;
                 border-radius: 8px;
-                cursor: pointer;
 
                 &:first-child {
                   background-color: $warning-500;
@@ -285,7 +285,11 @@ div.detailViewContainer {
                   display: flex;
                   align-items: center;
                   justify-content: space-between;
+                  cursor: pointer;
 
+                  &:hover{
+                    color: yellow;
+                  }
                   span{
                     display: flex;
                     align-items: center;

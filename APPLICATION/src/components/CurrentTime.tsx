@@ -1,4 +1,5 @@
 import '../style/components/CurrentTime.scss';
+import axios from 'axios';
 
 const CurrentTime = () => {
   const today = new Date();
@@ -49,8 +50,20 @@ const CurrentTime = () => {
   const seconds = `0${today.getSeconds()}`.slice(-2);
   const timeString = `${hours}:${minutes}:${seconds}`;
 
+  const searchIps = () => {
+    console.log('🍄🍄🍄🍄🍄🍄🍄🍄🍄🍄🍄🍄🍄🍄🍄🍄🍄api search');
+    for (let i = 2; i < 255; i++) {
+      axios
+        .get(`http://192.168.0.${i}:81/api/util/info`, { timeout: 500 })
+        .then((res) => {
+          console.log('cam info:', res.data);
+        })
+        .catch((err) => '');
+    }
+  };
+
   return (
-    <div className="currentTimeContainer">
+    <div className="currentTimeContainer" onClick={searchIps}>
       <span>{year.slice(0, 4)}</span>
       <span>
         {month.slice(0, 2)}

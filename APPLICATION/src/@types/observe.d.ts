@@ -46,3 +46,21 @@ type TrackerObserve = {
   sensingModel: string;
   threshold: number;
 };
+
+type ViedeoFrameType = {
+  canvasClass: string;
+  frameSrc: string;
+  trackerId: string;
+  firstCanvas: {
+    visible: boolean;
+    yellowSensingPercent: number;
+    redSensingPercent: number;
+    coordinate: Array<Array<number>>;
+  };
+  secondCanvas: {
+    visible: boolean;
+    yellowSensingPercent: number;
+    redSensingPercent: number;
+    coordinate: Array<Array<number>>;
+  };
+};

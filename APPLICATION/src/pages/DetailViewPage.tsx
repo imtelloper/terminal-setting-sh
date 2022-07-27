@@ -5,10 +5,25 @@ import DangerZonePopup from '../components/DangerZonePopup';
 import CalibrationPopup from '../components/CalibrationPopup';
 import { MdDangerous, MdModeEdit, MdOutlineTaskAlt } from 'react-icons/md';
 import { Feedback, Tune } from '@material-ui/icons';
+import Api from '../api/Api';
+import { useSWRState } from '../fetcher/useSWRState';
+import { useNavigate } from 'react-router-dom';
+import dayjs from 'dayjs';
+import { camPort1Ip } from '../initDatas/initVideoFrameData';
 
 const DetailViewPage = () => {
+  const { data: swrState, mutate: setSwrState } = useSWRState();
+  const navigate = useNavigate();
   const [isOpenDangerZoneState, setIsOpenDangerZoneState] = useState(false);
   const [isOpenCalibrationState, setIsOpenCalibrationState] = useState(false);
+  const [imgSrcState, setImgSrcState] = useState(
+    'http://192.168.0.4:81/api/stream/'
+  );
+  const [imgArchiveState, setImgArchiveState] = useState([]);
+  const levelColor = {
+    yellow: '#ffca2b',
+    red: '#ff530d',
+  };
 
   const openDangerZonePopup = () => {
     setIsOpenDangerZoneState(!isOpenDangerZoneState);
@@ -25,6 +40,88 @@ const DetailViewPage = () => {
   const closeCalibrationPopup = () => {
     setIsOpenCalibrationState(!isOpenCalibrationState);
   };
+
+  /* INIT EFFECT */
+  useEffect(() => {
+    console.log('🍓swr', swrState);
+    console.log('🍓swrState.curTrackerId', swrState.curTrackerId);
+    Api.archive
+      .getDetailRangeData({
+        trackerId: swrState.curTrackerId,
+        fileType: 'img',
+        start: 0,
+        limit: 20,
+      })
+      .then((archives) => {
+        dayjs.locale('ko');
+        console.log('GASHEEEEEE    archives', archives);
+        archives.forEach((obj) => {
+          console.log(
+            'dayjs(obj.createdAt)',
+            dayjs(obj.createdAt).format('YYYY-MM-DD')
+          );
+          console.log(
+            'dayjs(obj.createdAt)',
+            dayjs(obj.createdAt).format('h:m:s')
+          );
+        });
+        setImgArchiveState(
+          archives.map((obj) => {
+            return {
+              id: obj._id,
+              path: obj.path,
+              safetyLevel: obj.safetyLevel,
+              date: dayjs(obj.createdAt).format('YYYY-MM-DD'),
+              time: dayjs(obj.createdAt).format('hh:mm:ss'),
+            };
+          })
+        );
+      })
+      .catch((err) => console.error(err));
+  }, []);
+
+  useEffect(() => {
+    console.log('imgArchiveState', imgArchiveState);
+  }, [imgArchiveState]);
+
+  const handleSetArchiveImg = (e) => {
+    const target = e.currentTarget;
+    const dType = target.getAttribute('datatype');
+    // console.log('dType', dType);
+    // console.log(
+    //   `http://${camPort1Ip}:81/${dType.split('/').slice(5).join('/')}`
+    // );
+    setImgSrcState(
+      `http://${camPort1Ip}:81/${dType.split('/').slice(5).join('/')}`
+    );
+  };
+
+  const handleClickTab = (e) => {
+    const target = e.currentTarget;
+    const dType = target.getAttribute('datatype');
+    if (dType === 'realTimeStream') {
+      setImgSrcState('http://192.168.0.4:81/api/stream/');
+    }
+    // else if (dType === 'historyRefer') {
+    //   setImgSrcState('http://192.168.0.4:81/api/stream/');
+    // }
+  };
+
+  const imgCaptureHistoryMap = imgArchiveState.map((obj) => (
+    <p datatype={obj.path} onClick={handleSetArchiveImg} key={obj.id}>
+      <span>
+        <Feedback
+          style={{
+            fontSize: '20px',
+            color: levelColor[obj.safetyLevel.toLowerCase()],
+          }}
+        />
+        <span className={obj.safetyLevel.toLowerCase()}>YELLOW 2차 감지</span>
+      </span>
+      <span>{obj.date}</span>
+      <span>{obj.time}</span>
+    </p>
+  ));
 
   return (
     <div className="detailViewContainer">
@@ -43,7 +140,12 @@ const DetailViewPage = () => {
                 name="tabs"
                 defaultChecked
               />
-              <label className="label1" htmlFor="menuTab1">
+              <label
+                className="label1"
+                htmlFor="menuTab1"
+                datatype="realTimeStream"
+                onClick={handleClickTab}
+              >
                 실시간 영상
               </label>
               <input
@@ -52,15 +154,19 @@ const DetailViewPage = () => {
                 type="radio"
                 name="tabs"
               />
-              <label className="label2" htmlFor="menuTab2">
+              <label
+                className="label2"
+                htmlFor="menuTab2"
+                datatype="historyRefer"
+                onClick={handleClickTab}
+              >
                 이력조회
               </label>
               <select>
                 <option>Group 1</option>
                 <option>Group 2</option>
-                <option>Group 3</option>
-                <option>Group 4</option>
               </select>
+              {/* 실시간 영상 */}
               <div className="tabContent realTimeBox">
                 <div className="realTimeContent">
                   {/* className : 색상별 green yellow red inactive */}
@@ -98,6 +204,7 @@ const DetailViewPage = () => {
                   <span>1일 19시간 58분</span>
                 </div>
               </div>
+              {/* 이력 조회 */}
               <div className="tabContent historyBox">
                 <div className="sensingBox">
                   <span>
@@ -121,98 +228,7 @@ const DetailViewPage = () => {
                 </div>
 
                 <div className="alertBox">
-                  <div className="alertContent">
-                    <p>
-                      <span>
-                        <MdDangerous
-                          style={{ fontSize: '20px', color: '#ff530d' }}
-                        />
-                        <span className="red">RED 2차 감지</span>
-                      </span>
-                      <span>2022-05-28</span>
-                      <span>14:10:18</span>
-                    </p>
-                    <p>
-                      <span>
-                        <Feedback
-                          style={{ fontSize: '20px', color: '#ffca2b' }}
-                        />
-                        <span className="yellow">YELLOW 2차 감지</span>
-                      </span>
-                      <span>2022-05-28</span>
-                      <span>14:10:18</span>
-                    </p>
-                    <p>
-                      <span>
-                        <Feedback
-                          style={{ fontSize: '20px', color: '#ffca2b' }}
-                        />
-                        <span className="yellow">YELLOW 2차 감지</span>
-                      </span>
-                      <span>2022-05-28</span>
-                      <span>14:10:18</span>
-                    </p>
-                    <p>
-                      <span>
-                        <Feedback
-                          style={{ fontSize: '20px', color: '#ffca2b' }}
-                        />
-                        <span className="yellow">YELLOW 2차 감지</span>
-                      </span>
-                      <span>2022-05-28</span>
-                      <span>14:10:18</span>
-                    </p>
-                    <p>
-                      <span>
-                        <Feedback
-                          style={{ fontSize: '20px', color: '#ffca2b' }}
-                        />
-                        <span className="yellow">YELLOW 2차 감지</span>
-                      </span>
-                      <span>2022-05-28</span>
-                      <span>14:10:18</span>
-                    </p>
-                    <p>
-                      <span>
-                        <Feedback
-                          style={{ fontSize: '20px', color: '#ffca2b' }}
-                        />
-                        <span className="yellow">YELLOW 2차 감지</span>
-                      </span>
-                      <span>2022-05-28</span>
-                      <span>14:10:18</span>
-                    </p>
-                    <p>
-                      <span>
-                        <Feedback
-                          style={{ fontSize: '20px', color: '#ffca2b' }}
-                        />
-                        <span className="yellow">YELLOW 2차 감지</span>
-                      </span>
-                      <span>2022-05-28</span>
-                      <span>14:10:18</span>
-                    </p>
-                    <p>
-                      <span>
-                        <Feedback
-                          style={{ fontSize: '20px', color: '#ffca2b' }}
-                        />
-                        <span className="yellow">YELLOW 2차 감지</span>
-                      </span>
-                      <span>2022-05-28</span>
-                      <span>14:10:18</span>
-                    </p>
-                    <p>
-                      <span>
-                        <Feedback
-                          style={{ fontSize: '20px', color: '#ffca2b' }}
-                        />
-                        <span className="yellow">YELLOW 2차 감지</span>
-                      </span>
-                      <span>2022-05-28</span>
-                      <span>14:10:18</span>
-                    </p>
-                  </div>
+                  <div className="alertContent">{imgCaptureHistoryMap}</div>
                 </div>
               </div>
             </div>
@@ -233,7 +249,14 @@ const DetailViewPage = () => {
             </div>
 
             <div className="bottomBtnBox">
-              <button className="iconR normalPrimary">취소</button>
+              <button
+                className="iconR normalPrimary"
+                onClick={() => {
+                  navigate('/observe');
+                }}
+              >
+                취소
+              </button>
               <button className="iconR defaultPrimary">확인</button>
             </div>
           </div>
@@ -256,12 +279,16 @@ const DetailViewPage = () => {
       <div className="detailRight">
         <div className="rightBox">
           <div className="iframeBox">
-            <div className="iframeTitle">CAM2</div>
+            <div className="iframeTitle">
+              {swrState.curCamPort.toUpperCase()}
+            </div>
             <canvas className="polygonCanvas" typeof="coordinate3" />
-            <iframe
+            <img
               title="stream1"
               // src={streamUrl ??"http://127.0.0.1:8000/api/stream/area/"}
-              src="http://192.168.0.30:81/"
+              // src="http://192.168.0.4:81/api/stream/"
+              src={imgSrcState}
+              alt=""
             />
           </div>
         </div>

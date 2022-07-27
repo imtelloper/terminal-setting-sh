@@ -20,82 +20,12 @@ import KakaoIcon from '../images/kakao_icon.png';
 import Datathresholding from '../images/data_thresholding.png';
 import { useSWRState } from '../fetcher/useSWRState';
 import { flushSync } from 'react-dom';
-
-type CamSettingType = {
-  _id: string;
-  area: string;
-  camPort: string;
-  savingPath: string;
-  camName: string;
-  computeDevice: string;
-  sensingModel: string;
-  threshold: number;
-  imgSaveSwitch: boolean;
-  messageSwitch: boolean;
-  kakaoSwitch: boolean;
-  // _id: string;
-};
-
-const camDummyData: Array<CamSettingType> = [
-  {
-    _id: '',
-    area: 'H1 공장 크레인',
-    camPort: 'cam1',
-    savingPath: '/home/',
-    camName: 'H1 공장 크레인 좌측 상단 캠',
-    computeDevice: 'CPU',
-    sensingModel: 'small',
-    threshold: 70,
-    imgSaveSwitch: false,
-    messageSwitch: false,
-    kakaoSwitch: false,
-  },
-  {
-    _id: '',
-    area: 'H1 공장 크레인',
-    camPort: 'cam2',
-    savingPath: '/home/',
-    camName: 'H1 공장 크레인 우측 상단 캠',
-    computeDevice: 'CPU',
-    sensingModel: 'small',
-    threshold: 70,
-    imgSaveSwitch: false,
-    messageSwitch: false,
-    kakaoSwitch: false,
-  },
-  {
-    _id: '',
-    area: 'H1 공장 크레인',
-    camPort: 'cam3',
-    savingPath: '/home/',
-    camName: 'H1 공장 크레인 왼쪽 상단 캠',
-    computeDevice: 'CPU',
-    sensingModel: 'small',
-    threshold: 70,
-    imgSaveSwitch: false,
-    messageSwitch: false,
-    kakaoSwitch: false,
-  },
-  {
-    _id: '',
-    area: 'H1 공장 크레인',
-    camPort: 'cam4',
-    savingPath: '/home/',
-    camName: 'H1 공장 크레인 왼쪽 상단 캠',
-    computeDevice: 'CPU',
-    sensingModel: 'small',
-    threshold: 70,
-    imgSaveSwitch: false,
-    messageSwitch: false,
-    kakaoSwitch: false,
-  },
-];
+import { camDummyData } from '../initDatas/camSettingDummyData';
 
 /*
 tracker들을 가져와서 area를 고유값으로 select option에 셋팅
 tracker들이 cam이 1개일지, 2개일지 모르니 각 해당 구역의 cam만큼만 설정할 수 있도록 해야함
 */
-
 const SettingPage = () => {
   const [camSettingState, setCamSettingState] =
     useState<Array<CamSettingType>>(camDummyData);

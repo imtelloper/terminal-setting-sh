@@ -3,6 +3,7 @@ from typing import Optional
 from bson import ObjectId
 from pydantic import BaseModel, Field
 from models.baseModel import PyObjectId
+from pytz import timezone
 
 
 class Archive(BaseModel):
@@ -11,7 +12,7 @@ class Archive(BaseModel):
     fileType: str = Field(..., description="녹화 파일인지 캡쳐 파일인지 video | img")
     path: str = Field(..., description="카메라 녹화 파일 혹은 캡쳐 파일 저장 경로")
     safetyLevel: Optional[str] = Field(..., description="이미지 캡쳐시 안전 레벨 기록.   GREEN, YELLOW, RED")
-    createdAt: Optional[datetime] = datetime.now()
+    createdAt: Optional[datetime] = datetime.now(timezone('Asia/Seoul'))
 
     class Config:
         arbitrary_types_allowed = True

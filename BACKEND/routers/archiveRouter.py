@@ -41,6 +41,8 @@ async def getOneData(id):
 @router.post("/find", response_description='Json데이터로 찾아서 가져오기 body example -> { "date": "2022-06-22" } ')
 async def findData(data=Body(...)):
     jsonData = jsonable_encoder(data)
+    if "trackerId" in jsonData:
+        jsonData["trackerId"] = ObjectId(jsonData["trackerId"])
     serviceResult = await service.searchDatas(jsonData)
     resultArr = []
     for res in serviceResult:
@@ -64,6 +66,20 @@ async def deleteOneData(id):
 @router.get("/{start}/{limit}", response_description="시작 인덱스(start)와 가져올 갯수(limit)로 데이터들 가져오기")
 async def getRangeData(start, limit):
     serviceResult = await service.searchRangeData(int(start), int(limit))
+    resultArr = []
+    for res in serviceResult:
+        resultArr.append(dto(**res))
+    return resultArr
+
+
+
+@router.post("/find-range-data", response_description="")
+async def getDetailRangeData(data=Body(...)):
+    print('🍋',data)
+    jsonData = jsonable_encoder(data)
+    if "trackerId" in jsonData:
+        jsonData["trackerId"] = ObjectId(jsonData["trackerId"])
+    serviceResult = await service.detailSearchRangeData(jsonData)
     resultArr = []
     for res in serviceResult:
         resultArr.append(dto(**res))

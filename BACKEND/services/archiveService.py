@@ -64,6 +64,17 @@ class ArchiveService:
             dataArr.append(data)
         return dataArr
 
+    async def detailSearchRangeData(self, data: dict) -> dict:
+        dataArr = []
+        start = data["start"]
+        limit = data["limit"]
+        del data["start"]
+        del data["limit"]
+        foundData = detailFindRange(self.dbName, self.tableName, data, start, limit)
+        async for data in foundData:
+            dataArr.append(data)
+        return dataArr
+
     async def getDataCount(self):
         count = await dataCount(self.dbName, self.tableName)
         return count

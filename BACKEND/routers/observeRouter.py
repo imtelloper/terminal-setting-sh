@@ -36,28 +36,12 @@ async def getOneData(id):
 
 @router.post("/find", response_description='Json데이터로 찾아서 가져오기 body example -> { "date": "2022-06-22" } ')
 async def findData(data=Body(...)):
-    print('findData', data)
-
-    # if "trackerId" in data:
-    #     data["trackerId"] = ObjectId(data["trackerId"])
-    #     print("this will execute")
-    # print('findData', data)
-
     jsonData = jsonable_encoder(data)
-    print('jsonData',jsonData)
-
     if "trackerId" in jsonData:
         jsonData["trackerId"] = ObjectId(jsonData["trackerId"])
-        print("this will execute")
-    print('findData', jsonData)
-
-
     serviceResult = await service.searchDatas(jsonData)
-    print('serviceResult,', serviceResult)
     resultArr = []
     for res in serviceResult:
-        print('res', res)
-        print('dto(**res)', dto(**res))
         resultArr.append(dto(**res))
     return resultArr
 
