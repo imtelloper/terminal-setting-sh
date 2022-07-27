@@ -1,6 +1,6 @@
 export const camPort1Ip = '192.168.0.4';
-export const camPort2Ip = '192.168.0.26';
-export const camPort3Ip = '192.168.0.36';
+export const camPort2Ip = '192.168.0.14';
+export const camPort3Ip = '192.168.0.16';
 export const camPort4Ip = '192.168.0.30';
 
 export const initVideoFrameData: Array<ViedeoFrameType> = [

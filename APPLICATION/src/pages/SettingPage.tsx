@@ -124,8 +124,8 @@ const SettingPage = () => {
         console.log(camIdx);
         const newCamSetting = camSettingState;
         newCamSetting[camIdx][dType] = inputVal;
-        flushSync(() => setCamSettingState([]));
-        flushSync(() => setCamSettingState(newCamSetting));
+        flushSync(() => setCamSettingState([...newCamSetting]));
+        // flushSync(() => setCamSettingState(newCamSetting));
       })
       .catch((err) => console.error(err));
   };
@@ -179,8 +179,8 @@ const SettingPage = () => {
       .findData({ area: curCamAreaState })
       .then((res) => {
         console.log('🧥🧥🧥', res);
-        flushSync(() => setCamSettingState([]));
-        flushSync(() => setCamSettingState(res));
+        flushSync(() => setCamSettingState([...res]));
+        // flushSync(() => setCamSettingState(res));
       })
       // .finally(() => initSettingUI())
       .catch((err) => console.error(err));

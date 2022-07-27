@@ -97,6 +97,14 @@ async def screenCapture():
     """
     return service.setCaptureGateOpen()
 
+# 칼리브레이션 이미지 캡쳐
+@router.get("/calib-capture", response_description="")
+async def screenCapture():
+    """
+    Calibration 설정을 위한 스크린샷 캡쳐
+    """
+    return service.setCaptureGateOpen()
+
 
 # 감지 중 날짜가 다음날로 넘어 갔을때 safetyLevel, observeSwitch 값들은 이월 시켜 줘야 한다.
 # 오늘 날짜의 observe data 추가

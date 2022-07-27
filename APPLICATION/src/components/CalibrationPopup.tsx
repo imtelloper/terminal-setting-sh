@@ -3,10 +3,14 @@ import '../style/DesignSystem.scss';
 import '../style/components/CalibrationPopup.scss';
 import { Undo } from '@material-ui/icons';
 import { MdDesignServices } from 'react-icons/md';
+import { useSWRState } from '../fetcher/useSWRState';
 
-const CalibrationPopup = ({ openCalibrationPopup, closeCalibrationPopup }) => {
+const CalibrationPopup = ({ openClosePopup }) => {
+  const { data: swrState, mutate: setSwrState } = useSWRState();
+
   const [numState, setNumState] = useState('');
 
+  /* 기준선 그리기 */
   const handleBg = () => {
     const alarmBox = document.querySelector('.alarmBox');
     alarmBox.classList.add('alarmBoxActive');
@@ -30,6 +34,7 @@ const CalibrationPopup = ({ openCalibrationPopup, closeCalibrationPopup }) => {
       numLabelEl?.classList.remove('labelActive');
       checkBtnEl?.classList.remove('btnActive');
     }
+    console.log('😆swrState', swrState);
   }, []);
 
   return (
@@ -74,7 +79,8 @@ const CalibrationPopup = ({ openCalibrationPopup, closeCalibrationPopup }) => {
           <div className="bottomBtnBox">
             <button
               className="btnR normalPrimary"
-              onClick={closeCalibrationPopup}
+              datatype="calibration"
+              onClick={openClosePopup}
             >
               취소
             </button>

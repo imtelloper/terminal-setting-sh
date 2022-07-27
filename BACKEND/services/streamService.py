@@ -49,6 +49,7 @@ class StreamService:
         self.videoWriter = None  # cv 녹화 객체
         self.recordGate = False  # 녹화 시작, 중지를 위한 bool
         self.captureGate = False  # 캡쳐를 위한 bool
+        self.calibCaptureGate = False  # Calibration 설정을 위한 스크린샷 캡쳐를 위한 bool
         self.currentPort = None  # 카메라가 mini pc에 연결된 포트 번호
         self.listPorts = self.list_ports()  # 현재 연결된 카메라의 포트 번호
         if (self.listPorts[1]):
@@ -135,6 +136,12 @@ class StreamService:
     def setCaptureGateOpen(self):
         self.initScreenCapturePath()
         self.captureGate = True
+        return True
+
+    # Calibration 설정을 위한 스크린샷 캡쳐를 하기 위한 메서드
+    def setCalibCaptureGateOpen(self):
+        self.initScreenCapturePath()
+        self.calibCaptureGate = True
         return True
 
     # 녹화 경로, 파일명 초기화
@@ -290,6 +297,18 @@ class StreamService:
                 {
                     'safetyLevel': level.capitalize(),
                     '{0}Cnt'.format(level.lower()): cnt
+                }
+            }
+        )
+
+    def updateCalibrationImgPath(self, trackerId, captureImg: str, imgPath: str):
+        self.initScreenCapturePath()
+        cv2.imwrite(imgPath, captureImg, params=[cv2.IMWRITE_PNG_COMPRESSION, 0])
+        getConnection()[self.dbName][config.TABLE_TRACKER].update_one(
+            {'_id': ObjectId(trackerId)},
+            {'$set':
+                {
+                    'calibImg': imgPath,
                 }
             }
         )
@@ -572,6 +591,13 @@ class StreamService:
                     print('SCREEN CAPTURE SCREEN CAPTURE SCREEN CAPTURE SCREEN CAPTURE SCREEN CAPTURE SCREEN CAPTURE ')
                     self.screenCaptureInsertData(result_img, 'Normal')
                     self.captureGate = False
+                    self.saveFile(self.screenShotFolderPath, self.screenShotRecordPath)
+
+                # 칼리브레이션 이미지 캡쳐
+                if self.calibCaptureGate:
+                    print('CALIB CAPTURE CALIB CAPTURE CALIB CAPTURE CALIB CAPTURE CALIB CAPTURE')
+                    self.updateCalibrationImgPath(self.trackerId, result_img, self.screenShotRecordPath)
+                    self.calibCaptureGate = False
                     self.saveFile(self.screenShotFolderPath, self.screenShotRecordPath)
 
                 # 키보드 눌렀을 시 이벤트 발생

@@ -25,20 +25,14 @@ const DetailViewPage = () => {
     red: '#ff530d',
   };
 
-  const openDangerZonePopup = () => {
-    setIsOpenDangerZoneState(!isOpenDangerZoneState);
-  };
-
-  const closeDangerZonePopup = () => {
-    setIsOpenDangerZoneState(!isOpenDangerZoneState);
-  };
-
-  const openCalibrationPopup = () => {
-    setIsOpenCalibrationState(!isOpenCalibrationState);
-  };
-
-  const closeCalibrationPopup = () => {
-    setIsOpenCalibrationState(!isOpenCalibrationState);
+  const openClosePopup = (e) => {
+    const target = e.currentTarget;
+    const dType = target.getAttribute('datatype');
+    const type = {
+      calibration: () => setIsOpenCalibrationState(!isOpenCalibrationState),
+      dangerZone: () => setIsOpenDangerZoneState(!isOpenDangerZoneState),
+    };
+    type[dType]();
   };
 
   /* INIT EFFECT */
@@ -108,7 +102,12 @@ const DetailViewPage = () => {
   };
 
   const imgCaptureHistoryMap = imgArchiveState.map((obj) => (
-    <p datatype={obj.path} onClick={handleSetArchiveImg} key={obj.id}>
+    <p
+      datatype={obj.path}
+      onClick={handleSetArchiveImg}
+      key={obj.id}
+      role="presentation"
+    >
       <span>
         <Feedback
           style={{
@@ -141,6 +140,7 @@ const DetailViewPage = () => {
                 defaultChecked
               />
               <label
+                role="presentation"
                 className="label1"
                 htmlFor="menuTab1"
                 datatype="realTimeStream"
@@ -155,6 +155,7 @@ const DetailViewPage = () => {
                 name="tabs"
               />
               <label
+                role="presentation"
                 className="label2"
                 htmlFor="menuTab2"
                 datatype="historyRefer"
@@ -238,11 +239,11 @@ const DetailViewPage = () => {
                 <MdModeEdit style={{ fontSize: '38px' }} />
                 <span>영역 재설정</span>
               </button>
-              <button onClick={openCalibrationPopup}>
+              <button datatype="calibration" onClick={openClosePopup}>
                 <Tune style={{ fontSize: '38px' }} />
                 <span>Calibration 설정</span>
               </button>
-              <button onClick={openDangerZonePopup}>
+              <button datatype="dangerZone" onClick={openClosePopup}>
                 <MdDangerous style={{ fontSize: '38px' }} />
                 <span>위험구간 설정</span>
               </button>
@@ -262,16 +263,10 @@ const DetailViewPage = () => {
           </div>
 
           {isOpenDangerZoneState && (
-            <DangerZonePopup
-              openDangerZonePopup={openDangerZonePopup}
-              closeDangerZonePopup={closeDangerZonePopup}
-            />
+            <DangerZonePopup openClosePopup={openClosePopup} />
           )}
           {isOpenCalibrationState && (
-            <CalibrationPopup
-              openCalibrationPopup={openCalibrationPopup}
-              closeCalibrationPopup={closeCalibrationPopup}
-            />
+            <CalibrationPopup openClosePopup={openClosePopup} />
           )}
         </div>
       </div>

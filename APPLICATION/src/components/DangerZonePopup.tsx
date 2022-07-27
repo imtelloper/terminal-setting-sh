@@ -6,7 +6,7 @@ import '../style/components/DangerZonePopup.scss';
 import { useNavigate } from 'react-router-dom';
 import CalibrationPopup from './CalibrationPopup';
 
-const DangerZonePopup = ({ openDangerZonePopup, closeDangerZonePopup }) => {
+const DangerZonePopup = ({ openClosePopup }) => {
   const navigate = useNavigate();
   const [isOpenCalibrationState, setIsOpenCalibrationState] = useState(false);
   const [yellowTextState, setYellowTextState] = useState('');
@@ -70,7 +70,8 @@ const DangerZonePopup = ({ openDangerZonePopup, closeDangerZonePopup }) => {
                   <span>Calibration</span>
                   <button
                     className="settingAlarm"
-                    onClick={openCalibrationPopup}
+                    datatype="dangerZone"
+                    onClick={openClosePopup}
                   >
                     CALIBRATION 세팅 필요
                   </button>
@@ -116,7 +117,8 @@ const DangerZonePopup = ({ openDangerZonePopup, closeDangerZonePopup }) => {
               <div className="bottomBtnBox">
                 <button
                   className="btnR normalPrimary"
-                  onClick={closeDangerZonePopup}
+                  datatype="dangerZone"
+                  onClick={openClosePopup}
                 >
                   취소
                 </button>
@@ -125,10 +127,7 @@ const DangerZonePopup = ({ openDangerZonePopup, closeDangerZonePopup }) => {
             </div>
           </div>
           {isOpenCalibrationState && (
-            <CalibrationPopup
-              openCalibrationPopup={openCalibrationPopup}
-              closeCalibrationPopup={closeCalibrationPopup}
-            />
+            <CalibrationPopup openClosePopup={openClosePopup} />
           )}
         </div>
       </div>

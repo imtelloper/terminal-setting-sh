@@ -2,6 +2,7 @@ import React, { useEffect, useMemo } from 'react';
 import { flushSync } from 'react-dom';
 import PolygonDraw from '../util/PolygonDraw';
 import Api from '../api/Api';
+import { useSWRState } from '../fetcher/useSWRState';
 
 const ObserveCamStream = ({
   videoFrameState,
@@ -26,8 +27,7 @@ const ObserveCamStream = ({
   const setStateCoordinate = (arrIndex: number, itemID: string, coordinate) => {
     const newArr = videoFrameState;
     newArr[arrIndex][itemID].coordinate = coordinate;
-    flushSync(() => setVideoFrameState([]));
-    flushSync(() => setVideoFrameState(newArr));
+    flushSync(() => setVideoFrameState([...newArr]));
   };
 
   const polySort = (arrIndex: number, itemID: string) => {
@@ -219,14 +219,15 @@ const ObserveCamStream = ({
     else coordinate.splice(match, 1); // delete point when user clicks near it.
     const newArr = videoFrameState;
     newArr[arrIndex][itemID].coordinate = coordinate;
-    flushSync(() => setVideoFrameState([]));
-    flushSync(() => setVideoFrameState(newArr));
+    flushSync(() => setVideoFrameState([...newArr]));
     flushSync(() => polySort(arrIndex, itemID));
     draw(canvas, true, trackerId);
   };
 
   useEffect(() => {
-    document.querySelectorAll('.polygonCanvas').forEach((ele) => draw(ele));
+    if (videoFrameState.length > 0) {
+      document.querySelectorAll('.polygonCanvas').forEach((ele) => draw(ele));
+    }
   }, [videoFrameState]);
 
   /* 카메라 영상 스트림 */

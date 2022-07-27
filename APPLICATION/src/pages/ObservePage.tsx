@@ -70,8 +70,7 @@ const ObservePage = () => {
   const setNewVideoSrcState = (arrIndex: number, newSrc: string) => {
     const newArr = videoFrameState;
     newArr[arrIndex].frameSrc = newSrc;
-    flushSync(() => setVideoFrameState([]));
-    flushSync(() => setVideoFrameState(newArr));
+    flushSync(() => setVideoFrameState([...newArr]));
   };
 
   const setProcessedSwrData = () => {
@@ -129,8 +128,7 @@ const ObservePage = () => {
                 group2Coord.length > 0;
               curVideoFrameState[camIdx].secondCanvas.coordinate = group2Coord;
             });
-            flushSync(() => setVideoFrameState([]));
-            flushSync(() => setVideoFrameState(curVideoFrameState));
+            flushSync(() => setVideoFrameState([...curVideoFrameState]));
             flushSync(() => setGetObserveState([...processedData]));
           }
         });
@@ -198,9 +196,6 @@ const ObservePage = () => {
               <ObserveCamInfo
                 videoFrameState={videoFrameState}
                 setVideoFrameState={setVideoFrameState}
-                camTabState={camTabState}
-                recordState={recordState}
-                setRecordState={setRecordState}
                 getObserveState={getObserveState}
                 setNewVideoSrcState={setNewVideoSrcState}
               />
