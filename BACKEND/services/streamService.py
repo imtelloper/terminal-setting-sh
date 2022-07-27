@@ -20,6 +20,7 @@ from fastapi.responses import JSONResponse
 import paramiko
 import time
 import subprocess
+import stat
 
 
 # W: 256 H: 192
@@ -350,18 +351,18 @@ class StreamService:
         sftp = paramiko.SFTPClient.from_transport(transport)
 
         # 관제 PC 내 폴더 생성
-        try:
-            sftp.chdir(folderPath)
-        except IOError:
-            sftp.chdir(self.savePath)
-            sftp.mkdir(self.currentDate)
-            sftp.chdir(self.currentDate)
-            sftp.mkdir(self.camArea)
-            sftp.chdir(self.camArea)
-            sftp.mkdir(self.camPort)
-            sftp.chdir(self.camPort)
-            sftp.mkdir("video")
-            sftp.mkdir("capture")
+        client = paramiko.SSHClient()
+        client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+        client.load_system_host_keys()
+        client.connect(host, username=userId, password=password)
+        client.invoke_shell()
+        cmd = 'ls -d ' + folderPath
+        stdin, stdout, stderr = client.exec_command(cmd)
+        if not str(stderr.read()):
+            return True
+        else:
+            cmd = 'sudo mkdir -p ' + recordPath
+            client.exec_command(cmd)
 
         # Upload - 파일 업로드
         remotepath = recordPath
