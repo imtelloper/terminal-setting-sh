@@ -11,18 +11,20 @@ import {
 import { MdDownload, MdGridView } from 'react-icons/md';
 import VideoPopup from '../components/VideoPopup';
 import { useNavigate } from 'react-router-dom';
+import AlarmPopup from '../components/AlarmPopup';
 
 const VideoArchive = () => {
   const navigation = useNavigate();
   const [isOpenPopupState, setIsOpenPopupState] = useState(false);
+  const [alarmPopupState, setAlarmPopupState] = useState(false);
   const [txtChangeState, setTxtChangeState] = useState('모두 다운로드');
 
   const openVideoPopup = () => {
     setIsOpenPopupState(!isOpenPopupState);
   };
 
-  const closeVideoPopup = () => {
-    setIsOpenPopupState(!isOpenPopupState);
+  const openAlarmPopup = () => {
+    setAlarmPopupState(!alarmPopupState);
   };
 
   const handleChecked = (e) => {
@@ -36,6 +38,11 @@ const VideoArchive = () => {
       ? setTxtChangeState('선택 다운로드')
       : setTxtChangeState('모두 다운로드');
   };
+
+  // const handleToggleBtn = (e) => {
+  //   const target = e.currentTarget;
+  //   target.classList.toggle('toggleBtnActive');
+  // };
 
   return (
     <div className="videoArchiveWrap">
@@ -67,9 +74,24 @@ const VideoArchive = () => {
                 </select>
               </div>
               <div className="leftCon leftIcon">
-                <MdGridView style={{ fontSize: '24px' }} />
-                <ViewHeadline style={{ fontSize: '24px' }} />
-                <ViewList style={{ fontSize: '24px' }} />
+                {/* <span onClick={handleToggleBtn}>*/}
+                {/*  <MdGridView style={{ fontSize: '24px' }} />*/}
+                {/*</span>*/}
+                {/*<span onClick={handleToggleBtn}>*/}
+                {/*  <ViewHeadline style={{ fontSize: '24px' }} />*/}
+                {/*</span>*/}
+                {/*<span onClick={handleToggleBtn}>*/}
+                {/*  <ViewList style={{ fontSize: '24px' }} />*/}
+                {/*</span>*/}
+                <span>
+                  <MdGridView style={{ fontSize: '24px' }} />
+                </span>
+                <span>
+                  <ViewHeadline style={{ fontSize: '24px' }} />
+                </span>
+                <span>
+                  <ViewList style={{ fontSize: '24px' }} />
+                </span>
               </div>
             </div>
             <div className="right">
@@ -77,7 +99,7 @@ const VideoArchive = () => {
                 <span className="iconL">
                   <MdDownload style={{ fontSize: '24px' }} />
                 </span>
-                <span className="txt">{txtChangeState}</span>
+                <span className="txt" onClick={openAlarmPopup}>{txtChangeState}</span>
               </button>
               <button className="iconBtnL normalPrimary">
                 <span className="iconL">
@@ -311,8 +333,10 @@ const VideoArchive = () => {
         {isOpenPopupState && (
           <VideoPopup
             openVideoPopup={openVideoPopup}
-            closeVideoPopup={closeVideoPopup}
           />
+        )}
+        {alarmPopupState && (
+          <AlarmPopup openAlarmPopup={openAlarmPopup} />
         )}
       </div>
     </div>

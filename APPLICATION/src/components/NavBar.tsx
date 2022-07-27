@@ -6,10 +6,12 @@ import { useNavigate } from 'react-router-dom';
 import Logo from '../images/safety.ai_logo.png';
 import {
   Apps,
-  ArrowDropDown, Delete,
+  ArrowDropDown,
+  Delete,
   FolderRounded,
-  Person, PhotoLibrary,
-  Settings
+  Person,
+  PhotoLibrary,
+  Settings,
 } from '@material-ui/icons';
 import { MdManageAccounts } from 'react-icons/md';
 import { BiLogOut } from 'react-icons/bi';
@@ -148,7 +150,11 @@ const NaviBar = () => {
           <div className="block" />
           <div className="btn-dropdown">
             <span>
-              <PhotoLibrary onClick={() => {navigate('/videoArchive')}}/>
+              <PhotoLibrary
+                onClick={() => {
+                  navigate('/videoArchive');
+                }}
+              />
             </span>
             <ul className="dropdown-list">
               <li>
@@ -167,7 +173,11 @@ const NaviBar = () => {
           </div>
           <div className="btn-dropdown">
             <span>
-              <Delete />
+              <Delete
+                onClick={() => {
+                  navigate('/bin');
+                }}
+              />
             </span>
             <ul className="dropdown-list">
               <li>menu1</li>
