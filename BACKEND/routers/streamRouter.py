@@ -57,6 +57,9 @@ def setCoordinates(coordinate, coordinates, groupIdx):
 # 기본 사람 감지 영상 출력
 @router.get("/", response_description="")
 async def streamVideo():
+    """
+     사람 감지 영상 출력
+    """
     print('isInternetConnected :', isInternetConnected)
     if isInternetConnected():
         await service.getTrackerId()
@@ -67,6 +70,11 @@ async def streamVideo():
 
 @router.get("/test", response_description="")
 async def test():
+    """
+    테스트
+
+    - 그룹 별 하루 동안의 감지 정보 출력 (yellow, red 영역 감지 횟수)
+    """
     # return await service.test()
     # return await service.isTodayObserveExist(2)
     # return await service.insertVideoRecordPath('62c796f09715acf6931d4e6b', '/home')
@@ -84,12 +92,10 @@ async def test():
 # 스크린샷 캡쳐
 @router.get("/capture", response_description="")
 async def screenCapture():
+    """
+    스크린샷 캡쳐
+    """
     return service.setCaptureGateOpen()
-
-# 영상 저장
-@router.get("/save", response_description="")
-async def saveVideo():
-    return service.saveFile()
 
 
 # 감지 중 날짜가 다음날로 넘어 갔을때 safetyLevel, observeSwitch 값들은 이월 시켜 줘야 한다.
@@ -106,6 +112,15 @@ async def addObserveData(groupNum):
 # 녹화 시작
 @router.get("/record-on", response_description="")
 async def videoRecordOn():
+    """
+    녹화 시작
+
+    - **Response body** -> true : 영상 녹화 시작
+    - **Response body** -> false : 영상 녹화 종료
+    --------------------------------------------
+    - **trackerId**: ObjectID
+    - **videoPath**: 영상 저장 경로
+    """
     serviceResult = service.setRecordGateOpen()
     trackerId = await service.getTrackerId()
     videoPath = service.getVideoRecordPath()
@@ -118,12 +133,25 @@ async def videoRecordOn():
 # 녹화 중지
 @router.get("/record-off", response_description="")
 async def videoRecordOff():
+    """
+    녹화 중지
+
+    - **Response body** -> true : 영상 녹화 시작
+    - **Response body** -> false : 영상 녹화 종료
+    """
     return service.setRecordGateClose()
 
 
 # 첫번째 그룹 좌표 설정
 @router.get("/area/{groupNum}/{coordinate1}/{coordinate2}/", response_description="")
 async def streamVideoFirstAreaSet(groupNum, coordinate1, coordinate2):
+    """
+    첫번째 그룹 좌표 설정
+
+    - **groupNum**: 그룹 번호 (1차/2차)
+    - **coordinate1**: 1차 그룹 yellow 좌표
+    - **coordinate2**: 1차 그룹 red 좌표
+    """
     print('groupNum     ', groupNum)
     print('coordinate1     ', coordinate1)
     print('coordinate2     ', coordinate2)
@@ -147,6 +175,15 @@ async def streamVideoFirstAreaSet(groupNum, coordinate1, coordinate2):
 # coordinate2 : 1차 그룹 red 좌표
 @router.get("/area/{groupNum}/{coordinate1}/{coordinate2}/{coordinate3}/{coordinate4}", response_description="")
 async def streamVideoSecondAreaSet(groupNum, coordinate1, coordinate2, coordinate3, coordinate4):
+    """
+    두번째 그룹 좌표 설정
+
+    - **groupNum**: 그룹 번호 (1차/2차)
+    - **coordinate1**: 1차 그룹 yellow 좌표
+    - **coordinate2**: 1차 그룹 red 좌표표
+    - **coordinate3**: 2차 그룹 yellow 좌표
+    - **coordinate4**: 2차 그룹 red 좌표
+    """
     print('2차 감지 groupNum     ', groupNum)
     print('2차 감지 coordinate1     ', coordinate1)
     print('2차 감지 coordinate2     ', coordinate2)
@@ -169,3 +206,5 @@ async def streamVideoSecondAreaSet(groupNum, coordinate1, coordinate2, coordinat
     print('streamVideoAreaSet 2data :', coordinates2)
     return StreamingResponse(service.video_streaming(coordinates1, coordinates2),
                              media_type="multipart/x-mixed-replace; boundary=frame")
+
+

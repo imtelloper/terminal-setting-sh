@@ -14,8 +14,11 @@ router = APIRouter(
     responses={404: {"description": "not found"}, 200: {"description": "ok"}},
 )
 
-@router.get("/reboot/", response_description="")
+@router.get("/reboot/")
 async def reboot():
+    """
+    시스템 재실행
+    """
     os.system("echo reboot")
     os.system("sudo reboot")
     return "reboot"
@@ -59,6 +62,13 @@ async def getRtu():
 
 @router.get("/info", response_description="")
 async def getInfo():
+    """
+    연결 정보
+
+    - **ip**: 현재 IP 주소
+    - **camPort**: 연결 카메라
+    - **area**: 설치 공간
+    """
     try:
         sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         sock.connect(("pwnbit.kr", 443))

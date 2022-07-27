@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import '../style/DesignSystem.scss';
 import '../style/pages/VideoArchive.scss';
 import {
@@ -9,15 +9,40 @@ import {
   ViewList,
 } from '@material-ui/icons';
 import { MdDownload, MdGridView } from 'react-icons/md';
-import { BiDownload } from 'react-icons/all';
+import VideoPopup from '../components/VideoPopup';
+import { useNavigate } from 'react-router-dom';
 
 const VideoArchive = () => {
+  const navigation = useNavigate();
+  const [isOpenPopupState, setIsOpenPopupState] = useState(false);
+  const [txtChangeState, setTxtChangeState] = useState('모두 다운로드');
+
+  const openVideoPopup = () => {
+    setIsOpenPopupState(!isOpenPopupState);
+  };
+
+  const closeVideoPopup = () => {
+    setIsOpenPopupState(!isOpenPopupState);
+  };
+
+  const handleChecked = (e) => {
+    const isChecked = e.currentTarget.checked;
+    // if (isChecked > 0) {
+    //   setTxtChangeState('선택 다운로드');
+    // } else {
+    //   setTxtChangeState('모두 다운로드');
+    // }
+    isChecked > 0
+      ? setTxtChangeState('선택 다운로드')
+      : setTxtChangeState('모두 다운로드');
+  };
+
   return (
     <div className="videoArchiveWrap">
       <div className="videoArchiveContainer">
         <div className="videoTitleBox">
           <div className="title">
-            <Videocam style={{ fontSize: '24px' }} />
+            <Videocam style={{ fontSize: '28px' }} />
             <span>영상 보관함</span>
           </div>
           <div className="titleCon">
@@ -52,7 +77,7 @@ const VideoArchive = () => {
                 <span className="iconL">
                   <MdDownload style={{ fontSize: '24px' }} />
                 </span>
-                <span className="txt">모두 다운로드</span>
+                <span className="txt">{txtChangeState}</span>
               </button>
               <button className="iconBtnL normalPrimary">
                 <span className="iconL">
@@ -65,95 +90,230 @@ const VideoArchive = () => {
         </div>
         <div className="videoContentBox">
           <div className="videoContent">
-            <div className="videoBox">
+            <div className="videoBox" onClick={openVideoPopup}>
+              <input type="checkbox" onChange={handleChecked} />
               <div className="videoImg" />
               <div className="videoTitle">
                 <span>H1공장크레인_CAM2_20220715_13:00</span>
                 <span className="videoIcon">
-                  <Videocam />
+                  <Videocam style={{ fontSize: '28px', color: '#979797' }} />
                 </span>
               </div>
             </div>
-            <div className="videoBox">
+            <div className="videoBox" onClick={openVideoPopup}>
+              <input type="checkbox" onChange={handleChecked} />
               <div className="videoImg" />
               <div className="videoTitle">
                 <span>H1공장크레인_CAM2_20220715_13:00</span>
                 <span className="videoIcon">
-                  <Videocam />
+                  <Videocam style={{ fontSize: '28px', color: '#979797' }} />
                 </span>
               </div>
             </div>
-            <div className="videoBox">
+            <div className="videoBox" onClick={openVideoPopup}>
+              <input type="checkbox" onChange={handleChecked} />
               <div className="videoImg" />
               <div className="videoTitle">
                 <span>H1공장크레인_CAM2_20220715_13:00</span>
                 <span className="videoIcon">
-                  <Videocam />
+                  <Videocam style={{ fontSize: '28px', color: '#979797' }} />
                 </span>
               </div>
             </div>
-            <div className="videoBox">
+            <div className="videoBox" onClick={openVideoPopup}>
+              <input type="checkbox" onChange={handleChecked} />
               <div className="videoImg" />
               <div className="videoTitle">
                 <span>H1공장크레인_CAM2_20220715_13:00</span>
                 <span className="videoIcon">
-                  <Videocam />
+                  <Videocam style={{ fontSize: '28px', color: '#979797' }} />
                 </span>
               </div>
             </div>
-            <div className="videoBox">
+            <div className="videoBox" onClick={openVideoPopup}>
+              <input type="checkbox" onChange={handleChecked} />
               <div className="videoImg" />
               <div className="videoTitle">
                 <span>H1공장크레인_CAM2_20220715_13:00</span>
                 <span className="videoIcon">
-                  <Videocam />
+                  <Videocam style={{ fontSize: '28px', color: '#979797' }} />
                 </span>
               </div>
             </div>
-            <div className="videoBox">
+            <div className="videoBox" onClick={openVideoPopup}>
+              <input type="checkbox" onChange={handleChecked} />
               <div className="videoImg" />
               <div className="videoTitle">
                 <span>H1공장크레인_CAM2_20220715_13:00</span>
                 <span className="videoIcon">
-                  <Videocam />
+                  <Videocam style={{ fontSize: '28px', color: '#979797' }} />
                 </span>
               </div>
             </div>
-            <div className="videoBox">
+            <div className="videoBox" onClick={openVideoPopup}>
+              <input type="checkbox" />
               <div className="videoImg" />
               <div className="videoTitle">
                 <span>H1공장크레인_CAM2_20220715_13:00</span>
                 <span className="videoIcon">
-                  <Videocam />
+                  <Videocam style={{ fontSize: '28px', color: '#979797' }} />
                 </span>
               </div>
             </div>
-            <div className="videoBox">
+            <div className="videoBox" onClick={openVideoPopup}>
+              <input type="checkbox" onChange={handleChecked} />
               <div className="videoImg" />
               <div className="videoTitle">
                 <span>H1공장크레인_CAM2_20220715_13:00</span>
                 <span className="videoIcon">
-                  <Videocam />
+                  <Videocam style={{ fontSize: '28px', color: '#979797' }} />
                 </span>
               </div>
             </div>
           </div>
-        </div>
-        <div className="videoContent">
-          <div className="videoBox">
-            <div className="videoImg" />
-            <div className="videoTitle">
-              <span>H1공장크레인_CAM2_20220715_13:00</span>
-              <span className="videoIcon">
-                <Videocam />
-              </span>
+          <div className="videoContent">
+            <div className="videoBox" onClick={openVideoPopup}>
+              <input type="checkbox" onChange={handleChecked} />
+              <div className="videoImg" />
+              <div className="videoTitle">
+                <span>H1공장크레인_CAM2_20220715_13:00</span>
+                <span className="videoIcon">
+                  <Videocam style={{ fontSize: '28px', color: '#979797' }} />
+                </span>
+              </div>
+            </div>
+            <div className="videoBox" onClick={openVideoPopup}>
+              <input type="checkbox" onChange={handleChecked} />
+              <div className="videoImg" />
+              <div className="videoTitle">
+                <span>H1공장크레인_CAM2_20220715_13:00</span>
+                <span className="videoIcon">
+                  <Videocam style={{ fontSize: '28px', color: '#979797' }} />
+                </span>
+              </div>
+            </div>
+            {/* 클래스명 + s_ => 스켈레톤박스 */}
+            <div className="s_videoBox videoBox">
+              <div className="s_videoImg videoImg" />
+              <div className="s_videoTitle videoTitle">
+                <span />
+                <span />
+              </div>
+            </div>
+            <div className="s_videoBox videoBox">
+              <div className="s_videoImg videoImg" />
+              <div className="s_videoTitle videoTitle">
+                <span />
+                <span />
+              </div>
+            </div>
+            <div className="s_videoBox videoBox">
+              <div className="s_videoImg videoImg" />
+              <div className="s_videoTitle videoTitle">
+                <span />
+                <span />
+              </div>
+            </div>
+            <div className="s_videoBox videoBox">
+              <div className="s_videoImg videoImg" />
+              <div className="s_videoTitle videoTitle">
+                <span />
+                <span />
+              </div>
+            </div>
+            <div className="s_videoBox videoBox">
+              <div className="s_videoImg videoImg" />
+              <div className="s_videoTitle videoTitle">
+                <span />
+                <span />
+              </div>
+            </div>
+            <div className="s_videoBox videoBox">
+              <div className="s_videoImg videoImg" />
+              <div className="s_videoTitle videoTitle">
+                <span />
+                <span />
+              </div>
+            </div>
+          </div>
+          <div className="videoContent">
+            <div className="s_videoBox videoBox">
+              <div className="s_videoImg videoImg" />
+              <div className="s_videoTitle videoTitle">
+                <span />
+                <span />
+              </div>
+            </div>
+            <div className="s_videoBox videoBox">
+              <div className="s_videoImg videoImg" />
+              <div className="s_videoTitle videoTitle">
+                <span />
+                <span />
+              </div>
+            </div>
+            <div className="s_videoBox videoBox">
+              <div className="s_videoImg videoImg" />
+              <div className="s_videoTitle videoTitle">
+                <span />
+                <span />
+              </div>
+            </div>
+            <div className="s_videoBox videoBox">
+              <div className="s_videoImg videoImg" />
+              <div className="s_videoTitle videoTitle">
+                <span />
+                <span />
+              </div>
+            </div>
+            <div className="s_videoBox videoBox">
+              <div className="s_videoImg videoImg" />
+              <div className="s_videoTitle videoTitle">
+                <span />
+                <span />
+              </div>
+            </div>
+            <div className="s_videoBox videoBox">
+              <div className="s_videoImg videoImg" />
+              <div className="s_videoTitle videoTitle">
+                <span />
+                <span />
+              </div>
+            </div>
+            <div className="s_videoBox videoBox">
+              <div className="s_videoImg videoImg" />
+              <div className="s_videoTitle videoTitle">
+                <span />
+                <span />
+              </div>
+            </div>
+            <div className="s_videoBox videoBox">
+              <div className="s_videoImg videoImg" />
+              <div className="s_videoTitle videoTitle">
+                <span />
+                <span />
+              </div>
             </div>
           </div>
         </div>
+
         <div className="bottomBtnBox">
-          <button className="btnR normalPrimary">사진 보관함</button>
+          <button
+            className="btnR normalPrimary"
+            onClick={() => {
+              navigation('/imgArchive');
+            }}
+          >
+            사진 보관함
+          </button>
           <div className="pageBtn" />
         </div>
+
+        {isOpenPopupState && (
+          <VideoPopup
+            openVideoPopup={openVideoPopup}
+            closeVideoPopup={closeVideoPopup}
+          />
+        )}
       </div>
     </div>
   );
