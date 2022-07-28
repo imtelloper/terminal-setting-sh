@@ -81,6 +81,8 @@ class StreamService:
 
         # 각종 파일 저장 경로 폴더 생성
         if platform.platform() != 'macOS-12.4-arm64-arm-64bit':
+            print('self.videoFolderPath', self.videoFolderPath)
+            print('self.screenShotFolderPath',self.screenShotFolderPath)
             makedirs(self.videoFolderPath)
             makedirs(self.screenShotFolderPath)
         print('##### CONNECTED CAMERA ##### : ', self.listPorts)
@@ -587,7 +589,7 @@ class StreamService:
                     # cv2.imshow('frame', result_img)
                 else:
                     cv2.destroyAllWindows()
-                    self.saveFile(self.videoFolderPath, self.videoRecordPath)
+                    # self.saveFile(self.videoFolderPath, self.videoRecordPath)
 
                 # 스크린 캡쳐
                 if self.captureGate:
