@@ -33,6 +33,9 @@ const DetailViewPage = () => {
       dangerZone: () => setIsOpenDangerZoneState(!isOpenDangerZoneState),
     };
     type[dType]();
+    if (dType === 'calibration') {
+      Api.stream.calibationImgCapture('192.168.0.4');
+    }
   };
 
   /* INIT EFFECT */
