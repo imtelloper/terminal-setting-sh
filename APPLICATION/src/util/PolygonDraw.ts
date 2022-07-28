@@ -1,4 +1,5 @@
 export default class PolygonDraw {
+  /* 무게 중심 구하기 */
   static getCentroid = (points) => {
     let area = 0;
     let cx = 0;

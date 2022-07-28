@@ -84,6 +84,7 @@ async def findData(data=Body(...)):
     - body example -> **{ "date": "2022-06-22" }**
     """
     jsonData = jsonable_encoder(data)
+    print('jsonData',jsonData)
     serviceResult = await service.searchDatas(jsonData)
     resultArr = []
     for res in serviceResult:

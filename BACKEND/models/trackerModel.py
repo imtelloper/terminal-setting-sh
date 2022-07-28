@@ -14,7 +14,7 @@ class Tracker(BaseModel):
     savingPath: str = Field(..., description="현재 카메라의 각종 파일 저장 경로")
     sensingModel: str = Field(..., description="AI 감지 모델")
     calibImg: str = Field(..., description="calibration 설정시 보여지는 이미지")
-    baseLine: float = Field(..., description="기준선 x, y 좌표, calibration 설정시 저장. 단위(m).       ex) 123,234,456,234&12.5")
+    baseLine: str = Field(..., description="기준선 x, y 좌표, calibration 설정시 저장. 단위(m).       ex) 123,234,456,234&12.5")
     dangerLine: str = Field(..., description="위험구간 설정 Yellow Zone, Green Zone 설정. 단위(m)  ex.)3.0&6.5")
     sensingGroup1: Optional[str] = Field(..., description="감지 그룹 1의 좌표 Green & Yellow(1차 감지) & Red(2차 감지)   ex.) 234,456,123&234,456,123&234,456,123")
     sensingGroup2: Optional[str] = Field(..., description="감지 그룹 2의 좌표 Green & Yellow(1차 감지) & Red(2차 감지)   ex.) 234,456,123&234,456,123&234,456,123")
@@ -57,7 +57,7 @@ class UpdateTracker(BaseModel):
     savingPath: Optional[str] = None
     sensingModel: Optional[str] = None
     calibImg: Optional[str] = None
-    baseLine: Optional[float] = None
+    baseLine: Optional[str] = None
     dangerLine: Optional[str] = None
     sensingGroup1: Optional[str] = None
     sensingGroup2: Optional[str] = None
@@ -78,7 +78,7 @@ class UpdateTracker(BaseModel):
                 "savingPath": '/home/interx/',
                 "sensingModel": 'small',
                 "calibImg": '/home/interx/',
-                "baseLine": 3,
+                "baseLine": '',
                 "dangerLine": '3.0&6.5',
                 "sensingGroup1": None,
                 "sensingGroup2": None,

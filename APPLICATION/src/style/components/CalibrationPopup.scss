@@ -40,13 +40,13 @@ div.calibrationZoneContainer {
       display: flex;
       flex-direction: column;
       position: relative;
-      div.canvas{
+      div.calibCanvasBox{
         width: 512px;
         height: 384px;
         background-color: pink;
         margin: 8px;
         position: relative;
-        canvas{
+        canvas.calibCanvas{
           width: 512px;
           height: 384px;
         }

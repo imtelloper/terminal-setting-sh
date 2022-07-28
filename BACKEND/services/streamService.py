@@ -426,7 +426,7 @@ class StreamService:
         while self.cameraOnOff:
             k = cv2.waitKey(1) & 0xFF
             timeCnt += 1
-            time.sleep(0.08)
+            time.sleep(0.05)
             ret, frame = self.video.read()
             if frame is None: return
             self.camImg = frame.copy()

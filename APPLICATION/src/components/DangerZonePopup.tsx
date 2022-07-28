@@ -1,25 +1,20 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import '../style/components/DangerZonePopup.scss';
 // import dangerZoneImg from '../images/dangerImg.png';
 // import { MdDesignServices } from 'react-icons/md';
 // import { Undo } from '@material-ui/icons';
 import { useNavigate } from 'react-router-dom';
 import CalibrationPopup from './CalibrationPopup';
+import Api from '../api/Api';
+import { useSWRState } from '../fetcher/useSWRState';
 
-const DangerZonePopup = ({ openClosePopup }) => {
+const DangerZonePopup = ({ setIsOpenDangerZoneState }) => {
   const navigate = useNavigate();
-  const [isOpenCalibrationState, setIsOpenCalibrationState] = useState(false);
+  const { data: swrState, mutate: setSwrState } = useSWRState();
   const [yellowTextState, setYellowTextState] = useState('');
-  // eslint-disable-next-line react-hooks/rules-of-hooks
   const [greenTextState, setGreenTextState] = useState('');
-
-  const openCalibrationPopup = () => {
-    setIsOpenCalibrationState(!isOpenCalibrationState);
-  };
-
-  const closeCalibrationPopup = () => {
-    setIsOpenCalibrationState(!isOpenCalibrationState);
-  };
+  const inputGreenRef = useRef(null);
+  const inputYellowRef = useRef(null);
 
   const handleYellowText = (e) => {
     setYellowTextState(e.currentTarget.value);
@@ -29,31 +24,47 @@ const DangerZonePopup = ({ openClosePopup }) => {
     setGreenTextState(e.currentTarget.value);
   };
 
-  // input박스에 숫자 입력시 input버튼 및 확인버튼 활성화
-  const yellowInputEl = document.querySelector('.yellowInput');
-  const greenInputEl = document.querySelector('.greenInput');
-  const checkBtnEl = document.querySelector('.checkBtn');
-  const zoneImgEl = document.querySelector('.dangerZoneImg');
+  useEffect(() => {
+    const focusElement = document.activeElement.id;
+    console.log('focusElement', focusElement);
+  }, [document.activeElement.id]);
 
-  if (yellowTextState.length > 0) {
-    yellowInputEl?.classList.add('btnBoxActive');
-    zoneImgEl?.classList.add('yellowZoneImg');
-  } else {
-    yellowInputEl?.classList.remove('btnBoxActive');
-    zoneImgEl?.classList.remove('yellowZoneImg');
-  }
+  useEffect(() => {
+    // input박스에 숫자 입력시 input버튼 및 확인버튼 활성화
+    const checkBtnEl = document.querySelector('.checkBtn');
+    yellowTextState.length > 0 && greenTextState.length > 0
+      ? checkBtnEl?.classList.add('btnActive')
+      : checkBtnEl?.classList.remove('btnActive');
+  }, [yellowTextState, greenTextState]);
 
-  if (greenTextState.length > 0) {
-    greenInputEl?.classList.add('btnBoxActive');
-    zoneImgEl?.classList.add('greenZoneImg');
-  } else {
-    greenInputEl?.classList.remove('btnBoxActive');
-    zoneImgEl?.classList.remove('greenZoneImg');
-  }
+  const yellowGreenZoneActive = (color, isActive) => {
+    const inputEl = document.querySelector(`.${color}Input`);
+    const zoneImgEl = document.querySelector('.dangerZoneImg');
+    if (isActive) {
+      inputEl?.classList.add('btnBoxActive');
+      zoneImgEl?.classList.add(`${color}ZoneImg`);
+    } else {
+      inputEl?.classList.remove('btnBoxActive');
+      zoneImgEl?.classList.remove(`${color}ZoneImg`);
+    }
+  };
 
-  yellowTextState.length > 0 && greenTextState.length > 0
-    ? checkBtnEl?.classList.add('btnActive')
-    : checkBtnEl?.classList.remove('btnActive');
+  /* INIT EFFECT */
+  useEffect(() => {
+    inputGreenRef.current && inputGreenRef.current.focus();
+    yellowGreenZoneActive('green', true);
+  }, []);
+
+  const handleUpdateBaseLine = () => {
+    Api.tracker
+      .modifyOneData(swrState.curTrackerId, {
+        dangerLine: `${yellowTextState}&${greenTextState}`,
+      })
+      .finally(() => {
+        setIsOpenDangerZoneState(false);
+      })
+      .catch((err) => console.error(err));
+  };
 
   return (
     <>
@@ -71,7 +82,7 @@ const DangerZonePopup = ({ openClosePopup }) => {
                   <button
                     className="settingAlarm"
                     datatype="dangerZone"
-                    onClick={openClosePopup}
+                    onClick={() => setIsOpenDangerZoneState(false)}
                   >
                     CALIBRATION 세팅 필요
                   </button>
@@ -79,28 +90,38 @@ const DangerZonePopup = ({ openClosePopup }) => {
                 <div className="rightCon">
                   <span>Green Zone</span>
                   <input
-                    id="numInput"
+                    id="greenNumInput"
                     className="greenInput"
                     type="text"
                     placeholder="00.0"
                     onChange={handleGreenText}
                     value={greenTextState}
+                    ref={inputGreenRef}
+                    onClick={() => {
+                      yellowGreenZoneActive('green', true);
+                      yellowGreenZoneActive('yellow', false);
+                    }}
                   />
-                  <label htmlFor="numInput" className="numLabel">
+                  <label htmlFor="greenNumInput" className="numLabel">
                     m
                   </label>
                 </div>
                 <div className="rightCon">
                   <span>Yellow Zone</span>
                   <input
-                    id="numInput"
+                    id="yellowNumInput"
                     className="yellowInput"
                     type="text"
                     placeholder="00.0"
                     onChange={handleYellowText}
                     value={yellowTextState}
+                    ref={inputYellowRef}
+                    onClick={() => {
+                      yellowGreenZoneActive('yellow', true);
+                      yellowGreenZoneActive('green', false);
+                    }}
                   />
-                  <label htmlFor="numInput" className="numLabel">
+                  <label htmlFor="yellowNumInput" className="numLabel">
                     m
                   </label>
                 </div>
@@ -118,17 +139,16 @@ const DangerZonePopup = ({ openClosePopup }) => {
                 <button
                   className="btnR normalPrimary"
                   datatype="dangerZone"
-                  onClick={openClosePopup}
+                  onClick={() => setIsOpenDangerZoneState(false)}
                 >
                   취소
                 </button>
-                <button className="checkBtn">확인</button>
+                <button className="checkBtn" onClick={handleUpdateBaseLine}>
+                  확인
+                </button>
               </div>
             </div>
           </div>
-          {isOpenCalibrationState && (
-            <CalibrationPopup openClosePopup={openClosePopup} />
-          )}
         </div>
       </div>
     </>

@@ -10,6 +10,7 @@ import { useSWRState } from '../fetcher/useSWRState';
 import { useNavigate } from 'react-router-dom';
 import dayjs from 'dayjs';
 import { camPort1Ip } from '../initDatas/initVideoFrameData';
+import { flushSync } from 'react-dom';
 
 const DetailViewPage = () => {
   const { data: swrState, mutate: setSwrState } = useSWRState();
@@ -19,6 +20,7 @@ const DetailViewPage = () => {
   const [imgSrcState, setImgSrcState] = useState(
     'http://192.168.0.4:81/api/stream/'
   );
+  const [calibImgSrcState, setCalibImgSrcState] = useState('');
   const [imgArchiveState, setImgArchiveState] = useState([]);
   const levelColor = {
     yellow: '#ffca2b',
@@ -32,9 +34,37 @@ const DetailViewPage = () => {
       calibration: () => setIsOpenCalibrationState(!isOpenCalibrationState),
       dangerZone: () => setIsOpenDangerZoneState(!isOpenDangerZoneState),
     };
-    type[dType]();
+
+    /* calibration 오픈시 이미지 캡쳐 */
     if (dType === 'calibration') {
-      Api.stream.calibationImgCapture('192.168.0.4');
+      Api.stream
+        .calibrationImgCapture('192.168.0.4')
+        .then((res) => {
+          Api.tracker
+            .findData({
+              area: swrState.curTrackerArea,
+              camPort: swrState.curCamPort,
+            })
+            .then((tracker) => {
+              console.log('🍋🍋🍋🍋🍋🍋tracker', tracker);
+              console.log('🍋🍋🍋🍋🍋🍋tracker', tracker[0].calibImg);
+              flushSync(() => {
+                setCalibImgSrcState(
+                  `http://${camPort1Ip}:81/${tracker[0].calibImg
+                    .split('/')
+                    .slice(5)
+                    .join('/')}`
+                );
+              });
+            })
+            .finally(() => {
+              type[dType]();
+            })
+            .catch((err) => console.error(err));
+        })
+        .catch((err) => console.error(err));
+    } else {
+      type[dType]();
     }
   };
 
@@ -104,6 +134,7 @@ const DetailViewPage = () => {
     // }
   };
 
+  /* 감지 이력 리스트 */
   const imgCaptureHistoryMap = imgArchiveState.map((obj) => (
     <p
       datatype={obj.path}
@@ -266,10 +297,13 @@ const DetailViewPage = () => {
           </div>
 
           {isOpenDangerZoneState && (
-            <DangerZonePopup openClosePopup={openClosePopup} />
+            <DangerZonePopup setIsOpenDangerZoneState={setIsOpenDangerZoneState}/>
           )}
           {isOpenCalibrationState && (
-            <CalibrationPopup openClosePopup={openClosePopup} />
+            <CalibrationPopup
+              calibImgSrcState={calibImgSrcState}
+              setIsOpenCalibrationState={setIsOpenCalibrationState}
+            />
           )}
         </div>
       </div>

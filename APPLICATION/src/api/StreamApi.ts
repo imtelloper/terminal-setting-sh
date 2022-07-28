@@ -19,7 +19,7 @@ export default class StreamApi {
     }
   };
 
-  calibationImgCapture = async (ip) => {
+  calibrationImgCapture = async (ip) => {
     try {
       const res = await axios.get(`http://${ip}:81/api/stream/calib-capture`);
       return res.status === 200 ? res.data : 'failed capture calibation img';

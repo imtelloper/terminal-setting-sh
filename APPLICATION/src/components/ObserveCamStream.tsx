@@ -20,6 +20,7 @@ const ObserveCamStream = ({
     yellow: '#FFFA7C',
     red: '#FF374B',
   };
+  const { data: swrState, mutate: setSwrState } = useSWRState();
 
   const getStateCoordinate = (arrIndex: number, itemID: string) =>
     videoFrameState[arrIndex][itemID].coordinate;
@@ -58,11 +59,42 @@ const ObserveCamStream = ({
     const redSensingPoints = [];
     const yellowSensingPoints = [];
     const greenSensingPoints = [];
-    const calibrate = PolygonDraw.getDistanceRate(200, 5);
+    const baseLineSplited = swrState?.curCamBaseLine?.split('&');
+    const baseLineCooldiate = baseLineSplited[0].split(',');
+    let baseCoords = [];
+    const baseCoordsBox = [];
+    baseLineCooldiate.forEach((coord) => {
+      console.log('coord', coord);
+      baseCoords.push(parseInt(coord, 10));
+      if (baseCoords.length > 1) {
+        baseCoordsBox.push(baseCoords);
+        baseCoords = [];
+      }
+    });
+    const baseLineMeter = baseLineSplited[1];
+    console.log('baseLineMeter', baseLineMeter);
+    console.log('baseLineCooldiate', baseLineCooldiate);
+    console.log('baseCoordsBox', baseCoordsBox);
+    const baseLineDistance = PolygonDraw.getTwoPointsDistance(
+      baseCoordsBox[0],
+      baseCoordsBox[1]
+    );
+    console.log('baseLineDistance', baseLineDistance);
+    const calibrate = PolygonDraw.getDistanceRate(200, baseLineMeter ?? 5);
     // console.log('calibrate', calibrate); // 13.2  ,  1m당 13.2px
-    const yellowSetMeter = 0.6; // 5m
+
+    console.log(
+      "swrState?.curCamDangerLine?.split('&')[0]",
+      swrState?.curCamDangerLine?.split('&')[0]
+    );
+    console.log(
+      "swrState?.curCamDangerLine?.split('&')[1]",
+      swrState?.curCamDangerLine?.split('&')[1]
+    );
+    const dangerSplited = swrState?.curCamDangerLine?.split('&');
+    const yellowSetMeter: number = parseFloat(dangerSplited[0]) ?? 0.6; // dangerLine yellow m
     const yellowDistancePx = calibrate * yellowSetMeter; // 5m = 66px
-    const greenSetMeter = 1.2; // 5m
+    const greenSetMeter: number = parseFloat(dangerSplited[1]) ?? 1.6; // dangerLine green m
     const greenDistancePx = calibrate * greenSetMeter; // 5m = 66px
 
     // 기준 좌표에서 각 66px만큼 더 커진
