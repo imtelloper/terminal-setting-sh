@@ -356,8 +356,8 @@ class StreamService:
 
     # 관제 PC에 파일 저장
     def saveFile(self, folderPath, recordPath):
-        print('###### folderPath',folderPath)
-        print('###### recordPath',recordPath)
+        # print('###### folderPath',folderPath)
+        # print('###### recordPath',recordPath)
         #관제 PC
         host = "192.168.0.4"
         port = 22  # 고정
@@ -485,26 +485,26 @@ class StreamService:
                 fstGroupSensing = None
                 secGroupSensing = None
 
-                print('rsigs :', rsigs)
+                # print('rsigs :', rsigs)
                 testSigs = [[0,1], [2,0], [2,0]]
                 fstGroup =[]
                 secGroup =[]
                 if len(rsigs)>0 and len(rsigs[0])>0:
                     for person in rsigs:
-                        print('person',person)
+                        # print('person',person)
                         fstGroup.append(person[0])
                         if len(person)>1:
                             secGroup.append(person[1])
 
-                print('첫번째 사람들만', fstGroup)
-                print('두번째 사람들만', secGroup)
+                # print('첫번째 사람들만', fstGroup)
+                # print('두번째 사람들만', secGroup)
 
                 if len(fstGroup) > 0 :
-                    print('첫번째 그룹 ', max(fstGroup))
+                    # print('첫번째 그룹 ', max(fstGroup))
                     fstGroupSensing = max(fstGroup)
 
                 if len(secGroup) > 0:
-                    print('두번째 그룹 ', max(secGroup))
+                    # print('두번째 그룹 ', max(secGroup))
                     secGroupSensing = max(secGroup)
 
                 # timeCnt가 낮을수록 Yellow, Red 업데이트 속도 빨라짐. 너무 빠르면 성능에 문제 있을 수 있음
