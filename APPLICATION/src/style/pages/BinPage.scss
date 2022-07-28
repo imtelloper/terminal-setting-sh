@@ -1,14 +1,16 @@
 @import '../../style/color.scss';
-div.videoArchiveWrap{
+div.binWrap{
   width: 100%;
   height: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
-  div.videoArchiveContainer{
+  position: relative;
+  div.binContainer{
     width: calc(100% - 48px);
     height: calc(100% - 48px);
-    div.videoTitleBox{
+    position: relative;
+    div.binTitleBox{
       width: 100%;
 
       div.title{
@@ -16,9 +18,6 @@ div.videoArchiveWrap{
         align-items: center;
         font-size: 28px;
         font-weight: 700;
-        span{
-          margin-left: 12px;
-        }
       }
 
       div.titleCon{
@@ -26,14 +25,17 @@ div.videoArchiveWrap{
         display: flex;
         justify-content: space-between;
         margin: 12px 0 28px 0;
+
         div.left{
           display: flex;
           align-items: center;
+
           div.leftCon{
             height: 40px;
             display: flex;
             align-items: center;
             margin-right: 16px;
+            cursor: pointer;
             span{
               margin-right: 16px;
             }
@@ -68,7 +70,6 @@ div.videoArchiveWrap{
               border-radius: 2px;
               margin-right: 0;
               transition: 0.3s;
-              cursor: pointer;
               &.toggleBtnActive{
                 background-color: $blue-500;
                 color: $white;
@@ -89,17 +90,20 @@ div.videoArchiveWrap{
         }
       }
     }
-    div.videoContentBox{
+
+    //1. gridView
+    div.binGridView{
       width: 100%;
       height: calc(100% - 192px);
       position: relative;
-      div.videoContent{
+      //display: none;
+      div.binContent{
         width: 100%;
         height: 33.33%;
         display: flex;
         justify-content: space-between;
         position: relative;
-        div.videoBox{
+        div.binBox{
           width: calc((100% - 112px)/8);
           height: calc(100% - 10.66px);
           background-color: $white;
@@ -117,15 +121,14 @@ div.videoArchiveWrap{
             left: 16px;
             z-index: 10;
           }
-          div.videoImg{
+          div.binImg{
             width: 100%;
             height: 62.5%;
-            //background-color: pink;
             border-top-left-radius: 8px;
             border-top-right-radius: 8px;
             cursor: pointer;
           }
-          div.videoTitle{
+          div.binTitle{
             width: 100%;
             height: 37.5%;
             padding: 16px;
@@ -147,11 +150,11 @@ div.videoArchiveWrap{
           }
         }
         //스켈레톤 박스 css
-        div.s_videoBox{
-          div.s_videoImg{
+        div.s_binBox{
+          div.s_binImg{
             background-color: #E2E2E2;
           }
-          div.s_videoTitle{
+          div.s_binTitle{
             width: 100%;
             span{
               display: block;
@@ -165,14 +168,132 @@ div.videoArchiveWrap{
                 top: 32px;
                 left: 16px;
               }
-
             }
           }
         }
       }
     }
+
+    //2. viewHeadline
+    div.viewHeadline{
+      width: 100%;
+      height: calc(100% - 192px);
+      position: relative;
+      background-color: #0A1A7A;
+      display: none;
+      div.binContent{
+        width: 100%;
+        height: 100%;
+        overflow-y: scroll;
+        div.binBox{
+          width: 100%;
+          height: 40px;
+          display: flex;
+          align-items: center;
+          padding: 0 30px;
+          box-sizing: border-box;
+
+          &:first-child{
+            height: 52px;
+          }
+          &:nth-child(2n){
+            background-color: rgba(255,255,255,0.6);
+          }
+          &:nth-child(2n+1){
+            background-color: $background;
+          }
+          div{
+            display: flex;
+            align-items: center;
+          }
+          div.binInput{
+            width: 10%;
+          }
+          div.binTitle{
+            width: 30%;
+            span{
+              margin-left: 8px;
+            }
+          }
+          div.binDate{
+            width: 30%;
+          }
+          div.binSize{
+            width: 20%;
+          }
+          div.binGroup{
+            width: 10%;
+          }
+        }
+        &::-webkit-scrollbar{
+          display: none;
+        }
+      }
+    }
+
+    //3.listView
+    div.listView{
+      width: 100%;
+      height: calc(100% - 192px);
+      position: relative;
+      display: none;
+
+      div.binContent{
+        width: 100%;
+        height: 100%;
+        overflow-y: scroll;
+        div.binBox{
+          width: 100%;
+          height: 80px;
+          display: flex;
+          align-items: center;
+          padding: 0 30px;
+          box-sizing: border-box;
+          margin-bottom: 20px;
+          &:first-child{
+            height: 52px;
+            margin-bottom: 0;
+          }
+          div{
+            height: 100%;
+            display: flex;
+            align-items: center;
+          }
+          div.binInput{
+            width: 5%;
+          }
+          div.binPreview{
+            width: 10%;
+            img{
+              width: 116px;
+              height: 80px;
+            }
+          }
+          div.binTitle{
+            width: 30%;
+            span{
+              margin-left: 8px;
+            }
+          }
+          div.binDate{
+            width: 25%;
+          }
+          div.binSize{
+            width: 20%;
+          }
+          div.binGroup{
+            width: 10%;
+          }
+        }
+        &::-webkit-scrollbar{
+          display: none;
+        }
+      }
+    }
+
     div.bottomBtnBox{
       margin: 24px 0;
+      position: relative;
     }
   }
 }

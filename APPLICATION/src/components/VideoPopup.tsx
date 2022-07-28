@@ -2,7 +2,7 @@ import React from 'react';
 import '../style/DesignSystem.scss';
 import '../style/components/VideoPopup.scss';
 
-const VideoPopup = ({ closeVideoPopup }) => {
+const VideoPopup = ({ openVideoPopup }) => {
   return (
     <div className="videoPopupContainer">
       <div className="videoPopupBox">
@@ -13,10 +13,7 @@ const VideoPopup = ({ closeVideoPopup }) => {
           <video />
         </div>
         <div className="bottomBtnBox">
-          <button className="btnR normalPrimary" onClick={closeVideoPopup}>
-            취소
-          </button>
-          <button className="btnR defaultPrimary">확인</button>
+          <button className="btnR defaultPrimary" onClick={openVideoPopup}>확인</button>
         </div>
       </div>
     </div>

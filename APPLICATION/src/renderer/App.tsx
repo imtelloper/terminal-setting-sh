@@ -10,6 +10,7 @@ import DetailViewPage from '../pages/DetailViewPage';
 import SensingViewPage from '../pages/SensingViewPage';
 import VideoArchivePage from '../pages/VideoArchivePage';
 import ImgArchivePage from '../pages/ImgArchivePage';
+import BinPage from '../pages/BinPage';
 
 export default function App() {
   return (
@@ -25,6 +26,7 @@ export default function App() {
           <Route path="/login" element={<LoginPage />} />
           <Route path="/videoArchive" element={<VideoArchivePage />} />
           <Route path="/imgArchive" element={<ImgArchivePage />} />
+          <Route path="/bin" element={<BinPage />} />
         </Routes>
       </LayoutForm>
     </Router>

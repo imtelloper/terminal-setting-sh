@@ -56,3 +56,4 @@ export LANG=en_US.UTF-8
 export LC_ALL=en_US.UTF-8
 git config --global credential.helper store
 
+sudo apt -y install caffeine

@@ -110,10 +110,9 @@ div.areaInfoContainer {
             &:nth-child(3n) {
               margin-right: 0;
             }
-
-            h3 {
-              margin: 5px;
-            }
+            //h3 {
+            //  margin: 5px;
+            //}
 
             div.titleBox {
               height: 48px;
@@ -123,11 +122,11 @@ div.areaInfoContainer {
               border-bottom: 1px solid $line;
               box-sizing: border-box;
               padding: 0 12px 0 24px;
-
-              span {
-                font-size: 18px;
-              }
-
+              font-size: 18px;
+              //
+              //span {
+              //  font-size: 18px;
+              //}
             }
 
             div.areaContent {
@@ -297,9 +296,12 @@ div.areaInfoContainer {
 
 @keyframes activeAni {
   0%{
-    opacity: 0.3;
+    opacity: 0.2;
   }
   50%{
+    opacity: 1;
+  }
+  75%{
     opacity: 1;
   }
   100%{

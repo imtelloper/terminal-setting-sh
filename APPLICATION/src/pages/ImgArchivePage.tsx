@@ -11,46 +11,48 @@ import {
 import { MdDownload, MdGridView } from 'react-icons/md';
 import { useNavigate } from 'react-router-dom';
 import ImgPopup from '../components/ImgPopup';
+import AlarmPopup from '../components/AlarmPopup';
 
 const ImgArchive = () => {
   const navigation = useNavigate();
   const [isOpenPopupState, setIsOpenPopupState] = useState(false);
   const [txtChangeState, setTxtChangeState] = useState('모두 다운로드');
+  const [alarmPopupState, setAlarmPopupState] = useState(false);
 
   const openImgPopup = () => {
     setIsOpenPopupState(!isOpenPopupState);
   };
 
-  const closeImgPopup = () => {
-    setIsOpenPopupState(!isOpenPopupState);
+  const openAlarmPopup = () => {
+    setAlarmPopupState(!alarmPopupState);
   };
 
   const handleChecked = (e) => {
     const isChecked = e.currentTarget.checked;
     console.log(isChecked, '체크됨');
-    // if (isChecked > 0) {
-    //   setTxtChangeState('선택 다운로드');
-    // } else if (isChecked === 0) {
-    //   setTxtChangeState('모두 다운로드');
-    // }
     isChecked > 0
       ? setTxtChangeState('선택 다운로드')
       : setTxtChangeState('모두 다운로드');
   };
 
-  // const handleGrid = (e) => {
-  //   e.currentTarget.classList.add('gridActive');
-  //   console.log(e.currentTarget);
-  // };
+  // const visibleContent = (e) => {
+  //   const target = e.currentTarget;
+  //   console.log(target)
+  //   const dType = target.getAttribute('datatype');
+  //   const conTabs = Array.from(document.querySelectorAll('.imgConWrap'));
+  //   conTabs.forEach((ele: HTMLElement) => {
+  //     ele.style.display = 'none';
+  //   });
   //
-  // const handleHeadline = (e) => {
-  //   e.currentTarget.classList.add('headlineActive');
-  //   console.log(e.currentTarget);
+  //   const imgConWrapEl = document.querySelector(
+  //     `imgConWrap${dType}`
+  //   ) as HTMLTableSectionElement;
+  //   if (imgConWrapEl) imgConWrapEl.style.display = 'block';
   // };
-  //
-  // const handleListview = (e) => {
-  //   e.currentTarget.classList.add('listViewActive');
-  //   console.log(e.currentTarget);
+
+  // const handleToggleBtn = (e) => {
+  //   const target = e.currentTarget;
+  //   target.classList.toggle('toggleBtnActive');
   // };
 
   return (
@@ -83,22 +85,24 @@ const ImgArchive = () => {
                 </select>
               </div>
               <div className="leftCon leftIcon">
-                {/*<MdGridView onClick={handleGrid} style={{ fontSize: '24px' }} />*/}
-                <MdGridView style={{ fontSize: '24px' }} />
-                {/*<ViewHeadline*/}
-                {/*  onClick={handleHeadline}*/}
-                {/*  style={{ fontSize: '24px' }}*/}
-                {/*/>*/}
-                <ViewHeadline
-                  style={{ fontSize: '24px' }}
-                />
-                {/*<ViewList*/}
-                {/*  onClick={handleListview}*/}
-                {/*  style={{ fontSize: '24px' }}*/}
-                {/*/>*/}
-                <ViewList
-                  style={{ fontSize: '24px' }}
-                />
+                {/*<span onClick={handleToggleBtn}>*/}
+                {/*  <MdGridView style={{ fontSize: '24px' }} />*/}
+                {/*</span>*/}
+                {/*<span onClick={handleToggleBtn}>*/}
+                {/*  <ViewHeadline style={{ fontSize: '24px' }} />*/}
+                {/*</span>*/}
+                {/*<span onClick={handleToggleBtn}>*/}
+                {/*  <ViewList style={{ fontSize: '24px' }} />*/}
+                {/*</span>*/}
+                <span>
+                  <MdGridView style={{ fontSize: '24px' }} />
+                </span>
+                <span>
+                  <ViewHeadline style={{ fontSize: '24px' }} />
+                </span>
+                <span>
+                  <ViewList style={{ fontSize: '24px' }} />
+                </span>
               </div>
             </div>
             <div className="right">
@@ -106,20 +110,22 @@ const ImgArchive = () => {
                 <span className="iconL">
                   <MdDownload style={{ fontSize: '24px' }} />
                 </span>
-                <span className="txt">{txtChangeState}</span>
+                <span className="txt" onClick={openAlarmPopup}>{txtChangeState}</span>
               </button>
               <button className="iconBtnL normalPrimary">
                 <span className="iconL">
                   <Delete style={{ fontSize: '24px' }} />
                 </span>
-                <span className="txt">모두 버리기</span>
+                <span className="txt">
+                  모두 버리기
+                </span>
               </button>
             </div>
           </div>
         </div>
 
         {/* 1. grid view */}
-        <div className="imgGridView">
+        <div className="imgConWrap imgGridView">
           <div className="imgContent">
             <div className="imgBox" onClick={openImgPopup}>
               <input type="checkbox" onChange={handleChecked} />
@@ -328,7 +334,7 @@ const ImgArchive = () => {
         </div>
 
         {/* 2. view headline */}
-        <div className="viewHeadline">
+        <div className="imgConWrap viewHeadline">
           <div className="imgContent">
             <div className="imgBox">
               <div className="imgInput">
@@ -404,7 +410,7 @@ const ImgArchive = () => {
         </div>
 
         {/* 3.list View */}
-        <div className="listView">
+        <div className="imgConWrap listView">
           <div className="imgContent">
             <div className="imgBox">
               <div className="imgInput">
@@ -467,8 +473,10 @@ const ImgArchive = () => {
           <div className="pageBtn" />
         </div>
 
-        {isOpenPopupState && (
-          <ImgPopup openImgPopup={openImgPopup} closeImgPopup={closeImgPopup} />
+        {isOpenPopupState && <ImgPopup openImgPopup={openImgPopup} />}
+
+        {alarmPopupState && (
+          <AlarmPopup openAlarmPopup={openAlarmPopup} />
         )}
       </div>
     </div>

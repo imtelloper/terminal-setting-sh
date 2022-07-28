@@ -66,6 +66,19 @@ div.imgArchiveWrap{
               }
             }
           }
+          div.leftIcon{
+            span{
+              display: flex;
+              align-items: center;
+              border-radius: 2px;
+              margin-right: 0;
+              transition: 0.3s;
+              &.toggleBtnActive{
+                background-color: $blue-500;
+                color: $white;
+              }
+            }
+          }
           div.dateBox{
             span{
               margin-left: 8px;
@@ -114,7 +127,6 @@ div.imgArchiveWrap{
           div.imgImg{
             width: 100%;
             height: 62.5%;
-            background-color: pink;
             border-top-left-radius: 8px;
             border-top-right-radius: 8px;
             cursor: pointer;
@@ -162,10 +174,6 @@ div.imgArchiveWrap{
             }
           }
         }
-      }
-      &.gridActive{
-        display: block;
-        z-index: 3;
       }
     }
 
@@ -223,10 +231,6 @@ div.imgArchiveWrap{
         &::-webkit-scrollbar{
           display: none;
         }
-      }
-      &.headlineActive{
-        display: block;
-        z-index: 3;
       }
     }
 
@@ -287,10 +291,6 @@ div.imgArchiveWrap{
         &::-webkit-scrollbar{
           display: none;
         }
-      }
-      &.listViewActive{
-        display: block;
-        z-index: 3;
       }
     }
 
