@@ -40,6 +40,7 @@ const DetailViewPage = () => {
       Api.stream
         .calibrationImgCapture('192.168.0.4')
         .then((res) => {
+          console.log('calibrationImgCapture res', res);
           Api.tracker
             .findData({
               area: swrState.curTrackerArea,
