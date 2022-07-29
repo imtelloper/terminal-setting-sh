@@ -292,12 +292,21 @@ const DetailViewPage = () => {
               >
                 취소
               </button>
-              <button className="iconR defaultPrimary">확인</button>
+              <button
+                className="iconR defaultPrimary"
+                onClick={() => {
+                  navigate('/observe');
+                }}
+              >
+                확인
+              </button>
             </div>
           </div>
 
           {isOpenDangerZoneState && (
-            <DangerZonePopup setIsOpenDangerZoneState={setIsOpenDangerZoneState}/>
+            <DangerZonePopup
+              setIsOpenDangerZoneState={setIsOpenDangerZoneState}
+            />
           )}
           {isOpenCalibrationState && (
             <CalibrationPopup
