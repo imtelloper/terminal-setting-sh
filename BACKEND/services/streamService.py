@@ -78,6 +78,7 @@ class StreamService:
         self.thisCamSensingModel = ""  # 현재 pc의 감지 모델 셋팅 값
         self.humanCalcurator = HumanCalculator()
         self.camImg = ""
+        self.videoFrameCnt = 0.05
 
         # 각종 파일 저장 경로 폴더 생성
         if platform.platform() != 'macOS-12.4-arm64-arm-64bit':
@@ -112,6 +113,9 @@ class StreamService:
     def __del__(self):
         self.video.release()
 
+    def getScreenShotRecordPath(self):
+        return self.screenShotRecordPath
+
     def getVideoRecordPath(self):
         return self.videoRecordPath
 
@@ -142,10 +146,27 @@ class StreamService:
         return True
 
     # Calibration 설정을 위한 스크린샷 캡쳐를 하기 위한 메서드
-    def setCalibCaptureGateOpen(self):
+    async def setCalibCaptureGateOpen(self):
         self.initScreenCapturePath()
-        self.calibCaptureGate = True
+        # self.calibCaptureGate = True
+        await getConnection()[self.dbName][config.TABLE_TRACKER].update_one(
+            {'_id': ObjectId(self.trackerId)},
+            {'$set':
+                {
+                    'calibImg': self.screenShotRecordPath,
+                }
+            }
+        )
+        ret, frame = self.video.read()
+        frame = frame.copy()
+        frame = np.array(frame)
+        frame = cv2.cvtColor(frame, cv2.COLOR_RGB2BGR)
+        frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+        frame = cv2.resize(frame, dsize=(self.camWidth, self.camHeight), interpolation=cv2.INTER_AREA)
+        cv2.imwrite(self.screenShotRecordPath, frame, params=[cv2.IMWRITE_PNG_COMPRESSION, 0])
         return True
+
+
 
     # 녹화 경로, 파일명 초기화
     def initVideoRecordPath(self):
@@ -306,7 +327,6 @@ class StreamService:
 
     def updateCalibrationImgPath(self, trackerId, captureImg: str, imgPath: str):
         self.initScreenCapturePath()
-        cv2.imwrite(imgPath, captureImg, params=[cv2.IMWRITE_PNG_COMPRESSION, 0])
         getConnection()[self.dbName][config.TABLE_TRACKER].update_one(
             {'_id': ObjectId(trackerId)},
             {'$set':
@@ -315,6 +335,7 @@ class StreamService:
                 }
             }
         )
+        cv2.imwrite(imgPath, captureImg, params=[cv2.IMWRITE_PNG_COMPRESSION, 0])
 
     def screenCaptureInsertData(self, captureImg: str, level: str):
         self.initScreenCapturePath()
@@ -428,7 +449,7 @@ class StreamService:
         while self.cameraOnOff:
             k = cv2.waitKey(1) & 0xFF
             timeCnt += 1
-            time.sleep(0.05)
+            time.sleep(self.videoFrameCnt)
             ret, frame = self.video.read()
             if frame is None: return
             self.camImg = frame.copy()
@@ -601,9 +622,10 @@ class StreamService:
                 # 칼리브레이션 이미지 캡쳐
                 if self.calibCaptureGate:
                     print('CALIB CAPTURE CALIB CAPTURE CALIB CAPTURE CALIB CAPTURE CALIB CAPTURE')
-                    self.updateCalibrationImgPath(self.trackerId, result_img, self.screenShotRecordPath)
+                    # self.updateCalibrationImgPath(self.trackerId, result_img, self.screenShotRecordPath)
+                    cv2.imwrite(self.screenShotRecordPath, result_img, params=[cv2.IMWRITE_PNG_COMPRESSION, 0])
                     self.calibCaptureGate = False
-                    self.saveFile(self.screenShotFolderPath, self.screenShotRecordPath)
+                    # self.saveFile(self.screenShotFolderPath, self.screenShotRecordPath)
 
                 # 키보드 눌렀을 시 이벤트 발생
                 if k == ord('s'):
