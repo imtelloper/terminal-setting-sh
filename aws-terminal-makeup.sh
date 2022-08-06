@@ -21,19 +21,6 @@ nvm install 16.14.2
 npm install -g pm2
 npm install -g yarn
 
-#oh my zsh 설치
-sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
-# zsh-autosuggestions
-git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
-git clone git://github.com/wting/autojump.git
-# Run the installation script and follow on screen instructions.
-cd autojump
-./install.py
-# zsh-syntax-highlighting
-git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting
-# plugins=(git zsh-autosuggestions zsh-syntax-highlighting )
-
-
 # font 적용
 git clone [https://github.com/powerline/fonts.git](https://github.com/powerline/fonts.git) --depth=1
 cd fonts
@@ -56,3 +43,14 @@ export LANG=en_US.UTF-8
 export LC_ALL=en_US.UTF-8
 git config --global credential.helper store
 
+#oh my zsh 설치
+sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
+# zsh-autosuggestions
+git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
+git clone git://github.com/wting/autojump.git
+# Run the installation script and follow on screen instructions.
+cd autojump
+./install.py
+# zsh-syntax-highlighting
+git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting
+# plugins=(git zsh-autosuggestions zsh-syntax-highlighting )
