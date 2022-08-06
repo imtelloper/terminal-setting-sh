@@ -1,9 +1,11 @@
 sudo passwd
 sudo apt update
-sudo apt install nginx
-sudo apt install zsh
+sudo apt install nginx -y
+sudo apt install zsh -y
 chsh -s $(which zsh)
-sudo apt install net-tools curl file ssh -f
+sudo apt install net-tools -y
+sudo apt install curl -y
+sudo apt install file ssh -f
 sudo apt install fonts-powerline
 sudo apt install git -y
 sudo apt install build-essential
@@ -36,9 +38,9 @@ sudo apt install python-is-python3
 alias python=python3
 
 # mysql
-sudo apt install -y mysql-server
-sudo mysql_secure_installation
-sudo /etc/init.d/mysql restart
+#sudo apt install -y mysql-server
+#sudo mysql_secure_installation
+#sudo /etc/init.d/mysql restart
 
 # nginx https ssl
 sudo apt install certbot python3-certbot-nginx
