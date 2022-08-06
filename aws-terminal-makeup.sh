@@ -1,11 +1,13 @@
+sudo passwd
 sudo apt update
-sudo apt install nginx zsh
-chsh -s /usr/bin/zsh
-sudo apt install net-tools build-essential curl file ssh -f
+sudo apt install nginx
+sudo apt install zsh
+chsh -s $(which zsh)
+sudo apt install net-tools curl file ssh -f
 sudo apt install fonts-powerline
 sudo apt install git -y
+sudo apt install build-essential
 sh -c "$(curl -fsSL https://raw.githubusercontent.com/Linuxbrew/install/master/install.sh)"
-/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 export PATH="/home/linuxbrew/.linuxbrew/bin:$PATH"
 export MANPATH="/home/linuxbrew/.linuxbrew/share/man:$MANPATH"
 export INFOPATH="/home/linuxbrew/.linuxbrew/share/info:$INFOPATH"
@@ -14,6 +16,7 @@ eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 source ~/.zshrc
 brew doctor
 brew install gcc
+
 # nvm install
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.36.0/install.sh | zsh
 source ~/.zshrc
@@ -22,17 +25,20 @@ npm install -g pm2
 npm install -g yarn
 
 # font 적용
-git clone [https://github.com/powerline/fonts.git](https://github.com/powerline/fonts.git) --depth=1
-cd fonts
-./install.sh
-cd ..
-rm -rf fonts
+sudo apt install fonts-powerline
+
+# python 설치
 sudo apt-get install linuxbrew-wrapper
 sudo apt install software-properties-common -y
 sudo add-apt-repository ppa:deadsnakes/ppa -y
 sudo apt install python3.8 -y
 sudo apt install python-is-python3
 alias python=python3
+
+# mysql
+sudo apt install -y mysql-server
+sudo mysql_secure_installation
+sudo /etc/init.d/mysql restart
 
 # nginx https ssl
 sudo apt install certbot python3-certbot-nginx
@@ -41,16 +47,25 @@ sudo apt install certbot python3-certbot-nginx
 export LANGUAGE=en_US.UTF-8
 export LANG=en_US.UTF-8
 export LC_ALL=en_US.UTF-8
+
+# git config 업데이트
 git config --global credential.helper store
 
-#oh my zsh 설치
+# oh my zsh 설치
 sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
+
 # zsh-autosuggestions
 git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
-git clone git://github.com/wting/autojump.git
-# Run the installation script and follow on screen instructions.
-cd autojump
-./install.py
+
+# autojump
+sudo apt install autojump
+
 # zsh-syntax-highlighting
 git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting
-# plugins=(git zsh-autosuggestions zsh-syntax-highlighting )
+
+
+# fzf (Fuzzy Finder )
+git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
+~/.fzf/install
+
+# plugins=(git sudo colored-man-pages zsh-autosuggestions zsh-syntax-highlighting fzf )

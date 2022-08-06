@@ -22,3 +22,10 @@ ssh-keygen -R ec2-.compute.amazonaws.com <br>
 
 ssh-keygen -R 13.209.243.74 <br>
 ```
+
+
+
+# 우분투 mysql 설치
+```
+https://hiseon.me/linux/ubuntu/ubuntu-mysql-install/
+```
