@@ -33,6 +33,7 @@ cd autojump
 git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting
 # plugins=(git zsh-autosuggestions zsh-syntax-highlighting )
 
+
 # font 적용
 git clone [https://github.com/powerline/fonts.git](https://github.com/powerline/fonts.git) --depth=1
 cd fonts
@@ -45,7 +46,6 @@ sudo add-apt-repository ppa:deadsnakes/ppa -y
 sudo apt install python3.8 -y
 sudo apt install python-is-python3
 alias python=python3
-conda config --set auto_activate_base false
 
 # nginx https ssl
 sudo apt install certbot python3-certbot-nginx
