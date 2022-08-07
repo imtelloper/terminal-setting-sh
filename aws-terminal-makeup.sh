@@ -1,14 +1,18 @@
-sudo passwd
-sudo apt update
-sudo apt upgrade
+#sudo passwd
+#sudo apt update
+#sudo apt upgrade
 sudo apt install nginx -y
+
+# zsh install
 #sudo apt install zsh -y
 #chsh -s $(which zsh)
+
 sudo apt install net-tools -y
 sudo apt install curl -y
 sudo apt install file -f
 sudo apt install ssh -y
-sudo apt install git -y
+#sudo apt install git -y
+
 # brew install
 sudo apt install build-essential -y
 sh -c "$(curl -fsSL https://raw.githubusercontent.com/Linuxbrew/install/master/install.sh)"
@@ -98,6 +102,6 @@ sudo systemctl enable mysql
 # MongoDB install
 wget http://archive.ubuntu.com/ubuntu/pool/main/o/openssl/libssl1.1_1.1.1f-1ubuntu2_amd64.deb
 sudo dpkg -i libssl1.1_1.1.1f-1ubuntu2_amd64.deb
+sudo apt update
 sudo apt install mongodb-org -y
-
-
+sudo systemctl start mongod
