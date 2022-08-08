@@ -7,7 +7,7 @@ from models.baseModel import PyObjectId
 
 class Tracker(BaseModel):
     _id = Optional[PyObjectId]
-    ip: str = Field(..., description="카메라가 설치된 PC IP")
+    ip: Optional[str] = Field(..., description="카메라가 설치된 PC IP")
     area: str = Field(..., description="카메라가 설치된 구역 이름")
     camPort: str = Field(..., description="현재 카메라의 번호 -> cam1 | cam2 | cam3 | cam4")
     camName: str = Field(..., description="카메라 지정 이름")
