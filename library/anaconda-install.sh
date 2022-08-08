@@ -11,6 +11,7 @@ sudo apt install libxi6 -y
 sudo apt install libxtst6 -y
 wget https://repo.anaconda.com/archive/Anaconda3-2020.11-Linux-x86_64.sh
 zsh Anaconda3-2020.11-Linux-x86_64.sh
-export PATH=$HOME/anaconda3/bin:$PATH
+#export PATH=$HOME/anaconda3/bin:$PATH
+echo "export PATH=$HOME/anaconda3/bin:$PATH">> ~/.zshrc
 source ~/.zshrc
 conda init zsh
