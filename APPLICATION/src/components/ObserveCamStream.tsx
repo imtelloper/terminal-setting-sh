@@ -59,6 +59,7 @@ const ObserveCamStream = ({
     const redSensingPoints = [];
     const yellowSensingPoints = [];
     const greenSensingPoints = [];
+    console.log('🍊swrState?.curCamBaseLine', swrState?.curCamBaseLine);
     const baseLineSplited = swrState?.curCamBaseLine?.split('&');
     const baseLineCooldiate = baseLineSplited[0].split(',');
     let baseCoords = [];
@@ -199,6 +200,9 @@ const ObserveCamStream = ({
       yellowSensingCoordinate,
       redSensingCoordinate,
     ].join('&');
+    console.log('🔥greenSensingCoordinate', greenSensingCoordinate);
+    console.log('🔥yellowSensingCoordinate', yellowSensingCoordinate);
+    console.log('🔥redSensingCoordinate', redSensingCoordinate);
 
     console.log('sensingGroup', sensingGroup);
     console.log('👗👗👗 itemID', itemID);
@@ -258,6 +262,7 @@ const ObserveCamStream = ({
 
   useEffect(() => {
     if (videoFrameState.length > 0) {
+      console.log('🥹videoFrameState', videoFrameState);
       document.querySelectorAll('.polygonCanvas').forEach((ele) => draw(ele));
     }
   }, [videoFrameState]);

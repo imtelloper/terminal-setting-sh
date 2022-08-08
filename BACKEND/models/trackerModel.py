@@ -7,6 +7,7 @@ from models.baseModel import PyObjectId
 
 class Tracker(BaseModel):
     _id = Optional[PyObjectId]
+    ip: str = Field(..., description="카메라가 설치된 PC IP")
     area: str = Field(..., description="카메라가 설치된 구역 이름")
     camPort: str = Field(..., description="현재 카메라의 번호 -> cam1 | cam2 | cam3 | cam4")
     camName: str = Field(..., description="카메라 지정 이름")
@@ -29,6 +30,7 @@ class Tracker(BaseModel):
         json_encoders = {ObjectId: str}
         scheme_extra = {
             "example": {
+                "ip": '192.168.0.255',
                 "area": 'H1 공장 크레인',
                 "camPort": 'cam1',
                 "camName": '크레인 1',
@@ -50,6 +52,7 @@ class Tracker(BaseModel):
 
 # PATCH 전용 모델
 class UpdateTracker(BaseModel):
+    ip: Optional[str] = None
     area: Optional[str] = None
     camPort: Optional[str] = None
     camName: Optional[str] = None
@@ -71,6 +74,7 @@ class UpdateTracker(BaseModel):
         json_encoders = {ObjectId: str}
         scheme_extra = {
             "example": {
+                "ip": '192.168.0.255',
                 "area": 'H1 공장 크레인',
                 "camPort": 'cam1',
                 "camName": '크레인 1',

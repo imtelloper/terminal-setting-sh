@@ -80,10 +80,13 @@ class StreamService:
         self.camImg = ""
         self.videoFrameCnt = 0.05
 
+        print('🔥platform.platform()', platform.platform())
+        print('🔥platform.platform()', 'macOS' in platform.platform())
         # 각종 파일 저장 경로 폴더 생성
-        if platform.platform() != 'macOS-12.4-arm64-arm-64bit':
+        # if platform.platform() != 'macOS-12.4-arm64-arm-64bit':
+        if 'macOS' in platform.platform() is False:
             print('self.videoFolderPath', self.videoFolderPath)
-            print('self.screenShotFolderPath',self.screenShotFolderPath)
+            print('self.screenShotFolderPath', self.screenShotFolderPath)
             makedirs(self.videoFolderPath)
             makedirs(self.screenShotFolderPath)
         print('##### CONNECTED CAMERA ##### : ', self.listPorts)
@@ -165,8 +168,6 @@ class StreamService:
         frame = cv2.resize(frame, dsize=(self.camWidth, self.camHeight), interpolation=cv2.INTER_AREA)
         cv2.imwrite(self.screenShotRecordPath, frame, params=[cv2.IMWRITE_PNG_COMPRESSION, 0])
         return True
-
-
 
     # 녹화 경로, 파일명 초기화
     def initVideoRecordPath(self):
@@ -337,6 +338,17 @@ class StreamService:
         )
         cv2.imwrite(imgPath, captureImg, params=[cv2.IMWRITE_PNG_COMPRESSION, 0])
 
+    def updateDeviceIp(self, trackerId, ip: str):
+        self.initScreenCapturePath()
+        getConnection()[self.dbName][config.TABLE_TRACKER].update_one(
+            {'_id': ObjectId(trackerId)},
+            {'$set':
+                {
+                    'ip': ip,
+                }
+            }
+        )
+
     def screenCaptureInsertData(self, captureImg: str, level: str):
         self.initScreenCapturePath()
         cv2.imwrite(self.screenShotRecordPath, captureImg,
@@ -381,7 +393,7 @@ class StreamService:
     def saveFile(self, folderPath, recordPath):
         # print('###### folderPath',folderPath)
         # print('###### recordPath',recordPath)
-        #관제 PC
+        # 관제 PC
         host = "192.168.0.4"
         port = 22  # 고정
         transport = paramiko.transport.Transport(host, port)
@@ -468,8 +480,10 @@ class StreamService:
                     track_signal = False
                     cnt += 1
                 # 트랙킹 돌리기(추적한다., 박스가 따라간다.)
-                elif 0 < cnt < 3: cnt += 1
-                else: cnt = 0
+                elif 0 < cnt < 3:
+                    cnt += 1
+                else:
+                    cnt = 0
                 # 욜로가 0.2초, 트랙킹이 3번 <- 반복
                 bboxes = []
 
@@ -486,7 +500,7 @@ class StreamService:
                         multi_tracker.add(cv2.TrackerCSRT_create(), self.camImg, track_bbox)
                         track_signal = True
                     rsigs, self.camImg = self.humanCalcurator.calculate_human(self.camImg, bboxes, unit_num, rois)
-                        # print('warn_sig', warn_sig) # 0:안전, 1: 옐로우1차, 2: 2차 레드
+                    # print('warn_sig', warn_sig) # 0:안전, 1: 옐로우1차, 2: 2차 레드
                     result_img = self.camImg
                 else:
                     # tracking
@@ -499,8 +513,9 @@ class StreamService:
                                 x1, y1, w, h = tuple([int(_) for _ in t_bbox])
                                 x2, y2 = x1 + w, y1 + h
                                 bboxes.append([x1, y1, x2, y2, w, h])
-                            rsigs, result_img = self.humanCalcurator.calculate_human(self.camImg, bboxes, unit_num, rois)
-                                # print('warn_sig',warn_sig) # 0:안전, 1: 옐로우1차, 2: 2차 레드
+                            rsigs, result_img = self.humanCalcurator.calculate_human(self.camImg, bboxes, unit_num,
+                                                                                     rois)
+                            # print('warn_sig',warn_sig) # 0:안전, 1: 옐로우1차, 2: 2차 레드
                             result_img = self.camImg
                     else:
                         result_img = self.camImg
@@ -509,20 +524,20 @@ class StreamService:
                 secGroupSensing = None
 
                 # print('rsigs :', rsigs)
-                testSigs = [[0,1], [2,0], [2,0]]
-                fstGroup =[]
-                secGroup =[]
-                if len(rsigs)>0 and len(rsigs[0])>0:
+                testSigs = [[0, 1], [2, 0], [2, 0]]
+                fstGroup = []
+                secGroup = []
+                if len(rsigs) > 0 and len(rsigs[0]) > 0:
                     for person in rsigs:
                         # print('person',person)
                         fstGroup.append(person[0])
-                        if len(person)>1:
+                        if len(person) > 1:
                             secGroup.append(person[1])
 
                 # print('첫번째 사람들만', fstGroup)
                 # print('두번째 사람들만', secGroup)
 
-                if len(fstGroup) > 0 :
+                if len(fstGroup) > 0:
                     # print('첫번째 그룹 ', max(fstGroup))
                     fstGroupSensing = max(fstGroup)
 

@@ -47,13 +47,23 @@ export default class PolygonDraw {
     coordinate1: Array<number>,
     coordinate2: Array<number>
   ) => {
+    console.log('🌊coordinate1', coordinate1);
+    console.log('🌊coordinate2', coordinate2);
     const firstPoints = coordinate1;
     const secondPoints = coordinate2;
-    const twoPointsDistance = Math.sqrt(
-      (secondPoints[0] - firstPoints[0]) ** 2 +
-        (secondPoints[1] - firstPoints[1]) ** 2
-    );
-    return twoPointsDistance;
+    try {
+      if (firstPoints !== undefined && firstPoints.length > 0) {
+        const twoPointsDistance = Math.sqrt(
+          (secondPoints[0] - firstPoints[0]) ** 2 +
+            (secondPoints[1] - firstPoints[1]) ** 2
+        );
+        return twoPointsDistance;
+      }
+      return 0;
+    } catch (err) {
+      console.error('getTwoPointsDistance error', err);
+      return 0;
+    }
   };
 
   static getDistanceRate = (twoPointsDistance, lineDistance) => {

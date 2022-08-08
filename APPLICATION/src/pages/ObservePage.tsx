@@ -73,6 +73,7 @@ const ObservePage = () => {
     flushSync(() => setVideoFrameState([...newArr]));
   };
 
+  /* setVideoFrameState, setGetObserveState */
   const setProcessedSwrData = () => {
     const processedData = [];
     swrTrackerData.forEach(async (tracker, idx) => {

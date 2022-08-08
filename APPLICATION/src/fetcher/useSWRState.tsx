@@ -16,6 +16,7 @@ type SwrStateType = {
   curCamCalibImg: string;
   curCamBaseLine: string;
   curCamDangerLine: string;
+  curCamIp: string;
   streamInfo: Array<ViedeoFrameType>;
   observe: Observe;
   camInfo: {
@@ -36,6 +37,7 @@ let state: SwrStateType = {
   curCamCalibImg: '',
   curCamBaseLine: '',
   curCamDangerLine: '',
+  curCamIp: '',
   streamInfo: [],
   observe: {
     area: 'H3 공장 크레인',

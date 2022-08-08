@@ -32,6 +32,7 @@ async def saveData(data: dataModel = Body(...)):
 
     - **_id**: _id
     - **createdAt**: 생성 날짜
+    - **ip**: 현재 PC IP
     - **area**: (고정) 카메라 설치 구역 이름
     - **camPort**: (고정) 현재 카메라 번호 -> cam1|cam2|cam3|cam4
     - **camName**: 카메라 지정 이름
