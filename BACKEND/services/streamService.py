@@ -21,6 +21,7 @@ import paramiko
 import time
 import subprocess
 import stat
+import socket
 
 
 # W: 256 H: 192
@@ -79,7 +80,7 @@ class StreamService:
         self.humanCalcurator = HumanCalculator()
         self.camImg = ""
         self.videoFrameCnt = 0.05
-
+        self.deviceIp = socket.gethostbyname(socket.gethostname())
         print('🔥platform.platform()', platform.platform())
         print('🔥platform.platform()', 'macOS' in platform.platform())
         # 각종 파일 저장 경로 폴더 생성
@@ -457,6 +458,8 @@ class StreamService:
         timeCnt = 0
         fstSensingLevel = None
         secSensingLevel = None
+
+        self.updateDeviceIp(self.trackerId, self.deviceIp)
 
         while self.cameraOnOff:
             k = cv2.waitKey(1) & 0xFF
