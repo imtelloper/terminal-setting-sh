@@ -1,5 +1,24 @@
 # terminal-setting-sh
 
+## step1
+zsh-patch -> zsh-injection.sh
+
+## step2
+sudo reboot
+
+## step2
+zsh-patch -> oh-my-zsh-install.sh
+
+## step3
+zsh-patch -> zsh-makeup.sh
+
+## step4
+aws-terminal-makeup.sh
+
+
+export PATH="/root/anaconda3/bin:PATH"
+
+
 
 비밀번호 설정 필요할 시 <br>
 sudo passwd <br>
