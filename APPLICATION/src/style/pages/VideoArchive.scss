@@ -5,13 +5,15 @@ div.videoArchiveWrap{
   display: flex;
   align-items: center;
   justify-content: center;
+  position: relative;
   div.videoArchiveContainer{
     width: calc(100% - 48px);
     height: calc(100% - 48px);
-    div.videoTitleBox{
+    position: relative;
+    div.videoArchiveTitleBox{
       width: 100%;
 
-      div.title{
+      div.videoArchiveTitle{
         display: flex;
         align-items: center;
         font-size: 28px;
@@ -21,19 +23,22 @@ div.videoArchiveWrap{
         }
       }
 
-      div.titleCon{
+      div.videoArchiveTitleCon{
         width: 100%;
         display: flex;
         justify-content: space-between;
         margin: 12px 0 28px 0;
-        div.left{
+
+        div.videoArchiveLeft{
           display: flex;
           align-items: center;
-          div.leftCon{
+
+          div.videoArchiveLeftCon{
             height: 40px;
             display: flex;
             align-items: center;
             margin-right: 16px;
+            cursor: pointer;
             span{
               margin-right: 16px;
             }
@@ -61,18 +66,22 @@ div.videoArchiveWrap{
               }
             }
           }
-          div.leftIcon{
-            span{
+          div.videoArchiveLeftIcon{
+            display: flex;
+            input{
+              display: none;
+              &:checked + label{
+                color: $white;
+                background-color: $blue-500;
+              }
+            }
+            label{
               display: flex;
               align-items: center;
-              border-radius: 2px;
-              margin-right: 0;
+              border-radius: 4px;
               transition: 0.3s;
               cursor: pointer;
-              &.toggleBtnActive{
-                background-color: $blue-500;
-                color: $white;
-              }
+              margin-right: 4px;
             }
           }
           div.dateBox{
@@ -81,7 +90,7 @@ div.videoArchiveWrap{
             }
           }
         }
-        div.right{
+        div.videoArchiveRight{
           display: flex;
           button{
             margin-left: 8px;
@@ -89,22 +98,25 @@ div.videoArchiveWrap{
         }
       }
     }
-    div.videoContentBox{
+
+    //1. gridView
+    div.imgGridView{
       width: 100%;
       height: calc(100% - 192px);
       position: relative;
-      div.videoContent{
+      //display: none;
+      div.videoArchiveContent{
         width: 100%;
-        height: 33.33%;
-        display: flex;
-        justify-content: space-between;
-        position: relative;
-        div.videoBox{
-          width: calc((100% - 112px)/8);
-          height: calc(100% - 10.66px);
+        height: 100%;
+        display: grid;
+        grid-template-columns: repeat(8,1fr);
+        grid-template-rows: repeat(3, 33.33%);
+        grid-gap: 16px;
+        div.videoArchiveBox{
+          //width: calc((100% - 112px)/8);
+          //height: calc(33.33% - 10.66px);
           background-color: $white;
           border-radius: 8px;
-          margin-right: 16px;
           position: relative;
           &:last-child{
             margin-right: 0;
@@ -117,15 +129,14 @@ div.videoArchiveWrap{
             left: 16px;
             z-index: 10;
           }
-          div.videoImg{
+          div.videoArchiveImg{
             width: 100%;
             height: 62.5%;
-            //background-color: pink;
             border-top-left-radius: 8px;
             border-top-right-radius: 8px;
             cursor: pointer;
           }
-          div.videoTitle{
+          div.videoArchiveTitle{
             width: 100%;
             height: 37.5%;
             padding: 16px;
@@ -165,14 +176,135 @@ div.videoArchiveWrap{
                 top: 32px;
                 left: 16px;
               }
-
             }
           }
         }
       }
     }
-    div.bottomBtnBox{
+
+    //2. viewHeadline
+    div.viewHeadline{
+      width: 100%;
+      height: calc(100% - 192px);
+      position: relative;
+      display: none;
+      div.videoArchiveContent{
+        width: 100%;
+        height: 100%;
+        overflow-y: scroll;
+        div.videoArchiveBox{
+          width: 100%;
+          height: 40px;
+          display: flex;
+          align-items: center;
+          padding: 0 30px;
+          box-sizing: border-box;
+
+          &:first-child{
+            height: 52px;
+          }
+          &:nth-child(2n){
+            background-color: rgba(255,255,255,0.6);
+          }
+          &:nth-child(2n+1){
+            background-color: $background;
+          }
+          div{
+            display: flex;
+            align-items: center;
+          }
+          div.videoArchiveInput{
+            width: 10%;
+            input{
+              position: relative;
+              z-index: 10;
+            }
+          }
+          div.videoArchiveTitle{
+            width: 30%;
+            span{
+              margin-left: 8px;
+            }
+          }
+          div.videoArchiveDate{
+            width: 30%;
+          }
+          div.videoArchiveSize{
+            width: 20%;
+          }
+          div.videoArchiveGroup{
+            width: 10%;
+          }
+        }
+        &::-webkit-scrollbar{
+          display: none;
+        }
+      }
+    }
+
+    //3.listView
+    div.listView{
+      width: 100%;
+      height: calc(100% - 192px);
+      position: relative;
+      display: none;
+
+      div.videoArchiveContent{
+        width: 100%;
+        height: 100%;
+        overflow-y: scroll;
+        div.videoArchiveBox{
+          width: 100%;
+          height: 80px;
+          display: flex;
+          align-items: center;
+          padding: 0 30px;
+          box-sizing: border-box;
+          margin-bottom: 20px;
+          &:first-child{
+            height: 52px;
+            margin-bottom: 0;
+          }
+          div{
+            height: 100%;
+            display: flex;
+            align-items: center;
+          }
+          div.videoArchiveInput{
+            width: 5%;
+          }
+          div.videoArchivePreview{
+            width: 10%;
+            img{
+              width: 116px;
+              height: 80px;
+            }
+          }
+          div.videoArchiveTitle{
+            width: 30%;
+            span{
+              margin-left: 8px;
+            }
+          }
+          div.videoArchiveDate{
+            width: 25%;
+          }
+          div.videoArchiveSize{
+            width: 20%;
+          }
+          div.videoArchiveGroup{
+            width: 10%;
+          }
+        }
+        &::-webkit-scrollbar{
+          display: none;
+        }
+      }
+    }
+
+    div.videoArchiveBottomBtnBox{
       margin: 24px 0;
+      position: relative;
     }
   }
 }

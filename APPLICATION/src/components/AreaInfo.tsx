@@ -186,10 +186,10 @@ const AreaInfo = () => {
           onClick={goObservePage}
           datatype={idx.toString()}
         >
-          <h3>{card.area}</h3>
-          <div className="titleBox">
-            <span>{getObjectKey}</span>
-          </div>
+          <div className="titleBox">{card.area}</div>
+          {/*<div className="titleBox">*/}
+          {/*  <span>{getObjectKey}</span>*/}
+          {/*</div>*/}
           <div className="areaContent">
             <div className="areaTop">
               <div className="imgBox">

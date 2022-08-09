@@ -13,24 +13,27 @@ div.binWrap{
     div.binTitleBox{
       width: 100%;
 
-      div.title{
+      div.binTitle{
         display: flex;
         align-items: center;
         font-size: 28px;
         font-weight: 700;
+        span{
+          margin-left: 12px;
+        }
       }
 
-      div.titleCon{
+      div.binTitleCon{
         width: 100%;
         display: flex;
         justify-content: space-between;
         margin: 12px 0 28px 0;
 
-        div.left{
+        div.binLeft{
           display: flex;
           align-items: center;
 
-          div.leftCon{
+          div.binLeftCon{
             height: 40px;
             display: flex;
             align-items: center;
@@ -63,17 +66,22 @@ div.binWrap{
               }
             }
           }
-          div.leftIcon{
-            span{
+          div.binLeftIcon{
+            display: flex;
+            input{
+              display: none;
+              &:checked + label{
+                color: $white;
+                background-color: $blue-500;
+              }
+            }
+            label{
               display: flex;
               align-items: center;
-              border-radius: 2px;
-              margin-right: 0;
+              border-radius: 4px;
               transition: 0.3s;
-              &.toggleBtnActive{
-                background-color: $blue-500;
-                color: $white;
-              }
+              cursor: pointer;
+              margin-right: 4px;
             }
           }
           div.dateBox{
@@ -82,7 +90,7 @@ div.binWrap{
             }
           }
         }
-        div.right{
+        div.binRight{
           display: flex;
           button{
             margin-left: 8px;
@@ -92,23 +100,23 @@ div.binWrap{
     }
 
     //1. gridView
-    div.binGridView{
+    div.imgGridView{
       width: 100%;
       height: calc(100% - 192px);
       position: relative;
       //display: none;
       div.binContent{
         width: 100%;
-        height: 33.33%;
-        display: flex;
-        justify-content: space-between;
-        position: relative;
+        height: 100%;
+        display: grid;
+        grid-template-columns: repeat(8,1fr);
+        grid-template-rows: repeat(3, 33.33%);
+        grid-gap: 16px;
         div.binBox{
-          width: calc((100% - 112px)/8);
-          height: calc(100% - 10.66px);
+          //width: calc((100% - 112px)/8);
+          //height: calc(33.33% - 10.66px);
           background-color: $white;
           border-radius: 8px;
-          margin-right: 16px;
           position: relative;
           &:last-child{
             margin-right: 0;
@@ -179,7 +187,6 @@ div.binWrap{
       width: 100%;
       height: calc(100% - 192px);
       position: relative;
-      background-color: #0A1A7A;
       display: none;
       div.binContent{
         width: 100%;
@@ -208,6 +215,10 @@ div.binWrap{
           }
           div.binInput{
             width: 10%;
+            input{
+              position: relative;
+              z-index: 10;
+            }
           }
           div.binTitle{
             width: 30%;
@@ -291,7 +302,7 @@ div.binWrap{
       }
     }
 
-    div.bottomBtnBox{
+    div.binBottomBtnBox{
       margin: 24px 0;
       position: relative;
     }
