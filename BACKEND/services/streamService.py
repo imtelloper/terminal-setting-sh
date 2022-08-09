@@ -86,7 +86,7 @@ class StreamService:
         print('🔥platform.platform()', 'macOS' in platform.platform())
         # 각종 파일 저장 경로 폴더 생성
         # if platform.platform() != 'macOS-12.4-arm64-arm-64bit':
-        if 'macOS' in platform.platform() is False:
+        if 'macOS' in platform.platform() == False:
             print('self.videoFolderPath', self.videoFolderPath)
             print('self.screenShotFolderPath', self.screenShotFolderPath)
 
