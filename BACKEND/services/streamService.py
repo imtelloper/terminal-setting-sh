@@ -22,6 +22,7 @@ import time
 import subprocess
 import stat
 import socket
+from tools.scheculder import *
 
 
 # W: 256 H: 192
@@ -88,8 +89,13 @@ class StreamService:
         if 'macOS' in platform.platform() is False:
             print('self.videoFolderPath', self.videoFolderPath)
             print('self.screenShotFolderPath', self.screenShotFolderPath)
-            makedirs(self.videoFolderPath)
-            makedirs(self.screenShotFolderPath)
+
+            def dirBuilder():
+                makedirs(self.videoFolderPath)
+                makedirs(self.screenShotFolderPath)
+
+            dirBuilder()
+            secretary.add_job(dirBuilder, 'cron', hour='0', id='safety-todo-makedirs')
         print('##### CONNECTED CAMERA ##### : ', self.listPorts)
 
     async def test(self):

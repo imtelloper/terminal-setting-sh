@@ -1,6 +1,4 @@
-import glob
 import platform
-from typing import Optional
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from database.mongoDB import *
@@ -10,30 +8,12 @@ from routers.authRouter import router as AuthRouter
 from routers.observeRouter import router as ObserveRouter
 from routers.archiveRouter import router as ArchiveRouter
 from routers.trackerRouter import router as TrackerRouter
-from dotenv import load_dotenv
-from pathlib import Path
-import os
-import logging
 import logging.config
-import cv2
-import traceback
 import warnings
-import datetime
 from fastapi.responses import FileResponse
 
-warnings.filterwarnings('ignore')
-from modules.yolov5.detect import detect
-from modules.calculate import *
-import speech_recognition as sr
-from gtts import gTTS
-import os
-import time
-import playsound
-import minimalmodbus as minimalmodbus
-import serial
-import socket
-from services.streamService import StreamService
 
+warnings.filterwarnings('ignore')
 
 # load_dotenv(dotenv_path=f".{os.getenv('DOT_ENV', 'test')}.env")
 # logging.config.fileConfig("logging.conf", disable_existing_loggers=False)
