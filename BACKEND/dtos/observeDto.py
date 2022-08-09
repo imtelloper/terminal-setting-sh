@@ -14,5 +14,5 @@ class ObserveDto(BaseDtoMixin):
     safetyLevel: str = ...
     yellowCnt: Optional[int] = None
     redCnt: Optional[int] = None
-    observeSwitch: bool = ...
+    observeSwitch: bool = True
     observeTime: Optional[datetime] = Field(alias="createdAt")
