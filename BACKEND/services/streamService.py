@@ -85,16 +85,12 @@ class StreamService:
         print('🔥platform.platform()', platform.platform())
         print('🔥platform.platform()', 'macOS' in platform.platform())
         # 각종 파일 저장 경로 폴더 생성
-        # if platform.platform() != 'macOS-12.4-arm64-arm-64bit':
         if not ('macOS' in platform.platform()):
-            print('self.videoFolderPath', self.videoFolderPath)
-            print('self.screenShotFolderPath', self.screenShotFolderPath)
-
             def dirBuilder():
                 makedirs(self.videoFolderPath)
                 makedirs(self.screenShotFolderPath)
-                print('build dir videoFolderPath: ', self.videoFolderPath)
-                print('build dir screenShotFolderPath: ', self.screenShotFolderPath)
+                print('🏗 build dir videoFolderPath: ', self.videoFolderPath)
+                print('🏗 build dir screenShotFolderPath: ', self.screenShotFolderPath)
 
             dirBuilder()
             secretary.add_job(dirBuilder, 'cron', hour='0', id='safety-todo-makedirs')
