@@ -47,8 +47,8 @@ export default class PolygonDraw {
     coordinate1: Array<number>,
     coordinate2: Array<number>
   ) => {
-    console.log('🌊coordinate1', coordinate1);
-    console.log('🌊coordinate2', coordinate2);
+    // console.log('🌊coordinate1', coordinate1);
+    // console.log('🌊coordinate2', coordinate2);
     const firstPoints = coordinate1;
     const secondPoints = coordinate2;
     try {

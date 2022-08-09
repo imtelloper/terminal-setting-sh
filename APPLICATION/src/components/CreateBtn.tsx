@@ -22,7 +22,7 @@ const CreateBtn = ({ videoFrameState, setVideoFrameState }) => {
     <div className="safetyCreateBtnContainer">
       <button
         className="safetyCreateBtn"
-        datatype={idx.toString()}
+        // datatype={idx.toString()}
         onClick={createCanvas}
       >
         <span>

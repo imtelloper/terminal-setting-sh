@@ -11,11 +11,13 @@ class Observe(BaseModel):
     date: str = Field(..., description="날짜 -> yyyy-mm-dd 형식")
     groupNum: int = Field(..., description="1 -> group1, 2 -> group2")
     safetyLevel: str = Field(...,
-                             description="감지 구역의 현재 안전 레벨 -> Green | Yellow | Red, 알람 메세지(yellow, red 감지 될때마다 업뎃) -> 없음 | 작업자 진입 확인 | 작업자 위험 반경 진입")
+                             description="감지 구역의 현재 안전 레벨 -> Green | Yellow | Red, "
+                                         "알람 메세지(yellow, red 감지 될때마다 업뎃) -> 없음 | 작업자 진입 확인 | 작업자 위험 반경 진입")
     yellowCnt: Optional[int] = Field(..., description="해당 감지 그룹에서 YELLO 카메라 감지 됐을때 +1")
     redCnt: Optional[int] = Field(..., description="해당 감지 그룹에서 RED 카메라 감지 됐을때 +1")
-    observeSwitch: bool = Field(..., description="현재 안전펜스 작동중 -> true | false")
-    observeTime: str = Field(..., description="observeSwitch가 false면 초기화 true가 되었을때 시간 기록")
+    observeSwitch: bool = Field(True, description="현재 안전펜스 작동중 -> true | false")
+    # observeTime: str = Field(..., description="observeSwitch가 false면 초기화 true가 되었을때 시간 기록")
+    observeTime: Optional[datetime] = datetime.now()
     createdAt: Optional[datetime] = datetime.now()
 
     class Config:

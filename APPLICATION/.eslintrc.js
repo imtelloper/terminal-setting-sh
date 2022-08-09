@@ -27,6 +27,7 @@ module.exports = {
     '@typescript-eslint/no-shadow': 'off',
     'prefer-destructuring': 'off',
     'no-restricted-globals': 'off',
+    '@typescript-eslint/naming-convention': 'off',
   },
   parserOptions: {
     ecmaVersion: 2020,

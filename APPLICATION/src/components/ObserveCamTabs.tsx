@@ -54,6 +54,8 @@ const ObserveCamTabs = ({ setCamTabState, camTabState }) => {
         console.log('🍋🍋🍋🍋🍋🍋tracker', tracker);
         // console.log('🍋🍋🍋🍋🍋🍋tracker', tracker[0].camPort);
         // console.log('🍋🍋🍋🍋🍋🍋tracker', tracker[0]._id);
+
+        /* DetailViewPage에서 사용하기 위함 */
         setSwrState({
           ...swrState,
           curTrackerId: tracker[0]._id,
@@ -61,6 +63,7 @@ const ObserveCamTabs = ({ setCamTabState, camTabState }) => {
           curCamCalibImg: tracker[0].calibImg,
           curCamBaseLine: tracker[0].baseLine,
           curCamDangerLine: tracker[0].dangerLine,
+          curCamIp: tracker[0].ip,
         });
       })
       .catch((err) => console.error(err));
