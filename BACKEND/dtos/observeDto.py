@@ -1,7 +1,5 @@
 from typing import Optional
 from dtos.baseDto import BaseDtoMixin
-from datetime import datetime
-from pydantic import Field
 
 
 class ObserveDto(BaseDtoMixin):
@@ -14,5 +12,5 @@ class ObserveDto(BaseDtoMixin):
     safetyLevel: str = ...
     yellowCnt: Optional[int] = None
     redCnt: Optional[int] = None
-    observeSwitch: bool = True
-    observeTime: Optional[datetime] = Field(alias="createdAt")
+    observeSwitch: bool = ...
+    observeTime: str = ...

@@ -297,7 +297,7 @@ class StreamService:
                 "safetyLevel": "Green",
                 "yellowCnt": 0,
                 "redCnt": 0,
-                "observeSwitch": False,
+                "observeSwitch": True,
                 "observeTime": datetime.datetime.now(),
             }
             resultData = await insertOne(self.dbName, self.tableName, insertData)

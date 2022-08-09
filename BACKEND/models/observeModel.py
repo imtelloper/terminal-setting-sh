@@ -16,8 +16,7 @@ class Observe(BaseModel):
     yellowCnt: Optional[int] = Field(..., description="해당 감지 그룹에서 YELLO 카메라 감지 됐을때 +1")
     redCnt: Optional[int] = Field(..., description="해당 감지 그룹에서 RED 카메라 감지 됐을때 +1")
     observeSwitch: bool = Field(..., description="현재 안전펜스 작동중 -> true | false")
-    # observeTime: str = Field(..., description="observeSwitch가 false면 초기화 true가 되었을때 시간 기록")
-    observeTime: Optional[datetime] = datetime.now()
+    observeTime: str = Field(..., description="observeSwitch가 false면 초기화 true가 되었을때 시간 기록")
     createdAt: Optional[datetime] = datetime.now()
 
     class Config:
