@@ -93,6 +93,8 @@ class StreamService:
             def dirBuilder():
                 makedirs(self.videoFolderPath)
                 makedirs(self.screenShotFolderPath)
+                print('build dir videoFolderPath: ', self.videoFolderPath)
+                print('build dir screenShotFolderPath: ', self.screenShotFolderPath)
 
             dirBuilder()
             secretary.add_job(dirBuilder, 'cron', hour='0', id='safety-todo-makedirs')
