@@ -239,7 +239,7 @@ const ObserveCamInfo = ({
 
           <div className="safetyCreateBtnBox">
             <button
-              className="safetyCreateBtn btnL normalPrimary"
+              className="safetyCreateBtn btnL defaultPrimary"
               datatype={idx.toString()}
               onClick={createCanvas}
             >

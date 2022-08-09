@@ -10,10 +10,10 @@ div.imgArchiveWrap{
     width: calc(100% - 48px);
     height: calc(100% - 48px);
     position: relative;
-    div.imgTitleBox{
+    div.imgArchiveTitleBox{
       width: 100%;
 
-      div.title{
+      div.imgArchiveTitle{
         display: flex;
         align-items: center;
         font-size: 28px;
@@ -23,17 +23,17 @@ div.imgArchiveWrap{
         }
       }
 
-      div.titleCon{
+      div.imgArchiveTitleCon{
         width: 100%;
         display: flex;
         justify-content: space-between;
         margin: 12px 0 28px 0;
 
-        div.left{
+        div.imgArchiveLeft{
           display: flex;
           align-items: center;
 
-          div.leftCon{
+          div.imgArchiveLeftCon{
             height: 40px;
             display: flex;
             align-items: center;
@@ -66,17 +66,22 @@ div.imgArchiveWrap{
               }
             }
           }
-          div.leftIcon{
-            span{
+          div.imgArchiveLeftIcon{
+            display: flex;
+            input{
+              display: none;
+              &:checked + label{
+                color: $white;
+                background-color: $blue-500;
+              }
+            }
+            label{
               display: flex;
               align-items: center;
-              border-radius: 2px;
-              margin-right: 0;
+              border-radius: 4px;
               transition: 0.3s;
-              &.toggleBtnActive{
-                background-color: $blue-500;
-                color: $white;
-              }
+              cursor: pointer;
+              margin-right: 4px;
             }
           }
           div.dateBox{
@@ -85,7 +90,7 @@ div.imgArchiveWrap{
             }
           }
         }
-        div.right{
+        div.imgArchiveRight{
           display: flex;
           button{
             margin-left: 8px;
@@ -100,18 +105,18 @@ div.imgArchiveWrap{
       height: calc(100% - 192px);
       position: relative;
       //display: none;
-      div.imgContent{
+      div.imgArchiveContent{
         width: 100%;
-        height: 33.33%;
-        display: flex;
-        justify-content: space-between;
-        position: relative;
-        div.imgBox{
-          width: calc((100% - 112px)/8);
-          height: calc(100% - 10.66px);
+        height: 100%;
+        display: grid;
+        grid-template-columns: repeat(8,1fr);
+        grid-template-rows: repeat(3, 33.33%);
+        grid-gap: 16px;
+        div.imgArchiveBox{
+          //width: calc((100% - 112px)/8);
+          //height: calc(33.33% - 10.66px);
           background-color: $white;
           border-radius: 8px;
-          margin-right: 16px;
           position: relative;
           &:last-child{
             margin-right: 0;
@@ -124,14 +129,14 @@ div.imgArchiveWrap{
             left: 16px;
             z-index: 10;
           }
-          div.imgImg{
+          div.imgArchiveImg{
             width: 100%;
             height: 62.5%;
             border-top-left-radius: 8px;
             border-top-right-radius: 8px;
             cursor: pointer;
           }
-          div.imgTitle{
+          div.imgArchiveTitle{
             width: 100%;
             height: 37.5%;
             padding: 16px;
@@ -182,13 +187,12 @@ div.imgArchiveWrap{
       width: 100%;
       height: calc(100% - 192px);
       position: relative;
-      background-color: #0A1A7A;
       display: none;
-      div.imgContent{
+      div.imgArchiveContent{
         width: 100%;
         height: 100%;
         overflow-y: scroll;
-        div.imgBox{
+        div.imgArchiveBox{
           width: 100%;
           height: 40px;
           display: flex;
@@ -209,22 +213,26 @@ div.imgArchiveWrap{
             display: flex;
             align-items: center;
           }
-          div.imgInput{
+          div.imgArchiveInput{
             width: 10%;
+            input{
+              position: relative;
+              z-index: 10;
+            }
           }
-          div.imgTitle{
+          div.imgArchiveTitle{
             width: 30%;
             span{
               margin-left: 8px;
             }
           }
-          div.imgDate{
+          div.imgArchiveDate{
             width: 30%;
           }
-          div.imgSize{
+          div.imgArchiveSize{
             width: 20%;
           }
-          div.imgGroup{
+          div.imgArchiveGroup{
             width: 10%;
           }
         }
@@ -241,11 +249,11 @@ div.imgArchiveWrap{
       position: relative;
       display: none;
 
-      div.imgContent{
+      div.imgArchiveContent{
         width: 100%;
         height: 100%;
         overflow-y: scroll;
-        div.imgBox{
+        div.imgArchiveBox{
           width: 100%;
           height: 80px;
           display: flex;
@@ -262,29 +270,29 @@ div.imgArchiveWrap{
             display: flex;
             align-items: center;
           }
-          div.imgInput{
+          div.imgArchiveInput{
             width: 5%;
           }
-          div.imgPreview{
+          div.imgArchivePreview{
             width: 10%;
             img{
               width: 116px;
               height: 80px;
             }
           }
-          div.imgTitle{
+          div.imgArchiveTitle{
             width: 30%;
             span{
               margin-left: 8px;
             }
           }
-          div.imgDate{
+          div.imgArchiveDate{
             width: 25%;
           }
-          div.imgSize{
+          div.imgArchiveSize{
             width: 20%;
           }
-          div.imgGroup{
+          div.imgArchiveGroup{
             width: 10%;
           }
         }
@@ -294,7 +302,7 @@ div.imgArchiveWrap{
       }
     }
 
-    div.bottomBtnBox{
+    div.imgArchiveBottomBtnBox{
       margin: 24px 0;
       position: relative;
     }

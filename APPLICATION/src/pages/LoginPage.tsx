@@ -153,6 +153,9 @@ const LoginPage = () => {
             </div>
           </div>
           <button className="btnR defaultPrimary">LOG IN</button>
+          <div className="loginBtnBox">
+
+          </div>
         </div>
       </div>
       <div className="interX">© INTERX</div>

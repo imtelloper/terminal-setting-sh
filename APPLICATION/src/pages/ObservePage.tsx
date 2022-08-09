@@ -6,7 +6,7 @@ import ObserveCamInfo from '../components/ObserveCamInfo';
 import axios from 'axios';
 import Api from '../api/Api';
 import PolygonDraw from '../util/PolygonDraw';
-import { Settings } from '@material-ui/icons';
+import { PhotoLibrary, Settings } from '@material-ui/icons';
 import { useSWRState } from '../fetcher/useSWRState';
 import useSWR from 'swr';
 import dayjs from 'dayjs';
@@ -247,12 +247,22 @@ const ObservePage = () => {
                 <span className="recordTxt">{txtChangeState}</span>
               </div>
               {/* 셋팅 버튼 */}
-              <button
-                className="settingBtn"
-                onClick={() => navigate('/detail')}
-              >
-                <Settings />
-              </button>
+              <div className="rightBtnBox">
+                <button
+                  className="archiveBtn"
+                  onClick={() => {
+                    navigate('/videoArchive');
+                  }}
+                >
+                  <PhotoLibrary />
+                </button>
+                <button
+                  className="settingBtn"
+                  onClick={() => navigate('/detail')}
+                >
+                  <Settings />
+                </button>
+              </div>
             </div>
           </div>
         </div>
