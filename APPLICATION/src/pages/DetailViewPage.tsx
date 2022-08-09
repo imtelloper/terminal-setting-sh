@@ -10,6 +10,7 @@ import { useSWRState } from '../fetcher/useSWRState';
 import { useNavigate } from 'react-router-dom';
 import dayjs from 'dayjs';
 import { camPort1Ip } from '../initDatas/initVideoFrameData';
+import { flushSync } from 'react-dom';
 
 const DetailViewPage = () => {
   const { data: swrState, mutate: setSwrState } = useSWRState();
@@ -19,26 +20,53 @@ const DetailViewPage = () => {
   const [imgSrcState, setImgSrcState] = useState(
     'http://192.168.0.4:81/api/stream/'
   );
+  const [calibImgSrcState, setCalibImgSrcState] = useState('');
   const [imgArchiveState, setImgArchiveState] = useState([]);
   const levelColor = {
     yellow: '#ffca2b',
     red: '#ff530d',
   };
 
-  const openDangerZonePopup = () => {
-    setIsOpenDangerZoneState(!isOpenDangerZoneState);
-  };
+  const openClosePopup = (e) => {
+    const target = e.currentTarget;
+    const dType = target.getAttribute('datatype');
+    const type = {
+      calibration: () => setIsOpenCalibrationState(!isOpenCalibrationState),
+      dangerZone: () => setIsOpenDangerZoneState(!isOpenDangerZoneState),
+    };
 
-  const closeDangerZonePopup = () => {
-    setIsOpenDangerZoneState(!isOpenDangerZoneState);
-  };
-
-  const openCalibrationPopup = () => {
-    setIsOpenCalibrationState(!isOpenCalibrationState);
-  };
-
-  const closeCalibrationPopup = () => {
-    setIsOpenCalibrationState(!isOpenCalibrationState);
+    /* calibration 오픈시 이미지 캡쳐 */
+    if (dType === 'calibration') {
+      Api.stream
+        .calibrationImgCapture('192.168.0.4')
+        .then((res) => {
+          console.log('calibrationImgCapture res', res);
+          Api.tracker
+            .findData({
+              area: swrState.curTrackerArea,
+              camPort: swrState.curCamPort,
+            })
+            .then((tracker) => {
+              console.log('🍋🍋🍋🍋🍋🍋tracker', tracker);
+              console.log('🍋🍋🍋🍋🍋🍋tracker', tracker[0].calibImg);
+              flushSync(() => {
+                setCalibImgSrcState(
+                  `http://${camPort1Ip}:81/${tracker[0].calibImg
+                    .split('/')
+                    .slice(5)
+                    .join('/')}`
+                );
+              });
+            })
+            .finally(() => {
+              type[dType]();
+            })
+            .catch((err) => console.error(err));
+        })
+        .catch((err) => console.error(err));
+    } else {
+      type[dType]();
+    }
   };
 
   /* INIT EFFECT */
@@ -107,8 +135,14 @@ const DetailViewPage = () => {
     // }
   };
 
+  /* 감지 이력 리스트 */
   const imgCaptureHistoryMap = imgArchiveState.map((obj) => (
-    <p datatype={obj.path} onClick={handleSetArchiveImg} key={obj.id}>
+    <p
+      datatype={obj.path}
+      onClick={handleSetArchiveImg}
+      key={obj.id}
+      role="presentation"
+    >
       <span>
         <Feedback
           style={{
@@ -141,6 +175,7 @@ const DetailViewPage = () => {
                 defaultChecked
               />
               <label
+                role="presentation"
                 className="label1"
                 htmlFor="menuTab1"
                 datatype="realTimeStream"
@@ -155,6 +190,7 @@ const DetailViewPage = () => {
                 name="tabs"
               />
               <label
+                role="presentation"
                 className="label2"
                 htmlFor="menuTab2"
                 datatype="historyRefer"
@@ -238,11 +274,11 @@ const DetailViewPage = () => {
                 <MdModeEdit style={{ fontSize: '38px' }} />
                 <span>영역 재설정</span>
               </button>
-              <button onClick={openCalibrationPopup}>
+              <button datatype="calibration" onClick={openClosePopup}>
                 <Tune style={{ fontSize: '38px' }} />
                 <span>Calibration 설정</span>
               </button>
-              <button onClick={openDangerZonePopup}>
+              <button datatype="dangerZone" onClick={openClosePopup}>
                 <MdDangerous style={{ fontSize: '38px' }} />
                 <span>위험구간 설정</span>
               </button>
@@ -257,20 +293,26 @@ const DetailViewPage = () => {
               >
                 취소
               </button>
-              <button className="iconR defaultPrimary">확인</button>
+              <button
+                className="iconR defaultPrimary"
+                onClick={() => {
+                  navigate('/observe');
+                }}
+              >
+                확인
+              </button>
             </div>
           </div>
 
           {isOpenDangerZoneState && (
             <DangerZonePopup
-              openDangerZonePopup={openDangerZonePopup}
-              closeDangerZonePopup={closeDangerZonePopup}
+              setIsOpenDangerZoneState={setIsOpenDangerZoneState}
             />
           )}
           {isOpenCalibrationState && (
             <CalibrationPopup
-              openCalibrationPopup={openCalibrationPopup}
-              closeCalibrationPopup={closeCalibrationPopup}
+              calibImgSrcState={calibImgSrcState}
+              setIsOpenCalibrationState={setIsOpenCalibrationState}
             />
           )}
         </div>

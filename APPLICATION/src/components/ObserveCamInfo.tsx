@@ -14,13 +14,9 @@ type Props = {
   setVideoFrameState: React.Dispatch<any>;
 };
 
-// eslint-disable-next-line react/prop-types
 const ObserveCamInfo = ({
   videoFrameState,
   setVideoFrameState,
-  camTabState,
-  recordState,
-  setRecordState,
   getObserveState,
   setNewVideoSrcState,
 }) => {
@@ -49,8 +45,7 @@ const ObserveCamInfo = ({
 
     const newArr = videoFrameState;
     newArr[3].frameSrc = 'http://192.168.0.30:81/api/stream/';
-    flushSync(() => setVideoFrameState([]));
-    flushSync(() => setVideoFrameState(newArr));
+    flushSync(() => setVideoFrameState([...newArr]));
   };
 
   // 그룹안 삭제
@@ -86,8 +81,7 @@ const ObserveCamInfo = ({
     newArr[1].secondCanvas.visible = true;
     newArr[2].secondCanvas.visible = true;
     newArr[3].secondCanvas.visible = true;
-    flushSync(() => setVideoFrameState([]));
-    flushSync(() => setVideoFrameState(newArr));
+    flushSync(() => setVideoFrameState([...newArr]));
   };
 
   // 생성
@@ -110,8 +104,7 @@ const ObserveCamInfo = ({
       newArr[dType].firstCanvas.visible = true;
     else newArr[dType].secondCanvas.visible = true;
 
-    flushSync(() => setVideoFrameState([]));
-    flushSync(() => setVideoFrameState(newArr));
+    flushSync(() => setVideoFrameState([...newArr]));
   };
 
   /* INIT EFFECT */
@@ -124,7 +117,7 @@ const ObserveCamInfo = ({
 
   useEffect(() => {
     // console.log('ObserveCamInfo');
-    console.log('🌸getObserveState', getObserveState);
+    // console.log('🌸getObserveState', getObserveState);
 
     const newCamInfoState = [{}, {}, {}, {}];
     /* getObserveState 가공 후 camInfoState에 셋팅 */
@@ -138,13 +131,13 @@ const ObserveCamInfo = ({
       };
     });
 
-    console.log('🪴🪴🪴🪴☘️ newCamInfoState', newCamInfoState);
+    // console.log('🪴🪴🪴🪴☘️ newCamInfoState', newCamInfoState);
     newCamInfoState.length > 0 && setCamInfoState(newCamInfoState);
   }, [getObserveState]);
 
-  useEffect(() => {
-    console.log('love dive 🌝🌝🌝🌝🌝 camInfoState', camInfoState);
-  }, [camInfoState]);
+  // useEffect(() => {
+  //   console.log('love dive 🌝🌝🌝🌝🌝 camInfoState', camInfoState);
+  // }, [camInfoState]);
 
   const groupBoxComponent = (stateInfo, stateIdx, groupNum) => (
     <div className="observeCamInfoContainer">

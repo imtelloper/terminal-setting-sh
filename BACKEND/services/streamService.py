@@ -20,6 +20,9 @@ from fastapi.responses import JSONResponse
 import paramiko
 import time
 import subprocess
+import stat
+import socket
+from tools.scheculder import *
 
 
 # W: 256 H: 192
@@ -49,6 +52,7 @@ class StreamService:
         self.videoWriter = None  # cv 녹화 객체
         self.recordGate = False  # 녹화 시작, 중지를 위한 bool
         self.captureGate = False  # 캡쳐를 위한 bool
+        self.calibCaptureGate = False  # Calibration 설정을 위한 스크린샷 캡쳐를 위한 bool
         self.currentPort = None  # 카메라가 mini pc에 연결된 포트 번호
         self.listPorts = self.list_ports()  # 현재 연결된 카메라의 포트 번호
         if (self.listPorts[1]):
@@ -76,11 +80,20 @@ class StreamService:
         self.thisCamSensingModel = ""  # 현재 pc의 감지 모델 셋팅 값
         self.humanCalcurator = HumanCalculator()
         self.camImg = ""
-
+        self.videoFrameCnt = 0.05
+        self.deviceIp = socket.gethostbyname(socket.gethostname())
+        print('🔥platform.platform()', platform.platform())
+        print('🔥platform.platform()', 'macOS' in platform.platform())
         # 각종 파일 저장 경로 폴더 생성
-        if platform.platform() != 'macOS-12.4-arm64-arm-64bit':
-            makedirs(self.videoFolderPath)
-            makedirs(self.screenShotFolderPath)
+        if not ('macOS' in platform.platform()):
+            def dirBuilder():
+                makedirs(self.videoFolderPath)
+                makedirs(self.screenShotFolderPath)
+                print('🏗 build dir videoFolderPath: ', self.videoFolderPath)
+                print('🏗 build dir screenShotFolderPath: ', self.screenShotFolderPath)
+
+            dirBuilder()
+            secretary.add_job(dirBuilder, 'cron', hour='0', id='safety-todo-makedirs')
         print('##### CONNECTED CAMERA ##### : ', self.listPorts)
 
     async def test(self):
@@ -107,6 +120,9 @@ class StreamService:
 
     def __del__(self):
         self.video.release()
+
+    def getScreenShotRecordPath(self):
+        return self.screenShotRecordPath
 
     def getVideoRecordPath(self):
         return self.videoRecordPath
@@ -135,6 +151,27 @@ class StreamService:
     def setCaptureGateOpen(self):
         self.initScreenCapturePath()
         self.captureGate = True
+        return True
+
+    # Calibration 설정을 위한 스크린샷 캡쳐를 하기 위한 메서드
+    async def setCalibCaptureGateOpen(self):
+        self.initScreenCapturePath()
+        # self.calibCaptureGate = True
+        await getConnection()[self.dbName][config.TABLE_TRACKER].update_one(
+            {'_id': ObjectId(self.trackerId)},
+            {'$set':
+                {
+                    'calibImg': self.screenShotRecordPath,
+                }
+            }
+        )
+        ret, frame = self.video.read()
+        frame = frame.copy()
+        frame = np.array(frame)
+        frame = cv2.cvtColor(frame, cv2.COLOR_RGB2BGR)
+        frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+        frame = cv2.resize(frame, dsize=(self.camWidth, self.camHeight), interpolation=cv2.INTER_AREA)
+        cv2.imwrite(self.screenShotRecordPath, frame, params=[cv2.IMWRITE_PNG_COMPRESSION, 0])
         return True
 
     # 녹화 경로, 파일명 초기화
@@ -294,6 +331,29 @@ class StreamService:
             }
         )
 
+    def updateCalibrationImgPath(self, trackerId, captureImg: str, imgPath: str):
+        self.initScreenCapturePath()
+        getConnection()[self.dbName][config.TABLE_TRACKER].update_one(
+            {'_id': ObjectId(trackerId)},
+            {'$set':
+                {
+                    'calibImg': imgPath,
+                }
+            }
+        )
+        cv2.imwrite(imgPath, captureImg, params=[cv2.IMWRITE_PNG_COMPRESSION, 0])
+
+    def updateDeviceIp(self, trackerId, ip: str):
+        self.initScreenCapturePath()
+        getConnection()[self.dbName][config.TABLE_TRACKER].update_one(
+            {'_id': ObjectId(trackerId)},
+            {'$set':
+                {
+                    'ip': ip,
+                }
+            }
+        )
+
     def screenCaptureInsertData(self, captureImg: str, level: str):
         self.initScreenCapturePath()
         cv2.imwrite(self.screenShotRecordPath, captureImg,
@@ -336,7 +396,9 @@ class StreamService:
 
     # 관제 PC에 파일 저장
     def saveFile(self, folderPath, recordPath):
-        #관제 PC
+        # print('###### folderPath',folderPath)
+        # print('###### recordPath',recordPath)
+        # 관제 PC
         host = "192.168.0.4"
         port = 22  # 고정
         transport = paramiko.transport.Transport(host, port)
@@ -348,18 +410,18 @@ class StreamService:
         sftp = paramiko.SFTPClient.from_transport(transport)
 
         # 관제 PC 내 폴더 생성
-        try:
-            sftp.chdir(folderPath)
-        except IOError:
-            sftp.chdir(self.savePath)
-            sftp.mkdir(self.currentDate)
-            sftp.chdir(self.currentDate)
-            sftp.mkdir(self.camArea)
-            sftp.chdir(self.camArea)
-            sftp.mkdir(self.camPort)
-            sftp.chdir(self.camPort)
-            sftp.mkdir("video")
-            sftp.mkdir("capture")
+        client = paramiko.SSHClient()
+        client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+        client.load_system_host_keys()
+        client.connect(host, username=userId, password=password)
+        client.invoke_shell()
+        cmd = 'ls -d ' + folderPath
+        stdin, stdout, stderr = client.exec_command(cmd)
+        if not str(stderr.read()):
+            return True
+        else:
+            cmd = 'sudo mkdir -p ' + recordPath
+            client.exec_command(cmd)
 
         # Upload - 파일 업로드
         remotepath = recordPath
@@ -401,10 +463,12 @@ class StreamService:
         fstSensingLevel = None
         secSensingLevel = None
 
+        self.updateDeviceIp(self.trackerId, self.deviceIp)
+
         while self.cameraOnOff:
             k = cv2.waitKey(1) & 0xFF
             timeCnt += 1
-            time.sleep(0.08)
+            time.sleep(self.videoFrameCnt)
             ret, frame = self.video.read()
             if frame is None: return
             self.camImg = frame.copy()
@@ -423,8 +487,10 @@ class StreamService:
                     track_signal = False
                     cnt += 1
                 # 트랙킹 돌리기(추적한다., 박스가 따라간다.)
-                elif 0 < cnt < 3: cnt += 1
-                else: cnt = 0
+                elif 0 < cnt < 3:
+                    cnt += 1
+                else:
+                    cnt = 0
                 # 욜로가 0.2초, 트랙킹이 3번 <- 반복
                 bboxes = []
 
@@ -441,7 +507,7 @@ class StreamService:
                         multi_tracker.add(cv2.TrackerCSRT_create(), self.camImg, track_bbox)
                         track_signal = True
                     rsigs, self.camImg = self.humanCalcurator.calculate_human(self.camImg, bboxes, unit_num, rois)
-                        # print('warn_sig', warn_sig) # 0:안전, 1: 옐로우1차, 2: 2차 레드
+                    # print('warn_sig', warn_sig) # 0:안전, 1: 옐로우1차, 2: 2차 레드
                     result_img = self.camImg
                 else:
                     # tracking
@@ -454,8 +520,9 @@ class StreamService:
                                 x1, y1, w, h = tuple([int(_) for _ in t_bbox])
                                 x2, y2 = x1 + w, y1 + h
                                 bboxes.append([x1, y1, x2, y2, w, h])
-                            rsigs, result_img = self.humanCalcurator.calculate_human(self.camImg, bboxes, unit_num, rois)
-                                # print('warn_sig',warn_sig) # 0:안전, 1: 옐로우1차, 2: 2차 레드
+                            rsigs, result_img = self.humanCalcurator.calculate_human(self.camImg, bboxes, unit_num,
+                                                                                     rois)
+                            # print('warn_sig',warn_sig) # 0:안전, 1: 옐로우1차, 2: 2차 레드
                             result_img = self.camImg
                     else:
                         result_img = self.camImg
@@ -463,26 +530,26 @@ class StreamService:
                 fstGroupSensing = None
                 secGroupSensing = None
 
-                print('rsigs :', rsigs)
-                testSigs = [[0,1], [2,0], [2,0]]
-                fstGroup =[]
-                secGroup =[]
-                if len(rsigs)>0 and len(rsigs[0])>0:
+                # print('rsigs :', rsigs)
+                testSigs = [[0, 1], [2, 0], [2, 0]]
+                fstGroup = []
+                secGroup = []
+                if len(rsigs) > 0 and len(rsigs[0]) > 0:
                     for person in rsigs:
-                        print('person',person)
+                        # print('person',person)
                         fstGroup.append(person[0])
-                        if len(person)>1:
+                        if len(person) > 1:
                             secGroup.append(person[1])
 
-                print('첫번째 사람들만', fstGroup)
-                print('두번째 사람들만', secGroup)
+                # print('첫번째 사람들만', fstGroup)
+                # print('두번째 사람들만', secGroup)
 
-                if len(fstGroup) > 0 :
-                    print('첫번째 그룹 ', max(fstGroup))
+                if len(fstGroup) > 0:
+                    # print('첫번째 그룹 ', max(fstGroup))
                     fstGroupSensing = max(fstGroup)
 
                 if len(secGroup) > 0:
-                    print('두번째 그룹 ', max(secGroup))
+                    # print('두번째 그룹 ', max(secGroup))
                     secGroupSensing = max(secGroup)
 
                 # timeCnt가 낮을수록 Yellow, Red 업데이트 속도 빨라짐. 너무 빠르면 성능에 문제 있을 수 있음
@@ -565,7 +632,7 @@ class StreamService:
                     # cv2.imshow('frame', result_img)
                 else:
                     cv2.destroyAllWindows()
-                    self.saveFile(self.videoFolderPath, self.videoRecordPath)
+                    # self.saveFile(self.videoFolderPath, self.videoRecordPath)
 
                 # 스크린 캡쳐
                 if self.captureGate:
@@ -573,6 +640,14 @@ class StreamService:
                     self.screenCaptureInsertData(result_img, 'Normal')
                     self.captureGate = False
                     self.saveFile(self.screenShotFolderPath, self.screenShotRecordPath)
+
+                # 칼리브레이션 이미지 캡쳐
+                if self.calibCaptureGate:
+                    print('CALIB CAPTURE CALIB CAPTURE CALIB CAPTURE CALIB CAPTURE CALIB CAPTURE')
+                    # self.updateCalibrationImgPath(self.trackerId, result_img, self.screenShotRecordPath)
+                    cv2.imwrite(self.screenShotRecordPath, result_img, params=[cv2.IMWRITE_PNG_COMPRESSION, 0])
+                    self.calibCaptureGate = False
+                    # self.saveFile(self.screenShotFolderPath, self.screenShotRecordPath)
 
                 # 키보드 눌렀을 시 이벤트 발생
                 if k == ord('s'):

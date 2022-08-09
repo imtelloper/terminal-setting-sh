@@ -1,4 +1,4 @@
-export const camPort1Ip = '192.168.0.4';
+export const camPort1Ip = '192.168.0.34';
 export const camPort2Ip = '192.168.0.26';
 export const camPort3Ip = '192.168.0.36';
 export const camPort4Ip = '192.168.0.30';

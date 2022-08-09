@@ -51,13 +51,16 @@ const ObserveCamTabs = ({ setCamTabState, camTabState }) => {
         camPort: `cam${camTabState}`,
       })
       .then((tracker) => {
-        // console.log('🍋🍋🍋🍋🍋🍋tracker', tracker);
+        console.log('🍋🍋🍋🍋🍋🍋tracker', tracker);
         // console.log('🍋🍋🍋🍋🍋🍋tracker', tracker[0].camPort);
         // console.log('🍋🍋🍋🍋🍋🍋tracker', tracker[0]._id);
         setSwrState({
           ...swrState,
           curTrackerId: tracker[0]._id,
           curCamPort: tracker[0].camPort,
+          curCamCalibImg: tracker[0].calibImg,
+          curCamBaseLine: tracker[0].baseLine,
+          curCamDangerLine: tracker[0].dangerLine,
         });
       })
       .catch((err) => console.error(err));

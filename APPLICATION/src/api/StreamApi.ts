@@ -12,10 +12,17 @@ export default class StreamApi {
 
   stopRecordVideo = async (ip) => {
     try {
-      const res = await axios.get(
-        `http://${ip}:81/api/stream/record-off`
-      );
+      const res = await axios.get(`http://${ip}:81/api/stream/record-off`);
       return res.status === 200 ? res.data : 'failed record stop';
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  calibrationImgCapture = async (ip) => {
+    try {
+      const res = await axios.get(`http://${ip}:81/api/stream/calib-capture`);
+      return res.status === 200 ? res.data : 'failed capture calibation img';
     } catch (error) {
       console.error(error);
     }
