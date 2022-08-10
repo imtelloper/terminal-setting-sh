@@ -275,6 +275,10 @@ const SettingPage = () => {
               defaultValue={data.threshold}
               datatype="threshold"
             >
+              <option>10</option>
+              <option>20</option>
+              <option>30</option>
+              <option>40</option>
               <option>50</option>
               <option>60</option>
               <option>70</option>

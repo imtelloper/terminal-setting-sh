@@ -53,7 +53,7 @@ const ObserveCamStream = ({
     const itemID = canvas?.getAttribute('itemID');
     // console.log('☘☘☘☘☘☘☘☘☘☘☘☘☘☘☘☘☘☘☘☘☘☘☘☘☘️', canvas?.getAttribute('itemProp'));
     const itemProps = canvas?.getAttribute('itemProp').split('|');
-    console.log('☘️draw arrIndex', parseInt(arrIndex, 10) + 1, '번 카메라');
+    // console.log('☘️draw arrIndex', parseInt(arrIndex, 10) + 1, '번 카메라');
     // console.log('🍀️itemID', itemID);
     // console.log('🍀️itemProp', itemProps);
     // const baseLine = itemProps[0].includes('&') ? itemProps[0] : '0,0,0,0&0';

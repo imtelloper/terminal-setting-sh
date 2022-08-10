@@ -91,7 +91,7 @@ const ObservePage = () => {
     console.log('🌈swrTrackerData', swrTrackerData);
 
     swrTrackerData.forEach(async (tracker, idx) => {
-      console.log('🪸tracker', tracker);
+      // console.log('🪸tracker', tracker);
       // console.log('🪸tracker ip', tracker.ip);
 
       const curVideoFrameState = videoFrameState;

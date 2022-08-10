@@ -42,6 +42,7 @@ const DetailViewPage = () => {
     { refreshInterval: 1000 }
   );
 
+  /* 그룹 선택 */
   const handleSelectGroupNum = (e) => {
     const target = e.currentTarget;
     const { value } = target;

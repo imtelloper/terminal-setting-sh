@@ -34,6 +34,22 @@ const ObserveCamInfo = ({
 
   const handleActive = (e) => {
     console.log('handleActive');
+    const target = e.currentTarget;
+    const { value } = target;
+    const observeId = target.getAttribute('itemID');
+    console.log('value', value);
+    console.log('observeId', observeId);
+    console.log('value === 확인 하란 말이다 ', value === 'on');
+    setTimeout(() => {
+      Api.observe
+        .modifyOneData(observeId, {
+          observeSwitch: value === 'on',
+        })
+        .then((res) => {
+          console.log('Api.observe.modifyOneData res', res);
+        })
+        .catch((err) => console.error(err));
+    }, 20);
   };
 
   // 그룹안 삭제
@@ -123,9 +139,42 @@ const ObserveCamInfo = ({
     newCamInfoState.length > 0 && setCamInfoState(newCamInfoState);
   }, [getObserveState]);
 
-  // useEffect(() => {
-  //   console.log('love dive 🌝🌝🌝🌝🌝 camInfoState', camInfoState);
-  // }, [camInfoState]);
+  useEffect(() => {
+    // console.log('love dive 🌝🌝🌝🌝🌝 camInfoState', camInfoState);
+    camInfoState?.forEach((obj, idx) => {
+      const camNum = idx + 1;
+      const group1 = obj[1];
+      const group2 = obj[2];
+      // console.log('love dive 🌝🌝🌝🌝🌝 camInfoState obj', obj);
+      // console.log('🌷love dive obj[1]', obj[1]);
+      // console.log('🌷love dive obj[2]', obj[2]);
+      // console.log('🌷love dive obj[1].observeSwitch', obj[1]?.observeSwitch);
+      // console.log('🌷love dive obj[2].observeSwitch', obj[2]?.observeSwitch);
+
+      const group1Ele = document.querySelector(
+        `.cam${camNum}ObserveSwitch1`
+      ) as HTMLSpanElement;
+
+      const group2Ele = document.querySelector(
+        `.cam${camNum}ObserveSwitch2`
+      ) as HTMLSpanElement;
+
+      // console.log('🎄🎄🎄 group1Ele', group1Ele);
+      // console.log('🎄🎄🎄 group2Ele', group2Ele);
+
+      if (group1Ele) {
+        group1?.observeSwitch === true
+          ? (group1Ele.style.transform = 'translateX(-60%)')
+          : (group1Ele.style.transform = 'translateX(40%)');
+      }
+
+      if (group2Ele) {
+        group2?.observeSwitch === true
+          ? (group2Ele.style.transform = 'translateX(-60%)')
+          : (group2Ele.style.transform = 'translateX(40%)');
+      }
+    });
+  }, [camInfoState]);
 
   const groupBoxComponent = (stateInfo, stateIdx, groupNum) => (
     <div className="observeCamInfoContainer">
@@ -139,7 +188,8 @@ const ObserveCamInfo = ({
               id={`toggleOnRadio${stateIdx}`}
               name="messageRadio"
               value="on"
-              defaultChecked
+              onChange={handleActive}
+              itemID={stateInfo?.[groupNum]?._id}
             />
             <label htmlFor={`toggleOnRadio${stateIdx}`}>ON</label>
             <input
@@ -148,9 +198,13 @@ const ObserveCamInfo = ({
               id={`toggleOffRadio${stateIdx}`}
               name="messageRadio"
               value="off"
+              onChange={handleActive}
+              itemID={stateInfo?.[groupNum]?._id}
             />
             <label htmlFor={`toggleOffRadio${stateIdx}`}>OFF</label>
-            <span className="move" />
+            <span
+              className={`move ${stateInfo?.[groupNum]?.camPort}ObserveSwitch${groupNum}`}
+            />
           </div>
         </div>
         <div className="btnBox">
