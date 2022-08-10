@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import '../style/DesignSystem.scss';
 import '../style/pages/DetailViewPage.scss';
 import DangerZonePopup from '../components/DangerZonePopup';
@@ -9,22 +9,65 @@ import Api from '../api/Api';
 import { useSWRState } from '../fetcher/useSWRState';
 import { useNavigate } from 'react-router-dom';
 import dayjs from 'dayjs';
-import { camPort1Ip } from '../initDatas/initVideoFrameData';
 import { flushSync } from 'react-dom';
+import useSWR from 'swr';
+import axios from 'axios';
+import { today } from '../util/dateLibrary';
 
 const DetailViewPage = () => {
   const { data: swrState, mutate: setSwrState } = useSWRState();
   const navigate = useNavigate();
-  const [isOpenDangerZoneState, setIsOpenDangerZoneState] = useState(false);
-  const [isOpenCalibrationState, setIsOpenCalibrationState] = useState(false);
-  const [imgSrcState, setImgSrcState] = useState(
-    'http://192.168.0.4:81/api/stream/'
-  );
-  const [calibImgSrcState, setCalibImgSrcState] = useState('');
-  const [imgArchiveState, setImgArchiveState] = useState([]);
   const levelColor = {
     yellow: '#ffca2b',
     red: '#ff530d',
+  };
+  const [isOpenDangerZoneState, setIsOpenDangerZoneState] = useState(false);
+  const [isOpenCalibrationState, setIsOpenCalibrationState] = useState(false);
+  const [imgSrcState, setImgSrcState] = useState(
+    `http://${swrState.curCamIp}:81/api/stream/`
+  );
+  const [calibImgSrcState, setCalibImgSrcState] = useState('');
+  const [imgArchiveState, setImgArchiveState] = useState([]);
+  const [groupNumState, setGroupNumState] = useState(1);
+  const [curObserveState, setCurObserveState] = useState<Partial<Observe>>({});
+
+  const observeFindFetcher = (url: string) =>
+    axios
+      .post(url, { date: today, trackerId: swrState.curTrackerId })
+      .then((res) => res.data);
+
+  const { data: swrObserveData, error } = useSWR(
+    '/api/observe/find',
+    observeFindFetcher,
+    { refreshInterval: 1000 }
+  );
+
+  const handleSelectGroupNum = (e) => {
+    const target = e.currentTarget;
+    const { value } = target;
+
+    console.log('🥑value', value);
+    setGroupNumState(parseInt(value, 10));
+  };
+
+  const handleSetArchiveImg = (e) => {
+    const target = e.currentTarget;
+    const dType = target.getAttribute('datatype');
+    // console.log('dType', dType);
+    setImgSrcState(
+      `http://${swrState.curCamIp}:81/${dType.split('/').slice(5).join('/')}`
+    );
+  };
+
+  const handleClickTab = (e) => {
+    const target = e.currentTarget;
+    const dType = target.getAttribute('datatype');
+    if (dType === 'realTimeStream') {
+      setImgSrcState(`http://${swrState.curCamIp}:81/api/stream/`);
+    }
+    // else if (dType === 'historyRefer') {
+    //   setImgSrcState('http://192.168.0.4:81/api/stream/');
+    // }
   };
 
   const openClosePopup = (e) => {
@@ -38,7 +81,7 @@ const DetailViewPage = () => {
     /* calibration 오픈시 이미지 캡쳐 */
     if (dType === 'calibration') {
       Api.stream
-        .calibrationImgCapture('192.168.0.4')
+        .calibrationImgCapture(swrState.curCamIp)
         .then((res) => {
           console.log('calibrationImgCapture res', res);
           Api.tracker
@@ -51,7 +94,7 @@ const DetailViewPage = () => {
               console.log('🍋🍋🍋🍋🍋🍋tracker', tracker[0].calibImg);
               flushSync(() => {
                 setCalibImgSrcState(
-                  `http://${camPort1Ip}:81/${tracker[0].calibImg
+                  `http://${swrState.curCamIp}:81/${tracker[0].calibImg
                     .split('/')
                     .slice(5)
                     .join('/')}`
@@ -73,6 +116,8 @@ const DetailViewPage = () => {
   useEffect(() => {
     console.log('🍓swr', swrState);
     console.log('🍓swrState.curTrackerId', swrState.curTrackerId);
+
+    /* 이력조회에서 조회할 이미지 정보들 셋팅 */
     Api.archive
       .getDetailRangeData({
         trackerId: swrState.curTrackerId,
@@ -82,17 +127,6 @@ const DetailViewPage = () => {
       })
       .then((archives) => {
         dayjs.locale('ko');
-        console.log('GASHEEEEEE    archives', archives);
-        archives.forEach((obj) => {
-          console.log(
-            'dayjs(obj.createdAt)',
-            dayjs(obj.createdAt).format('YYYY-MM-DD')
-          );
-          console.log(
-            'dayjs(obj.createdAt)',
-            dayjs(obj.createdAt).format('h:m:s')
-          );
-        });
         setImgArchiveState(
           archives.map((obj) => {
             return {
@@ -109,53 +143,49 @@ const DetailViewPage = () => {
   }, []);
 
   useEffect(() => {
+    console.log('🍅groupNumState', groupNumState);
+  }, [groupNumState]);
+
+  useEffect(() => {
     console.log('imgArchiveState', imgArchiveState);
   }, [imgArchiveState]);
 
-  const handleSetArchiveImg = (e) => {
-    const target = e.currentTarget;
-    const dType = target.getAttribute('datatype');
-    // console.log('dType', dType);
-    // console.log(
-    //   `http://${camPort1Ip}:81/${dType.split('/').slice(5).join('/')}`
-    // );
-    setImgSrcState(
-      `http://${camPort1Ip}:81/${dType.split('/').slice(5).join('/')}`
+  useEffect(() => {
+    console.log('🍒swrObserveData', swrObserveData);
+    const getCurObserve = swrObserveData.filter(
+      (obj) => obj.groupNum === groupNumState
     );
-  };
+    console.log('🍒🍒🍒🍒🍒🍒getCurObserve', getCurObserve);
+    setCurObserveState(getCurObserve[0]);
+  }, [swrObserveData, groupNumState]);
 
-  const handleClickTab = (e) => {
-    const target = e.currentTarget;
-    const dType = target.getAttribute('datatype');
-    if (dType === 'realTimeStream') {
-      setImgSrcState('http://192.168.0.4:81/api/stream/');
-    }
-    // else if (dType === 'historyRefer') {
-    //   setImgSrcState('http://192.168.0.4:81/api/stream/');
-    // }
-  };
+  useEffect(() => {
+    console.log('🌷curObserveState', curObserveState);
+  }, [curObserveState]);
 
   /* 감지 이력 리스트 */
-  const imgCaptureHistoryMap = imgArchiveState.map((obj) => (
-    <p
-      datatype={obj.path}
-      onClick={handleSetArchiveImg}
-      key={obj.id}
-      role="presentation"
-    >
-      <span>
-        <Feedback
-          style={{
-            fontSize: '20px',
-            color: levelColor[obj.safetyLevel.toLowerCase()],
-          }}
-        />
-        <span className={obj.safetyLevel.toLowerCase()}>YELLOW 2차 감지</span>
-      </span>
-      <span>{obj.date}</span>
-      <span>{obj.time}</span>
-    </p>
-  ));
+  const imgCaptureHistoryMap = useMemo(() => {
+    return imgArchiveState.map((obj) => (
+      <p
+        datatype={obj.path}
+        onClick={handleSetArchiveImg}
+        key={obj.id}
+        role="presentation"
+      >
+        <span>
+          <Feedback
+            style={{
+              fontSize: '20px',
+              color: levelColor[obj.safetyLevel.toLowerCase()],
+            }}
+          />
+          <span className={obj.safetyLevel.toLowerCase()}>YELLOW 2차 감지</span>
+        </span>
+        <span>{obj.date}</span>
+        <span>{obj.time}</span>
+      </p>
+    ));
+  }, [imgArchiveState]);
 
   return (
     <div className="detailViewContainer">
@@ -167,6 +197,7 @@ const DetailViewPage = () => {
           </div>
           <div className="detailTabWrap">
             <div className="detailTabBox">
+              {/* 실시간 영상 | 이력 조회 */}
               <input
                 className="menuTab"
                 id="menuTab1"
@@ -198,17 +229,28 @@ const DetailViewPage = () => {
               >
                 이력조회
               </label>
-              <select>
-                <option>Group 1</option>
-                <option>Group 2</option>
+
+              {/* 그룹 선택 */}
+              <select onChange={handleSelectGroupNum}>
+                <option value={1}>Group 1</option>
+                <option value={2}>Group 2</option>
               </select>
-              {/* 실시간 영상 */}
+
+              {/* 실시간 영상 TAB */}
               <div className="tabContent realTimeBox">
                 <div className="realTimeContent">
                   {/* className : 색상별 green yellow red inactive */}
-                  <div className="alarmTxt green">
+                  <div
+                    className={`alarmTxt ${curObserveState?.safetyLevel?.toLowerCase()}`}
+                  >
                     <MdOutlineTaskAlt style={{ fontSize: '32px' }} />
-                    <span>안전합니다.</span>
+                    <span>
+                      {curObserveState?.safetyLevel === 'Green'
+                        ? '안전합니다.'
+                        : curObserveState?.safetyLevel === 'Yellow'
+                        ? '작업자 진입 확인'
+                        : '작업자 위험 반경 진입'}
+                    </span>
                   </div>
 
                   {/* <div className="alarmTxt yellow"> */}
@@ -228,10 +270,10 @@ const DetailViewPage = () => {
 
                   <div className="sensingBox">
                     <span>
-                      1차 감지<p>7</p>
+                      1차 감지<p>{curObserveState?.yellowCnt}</p>
                     </span>
                     <span>
-                      2차 감지<p>8</p>
+                      2차 감지<p>{curObserveState?.redCnt}</p>
                     </span>
                   </div>
                 </div>
@@ -240,21 +282,25 @@ const DetailViewPage = () => {
                   <span>1일 19시간 58분</span>
                 </div>
               </div>
-              {/* 이력 조회 */}
+
+              {/* 이력 조회 TAB */}
               <div className="tabContent historyBox">
                 <div className="sensingBox">
                   <span>
-                    1차 감지<p>7</p>
+                    1차 감지<p>{curObserveState?.yellowCnt}</p>
                   </span>
                   <span>
-                    2차 감지<p>8</p>
+                    2차 감지<p>{curObserveState?.redCnt}</p>
                   </span>
                 </div>
                 <div className="historyTimeBox">
                   <div>
                     <span>생성시간</span>
                     <span>
-                      2022-05-28<span>14:10:18</span>
+                      {dayjs(curObserveState?.createdAt).format('YYYY-MM-DD')}
+                      <span>
+                        {dayjs(curObserveState?.createdAt).format('hh:mm:ss')}
+                      </span>
                     </span>
                   </div>
                   <div>
@@ -269,6 +315,7 @@ const DetailViewPage = () => {
               </div>
             </div>
 
+            {/* 영역 재설정 | Calibration 설정 | 위험구간 설정 */}
             <div className="settingBtnBox">
               <button>
                 <MdModeEdit style={{ fontSize: '38px' }} />
@@ -284,6 +331,7 @@ const DetailViewPage = () => {
               </button>
             </div>
 
+            {/* 취소 | 확인 */}
             <div className="bottomBtnBox">
               <button
                 className="iconBtnR normalPrimary"
@@ -318,6 +366,7 @@ const DetailViewPage = () => {
         </div>
       </div>
 
+      {/* 우측 영상 | 이미지 */}
       <div className="detailRight">
         <div className="rightBox">
           <div className="iframeBox">

@@ -1,26 +1,21 @@
 // 위험 알림 메세지 -> 없음 | 작업자 진입 확인 | 작업자 위험 반경 진입!
 
 type Observe = {
-  area: string;
-  camPort: 'cam1' | 'cam2' | 'cam3' | 'cam4';
-  activate: boolean;
-  alarms: '없음' | '작업자 진입 확인' | '작업자 위험 반경 진입!';
+  _id: string;
+  trackerId: string;
   date: string;
-  computeDevice: 'CPU' | 'GPU';
-  savingPath: string;
-  camName: string;
-  sensingModel: string;
-  camCoordinate1: string;
-  camCoordinate2: string;
-  // 안전 등급
-  camSafetyLevel: 'Green' | 'Yellow' | 'Red';
-  // 감지 수
-  camSensing1: number;
-  camSensing2: number;
+  groupNum: number;
+  safetyLevel: string;
+  yellowCnt: number;
+  redCnt: number;
+  observeSwitch: boolean;
+  observeTime: string;
+  createdAt: string;
 };
 
 type TrackerObserve = {
   _id: string;
+  ip: string;
   date: string;
   groupNum: number;
   observeSwitch: boolean;
@@ -30,7 +25,7 @@ type TrackerObserve = {
   trackerId: string;
   yellowCnt: number;
   area: string;
-  baseLine: number;
+  baseLine: string;
   calibImg: string;
   camName: string;
   camPort: string;
@@ -48,9 +43,12 @@ type TrackerObserve = {
 };
 
 type ViedeoFrameType = {
+  ip: string;
   canvasClass: string;
   frameSrc: string;
   trackerId: string;
+  baseLine: string;
+  dangerLine: string;
   firstCanvas: {
     visible: boolean;
     yellowSensingPercent: number;

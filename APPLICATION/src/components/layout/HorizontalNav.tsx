@@ -1,28 +1,7 @@
-import React, { useEffect, useState } from 'react';
-import '../../styles/components/module/HorizontalNav.scss';
-import { useNavigate, Link } from 'react-router-dom';
-import { useSWRState } from '../../fetcher/useSWRState';
+import React from 'react';
+import { Link } from 'react-router-dom';
 
 const HorizontalNav = () => {
-  const navigate = useNavigate();
-  const { data: swrState, mutate: setSwrState } = useSWRState();
-  const onClickIcon = (e) => {
-    const tabType = e.currentTarget.getAttribute('datatype');
-    switch (tabType) {
-      case 'home':
-        navigate('/main');
-        break;
-      case 'user':
-        navigate('/loginModal');
-        break;
-      case 'help':
-        navigate('/help');
-        break;
-      case 'setting':
-        break;
-    }
-  };
-
   return (
     <div className="horizontalContainer">
       <div className="horizontalSlLogo">로고</div>

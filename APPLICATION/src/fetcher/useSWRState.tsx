@@ -18,7 +18,7 @@ type SwrStateType = {
   curCamDangerLine: string;
   curCamIp: string;
   streamInfo: Array<ViedeoFrameType>;
-  observe: Observe;
+  observe: Partial<Observe>;
   camInfo: {
     cam1: CamInfo;
     cam2: CamInfo;
@@ -39,22 +39,7 @@ let state: SwrStateType = {
   curCamDangerLine: '',
   curCamIp: '',
   streamInfo: [],
-  observe: {
-    area: 'H3 공장 크레인',
-    camPort: 'cam1',
-    activate: true,
-    alarms: '없음',
-    date: '2022-06-03',
-    computeDevice: 'CPU',
-    savingPath: '/home/',
-    camName: '3크레인 구역1',
-    sensingModel: 'small',
-    camCoordinate1: '456,307,658,329,536,486,332,469',
-    camCoordinate2: '456,307,658,329,536,486,332,469',
-    camSafetyLevel: 'Green',
-    camSensing1: 5,
-    camSensing2: 1,
-  },
+  observe: {},
   camInfo: {
     cam1: {
       ip: '',

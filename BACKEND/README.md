@@ -1,3 +1,6 @@
+# DB ERD
+https://www.erdcloud.com/d/ca5xyxoCFGmyY3bHj
+
 # .env 파일 필요
 
 # SAMPLE

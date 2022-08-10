@@ -1,14 +1,19 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import '../style/pages/SensingView.scss';
 import Api from '../api/Api';
-import {
-  camPort1Ip,
-  camPort2Ip,
-  camPort3Ip,
-  camPort4Ip,
-} from '../initDatas/initVideoFrameData';
+// import {
+//   camPort1Ip,
+//   camPort2Ip,
+//   camPort3Ip,
+//   camPort4Ip,
+// } from '../initDatas/initVideoFrameData';
 
 const SensingViewPage = () => {
+  const camPort1Ip = '192.168.0.34';
+  const camPort2Ip = '192.168.0.26';
+  const camPort3Ip = '192.168.0.36';
+  const camPort4Ip = '192.168.0.30';
+
   const [urlState, setUrlState] = useState([]);
   const [videoSrcState, setVideoSrcState] = useState([]);
   const [captureSrcState, setCaptureSrcState] = useState('');
@@ -19,45 +24,48 @@ const SensingViewPage = () => {
       .then((videoRes) => {
         const urlData = [];
         videoRes.forEach((data, idx) => {
-          Api.tracker.getOneData(data.trackerId).then((res) => {
-            switch (res.camPort) {
-              case 'cam1':
-                urlData.push(
-                  `http://${camPort1Ip}:81/${data.path
-                    .split('/')
-                    .slice(5)
-                    .join('/')}`
-                );
-                break;
-              case 'cam2':
-                urlData.push(
-                  `http://${camPort2Ip}:81/${data.path
-                    .split('/')
-                    .slice(5)
-                    .join('/')}`
-                );
-                break;
-              case 'cam3':
-                urlData.push(
-                  `http://${camPort3Ip}:81/${data.path
-                    .split('/')
-                    .slice(5)
-                    .join('/')}`
-                );
-                break;
-              case 'cam4':
-                urlData.push(
-                  `http://${camPort4Ip}:81/${data.path
-                    .split('/')
-                    .slice(5)
-                    .join('/')}`
-                );
-                break;
-              default:
-                console.log('default');
-            }
-            videoRes.length === idx + 1 && setVideoSrcState(urlData);
-          });
+          Api.tracker
+            .getOneData(data.trackerId)
+            .then((res) => {
+              switch (res.camPort) {
+                case 'cam1':
+                  urlData.push(
+                    `http://${camPort1Ip}:81/${data.path
+                      .split('/')
+                      .slice(5)
+                      .join('/')}`
+                  );
+                  break;
+                case 'cam2':
+                  urlData.push(
+                    `http://${camPort2Ip}:81/${data.path
+                      .split('/')
+                      .slice(5)
+                      .join('/')}`
+                  );
+                  break;
+                case 'cam3':
+                  urlData.push(
+                    `http://${camPort3Ip}:81/${data.path
+                      .split('/')
+                      .slice(5)
+                      .join('/')}`
+                  );
+                  break;
+                case 'cam4':
+                  urlData.push(
+                    `http://${camPort4Ip}:81/${data.path
+                      .split('/')
+                      .slice(5)
+                      .join('/')}`
+                  );
+                  break;
+                default:
+                  console.log('default');
+              }
+              videoRes.length === idx + 1 && setVideoSrcState(urlData);
+            })
+            .catch((err) => console.error(err));
         });
       })
       .catch((error) => console.error(error));
@@ -68,46 +76,49 @@ const SensingViewPage = () => {
         console.log('img archiveRes', archiveRes);
         const urlData = [];
         archiveRes.forEach((data, idx) => {
-          Api.tracker.getOneData(data.trackerId).then((res) => {
-            switch (res.camPort) {
-              case 'cam1':
-                urlData.push(
-                  `http://${camPort1Ip}:81/${data.path
-                    .split('/')
-                    .slice(5)
-                    .join('/')}`
-                );
-                break;
-              case 'cam2':
-                urlData.push(
-                  `http://${camPort2Ip}:81/${data.path
-                    .split('/')
-                    .slice(5)
-                    .join('/')}`
-                );
-                break;
-              case 'cam3':
-                urlData.push(
-                  `http://${camPort3Ip}:81/${data.path
-                    .split('/')
-                    .slice(5)
-                    .join('/')}`
-                );
-                break;
-              case 'cam4':
-                urlData.push(
-                  `http://${camPort4Ip}:81/${data.path
-                    .split('/')
-                    .slice(5)
-                    .join('/')}`
-                );
-                break;
-              default:
-                console.log('default');
-            }
-            console.log('2urlData', urlData);
-            archiveRes.length === idx + 1 && setUrlState(urlData);
-          });
+          Api.tracker
+            .getOneData(data.trackerId)
+            .then((res) => {
+              switch (res.camPort) {
+                case 'cam1':
+                  urlData.push(
+                    `http://${camPort1Ip}:81/${data.path
+                      .split('/')
+                      .slice(5)
+                      .join('/')}`
+                  );
+                  break;
+                case 'cam2':
+                  urlData.push(
+                    `http://${camPort2Ip}:81/${data.path
+                      .split('/')
+                      .slice(5)
+                      .join('/')}`
+                  );
+                  break;
+                case 'cam3':
+                  urlData.push(
+                    `http://${camPort3Ip}:81/${data.path
+                      .split('/')
+                      .slice(5)
+                      .join('/')}`
+                  );
+                  break;
+                case 'cam4':
+                  urlData.push(
+                    `http://${camPort4Ip}:81/${data.path
+                      .split('/')
+                      .slice(5)
+                      .join('/')}`
+                  );
+                  break;
+                default:
+                  console.log('default');
+              }
+              console.log('2urlData', urlData);
+              archiveRes.length === idx + 1 && setUrlState(urlData);
+            })
+            .catch((err) => console.error(err));
         });
       })
       .catch((error) => console.error(error));

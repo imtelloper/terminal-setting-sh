@@ -12,18 +12,18 @@ import useSWR from 'swr';
 import dayjs from 'dayjs';
 import ObserveCamTabs from '../components/ObserveCamTabs';
 import {
-  camPort1Ip,
-  camPort2Ip,
-  camPort3Ip,
-  camPort4Ip,
+  // camPort1Ip,
+  // camPort2Ip,
+  // camPort3Ip,
+  // camPort4Ip,
   initVideoFrameData,
 } from '../initDatas/initVideoFrameData';
 import CoordinateTool from '../util/CoordinateTool';
 import ObserveCamStream from '../components/ObserveCamStream';
+import { today } from '../util/dateLibrary';
 
 const ObservePage = () => {
   const navigate = useNavigate();
-  const today = dayjs().format('YYYY-MM-DD');
   const { data: swrState, mutate: setSwrState } = useSWRState();
   const [txtChangeState, setTxtChangeState] = useState('녹화시작');
   const [videoFrameState, setVideoFrameState] =
@@ -57,10 +57,14 @@ const ObservePage = () => {
     setTxtChangeState((prev) => (prev === '녹화중' ? '녹화시작' : '녹화중'));
     recordTxtEl.classList.toggle('txtColorActive');
     const camStateObj = {
-      cam1: camPort1Ip,
-      cam2: camPort2Ip,
-      cam3: camPort3Ip,
-      cam4: camPort4Ip,
+      // cam1: camPort1Ip,
+      // cam2: camPort2Ip,
+      // cam3: camPort3Ip,
+      // cam4: camPort4Ip,
+      cam1: videoFrameState[0].ip,
+      cam2: videoFrameState[1].ip,
+      cam3: videoFrameState[2].ip,
+      cam4: videoFrameState[3].ip,
     };
     const ip = camStateObj[`cam${camTabState.toString()}`];
     Api.stream.startRecordVideo(ip);
@@ -76,7 +80,77 @@ const ObservePage = () => {
   /* setVideoFrameState, setGetObserveState */
   const setProcessedSwrData = () => {
     const processedData = [];
+
+    /* 정렬 */
+    swrTrackerData.sort((prev, next) => {
+      if (prev.camPort > next.camPort) return 1;
+      if (prev.camPort < next.camPort) return -1;
+      return 0;
+    });
+
+    console.log('🌈swrTrackerData', swrTrackerData);
+
     swrTrackerData.forEach(async (tracker, idx) => {
+      console.log('🪸tracker', tracker);
+      // console.log('🪸tracker ip', tracker.ip);
+
+      const curVideoFrameState = videoFrameState;
+      // console.log('processedData.length', processedData.length);
+      const { _id, ip, baseLine, dangerLine, sensingGroup1, sensingGroup2 } =
+        tracker;
+      // console.log('🐳sensingGroup1', sensingGroup1);
+      // console.log('🐳sensingGroup2', sensingGroup2);
+      // GYR
+      const yellowSensingCoordinate1 = sensingGroup1.split('&')[1];
+      const redSensingCoordinate1 = sensingGroup1.split('&')[2];
+      const yellowSensingCoordinate2 = sensingGroup2.split('&')[1];
+      const redSensingCoordinate2 = sensingGroup2.split('&')[2];
+      // console.log('🍑yellowSensingCoordinate1', yellowSensingCoordinate1);
+      // console.log('🍑redSensingCoordinate1', redSensingCoordinate1);
+      let frameSrc = `http://${ip}:81`;
+      const areaFrameSrc = `http://${ip}:81/api/stream/area`;
+
+      if (yellowSensingCoordinate1) {
+        frameSrc = `${areaFrameSrc}/1/${yellowSensingCoordinate1}/${redSensingCoordinate1}/`;
+      }
+
+      if (yellowSensingCoordinate2) {
+        frameSrc = yellowSensingCoordinate1
+          ? `${areaFrameSrc}/2/${yellowSensingCoordinate1}/${redSensingCoordinate1}/${yellowSensingCoordinate2}/${redSensingCoordinate2}`
+          : `${areaFrameSrc}/2/${yellowSensingCoordinate2}/${redSensingCoordinate2}/`;
+      }
+
+      // const newSrc = `http://${ip}:81/api/stream/area/1/${yellowSensingCoordinate}/${redSensingCoordinate}/`;
+
+      // const camIdx = camPort.at(-1) - 1;
+      // console.log('camIdx', camIdx);
+      // console.log('🍄obj', obj);
+      // console.log('🌾camPort', camPort);
+      // console.log('🍄camPort.at(-1)', camPort.at(-1));
+      // console.log('🌳camIdx', camIdx);
+      // console.log('🌺ip', ip);
+      curVideoFrameState[idx].trackerId = _id;
+      curVideoFrameState[idx].baseLine = baseLine;
+      curVideoFrameState[idx].dangerLine = dangerLine;
+      curVideoFrameState[idx].ip = ip;
+      curVideoFrameState[idx].frameSrc = frameSrc;
+
+      const group1Coord = CoordinateTool.coordinateMaker(
+        tracker.sensingGroup1.split('&')[2]?.split(',')
+      );
+      // console.log('🌸group1Coord', group1Coord);
+      /* DB에 저장된 좌표값을 기준으로 좌표값이 있다면 visible true */
+      curVideoFrameState[idx].firstCanvas.visible = group1Coord.length > 0;
+      curVideoFrameState[idx].firstCanvas.coordinate = group1Coord;
+
+      const group2Coord = CoordinateTool.coordinateMaker(
+        tracker.sensingGroup2.split('&')[2]?.split(',')
+      );
+      // console.log('🌸group2Coord', group2Coord);
+      curVideoFrameState[idx].secondCanvas.visible = group2Coord.length > 0;
+      curVideoFrameState[idx].secondCanvas.coordinate = group2Coord;
+      await setVideoFrameState([...curVideoFrameState]);
+
       await Api.observe
         .findData({
           trackerId: tracker._id,
@@ -88,7 +162,7 @@ const ObservePage = () => {
               return { ...tracker, ...obj };
             });
             processedData.push(...processedObserve);
-            console.log('🌺🌺🌺processedData', processedData);
+            // console.log('🌺🌺🌺processedData', processedData);
             /* 정렬 */
             processedData.sort((prev, next) => {
               if (
@@ -104,32 +178,6 @@ const ObservePage = () => {
               return 0;
             });
 
-            const curVideoFrameState = videoFrameState;
-            processedData.forEach((obj) => {
-              const { camPort, trackerId } = obj;
-              const camIdx = camPort.at(-1) - 1;
-              // console.log('camIdx', camIdx);
-
-              curVideoFrameState[camIdx].trackerId = trackerId;
-
-              const group1Coord = CoordinateTool.coordinateMaker(
-                obj.sensingGroup1.split('&')[2]?.split(',')
-              );
-              // console.log('🌸group1Coord', group1Coord);
-              /* DB에 저장된 좌표값을 기준으로 좌표값이 있다면 visible true */
-              curVideoFrameState[camIdx].firstCanvas.visible =
-                group1Coord.length > 0;
-              curVideoFrameState[camIdx].firstCanvas.coordinate = group1Coord;
-
-              const group2Coord = CoordinateTool.coordinateMaker(
-                obj.sensingGroup2.split('&')[2]?.split(',')
-              );
-              // console.log('🌸group2Coord', group2Coord);
-              curVideoFrameState[camIdx].secondCanvas.visible =
-                group2Coord.length > 0;
-              curVideoFrameState[camIdx].secondCanvas.coordinate = group2Coord;
-            });
-            flushSync(() => setVideoFrameState([...curVideoFrameState]));
             flushSync(() => setGetObserveState([...processedData]));
           }
         });
@@ -137,17 +185,7 @@ const ObservePage = () => {
   };
 
   useEffect(() => {
-    console.log('📀📀📀📀videoFrameState', videoFrameState);
-    // videoFrameState.forEach((obj) => {
-    //   console.log('frameSrc', obj.frameSrc);
-    //   console.log('firstCanvas.visible', obj.firstCanvas.visible);
-    //   console.log('firstCanvas.coordinate', obj.firstCanvas.coordinate);
-    //   console.log('secondCanvas.visible', obj.secondCanvas.visible);
-    //   console.log('secondCanvas.coordinate', obj.secondCanvas.coordinate);
-    // });
-
-    // redSensingCoordinate 227,111,268,148,226,141
-
+    // console.log('📀📀📀📀videoFrameState', videoFrameState);
     if (videoFrameState[0]) {
       const coor1 = videoFrameState[0]?.secondCanvas?.coordinate[0];
       const coor2 = videoFrameState[0]?.secondCanvas?.coordinate[1];
@@ -158,15 +196,13 @@ const ObservePage = () => {
           PolygonDraw.getTwoPointsDistance(coor1, coor2)
         );
     }
-
     // console.log('rate', PolygonDraw.getDistanceRate(165, 12.5));
   }, [videoFrameState]);
 
   useEffect(() => {
     // console.log('🌽🌽🌽🌽🌽getObserveState', getObserveState);
-    if (getObserveState.length === 0) {
+    if (getObserveState.length === 0)
       swrTrackerData?.length > 0 && setProcessedSwrData();
-    }
   }, [getObserveState]);
 
   useEffect(() => {

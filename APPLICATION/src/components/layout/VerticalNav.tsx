@@ -3,50 +3,14 @@ import React, { useEffect, useState } from 'react';
 // eslint-disable-next-line import/no-unresolved
 import MaterialIcon from 'react-google-material-icons';
 import axios from 'axios';
-// eslint-disable-next-line import/no-unresolved
-import '../../styles/components/module/VerticalNav.scss';
-import { Link, useNavigate } from 'react-router-dom';
-import Api from '../../api/Api';
-import { useSWRState } from '../../fetcher/useSWRState';
+import { useNavigate } from 'react-router-dom';
 
 const VerticalNav = () => {
   const navigate = useNavigate();
   const [tabStatus, setTabStatus] = useState('');
-  const { data: swrState, mutate: setSwrState } = useSWRState();
   const [userCurrentIp, setUserCurrentIp] = useState('');
-  const api = new Api();
   const iconWidthHeight = 24;
   const [menuClicked, setMenuClicked] = useState(false);
-
-  const onClickTab = (e) => {
-    const tabType = e.currentTarget.getAttribute('datatype');
-    setTabStatus(tabType);
-    // eslint-disable-next-line default-case
-    switch (tabType) {
-      case 'Load':
-        navigate('/load');
-        break;
-      case 'Image Load':
-        navigate('/imageLoad');
-        break;
-      case 'Clinical Data Load':
-        navigate('/clinicalDataLoad');
-        break;
-      case 'Ananlysis Option':
-        navigate('/analysisOption');
-        break;
-      case 'Analysis':
-        navigate('/analysis');
-        break;
-      case 'Report':
-        navigate('/report');
-        break;
-    }
-  };
-
-  const logout = () => {
-    navigate('/');
-  };
 
   const tabStatusChangeByUrlParam = () => {
     const getUrlParam = window.location.href.split('/');

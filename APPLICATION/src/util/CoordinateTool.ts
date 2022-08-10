@@ -1,5 +1,5 @@
 export default class CoordinateTool {
-  static coordinateMaker = (coordNums: []) => {
+  static coordinateMaker = (coordNums: Array<any>) => {
     const totalCoords = [];
     let coordinate: Array<number> = [];
     coordNums?.forEach((num) => {

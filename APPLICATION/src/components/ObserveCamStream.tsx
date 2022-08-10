@@ -51,6 +51,19 @@ const ObserveCamStream = ({
     const greenCtx = canvas?.getContext('2d');
     const arrIndex = canvas?.getAttribute('tabIndex');
     const itemID = canvas?.getAttribute('itemID');
+    // console.log('☘☘☘☘☘☘☘☘☘☘☘☘☘☘☘☘☘☘☘☘☘☘☘☘☘️', canvas?.getAttribute('itemProp'));
+    const itemProps = canvas?.getAttribute('itemProp').split('|');
+    console.log('☘️draw arrIndex', parseInt(arrIndex, 10) + 1, '번 카메라');
+    // console.log('🍀️itemID', itemID);
+    // console.log('🍀️itemProp', itemProps);
+    // const baseLine = itemProps[0].includes('&') ? itemProps[0] : '0,0,0,0&0';
+    const baseLine = itemProps[0].includes('&')
+      ? itemProps[0]
+      : '243,149,253,209&10';
+    const dangerLine = itemProps[1].includes('&') ? itemProps[1] : '2&4';
+    // console.log('🍊baseLine', baseLine);
+    // console.log('🍊dangerLine', dangerLine);
+
     greenCtx?.clearRect(0, 0, canvas.width, canvas.height);
     redCtx?.clearRect(0, 0, canvas.width, canvas.height);
     yellowCtx?.clearRect(0, 0, canvas.width, canvas.height);
@@ -59,13 +72,13 @@ const ObserveCamStream = ({
     const redSensingPoints = [];
     const yellowSensingPoints = [];
     const greenSensingPoints = [];
-    console.log('🍊swrState?.curCamBaseLine', swrState?.curCamBaseLine);
-    const baseLineSplited = swrState?.curCamBaseLine?.split('&');
+    // const baseLineSplited = swrState?.curCamBaseLine?.split('&');
+    const baseLineSplited = baseLine.split('&');
     const baseLineCooldiate = baseLineSplited[0].split(',');
     let baseCoords = [];
     const baseCoordsBox = [];
     baseLineCooldiate.forEach((coord) => {
-      console.log('coord', coord);
+      // console.log('coord', coord);
       baseCoords.push(parseInt(coord, 10));
       if (baseCoords.length > 1) {
         baseCoordsBox.push(baseCoords);
@@ -73,26 +86,18 @@ const ObserveCamStream = ({
       }
     });
     const baseLineMeter = baseLineSplited[1];
-    console.log('baseLineMeter', baseLineMeter);
-    console.log('baseLineCooldiate', baseLineCooldiate);
-    console.log('baseCoordsBox', baseCoordsBox);
+    // console.log('baseLineMeter', baseLineMeter);
+    // console.log('baseLineCooldiate', baseLineCooldiate);
+    // console.log('baseCoordsBox', baseCoordsBox);
     const baseLineDistance = PolygonDraw.getTwoPointsDistance(
       baseCoordsBox[0],
       baseCoordsBox[1]
     );
-    console.log('baseLineDistance', baseLineDistance);
+    // console.log('baseLineDistance', baseLineDistance);
     const calibrate = PolygonDraw.getDistanceRate(200, baseLineMeter ?? 5);
     // console.log('calibrate', calibrate); // 13.2  ,  1m당 13.2px
-
-    console.log(
-      "swrState?.curCamDangerLine?.split('&')[0]",
-      swrState?.curCamDangerLine?.split('&')[0]
-    );
-    console.log(
-      "swrState?.curCamDangerLine?.split('&')[1]",
-      swrState?.curCamDangerLine?.split('&')[1]
-    );
-    const dangerSplited = swrState?.curCamDangerLine?.split('&');
+    // const dangerSplited = swrState?.curCamDangerLine?.split('&');
+    const dangerSplited = dangerLine.split('&');
     const yellowSetMeter: number = parseFloat(dangerSplited[0]) ?? 0.6; // dangerLine yellow m
     const yellowDistancePx = calibrate * yellowSetMeter; // 5m = 66px
     const greenSetMeter: number = parseFloat(dangerSplited[1]) ?? 1.6; // dangerLine green m
@@ -172,6 +177,9 @@ const ObserveCamStream = ({
     const redSensingCoordinate = redSensingPoints.join(',');
     const yellowSensingCoordinate = yellowSensingPoints.join(',');
     const greenSensingCoordinate = greenSensingPoints.join(',');
+    // console.log('🔥greenSensingCoordinate', greenSensingCoordinate);
+    // console.log('🔥yellowSensingCoordinate', yellowSensingCoordinate);
+    // console.log('🔥redSensingCoordinate', redSensingCoordinate);
 
     /* Red Zone 라인  그리기 */
     PolygonDraw.drawLines(redCtx, coordinate, lineSize, drawColor.red);
@@ -200,11 +208,8 @@ const ObserveCamStream = ({
       yellowSensingCoordinate,
       redSensingCoordinate,
     ].join('&');
-    console.log('🔥greenSensingCoordinate', greenSensingCoordinate);
-    console.log('🔥yellowSensingCoordinate', yellowSensingCoordinate);
-    console.log('🔥redSensingCoordinate', redSensingCoordinate);
-
     console.log('sensingGroup', sensingGroup);
+
     console.log('👗👗👗 itemID', itemID);
     if (itemID === 'firstCanvas') {
       console.log('firstCanvas');
@@ -263,62 +268,69 @@ const ObserveCamStream = ({
   useEffect(() => {
     if (videoFrameState.length > 0) {
       console.log('🥹videoFrameState', videoFrameState);
-      document.querySelectorAll('.polygonCanvas').forEach((ele) => draw(ele));
+      document.querySelectorAll('.polygonCanvas').forEach((ele) => {
+        // console.log('ele💫', ele);
+        draw(ele);
+      });
     }
   }, [videoFrameState]);
 
   /* 카메라 영상 스트림 */
   const videoFrameMap = useMemo(() => {
-    return videoFrameState.map((data: ViedeoFrameType, idx) => (
-      <div className="iframeBox" key={idx}>
-        <div className="iframeTitle">
-          <span>CAM{(idx + 1).toString()}</span>
-          <span className="iframeRecording">
-            {/* {camTabState - 1 === idx && recordState && ( */}
-            {/*  <div style={{ width: '16px', height: '16px', color: 'red' }}>REC</div> */}
-            {/* )} */}
-            {camTabState - 1 === idx && recordState && (
-              <div>
-                <span />
-                REC
-              </div>
-            )}
-          </span>
+    return videoFrameState.map((data: ViedeoFrameType, idx) => {
+      return (
+        <div className="iframeBox" key={idx}>
+          <div className="iframeTitle">
+            <span>CAM{(idx + 1).toString()}</span>
+            <span className="iframeRecording">
+              {/* {camTabState - 1 === idx && recordState && ( */}
+              {/*  <div style={{ width: '16px', height: '16px', color: 'red' }}>REC</div> */}
+              {/* )} */}
+              {camTabState - 1 === idx && recordState && (
+                <div>
+                  <span />
+                  REC
+                </div>
+              )}
+            </span>
+          </div>
+          {data.firstCanvas.visible && (
+            <canvas
+              className={`firstCanvas polygonCanvas ${data.canvasClass}`}
+              tabIndex={idx}
+              itemID="firstCanvas"
+              width={camWidth}
+              height={camHeight}
+              id={data.trackerId}
+              onClick={canvasClick}
+              itemProp={`${data.baseLine}|${data.dangerLine}`}
+            />
+          )}
+          {data.secondCanvas.visible && (
+            <canvas
+              className={`secondCanvas polygonCanvas ${data.canvasClass}`}
+              tabIndex={idx}
+              itemID="secondCanvas"
+              width={camWidth}
+              height={camHeight}
+              id={data.trackerId}
+              onClick={canvasClick}
+              itemProp={`${data.baseLine}|${data.dangerLine}`}
+            />
+          )}
+          <iframe
+            title="stream1"
+            src={
+              data.frameSrc.split('/').includes('area')
+                ? data.frameSrc
+                : `${data.frameSrc}/api/stream/`
+            }
+            width={camWidth}
+            height={camHeight}
+          />
         </div>
-        {data.firstCanvas.visible && (
-          <canvas
-            className={`firstCanvas polygonCanvas ${data.canvasClass}`}
-            tabIndex={idx}
-            itemID="firstCanvas"
-            width={camWidth}
-            height={camHeight}
-            id={data.trackerId}
-            onClick={canvasClick}
-          />
-        )}
-        {data.secondCanvas.visible && (
-          <canvas
-            className={`secondCanvas polygonCanvas ${data.canvasClass}`}
-            tabIndex={idx}
-            itemID="secondCanvas"
-            width={camWidth}
-            height={camHeight}
-            id={data.trackerId}
-            onClick={canvasClick}
-          />
-        )}
-        <iframe
-          title="stream1"
-          src={
-            data.frameSrc.split('/').includes('area')
-              ? data.frameSrc
-              : `${data.frameSrc}/api/stream/`
-          }
-          width={camWidth}
-          height={camHeight}
-        />
-      </div>
-    ));
+      );
+    });
   }, [videoFrameState, recordState]);
 
   return <div className="iframeContent">{videoFrameMap}</div>;

@@ -34,18 +34,6 @@ const ObserveCamInfo = ({
 
   const handleActive = (e) => {
     console.log('handleActive');
-    const target = e.currentTarget as HTMLButtonElement;
-    const dType = target.getAttribute('datatype');
-    console.log('dType', dType);
-    JSON.parse(dType)
-      ? ((target.textContent = 'Inactive'),
-        target.setAttribute('datatype', 'false'))
-      : ((target.textContent = 'Active'),
-        target.setAttribute('datatype', 'true'));
-
-    const newArr = videoFrameState;
-    newArr[3].frameSrc = 'http://192.168.0.30:81/api/stream/';
-    flushSync(() => setVideoFrameState([...newArr]));
   };
 
   // 그룹안 삭제
@@ -167,10 +155,20 @@ const ObserveCamInfo = ({
         </div>
         <div className="btnBox">
           {/* className : 색상별 green yellow red inactive */}
-          <div className="alarmTxt green">
+          <div
+            className={`alarmTxt ${stateInfo?.[
+              groupNum
+            ]?.safetyLevel.toLowerCase()}`}
+          >
             <MdOutlineTaskAlt style={{ fontSize: '32px' }} />
             {/* 작업자 진입 확인 / 작업자 위험 반경 진입 / 비활성화 되었습니다. */}
-            <span>안전합니다.</span>
+            <span>
+              {stateInfo?.[groupNum]?.safetyLevel === 'Green'
+                ? '안전합니다.'
+                : stateInfo?.[groupNum]?.safetyLevel === 'Yellow'
+                ? '작업자 진입 확인'
+                : '작업자 위험 반경 진입'}
+            </span>
           </div>
 
           <div className="sensingBox">
@@ -197,6 +195,15 @@ const ObserveCamInfo = ({
             <button className="btnR normalPrimary" onClick={handleErrorReset}>
               상태 리셋
             </button>
+            {/* {(() => { */}
+            {/*  console.log('🌞stateInfo', stateInfo); */}
+            {/*  console.log('🌝groupNum', groupNum); */}
+            {/*  console.log('🌝🌝stateInfo?.[groupNum', stateInfo?.[groupNum]); */}
+            {/*  console.log( */}
+            {/*    '🌝🌝🌝stateInfo?.[groupNum]?.trackerId', */}
+            {/*    stateInfo?.[groupNum]?.trackerId */}
+            {/*  ); */}
+            {/* })()} */}
             <button
               className="btnR normalPrimary"
               onClick={handleDelete}
@@ -220,6 +227,10 @@ const ObserveCamInfo = ({
         key={idx}
       >
         <div className="safetyContentBox">
+          {/* {(() => { */}
+          {/*  console.log('🌟info', info); */}
+          {/*  console.log('🌟idx', idx); */}
+          {/* })()} */}
           {videoFrameState[idx]?.firstCanvas?.visible &&
             groupBoxComponent(info, idx + 1, 1)}
 
