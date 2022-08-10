@@ -286,7 +286,7 @@ const DetailViewPage = () => {
 
             <div className="bottomBtnBox">
               <button
-                className="iconR normalPrimary"
+                className="iconBtnR normalPrimary"
                 onClick={() => {
                   navigate('/observe');
                 }}
@@ -294,7 +294,7 @@ const DetailViewPage = () => {
                 취소
               </button>
               <button
-                className="iconR defaultPrimary"
+                className="iconBtnR defaultPrimary"
                 onClick={() => {
                   navigate('/observe');
                 }}

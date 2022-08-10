@@ -125,21 +125,43 @@
   button.defaultPrimary{
     background-color: $blue-500;
     color: $white;
+    transition: 0.3s;
+    &:hover{
+      background-color: $blue-700;
+      color: $white;
+    }
   }
 
   button.defaultES{
     background-color: $blue-100;
     color: $blue-500;
+    transition: 0.3s;
+    &:hover{
+      background-color: $blue-500;
+      color: $white;
+    }
   }
 
   button.defaultOutlined{
     background-color: $white;
     color: $blue-500;
     border: 1px solid $blue-500;
+    transition: 0.3s;
+    &:hover{
+      background-color: $blue-100;
+      color: $blue-500;
+      border: 1px solid $blue-200;
+    }
   }
 
   button.defaultGhost{
+    background-color: transparent;
     color: $blue-500;
+    transition: 0.3s;
+    &:hover{
+      background-color: $blue-100;
+      color: $blue-500;
+    }
   }
 
   //normal
@@ -147,93 +169,188 @@
     background-color: $white;
     color: $black;
     border: 1px solid #d4d4d4;
+    transition: 0.3s;
+    &:hover{
+      background-color: $blue-100;
+      color: $blue-500;
+    }
   }
 
   button.normalGhost{
     background-color: transparent;
     color: $black;
+    transition: 0.3s;
+    &:hover{
+      background-color: $blue-100;
+      color: $blue-500;
+    }
   }
 
   //success
   button.successPrimary{
     background-color: $success-500;
     color: $success-900;
+    transition: 0.3s;
+    &:hover{
+      background-color: $success-700;
+      color: $black;
+    }
   }
 
   button.successES{
     background-color: $success-100;
     color: $success-900;
+    transition: 0.3s;
+    &:hover{
+      background-color: $success-500;
+      color: $success-900;
+    }
   }
 
   button.successOutlined{
     background-color: $white;
     color: $success-600;
     border: 1px solid $success-500;
+    &:hover{
+      background-color: $success-200;
+      color: $success-900;
+      border: 1px solid $success-400;
+    }
   }
 
   button.successGhost{
     color: $success-600;
+    transition: 0.3s;
+    &:hover{
+      background-color: $success-200;
+      color: $success-900;
+    }
   }
 
   //warning
   button.warningPrimary{
     background-color: $warning-500;
     color: $warning-900;
+    transition: 0.3s;
+    &:hover{
+      background-color: $warning-700;
+      color: $white;
+    }
   }
 
   button.warningES{
     background-color: $warning-100;
     color: $warning-800;
+    transition: 0.3s;
+    &:hover{
+      background-color: $warning-500;
+      color: $warning-900;
+    }
   }
 
   button.warningOutlined{
     background-color: $white;
     color: $warning-500;
     border: 1px solid $warning-500;
+    transition: 0.3s;
+    &:hover{
+      background-color: $warning-500;
+      color: $warning-900;
+      border: 1px solid $warning-400;
+    }
   }
 
   button.warningGhost{
     color: $warning-500;
+    transition: 0.3s;
+    &:hover {
+      background-color: $warning-500;
+      color: $warning-900;
+    }
   }
 
   //danger
   button.dangerPrimary{
     background-color: $error-500;
     color: $white;
+    transition: 0.3s;
+    &:hover {
+      background-color: $error-700;
+      color: $white;
+    }
   }
 
   button.dangerES{
     background-color: $error-200;
     color: $error-500;
+    transition: 0.3s;
+    &:hover {
+      background-color: $error-500;
+      color: $white;
+    }
   }
 
   button.dangerOutlined{
     background-color: $white;
     color: $error-500;
     border: 1px solid $error-500;
+    transition: 0.3s;
+    &:hover {
+      background-color: $error-200;
+      color: $error-500;
+      border: 1px solid $error-400;
+    }
   }
 
   button.dangerGhost{
+    background-color: transparent;
     color: $error-500;
+    transition: 0.3s;
+    &:hover {
+      background-color: $error-200;
+      color: $error-500;
+    }
   }
 
   //special
   button.specialPrimary{
     background-color: $orange-500;
     color: $white;
+    transition: 0.3s;
+    &:hover {
+      background-color: $orange-700;
+      color: $white;
+    }
   }
 
   button.specialES{
     background-color: $orange-200;
     color: $orange-500;
+    transition: 0.3s;
+    &:hover {
+      background-color: $orange-500;
+      color: $white;
+    }
   }
 
   button.specialOutlined{
     background-color: $white;
     color: $orange-500;
     border: 1px solid $orange-500;
+    transition: 0.3s;
+    &:hover {
+      background-color: $orange-200;
+      color: $orange-500;
+      border: 1px solid $orange-400;
+    }
   }
 
   button.specialGhost{
+    background-color: transparent;
     color: $orange-500;
+    transition: 0.3s;
+    &:hover {
+      background-color: $orange-200;
+      color: $orange-500;
+    }
   }

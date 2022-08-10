@@ -237,6 +237,7 @@ const SettingPage = () => {
                 name="radio"
                 onChange={handleChangeValue}
                 value="CPU"
+                defaultChecked
               />
               <label htmlFor={`${data._id}1`}>CPU</label>
               <input
