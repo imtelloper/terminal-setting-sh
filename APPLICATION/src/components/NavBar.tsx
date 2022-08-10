@@ -47,7 +47,9 @@ const NaviBar = () => {
       e.target.closest('.all-menu') === null
     ) {
       // topmenu
-      document.querySelector('.dropdown-list.dropdownActive')?.classList.remove('dropdownActive');
+      document
+        .querySelector('.dropdown-list.dropdownActive')
+        ?.classList.remove('dropdownActive');
     }
   });
   return (
@@ -61,20 +63,20 @@ const NaviBar = () => {
               <span />
             </div>
             {/* <div className="all-menu"> */}
-            {/*  <ul> */}
-            {/*    <li> */}
-            {/*      <p>Recipe.AI</p> */}
-            {/*      <h5>Project NAME</h5> */}
-            {/*      <ul> */}
-            {/*        <li> */}
-            {/*          <span> */}
-            {/*            <FolderRounded /> */}
-            {/*          </span> */}
-            {/*          현상분석 */}
-            {/*        </li> */}
-            {/*      </ul> */}
-            {/*    </li> */}
-            {/*  </ul> */}
+            {/* <ul> */}
+            {/*   <li> */}
+            {/*     <p>Recipe.AI</p> */}
+            {/*     <h5>Project NAME</h5> */}
+            {/*     <ul> */}
+            {/*       <li> */}
+            {/*         <span> */}
+            {/*           <FolderRounded /> */}
+            {/*         </span> */}
+            {/*         현상분석 */}
+            {/*       </li> */}
+            {/*     </ul> */}
+            {/*   </li> */}
+            {/* </ul> */}
             {/* </div> */}
           </div>
           <div

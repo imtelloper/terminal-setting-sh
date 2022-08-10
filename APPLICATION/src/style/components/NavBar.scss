@@ -66,6 +66,7 @@ div.header{
       background-color: #050A1E;
       position: relative;
       cursor: pointer;
+      display: none;
       div.menu-bar{
         width: 100%;
         height: 100%;
@@ -249,24 +250,46 @@ div.header .breadcrumb .btn-dropdown:not(:last-child):before {
 /*left end*/
 
 /*right start*/
-div.header div.private {
+div.private{
   padding: 0px 16px;
   display: flex;
   align-items: center;
-}
-div.header div.private div.btn-dropdown {
-  margin-left: 16px;
-}
-div.header div.private span{
-  cursor: pointer;
-  vertical-align: middle;
-  color: var(--white);
-}
-div.header .private .dropdown-list {
-  left: unset;
-  right: 0px;
-}
-div.header .private .dropdown-list i{
-  color: var(--black);
+  div.btn-dropdown{
+    margin-left: 16px;
+    span{
+      width: 24px;
+      height: 24px;
+      cursor: pointer;
+      vertical-align: middle;
+      color: $white;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      &::after{
+        content: '';
+        transition: 0.3s;
+        position: absolute;
+        border-radius: 50%;
+        opacity: 0;
+      }
+      &:hover{
+       &::after{
+         position: absolute;
+         width: 36px;
+         height: 36px;
+         background-color: #fff;
+         opacity: 0.12;
+       }
+      }
+    }
+  }
+  ul.dropdown-list{
+    left: unset;
+    right: 0;
+    i{
+      color: $black;
+    }
+  }
 }
 /*right end*/

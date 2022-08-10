@@ -151,14 +151,14 @@ const DetailViewPage = () => {
     console.log('imgArchiveState', imgArchiveState);
   }, [imgArchiveState]);
 
-  useEffect(() => {
-    console.log('🍒swrObserveData', swrObserveData);
-    const getCurObserve = swrObserveData.filter(
-      (obj) => obj.groupNum === groupNumState
-    );
-    console.log('🍒🍒🍒🍒🍒🍒getCurObserve', getCurObserve);
-    setCurObserveState(getCurObserve[0]);
-  }, [swrObserveData, groupNumState]);
+  // useEffect(() => {
+  //   console.log('🍒swrObserveData', swrObserveData);
+  //   const getCurObserve = swrObserveData?.filter(
+  //     (obj) => obj.groupNum === groupNumState
+  //   );
+  //   console.log('🍒🍒🍒🍒🍒🍒getCurObserve', getCurObserve);
+  //   setCurObserveState(getCurObserve[0]);
+  // }, [swrObserveData, groupNumState]);
 
   useEffect(() => {
     console.log('🌷curObserveState', curObserveState);
@@ -319,23 +319,29 @@ const DetailViewPage = () => {
             {/* 영역 재설정 | Calibration 설정 | 위험구간 설정 */}
             <div className="settingBtnBox">
               <button>
-                <MdModeEdit style={{ fontSize: '38px' }} />
-                <span>영역 재설정</span>
+                <div className="settingBtnCon">
+                  <MdModeEdit style={{ fontSize: '38px' }} />
+                  <span>영역 재설정</span>
+                </div>
               </button>
               <button datatype="calibration" onClick={openClosePopup}>
-                <Tune style={{ fontSize: '38px' }} />
-                <span>Calibration 설정</span>
+                <div className="settingBtnCon">
+                  <Tune style={{ fontSize: '38px' }} />
+                  <span>Calibration 설정</span>
+                </div>
               </button>
               <button datatype="dangerZone" onClick={openClosePopup}>
-                <MdDangerous style={{ fontSize: '38px' }} />
-                <span>위험구간 설정</span>
+                <div className="settingBtnCon">
+                  <MdDangerous style={{ fontSize: '38px' }} />
+                  <span>위험구간 설정</span>
+                </div>
               </button>
             </div>
 
             {/* 취소 | 확인 */}
             <div className="bottomBtnBox">
               <button
-                className="iconR normalPrimary"
+                className="iconBtnR normalPrimary"
                 onClick={() => {
                   navigate('/observe');
                 }}
@@ -343,7 +349,7 @@ const DetailViewPage = () => {
                 취소
               </button>
               <button
-                className="iconR defaultPrimary"
+                className="iconBtnR defaultPrimary"
                 onClick={() => {
                   navigate('/observe');
                 }}
@@ -372,7 +378,7 @@ const DetailViewPage = () => {
         <div className="rightBox">
           <div className="iframeBox">
             <div className="iframeTitle">
-              {swrState.curCamPort.toUpperCase()}
+              {swrState.curCamPort?.toUpperCase()}
             </div>
             <canvas className="polygonCanvas" typeof="coordinate3" />
             <img
