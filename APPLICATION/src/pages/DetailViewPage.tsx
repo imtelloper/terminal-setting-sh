@@ -339,24 +339,24 @@ const DetailViewPage = () => {
             </div>
 
             {/* 취소 | 확인 */}
-            <div className="bottomBtnBox">
-              <button
-                className="iconBtnR normalPrimary"
-                onClick={() => {
-                  navigate('/observe');
-                }}
-              >
-                취소
-              </button>
-              <button
-                className="iconBtnR defaultPrimary"
-                onClick={() => {
-                  navigate('/observe');
-                }}
-              >
-                확인
-              </button>
-            </div>
+            {/*<div className="bottomBtnBox">*/}
+            {/*  <button*/}
+            {/*    className="iconBtnR normalPrimary"*/}
+            {/*    onClick={() => {*/}
+            {/*      navigate('/observe');*/}
+            {/*    }}*/}
+            {/*  >*/}
+            {/*    취소*/}
+            {/*  </button>*/}
+            {/*  <button*/}
+            {/*    className="iconBtnR defaultPrimary"*/}
+            {/*    onClick={() => {*/}
+            {/*      navigate('/observe');*/}
+            {/*    }}*/}
+            {/*  >*/}
+            {/*    확인*/}
+            {/*  </button>*/}
+            {/*</div>*/}
           </div>
 
           {isOpenDangerZoneState && (
@@ -378,7 +378,16 @@ const DetailViewPage = () => {
         <div className="rightBox">
           <div className="iframeBox">
             <div className="iframeTitle">
-              {swrState.curCamPort?.toUpperCase()}
+              {/*<div>{swrState.curCamPort?.toUpperCase()}</div>*/}
+              <div className="iframeTitleLeft">
+                {/*캠번호*/}
+                <div className="iframeCamNum">Cam2</div>
+                <div className="iframeCamName">이름</div>
+              </div>
+              <div className="iframeIcon">
+                <span />
+                REC
+              </div>
             </div>
             <canvas className="polygonCanvas" typeof="coordinate3" />
             <img
