@@ -159,7 +159,7 @@ const AreaInfo = () => {
   }, []);
 
   useEffect(() => {
-    // console.log('#####getObserveState', getObserveState);
+    console.log('#####getObserveState', getObserveState);
     // console.log('🌸🌸🌸 swrObserveData', swrObserveData);
     /* getObserveState 데이터가 있을때 한번 가공 데이터 셋팅 */
     if (getObserveState.length === 0)
@@ -177,7 +177,7 @@ const AreaInfo = () => {
     return (
       getObserveState.length > 0 ? getObserveState : areaInfoDummyData
     ).map((card, idx) => {
-      const getObjectKey = Object.keys(card)[0].toString();
+      const getObjectKey = Object.keys(card)[0].toString() ?? card.area;
       return (
         <div
           className="areaCardBox"
@@ -186,10 +186,10 @@ const AreaInfo = () => {
           onClick={goObservePage}
           datatype={idx.toString()}
         >
-          <div className="titleBox">{card.area}</div>
-          {/*<div className="titleBox">*/}
-          {/*  <span>{getObjectKey}</span>*/}
-          {/*</div>*/}
+          {/* <div className="titleBox">{card.area}</div> */}
+          <div className="titleBox">
+            <span>{getObjectKey}</span>
+          </div>
           <div className="areaContent">
             <div className="areaTop">
               <div className="imgBox">
