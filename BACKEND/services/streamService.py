@@ -93,7 +93,9 @@ class StreamService:
                 print('🏗 build dir screenShotFolderPath: ', self.screenShotFolderPath)
 
             dirBuilder()
-            secretary.add_job(dirBuilder, 'cron', hour='0', id='safety-todo-makedirs')
+            print(' secr ')
+            # secretary.add_job(dirBuilder, 'cron', hour='0', id='safety-todo-makedirs')
+            secretary.add_job(dirBuilder, 'interval', seconds=60, id='safety-todo-makedirs')
         print('##### CONNECTED CAMERA ##### : ', self.listPorts)
 
     async def test(self):

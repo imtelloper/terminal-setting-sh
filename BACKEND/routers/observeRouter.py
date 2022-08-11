@@ -79,7 +79,10 @@ async def modifyOneData(id, data: UpdateObserve = Body(...)):
     """
     id로 데이터 수정
     """
+    print('🍄🍄🍄🍄 id', id)
+    print('🍄🍄🍄🍄 data', data)
     jsonData = jsonable_encoder(data)
+    print('🍄🍄🍄🍄 jsonData', jsonData)
     serviceResult = await service.updateOneData(id, jsonData)
     return dto(**serviceResult)
 
