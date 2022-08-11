@@ -221,38 +221,33 @@ div.areaInfoContainer {
                     justify-content: center;
                     align-items: center;
                     font-weight: 700;
+                    transition: 0.3s;
                   }
-
-
                   div.green {
-                    background-color: $quality-good;
-                    //&:hover{
-                    //  background-color: ;
-                    //}
+                    background-color: $success-500;
+                    &:hover{
+                      background-color: $success-700;
+                    }
                   }
 
                   div.yellow {
-                    background-color: rgba(255, 202, 43, 0.7);
-
-                    div {
-                      background-color: $warning-500;
+                    background-color:$warning-500;
+                    &:hover{
+                      background-color: $warning-700;
                     }
                   }
 
                   div.red {
-                    background-color: rgba(255, 80, 61, 0.7);
-
-                    div {
-                      background-color: $error-500;
-                      color: $white;
+                    background-color: $error-500;
+                    color: $white;
+                    &:hover{
+                      background-color: $error-700;
                     }
                   }
 
                   div.inactive {
-                    div {
                       background-color: $inactive;
                       color: $inactive-text;
-                    }
                   }
 
                   div.sensingBox {
@@ -260,7 +255,6 @@ div.areaInfoContainer {
                     display: flex;
 
                     span {
-                      display: block;
                       width: calc(50% - 4px);
                       height: 48px;
                       display: flex;
@@ -270,16 +264,23 @@ div.areaInfoContainer {
                       box-sizing: border-box;
                       font-weight: 700;
                       border-radius: 8px;
+                      transition: 0.3s;
 
                       &:first-child {
                         margin-right: 8px;
                         background-color: $warning-500;
                         color: $dark;
+                        &:hover{
+                          background-color: $warning-700;
+                        }
                       }
 
                       &:last-child {
                         background-color: $error-500;
                         color: $white;
+                        &:hover{
+                          background-color: $error-700;
+                        }
                       }
 
                       div {
