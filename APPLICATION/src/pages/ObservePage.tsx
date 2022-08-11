@@ -248,17 +248,17 @@ const ObservePage = () => {
               </div>
               {/* 셋팅 버튼 */}
               <div className="rightBtnBox">
+                {/* <button */}
+                {/*  className="archiveBtn" */}
+                {/*  onClick={() => { */}
+                {/*    navigate('/videoArchive'); */}
+                {/*  }} */}
+                {/* > */}
+                {/*  <PhotoLibrary /> */}
+                {/* </button> */}
                 <button
-                  className="archiveBtn"
-                  onClick={() => {
-                    navigate('/videoArchive');
-                  }}
-                >
-                  <PhotoLibrary />
-                </button>
-                <button
-                  className="settingBtn"
-                  onClick={() => navigate('/detail')}
+                  className="settingIcon"
+                  onClick={() => navigate('/setting')}
                 >
                   <Settings />
                 </button>

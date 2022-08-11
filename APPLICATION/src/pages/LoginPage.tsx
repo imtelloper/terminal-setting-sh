@@ -7,7 +7,6 @@ import Api from '../api/Api';
 import { useSWRState } from '../fetcher/useSWRState';
 
 import LogoImg from '../images/safety.ai_logo.png';
-import LoginBg from '../images/loginBg.png';
 import WorldIcon from '../images/world.png';
 import ArrowDown from '../images/arrow-down.png';
 
@@ -111,13 +110,19 @@ const LoginPage = () => {
   // if (loading) return <Loading />;
   // if (error) alert(error);
 
+  const openClosePopup = (e) => {
+    const target = e.currentTarget;
+    const dType = target.getAttribute('datatype');
+    const type = {
+      findPwd: () => setIsOpenFindPwdPopupState(!isOpenFindPwdPopupState),
+    };
+  }
+
   return (
     <div className="loginContainer">
       <div className="loginBox">
         <div className="left">
-          <div className="loginBg">
-            <img src={LoginBg} />
-          </div>
+          <div className="loginBg"/>
           <div className="logoImg">
             <img src={LogoImg} />
           </div>
@@ -152,9 +157,16 @@ const LoginPage = () => {
               </div>
             </div>
           </div>
-          <button className="btnR defaultPrimary">LOG IN</button>
+          <div className="loginSaveBtn">
+            <input type="checkbox" />
+            <label>Save</label>
+          </div>
           <div className="loginBtnBox">
-
+            <button className="btnR defaultPrimary">LOG IN</button>
+          </div>
+          <div className="loginPwdBtnBox">
+            <button className="btnR defaultES">FORGET PASSWORD</button>
+            <button className="btnR defaultES">CHANGE PASSWORD</button>
           </div>
         </div>
       </div>

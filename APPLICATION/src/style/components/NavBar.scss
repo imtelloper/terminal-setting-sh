@@ -283,6 +283,9 @@ div.private{
        }
       }
     }
+    span.videoArchiveIcon, span.binIcon{
+      display: none;
+    }
   }
   ul.dropdown-list{
     left: unset;
