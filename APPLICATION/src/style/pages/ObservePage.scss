@@ -229,17 +229,46 @@ div.observeContainer {
           right: 24px;
           display: flex;
           align-items: center;
-          justify-content: space-between;
+          //justify-content: space-between;
+          justify-content: end;
           button{
             all: unset;
-            width: 40px;
-            height: 40px;
-            color: $white;
-            display: flex;
-            justify-content: center;
-            align-items: center;
+            width: 24px;
+            height: 24px;
             cursor: pointer;
+            vertical-align: middle;
+            color: $white;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            &::after{
+              content: '';
+              transition: 0.3s;
+              position: absolute;
+              border-radius: 50%;
+              opacity: 0;
+            }
+            &:hover{
+              &::after{
+                position: absolute;
+                width: 36px;
+                height: 36px;
+                background-color: #fff;
+                opacity: 0.12;
+              }
+            }
           }
+          //button{
+          //  all: unset;
+          //  width: 40px;
+          //  height: 40px;
+          //  color: $white;
+          //  display: flex;
+          //  justify-content: center;
+          //  align-items: center;
+          //  cursor: pointer;
+          //}
         }
       }
     }

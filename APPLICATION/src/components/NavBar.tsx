@@ -85,123 +85,125 @@ const NaviBar = () => {
               navigate('/');
             }}
           />
-          <div className="block" />
-          <div className="breadcrumb">
-            {/* PROJECT NAME / LEVEL 1 MENU */}
-            <div className="btn-dropdown" onClick={handleDropdown}>
-              <span>
-                PROJECT NAME / LEVEL 1 MENU
-                <i>
-                  <ArrowDropDown />
-                </i>
-              </span>
-              <ul className="dropdown-list">
-                <li>
-                  <span>
-                    <FolderRounded />
-                  </span>
-                  Level 2 Page
-                </li>
-                <li>
-                  <span>
-                    <FolderRounded />
-                  </span>
-                  Level 2 Page
-                </li>
-                <li>
-                  <span>
-                    <FolderRounded />
-                  </span>
-                  Level 2 Page
-                </li>
-              </ul>
-            </div>
+          {/*  <div className="block" /> */}
+          {/*  <div className="breadcrumb"> */}
+          {/*    /!* PROJECT NAME / LEVEL 1 MENU *!/ */}
+          {/*    <div className="btn-dropdown" onClick={handleDropdown}> */}
+          {/*      <span> */}
+          {/*        PROJECT NAME / LEVEL 1 MENU */}
+          {/*        <i> */}
+          {/*          <ArrowDropDown /> */}
+          {/*        </i> */}
+          {/*      </span> */}
+          {/*      <ul className="dropdown-list"> */}
+          {/*        <li> */}
+          {/*          <span> */}
+          {/*            <FolderRounded /> */}
+          {/*          </span> */}
+          {/*          Level 2 Page */}
+          {/*        </li> */}
+          {/*        <li> */}
+          {/*          <span> */}
+          {/*            <FolderRounded /> */}
+          {/*          </span> */}
+          {/*          Level 2 Page */}
+          {/*        </li> */}
+          {/*        <li> */}
+          {/*          <span> */}
+          {/*            <FolderRounded /> */}
+          {/*          </span> */}
+          {/*          Level 2 Page */}
+          {/*        </li> */}
+          {/*      </ul> */}
+          {/*    </div> */}
 
-            {/* LEVEL 2 MENU */}
-            <div className="btn-dropdown" onClick={handleDropdown}>
-              <span>
-                LEVEL 2 MENU
-                <i>
-                  <ArrowDropDown />
-                </i>
-              </span>
-              <ul className="dropdown-list">
-                <li>
-                  <span>
-                    <FolderRounded />
-                  </span>
-                  menu1
-                </li>
-                <li>
-                  <span>
-                    <FolderRounded />
-                  </span>
-                  menu2
-                </li>
-                <li>
-                  <span>
-                    <FolderRounded />
-                  </span>
-                  menu3
-                </li>
-              </ul>
-            </div>
+          {/*    /!* LEVEL 2 MENU *!/ */}
+          {/*    <div className="btn-dropdown" onClick={handleDropdown}> */}
+          {/*      <span> */}
+          {/*        LEVEL 2 MENU */}
+          {/*        <i> */}
+          {/*          <ArrowDropDown /> */}
+          {/*        </i> */}
+          {/*      </span> */}
+          {/*      <ul className="dropdown-list"> */}
+          {/*        <li> */}
+          {/*          <span> */}
+          {/*            <FolderRounded /> */}
+          {/*          </span> */}
+          {/*          menu1 */}
+          {/*        </li> */}
+          {/*        <li> */}
+          {/*          <span> */}
+          {/*            <FolderRounded /> */}
+          {/*          </span> */}
+          {/*          menu2 */}
+          {/*        </li> */}
+          {/*        <li> */}
+          {/*          <span> */}
+          {/*            <FolderRounded /> */}
+          {/*          </span> */}
+          {/*          menu3 */}
+          {/*        </li> */}
+          {/*      </ul> */}
+          {/*    </div> */}
 
-            {/* LEVEL 3 MENU */}
-            <div className="btn-dropdown" onClick={handleDropdown}>
-              <span>
-                LEVEL 3 MENU
-                <i>
-                  <ArrowDropDown />
-                </i>
-              </span>
-              <ul className="dropdown-list">
-                <li>
-                  <span>
-                    <FolderRounded />
-                  </span>
-                  menu1
-                </li>
-                <li>
-                  <span>
-                    <FolderRounded />
-                  </span>
-                  menu2
-                </li>
-                <li>
-                  <span>
-                    <FolderRounded />
-                  </span>
-                  menu3
-                </li>
-              </ul>
-            </div>
-          </div>
+          {/*    /!* LEVEL 3 MENU *!/ */}
+          {/*    <div className="btn-dropdown" onClick={handleDropdown}> */}
+          {/*      <span> */}
+          {/*        LEVEL 3 MENU */}
+          {/*        <i> */}
+          {/*          <ArrowDropDown /> */}
+          {/*        </i> */}
+          {/*      </span> */}
+          {/*      <ul className="dropdown-list"> */}
+          {/*        <li> */}
+          {/*          <span> */}
+          {/*            <FolderRounded /> */}
+          {/*          </span> */}
+          {/*          menu1 */}
+          {/*        </li> */}
+          {/*        <li> */}
+          {/*          <span> */}
+          {/*            <FolderRounded /> */}
+          {/*          </span> */}
+          {/*          menu2 */}
+          {/*        </li> */}
+          {/*        <li> */}
+          {/*          <span> */}
+          {/*            <FolderRounded /> */}
+          {/*          </span> */}
+          {/*          menu3 */}
+          {/*        </li> */}
+          {/*      </ul> */}
+          {/*    </div> */}
+          {/*  </div> */}
         </div>
         <div className="private">
-          <div className="block" />
+          {/*<div className="block" />*/}
           {/* 오른쪽 아이콘 */}
           <div className="btn-dropdown">
-            <span>
-              <PhotoLibrary
-                onClick={() => {
-                  navigate('/videoArchive');
-                }}
-              />
+            <span
+              className="videoArchiveIcon"
+              onClick={() => {
+                navigate('/videoArchive');
+              }}
+            >
+              <PhotoLibrary />
             </span>
           </div>
           <div className="btn-dropdown">
-            <span>
-              <Delete
-                onClick={() => {
-                  navigate('/bin');
-                }}
-              />
+            <span
+              className="binIcon"
+              onClick={() => {
+                navigate('/bin');
+              }}
+            >
+              <Delete />
             </span>
           </div>
           <div className="group btn-dropdown">
-            <span>
-              <Settings onClick={() => navigate('/setting')} />
+            <span className="settingIcon" onClick={() => navigate('/setting')}>
+              <Settings />
             </span>
           </div>
         </div>

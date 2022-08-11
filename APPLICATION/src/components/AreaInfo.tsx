@@ -146,8 +146,8 @@ const AreaInfo = () => {
               <span className="camContent">Cam(2):<span>Active</span></span>
               <span>Alarms:</span><span>없음</span>
               <div className="detectContent">
-                <span>1차 감지: <span>0</span></span>
-                <span>2차 감지: <span>0</span></span>
+                <button>1차 감지: <span>0</span></button>
+                <button>2차 감지: <span>0</span></button>
               </span>
             </span>
           </div>`;

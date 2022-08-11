@@ -13,7 +13,7 @@ div.loginContainer {
   div.loginBox {
     max-width: 656px;
     width: 100%;
-    height: 344px;
+    height: 440px;
     background-color: $white;
     font-size: 30px;
     border-radius: 8px;
@@ -35,6 +35,9 @@ div.loginContainer {
         width: 100%;
         height: 100%;
         position: absolute;
+        background: url("../../images/loginBg.svg") center/cover no-repeat;
+        border-top-left-radius: 8px;
+        border-bottom-left-radius: 8px;
       }
       div.logoImg{
         position: absolute;
@@ -70,7 +73,10 @@ div.loginContainer {
             width: 100%;
             display: flex;
             flex-direction: column;
-            margin-bottom: 16px;
+            margin-bottom: 24px;
+            &:last-child{
+              margin-bottom: 20px;
+            }
 
             label {
               margin-bottom: 8px;
@@ -88,9 +94,37 @@ div.loginContainer {
         }
       }
 
-      button {
-        width: 352px;
-        margin-top: 20px;
+      div.loginBtnBox{
+        border-bottom: 1px solid #d4d4d4;
+        button {
+          width: 352px;
+          margin: 20px 0 16px 0;
+        }
+      }
+
+      div.loginSaveBtn{
+        display: flex;
+        align-items: center;
+        input{
+          margin-right: 8px;
+        }
+        label{
+          font-size: 14px;
+          display: flex;
+        }
+      }
+
+      div.loginPwdBtnBox{
+        width: 100%;
+        margin-top: 16px;
+        font-size: 14px;
+        button{
+          width: calc(50% - 4px);
+          font-size: 13px;
+          &:first-child {
+            margin-right: 8px;
+          }
+        }
       }
     }
   }
