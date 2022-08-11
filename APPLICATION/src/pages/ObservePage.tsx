@@ -258,7 +258,7 @@ const ObservePage = () => {
                 {/* </button> */}
                 <button
                   className="settingIcon"
-                  onClick={() => navigate('/setting')}
+                  onClick={() => navigate('/detail')}
                 >
                   <Settings />
                 </button>
