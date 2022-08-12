@@ -31,13 +31,14 @@ const ObservePage = () => {
   const [getObserveState, setGetObserveState] = useState([]);
   const [camTabState, setCamTabState] = useState(1);
   const [recordState, setRecordState] = useState(false);
+  const swrIntervalMilliSec = 300;
   const findFetcher = (url: string) =>
     axios.post(url, { area: swrState.curTrackerArea }).then((res) => res.data);
 
   const { data: swrTrackerData, error: swrTrackerErr } = useSWR<
     Array<TrackerObserve>
   >('/api/tracker/find', findFetcher, {
-    refreshInterval: 1000,
+    refreshInterval: swrIntervalMilliSec,
   });
 
   const observeFindFetcher = (url: string) =>
@@ -46,7 +47,7 @@ const ObservePage = () => {
   const { data: swrObserveData, error } = useSWR(
     '/api/observe/find',
     observeFindFetcher,
-    { refreshInterval: 1000 }
+    { refreshInterval: swrIntervalMilliSec }
   );
 
   const handleActive = (e) => {
