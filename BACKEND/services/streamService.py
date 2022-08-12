@@ -107,19 +107,20 @@ class StreamService:
             dirBuilder()
             # secretary.add_job(dirBuilder, 'cron', hour='0', id='safety-todo-makedirs')
             secretary.add_job(dirBuilder, 'interval', seconds=60, id='safety-todo-makedirs')
-        # 현재 Device의 내부IP DB에 셋팅
-        connection = pymongo.MongoClient(config.DB_ADDRESS)
-        dbSafety = connection.get_database("safety")
-        trackerData = dbSafety["tracker"].find_one({"area": config.AREA, "camPort": config.CAMPORT})
-        print('trackerData: ', trackerData)
-        dbSafety["tracker"].update_one(
-            {'_id': ObjectId(trackerData["_id"])},
-            {'$set':
-                {
-                    'ip': self.deviceIp,
+
+            # 현재 Device의 내부IP DB에 셋팅
+            connection = pymongo.MongoClient(config.DB_ADDRESS)
+            dbSafety = connection.get_database("safety")
+            trackerData = dbSafety["tracker"].find_one({"area": config.AREA, "camPort": config.CAMPORT})
+            print('trackerData: ', trackerData)
+            dbSafety["tracker"].update_one(
+                {'_id': ObjectId(trackerData["_id"])},
+                {'$set':
+                    {
+                        'ip': self.deviceIp,
+                    }
                 }
-            }
-        )
+            )
         print('##### CONNECTED CAMERA ##### : ', self.listPorts)
 
     async def test(self):
