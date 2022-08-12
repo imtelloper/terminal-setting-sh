@@ -94,8 +94,10 @@ class StreamService:
         sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         sock.connect(("pwnbit.kr", 443))
         self.deviceIp = sock.getsockname()[0]
+        print('🔥self.deviceIp', self.deviceIp)
+        print('🔥192.168 in self.deviceIp', '192.168' in self.deviceIp)
         print('🔥platform.platform()', platform.platform())
-        print('🔥platform.platform()', 'macOS' in platform.platform())
+        print('🔥macOS in platform.platform()', 'macOS' in platform.platform())
         # 각종 파일 저장 경로 폴더 생성
         if not ('macOS' in platform.platform()):
             def dirBuilder():
