@@ -14,6 +14,14 @@ router = APIRouter(
     responses={404: {"description": "not found"}, 200: {"description": "ok"}},
 )
 
+@router.get("/echoTest")
+async def echoTest():
+    """
+    시스템 재실행
+    """
+    os.system("echo ECHO ECHO ECHO")
+    return "echo"
+
 @router.get("/reboot/")
 async def reboot():
     """
@@ -22,6 +30,30 @@ async def reboot():
     os.system("echo reboot")
     os.system("sudo reboot")
     return "reboot"
+
+
+@router.get("/autoStreamOn")
+async def autoStreamOn():
+    """
+    autoStream.py 실행
+    """
+    os.system("echo autoStream on!!")
+    # os.system("screen -S autoStream")
+    # os.system("screen -x autoStreeam")
+    os.system("echo hi")
+    os.system("sudo sh /home/interx/SAFETY-AI/BACKEND/reviver/auto-stream-killer.sh")
+    os.system("nohup python /home/interx/SAFETY-AI/BACKEND/reviver/autoStream.py &")
+    return "autoStreamOn"
+
+
+@router.get("/autoStreamOff")
+async def autoStreamOff():
+    """
+    autoStream.py 종료
+    """
+    os.system("sudo sh /home/interx/SAFETY-AI/BACKEND/reviver/auto-stream-killer.sh")
+    return "autoStreamOff"
+
 
 @router.get("/", response_description="")
 async def getRtu():

@@ -1,0 +1,8 @@
+resultData:  {'_id': ObjectId('62cf7d02b3811a9852f918e5'), 'area': 'H2 로봇', 'camPort': 'cam1', 'camName': '로봇캠1', 'computeDevice': 'CPU', 'savingPath': 'string', 'sensingModel': 'nano', 'calibImg': '/home/interx/SAFETY-AI/BACKEND/safety-archives/2022-08-11/H2로봇/cam1/capture/safety-shot-H2로봇-cam1-2022-08-11_11:34:37.124218.png', 'baseLine': '242,69,236,231&5', 'dangerLine': '1.5&2.5', 'sensingGroup1': '259,27,413,33,315,351,248,352,196,262&272,65,390,65,313,311,261,315,228,239&290,122,355,114,311,251,281,258,276,203', 'sensingGroup2': '', 'threshold': 40, 'imgSaveSwitch': True, 'messageSwitch': True, 'kakaoSwitch': True, 'createdAt': '2022-07-14T09:32:02.798942', 'ip': '192.168.0.4'}
+splitGrp1:  ['259,27,413,33,315,351,248,352,196,262', '272,65,390,65,313,311,261,315,228,239', '290,122,355,114,311,251,281,258,276,203']
+splitGrp2:  ['']
+sensingGroup1:  272,65,390,65,313,311,261,315,228,239/290,122,355,114,311,251,281,258,276,203
+sensingGroup2:  
+http://127.0.0.1:8000/api/stream/area/2/272,65,390,65,313,311,261,315,228,239/290,122,355,114,311,251,281,258,276,203/
+baseStreamGroupUrl http://127.0.0.1:8000/api/stream/area/2/272,65,390,65,313,311,261,315,228,239/290,122,355,114,311,251,281,258,276,203/
+Frame is None
