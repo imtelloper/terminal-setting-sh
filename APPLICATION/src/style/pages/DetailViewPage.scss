@@ -71,6 +71,12 @@ div.detailViewContainer {
             justify-content: center;
             border-bottom: 1px solid #d4d4d4;
             cursor: pointer;
+
+            &:hover{
+              color: $black;
+              border-bottom: 4px solid $blue-100;
+            }
+
             &:nth-child(2) {
               border-top-left-radius: 8px;
             }
@@ -271,7 +277,7 @@ div.detailViewContainer {
               height: calc(100% - 212px);
               div.alertContent{
                 width: 100%;
-                height: 100%;
+                height: 568px;
                 overflow-y: auto;
                 padding: 24px 24px 0 24px;
                 box-sizing: border-box;
@@ -287,9 +293,9 @@ div.detailViewContainer {
                   justify-content: space-between;
                   cursor: pointer;
 
-                  &:hover{
-                    color: yellow;
-                  }
+                  //&:hover{
+                  //  color: yellow;
+                  //}
                   span{
                     display: flex;
                     align-items: center;
@@ -393,13 +399,37 @@ div.detailViewContainer {
         div.iframeTitle {
           height: 48px;
           font-size: 18px;
-          padding-left: 24px;
-          padding-right: 24px;
+          padding: 0 16px;
           border-bottom: 1px solid $line;
           display: flex;
           justify-content: space-between;
           align-items: center;
           position: relative;
+          div.iframeTitleLeft{
+            display: flex;
+            align-items: center;
+            div.iframeCamNum{
+              border-right: 1px solid #d4d4d4;
+              padding-right: 12px;
+            }
+            div.iframeCamName{
+              padding-left: 12px;
+              font-size: 14px;
+            }
+          }
+          div.iframeIcon{
+            display: flex;
+            align-items: center;
+            span{
+              display: block;
+              width: 16px;
+              height: 16px;
+              border-radius: 50%;
+              background-color: $error-500;
+              margin-right: 4px;
+              animation: recIcon 1.5s infinite ease-in-out;
+            }
+          }
         }
 
         canvas {

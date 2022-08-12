@@ -281,7 +281,10 @@ const ObserveCamStream = ({
       return (
         <div className="iframeBox" key={idx}>
           <div className="iframeTitle">
-            <span>CAM{(idx + 1).toString()}</span>
+            <div className="iframeTitleLeft">
+              <div className="iframeCamNum">CAM{(idx + 1).toString()}</div>
+              <div className="iframeCamName">이름</div>
+            </div>
             <span className="iframeRecording">
               {/* {camTabState - 1 === idx && recordState && ( */}
               {/*  <div style={{ width: '16px', height: '16px', color: 'red' }}>REC</div> */}
