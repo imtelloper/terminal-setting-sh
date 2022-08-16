@@ -21,4 +21,6 @@
 fuser -k 8000/tcp
 python /home/interx/SAFETY-AI/BACKEND/reviver/port-watcher.py
 
+
+
 exit 0
