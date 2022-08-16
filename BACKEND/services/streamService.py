@@ -92,8 +92,20 @@ class StreamService:
         self.detectTimeCntLimit = 0  # FOR DEV: 10, FOR PRODUCT: 0
         # 내부 IP 가져오기
         sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        sock.connect(("pwnbit.kr", 443))
-        self.deviceIp = sock.getsockname()[0]
+
+        try:
+            socket.setdefaulttimeout(3)
+            socket.socket(socket.AF_INET, socket.SOCK_STREAM).connect(("8.8.8.8", 53))
+            print('Internet connected ')
+            # 내부 IP 가져오기
+            sock.connect(("pwnbit.kr", 443))
+            self.deviceIp = sock.getsockname()[0]
+        except socket.error as ex:
+            print('Internet is not connected')
+            print(ex)
+            self.deviceIp =""
+
+
         print('🔥platform.platform()', platform.platform())
         print('🔥platform.platform()', 'macOS' in platform.platform())
         # 각종 파일 저장 경로 폴더 생성

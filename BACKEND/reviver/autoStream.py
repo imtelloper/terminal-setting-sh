@@ -38,8 +38,20 @@ print('baseStreamGroupUrl', baseStreamGroupUrl)
 vcap = cv2.VideoCapture(baseStreamGroupUrl)
 vcap.set(cv2.CAP_PROP_BUFFERSIZE, 3)
 
-while (True):
+cameraOnOff = True
+cnt = 0
+while (cameraOnOff):
+    cnt += 1
+    print('cnt', cnt)
     ret, frame = vcap.read()
+    if cnt == 50:
+        cnt = 0
+        # cameraOnOff = False
+        # vcap.release()
+        # cv2.destroyAllWindows()
+        vcap = cv2.VideoCapture(baseStreamGroupUrl)
+        vcap.set(cv2.CAP_PROP_BUFFERSIZE, 3)
+
     if frame is not None:
         cv2.imshow('frame', frame)
         '''
@@ -54,5 +66,4 @@ while (True):
         print("Frame is None")
         break
 
-vcap.release()
-cv2.destroyAllWindows()
+print('GOOD BYE')
