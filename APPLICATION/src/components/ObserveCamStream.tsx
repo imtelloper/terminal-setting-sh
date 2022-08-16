@@ -275,11 +275,20 @@ const ObserveCamStream = ({
     }
   }, [videoFrameState]);
 
+  // const addFontColor = () => {
+  //   if (document.querySelector('.iframeBox').contains.('iframeBorder')) {
+  //     document.querySelector('.iframeTitle').classList.toggle('.iframeTitleActive')
+  //   }
+  // };
+
   /* 카메라 영상 스트림 */
   const videoFrameMap = useMemo(() => {
     return videoFrameState.map((data: ViedeoFrameType, idx) => {
       return (
         <div className="iframeBox" key={idx}>
+          {camTabState - 1 === idx && recordState && (
+            <div className="iframeBorder" />
+          )}
           <div className="iframeTitle">
             <div className="iframeTitleLeft">
               <div className="iframeCamNum">CAM{(idx + 1).toString()}</div>
@@ -330,6 +339,7 @@ const ObserveCamStream = ({
             }
             width={camWidth}
             height={camHeight}
+            style={{ border: 'none' }}
           />
         </div>
       );

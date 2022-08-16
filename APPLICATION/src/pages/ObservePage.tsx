@@ -6,7 +6,7 @@ import ObserveCamInfo from '../components/ObserveCamInfo';
 import axios from 'axios';
 import Api from '../api/Api';
 import PolygonDraw from '../util/PolygonDraw';
-import { PhotoLibrary, Settings } from '@material-ui/icons';
+import { Build, GpsFixed, PhotoLibrary, Settings } from '@material-ui/icons';
 import { useSWRState } from '../fetcher/useSWRState';
 import useSWR from 'swr';
 import dayjs from 'dayjs';
@@ -21,6 +21,7 @@ import {
 import CoordinateTool from '../util/CoordinateTool';
 import ObserveCamStream from '../components/ObserveCamStream';
 import { today } from '../util/dateLibrary';
+import { FiX } from 'react-icons/all';
 
 const ObservePage = () => {
   const navigate = useNavigate();
@@ -210,6 +211,12 @@ const ObservePage = () => {
     swrTrackerData?.length > 0 && setProcessedSwrData();
   }, [swrTrackerData, swrObserveData]);
 
+  // 녹화버튼 클릭시 iframeBox에 테두리 추가 및 색상 변경
+  // const handleAddStyle = (e) => {
+  //   const iframeTitleEl = document.querySelector('.iframeTitle');
+  //   iframeTitleEl.classList.toggle('iframeTitleActive');
+  // };
+
   return (
     <div id="observeContainer" className="observeContainer">
       <div className="observeLeft">
@@ -256,11 +263,8 @@ const ObservePage = () => {
                 {/* > */}
                 {/*  <PhotoLibrary /> */}
                 {/* </button> */}
-                <button
-                  className="settingIcon"
-                  onClick={() => navigate('/detail')}
-                >
-                  <Settings />
+                <button className="fixIcon" onClick={() => navigate('/detail')}>
+                  <Build />
                 </button>
               </div>
             </div>

@@ -9,9 +9,16 @@ import { useSWRState } from '../fetcher/useSWRState';
 import LogoImg from '../images/safety.ai_logo.png';
 import WorldIcon from '../images/world.png';
 import ArrowDown from '../images/arrow-down.png';
+import ChangePwdPopup from '../components/ChangePwdPopup';
+import ForgetPwdPopup from '../components/ForgetPwdPopup';
 
 const LoginPage = () => {
   const navigate = useNavigate();
+
+  const [isChangePwdPopupOpenState, setIsChangePwdPopupOpenState] =
+    useState(false);
+  const [isForgetPwdPopupOpenState, setIsForgetPwdPopupOpenState] =
+    useState(false);
 
   const { data: swrState, mutate: setSwrState } = useSWRState();
 
@@ -21,6 +28,14 @@ const LoginPage = () => {
     emailValid: false,
     pwValid: false,
   });
+
+  const changePwdPopup = () => {
+    setIsChangePwdPopupOpenState(!isChangePwdPopupOpenState);
+  };
+
+  const forgetPwdPopup = () => {
+    setIsForgetPwdPopupOpenState(!isForgetPwdPopupOpenState);
+  };
 
   const checkEmail = (e: FormEvent<HTMLInputElement>) => {
     const email = e.currentTarget.value;
@@ -110,19 +125,11 @@ const LoginPage = () => {
   // if (loading) return <Loading />;
   // if (error) alert(error);
 
-  const openClosePopup = (e) => {
-    const target = e.currentTarget;
-    const dType = target.getAttribute('datatype');
-    const type = {
-      findPwd: () => setIsOpenFindPwdPopupState(!isOpenFindPwdPopupState),
-    };
-  }
-
   return (
     <div className="loginContainer">
       <div className="loginBox">
         <div className="left">
-          <div className="loginBg"/>
+          <div className="loginBg" />
           <div className="logoImg">
             <img src={LogoImg} />
           </div>
@@ -165,11 +172,25 @@ const LoginPage = () => {
             <button className="btnR defaultPrimary">LOG IN</button>
           </div>
           <div className="loginPwdBtnBox">
-            <button className="btnR defaultES">FORGET PASSWORD</button>
-            <button className="btnR defaultES">CHANGE PASSWORD</button>
+            <button className="btnR defaultES" onClick={forgetPwdPopup}>FORGET PASSWORD</button>
+            <button className="btnR defaultES" onClick={changePwdPopup}>
+              CHANGE PASSWORD
+            </button>
           </div>
         </div>
       </div>
+      {isChangePwdPopupOpenState && (
+        <ChangePwdPopup
+          changePwdPopup={changePwdPopup}
+          setIsChangePwdPopupOpenState={setIsChangePwdPopupOpenState}
+        />
+      )}
+      {isForgetPwdPopupOpenState && (
+        <ForgetPwdPopup
+          forgetPwdPopup={forgetPwdPopup}
+          setIsForgetPwdPopupOpenState={setIsForgetPwdPopupOpenState}
+        />
+      )}
       <div className="interX">© INTERX</div>
     </div>
   );

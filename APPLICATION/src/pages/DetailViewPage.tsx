@@ -24,7 +24,7 @@ const DetailViewPage = () => {
   const [isOpenDangerZoneState, setIsOpenDangerZoneState] = useState(false);
   const [isOpenCalibrationState, setIsOpenCalibrationState] = useState(false);
   const [imgSrcState, setImgSrcState] = useState(
-    `http://${swrState.curCamIp}:81/api/stream/`
+    `http://${swrState?.curCamIp}:81/api/stream/`
   );
   const [calibImgSrcState, setCalibImgSrcState] = useState('');
   const [imgArchiveState, setImgArchiveState] = useState([]);
@@ -116,12 +116,12 @@ const DetailViewPage = () => {
   /* INIT EFFECT */
   useEffect(() => {
     console.log('🍓swr', swrState);
-    console.log('🍓swrState.curTrackerId', swrState.curTrackerId);
+    console.log('🍓swrState.curTrackerId', swrState?.curTrackerId);
 
     /* 이력조회에서 조회할 이미지 정보들 셋팅 */
     Api.archive
       .getDetailRangeData({
-        trackerId: swrState.curTrackerId,
+        trackerId: swrState?.curTrackerId,
         fileType: 'img',
         start: 0,
         limit: 20,
@@ -339,24 +339,24 @@ const DetailViewPage = () => {
             </div>
 
             {/* 취소 | 확인 */}
-            {/*<div className="bottomBtnBox">*/}
-            {/*  <button*/}
-            {/*    className="iconBtnR normalPrimary"*/}
-            {/*    onClick={() => {*/}
-            {/*      navigate('/observe');*/}
-            {/*    }}*/}
-            {/*  >*/}
-            {/*    취소*/}
-            {/*  </button>*/}
-            {/*  <button*/}
-            {/*    className="iconBtnR defaultPrimary"*/}
-            {/*    onClick={() => {*/}
-            {/*      navigate('/observe');*/}
-            {/*    }}*/}
-            {/*  >*/}
-            {/*    확인*/}
-            {/*  </button>*/}
-            {/*</div>*/}
+            <div className="bottomBtnBox">
+              <button
+                className="iconBtnR normalPrimary"
+                onClick={() => {
+                  navigate('/observe');
+                }}
+              >
+                취소
+              </button>
+              <button
+                className="iconBtnR defaultPrimary"
+                onClick={() => {
+                  navigate('/observe');
+                }}
+              >
+                확인
+              </button>
+            </div>
           </div>
 
           {isOpenDangerZoneState && (
@@ -378,9 +378,9 @@ const DetailViewPage = () => {
         <div className="rightBox">
           <div className="iframeBox">
             <div className="iframeTitle">
-              {/*<div>{swrState.curCamPort?.toUpperCase()}</div>*/}
+              {/* <div>{swrState.curCamPort?.toUpperCase()}</div> */}
               <div className="iframeTitleLeft">
-                {/*캠번호*/}
+                {/* 캠번호 */}
                 <div className="iframeCamNum">Cam2</div>
                 <div className="iframeCamName">이름</div>
               </div>

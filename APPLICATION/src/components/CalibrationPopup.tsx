@@ -200,7 +200,7 @@ const CalibrationPopup = ({ calibImgSrcState, setIsOpenCalibrationState }) => {
             >
               취소
             </button>
-            <button className="checkBtn" onClick={handleUpdateBaseLine}>
+            <button className="btn checkBtn" onClick={handleUpdateBaseLine}>
               확인
             </button>
           </div>

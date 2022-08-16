@@ -306,10 +306,41 @@ div.observeContainer {
           border-radius: 8px;
           position: relative;
           box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.2);
+          //&.iframeBoxActive{
+          //  &:after{
+          //    content: '';
+          //    width: 100%;
+          //    height: calc(100% - 48px);
+          //    position: absolute;
+          //    top: 48px;
+          //    left: 0;
+          //    box-sizing: border-box;
+          //    border: 8px solid $dark;
+          //  }
+            div.iframeBorder{
+              width: 100%;
+              height: 48px;
+              position: absolute;
+              top:0;
+              left: 0;
+              background-color: $dark;
+              border-radius:  8px 8px 0 0;
+              &:after{
+                content: "";
+                width: 512px;
+                height: 384px;
+                box-sizing: border-box;
+                position: absolute;
+                top: 48px;
+                left: 0;
+                border: 8px solid $dark;
+              }
+          }
+
           //border: 2px solid black;
 
           div.iframeTitle {
-            width: 100%;
+            width: calc(100% - 32px);
             height: 48px;
             font-size: 18px;
             padding: 0 16px;
@@ -318,6 +349,13 @@ div.observeContainer {
             justify-content: space-between;
             align-items: center;
             position: relative;
+            z-index: 99;
+            border-radius: 8px 8px 0 0;
+
+            &.iframeTitleActive{
+              color: $white;
+            }
+
             div.iframeTitleLeft{
               width: 50%;
               display: flex;
@@ -333,7 +371,6 @@ div.observeContainer {
             }
             span.iframeRecording{
               width: 50%;
-              padding-right: 32px;
               height: 30px;
               display: flex;
               align-items: center;
@@ -360,7 +397,8 @@ div.observeContainer {
             width: 100%;
             height: calc(100% - 48px);
             position: absolute;
-
+            outline: none;
+            border: none;
           }
 
           canvas.firstCanvas {

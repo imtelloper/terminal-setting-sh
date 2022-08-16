@@ -47,7 +47,7 @@ const ObserveCamTabs = ({ setCamTabState, camTabState }) => {
   useEffect(() => {
     Api.tracker
       .findData({
-        area: swrState.curTrackerArea,
+        area: swrState?.curTrackerArea,
         camPort: `cam${camTabState}`,
       })
       .then((tracker) => {
