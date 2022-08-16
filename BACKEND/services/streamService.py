@@ -1,5 +1,6 @@
 import os
 import pipes
+import pymongo
 import platform
 import time
 import cv2
@@ -80,8 +81,31 @@ class StreamService:
         self.thisCamSensingModel = ""  # 현재 pc의 감지 모델 셋팅 값
         self.humanCalcurator = HumanCalculator()
         self.camImg = ""
-        self.videoFrameCnt = 0.05
-        self.deviceIp = socket.gethostbyname(socket.gethostname())
+        # self.isSetVideoFrameDelay, self.isSetDetectDelay 가 False인 이유는 컴퓨터 부하를 무시하고 최고성능을 내기 위함이다.
+        self.isSetVideoFrameDelay = False  # FOR DEV: True, FOR PRODUCT: False
+        self.isSetDetectDelay = False  # FOR DEV: True, FOR PRODUCT: False
+        # 카메라를 초당 읽는 속도, 낮을 수록 빠르게 읽음(컴퓨터 성능이 중요)
+        self.videoSleepCnt = 0.03  # FOR DEV: 0.1, FOR PRODUCT: Don't use, just set self.isSetDetectDelay as False
+        self.detectTimeCnt = 0
+        # self.detectTimeCntLimit가 낮을수록 Yellow, Red 업데이트 속도 빨라짐. 너무 빠르면 성능에 문제 있을 수 있음
+        # 개발할때는 detectTimeCntLimit을 10 정도로 올려서 videoSleepCnt*10 번째에 DB 업데이트 되도록 하는게 좋다.
+        self.detectTimeCntLimit = 0  # FOR DEV: 10, FOR PRODUCT: 0
+        # 내부 IP 가져오기
+        sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+
+        try:
+            socket.setdefaulttimeout(3)
+            socket.socket(socket.AF_INET, socket.SOCK_STREAM).connect(("8.8.8.8", 53))
+            print('Internet connected ')
+            # 내부 IP 가져오기
+            sock.connect(("pwnbit.kr", 443))
+            self.deviceIp = sock.getsockname()[0]
+        except socket.error as ex:
+            print('Internet is not connected')
+            print(ex)
+            self.deviceIp =""
+
+
         print('🔥platform.platform()', platform.platform())
         print('🔥platform.platform()', 'macOS' in platform.platform())
         # 각종 파일 저장 경로 폴더 생성
@@ -93,9 +117,22 @@ class StreamService:
                 print('🏗 build dir screenShotFolderPath: ', self.screenShotFolderPath)
 
             dirBuilder()
-            print(' secr ')
             # secretary.add_job(dirBuilder, 'cron', hour='0', id='safety-todo-makedirs')
             secretary.add_job(dirBuilder, 'interval', seconds=60, id='safety-todo-makedirs')
+
+            # 현재 Device의 내부IP DB에 셋팅
+            connection = pymongo.MongoClient(config.DB_ADDRESS)
+            dbSafety = connection.get_database("safety")
+            trackerData = dbSafety["tracker"].find_one({"area": config.AREA, "camPort": config.CAMPORT})
+            print('trackerData: ', trackerData)
+            dbSafety["tracker"].update_one(
+                {'_id': ObjectId(trackerData["_id"])},
+                {'$set':
+                    {
+                        'ip': self.deviceIp,
+                    }
+                }
+            )
         print('##### CONNECTED CAMERA ##### : ', self.listPorts)
 
     async def test(self):
@@ -124,7 +161,7 @@ class StreamService:
         self.video.release()
 
     def getScreenShotRecordPath(self):
-        return self.screenShotRecordPath
+        return self.screenShotRecordPath11111
 
     def getVideoRecordPath(self):
         return self.videoRecordPath
@@ -215,7 +252,6 @@ class StreamService:
         self.trackerId = trackerId
         self.thisCamThreshold = float(foundData['threshold']) / 100
         self.thisCamSensingModel = foundData['sensingModel']
-        print('trackerId', trackerId)
         return trackerId
 
     # 동영상 녹화 경로 삽입
@@ -347,6 +383,7 @@ class StreamService:
 
     def updateDeviceIp(self, trackerId, ip: str):
         self.initScreenCapturePath()
+        print('updateDeviceIp trackerId',trackerId)
         getConnection()[self.dbName][config.TABLE_TRACKER].update_one(
             {'_id': ObjectId(trackerId)},
             {'$set':
@@ -461,7 +498,7 @@ class StreamService:
         warn_sig = None
         multi_tracker = cv2.MultiTracker_create()  # tracking api 호출
         imgType = 'jpeg'
-        timeCnt = 0
+
         fstSensingLevel = None
         secSensingLevel = None
 
@@ -469,8 +506,11 @@ class StreamService:
 
         while self.cameraOnOff:
             k = cv2.waitKey(1) & 0xFF
-            timeCnt += 1
-            time.sleep(self.videoFrameCnt)
+            # For Dev, isSetDetectDelay have to set True
+            if self.isSetDetectDelay: self.detectTimeCnt += 1
+            # For Dev, isSetVideoFrameDelay have to set True
+            if self.isSetVideoFrameDelay: time.sleep(self.videoSleepCnt)
+
             ret, frame = self.video.read()
             if frame is None: return
             self.camImg = frame.copy()
@@ -553,10 +593,10 @@ class StreamService:
                 if len(secGroup) > 0:
                     # print('두번째 그룹 ', max(secGroup))
                     secGroupSensing = max(secGroup)
-
-                # timeCnt가 낮을수록 Yellow, Red 업데이트 속도 빨라짐. 너무 빠르면 성능에 문제 있을 수 있음
-                if timeCnt == 8 and len(str(self.todayFstCamDataId)) > 0:
-                    print('첫번째 그룹 입니다 #####################################timeCnt :', timeCnt)
+                print('self#####################################detectTimeCnt :', self.detectTimeCnt)
+                # self.detectTimeCnt가 낮을수록 Yellow, Red 업데이트 속도 빨라짐. 너무 빠르면 성능에 문제 있을 수 있음
+                if self.detectTimeCnt == self.detectTimeCntLimit and len(str(self.todayFstCamDataId)) > 0:
+                    print('첫번째 그룹 입니다 #####################################detectTimeCnt :', self.detectTimeCnt)
                     # timeCnt = 0
                     '''
                     1차 감지, 2차 감지에 따라 안전 등급 수정 
@@ -588,8 +628,8 @@ class StreamService:
                             fstSensingLevel = 'RED'
 
                 # print('str(self.todaySecCamDataId)', str(self.todaySecCamDataId))
-                if timeCnt == 8 and len(str(self.todaySecCamDataId)) > 0:
-                    print('두번 그룹 입니다 #####################################timeCnt :', timeCnt)
+                if self.detectTimeCnt == self.detectTimeCntLimit and len(str(self.todaySecCamDataId)) > 0:
+                    print('두번 그룹 입니다 #####################################detectTimeCnt :', self.detectTimeCnt)
                     # timeCnt = 0
                     if secGroupSensing is not None:
                         if secGroupSensing == 0:
@@ -615,8 +655,8 @@ class StreamService:
                                     self.screenCaptureInsertData(result_img, 'Red')
                             secSensingLevel = 'RED'
 
-                if timeCnt == 8:
-                    timeCnt = 0
+                if self.detectTimeCnt == self.detectTimeCntLimit:
+                    self.detectTimeCnt = 0
 
                 if len(result_img) <= 0: continue
                 result_img = np.array(result_img)

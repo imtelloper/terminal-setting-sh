@@ -1,52 +1,69 @@
 import numpy as np
 import cv2
 import time
+import os
 import pymongo
+from dotenv import load_dotenv
+
+load_dotenv(verbose=True)
+area = os.getenv('AREA')
+camPort = os.getenv('CAMPORT')
 
 mongodbUri = "mongodb://interx:interx12!@192.168.0.4:27017/interx"
 connection = pymongo.MongoClient(mongodbUri)
 dbSafety = connection.get_database("safety")
+resultData = dbSafety["tracker"].find_one({"area": area, "camPort": camPort})
+print('resultData: ', resultData)
+splitGrp1, splitGrp2 = resultData["sensingGroup1"].split('&'), resultData["sensingGroup2"].split('&')
+print('splitGrp1: ', splitGrp1)
+print('splitGrp2: ', splitGrp2)
+sensingGroup1 = ''
+sensingGroup2 = ''
 
-resultData = dbSafety["tracker"].find_one({"area": "H1 공장 크레인", "camPort": "cam1"})
+if len(splitGrp1) > 1: sensingGroup1 = splitGrp1[1] + '/' + splitGrp1[2]
+if len(splitGrp2) > 1: sensingGroup2 = splitGrp2[1] + '/' + splitGrp2[2]
 
-split_grp1, split_grp2 = resultData["sensingGroup1"].split('&'), resultData["sensingGroup2"].split('&')
-
-sensingGroup1 = split_grp1[1]+'/'+split_grp1[2]
-sensingGroup2 = split_grp2[1]+'/'+split_grp2[2]
+print('sensingGroup1: ', sensingGroup1)
+print('sensingGroup2: ', sensingGroup2)
 
 if sensingGroup2 is not None:
     sensingGroup = "2/{}/{}".format(sensingGroup1, sensingGroup2)
 else:
     sensingGroup = "1/{}".format(sensingGroup1)
 
-print('http://127.0.0.1:8000/api/stream/area/' + sensingGroup)
+baseStreamAreaUrl = 'http://127.0.0.1:8000/api/stream/area/'
+baseStreamGroupUrl = baseStreamAreaUrl + sensingGroup
+print('baseStreamGroupUrl', baseStreamGroupUrl)
 
-vcap = cv2.VideoCapture('http://127.0.0.1:8000/api/stream/area/' + sensingGroup)
+vcap = cv2.VideoCapture(baseStreamGroupUrl)
+vcap.set(cv2.CAP_PROP_BUFFERSIZE, 3)
 
-# if vcap is not None
-print(vcap.read()[0])
-setVcapBool = True
-while (setVcapBool):
-    time.sleep(1)
-    if vcap.read()[0] == False:
-        print('재시')
-        vcap = cv2.VideoCapture(
-            'http://127.0.0.1:8000/api/stream/area/' + sensingGroup)
-        print(vcap.read()[0])
-    else:
-        setVcapBool = False
-
-while (True):
+cameraOnOff = True
+cnt = 0
+while (cameraOnOff):
+    cnt += 1
+    print('cnt', cnt)
     ret, frame = vcap.read()
+    if cnt == 50:
+        cnt = 0
+        # cameraOnOff = False
+        # vcap.release()
+        # cv2.destroyAllWindows()
+        vcap = cv2.VideoCapture(baseStreamGroupUrl)
+        vcap.set(cv2.CAP_PROP_BUFFERSIZE, 3)
+
     if frame is not None:
         cv2.imshow('frame', frame)
-        # Press q to close the video windows before it ends if you want
-        if cv2.waitKey(22) & 0xFF == ord('q'):
-            break
+        '''
+        waitKey(1)를 넣었을때는 작동하던 코드가 이걸 빼니깐 작동하지 않는 걸 발견하였습니다.
+        waitKey(0)은 새로운 input이 들어올 때까지 무작정 기다리고, 
+        waitKey(1)은 1ms을 기다리고 다음 이미지를 display하기 때문에, 다음과 같이 사용합니다.
+        만일 waitKey(0)을 사용한다면 rtsp feed가 계속 play 되는 게 아니라 still image로 display됩니다.
+        '''
+
+        if cv2.waitKey(1) == ord('q'): break
     else:
         print("Frame is None")
         break
 
-# When everything done, release the capture
-vcap.release()
-cv2.destroyAllWindows()
+print('GOOD BYE')
