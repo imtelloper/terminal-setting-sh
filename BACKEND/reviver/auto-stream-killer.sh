@@ -27,5 +27,6 @@ then
   sudo service cron stop
   sudo service crond stop
   sudo kill -9 $PORT_WATCHER_PID $AUTO_STREAM_PID
+  kill -9 `pgrep -f auto-stream.py`
   ps -ef | grep auto-stream
 fi

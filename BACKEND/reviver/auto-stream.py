@@ -6,38 +6,58 @@ import pymongo
 from dotenv import load_dotenv
 
 print('######## auto-stream.py RUN ########')
-
 load_dotenv(verbose=True)
 area = os.getenv('AREA')
 camPort = os.getenv('CAMPORT')
-
 mongodbUri = "mongodb://interx:interx12!@192.168.0.4:27017/interx"
 connection = pymongo.MongoClient(mongodbUri)
 dbSafety = connection.get_database("safety")
-resultData = dbSafety["tracker"].find_one({"area": area, "camPort": camPort})
-print('resultData: ', resultData)
-splitGrp1, splitGrp2 = resultData["sensingGroup1"].split('&'), resultData["sensingGroup2"].split('&')
-print('splitGrp1: ', splitGrp1)
-print('splitGrp2: ', splitGrp2)
-sensingGroup1 = ''
-sensingGroup2 = ''
 
-if len(splitGrp1) > 1: sensingGroup1 = splitGrp1[1] + '/' + splitGrp1[2]
-if len(splitGrp2) > 1: sensingGroup2 = splitGrp2[1] + '/' + splitGrp2[2]
+'''
+DB에서 좌표가 업데이트 될때마다 여기서도 업데이트 되어야함
+'''
 
-print('sensingGroup1: ', sensingGroup1)
-print('sensingGroup2: ', sensingGroup2)
 
-if sensingGroup2 is not None:
-    sensingGroup = "2/{}/{}".format(sensingGroup1, sensingGroup2)
-else:
-    sensingGroup = "1/{}".format(sensingGroup1)
+def setsUrlCoordinate():
+    baseStreamAreaUrl = 'http://127.0.0.1:8000/api/stream'
+    resultData = dbSafety["tracker"].find_one({"area": area, "camPort": camPort})
+    print('resultData: ', resultData)
+    sensingGroup1: str = ''
+    sensingGroup2: str = ''
+    splitGrp1, splitGrp2 = resultData["sensingGroup1"].split('&'), resultData["sensingGroup2"].split('&')
+    print('splitGrp1: ', splitGrp1)
+    print('splitGrp2: ', splitGrp2)
 
-baseStreamAreaUrl = 'http://127.0.0.1:8000/api/stream/area/'
-baseStreamGroupUrl = baseStreamAreaUrl + sensingGroup
-print('baseStreamGroupUrl', baseStreamGroupUrl)
+    if len(splitGrp1) > 1: sensingGroup1 = splitGrp1[1] + '/' + splitGrp1[2]
+    if len(splitGrp2) > 1: sensingGroup2 = splitGrp2[1] + '/' + splitGrp2[2]
 
-vcap = cv2.VideoCapture(baseStreamGroupUrl)
+    print('### sensingGroup1: ', sensingGroup1)
+    print('### sensingGroup2: ', sensingGroup2)
+    print('len(sensingGroup1): ', len(sensingGroup1))
+    print('len(sensingGroup2): ', len(sensingGroup2))
+
+    if len(sensingGroup1) > 0 and len(sensingGroup2) > 0:
+        print('### sensingGroup2 is not None')
+        sensingGroup = "/area/2/{}/{}".format(sensingGroup1, sensingGroup2)
+
+    if len(sensingGroup1) > 0 and len(sensingGroup2) == 0:
+        sensingGroup = "/area/1/{}/".format(sensingGroup1)
+
+    if len(sensingGroup1) == 0 and len(sensingGroup2) > 0:
+        sensingGroup = "/area/2/{}/".format(sensingGroup1)
+
+    if len(sensingGroup1) == 0 and len(sensingGroup2) == 0:
+        sensingGroup = ''
+
+    print('###sensingGroup: ', sensingGroup)
+
+    baseStreamGroupUrl = baseStreamAreaUrl + sensingGroup
+    print('baseStreamGroupUrl', baseStreamGroupUrl)
+    return baseStreamGroupUrl
+
+
+print('##### setsUrlCoordinate(): ', setsUrlCoordinate())
+vcap = cv2.VideoCapture(setsUrlCoordinate())
 vcap.set(cv2.CAP_PROP_BUFFERSIZE, 3)
 
 cameraOnOff = True
@@ -51,7 +71,8 @@ while (cameraOnOff):
         # cameraOnOff = False
         # vcap.release()
         # cv2.destroyAllWindows()
-        vcap = cv2.VideoCapture(baseStreamGroupUrl)
+
+        vcap = cv2.VideoCapture(setsUrlCoordinate())
         vcap.set(cv2.CAP_PROP_BUFFERSIZE, 3)
         ret, frame = vcap.read()
 
@@ -71,8 +92,7 @@ while (cameraOnOff):
         if cv2.waitKey(1) == ord('q'): break
     else:
         print("Frame is None")
-        vcap = cv2.VideoCapture(baseStreamGroupUrl)
+        vcap = cv2.VideoCapture(setsUrlCoordinate())
         vcap.set(cv2.CAP_PROP_BUFFERSIZE, 3)
-        # break
 
 print('GOOD BYE')
