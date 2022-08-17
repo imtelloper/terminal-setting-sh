@@ -90,9 +90,9 @@ class StreamService:
         # self.detectTimeCntLimit가 낮을수록 Yellow, Red 업데이트 속도 빨라짐. 너무 빠르면 성능에 문제 있을 수 있음
         # 개발할때는 detectTimeCntLimit을 10 정도로 올려서 videoSleepCnt*10 번째에 DB 업데이트 되도록 하는게 좋다.
         self.detectTimeCntLimit = 0  # FOR DEV: 10, FOR PRODUCT: 0
+
         # 내부 IP 가져오기
         sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-
         try:
             socket.setdefaulttimeout(3)
             socket.socket(socket.AF_INET, socket.SOCK_STREAM).connect(("8.8.8.8", 53))
@@ -105,7 +105,6 @@ class StreamService:
             print(ex)
             self.deviceIp =""
 
-
         print('🔥platform.platform()', platform.platform())
         print('🔥platform.platform()', 'macOS' in platform.platform())
         # 각종 파일 저장 경로 폴더 생성
@@ -117,6 +116,7 @@ class StreamService:
                 print('🏗 build dir screenShotFolderPath: ', self.screenShotFolderPath)
 
             dirBuilder()
+            # 일정 시간 마다 저장 폴더 생성(이미 있으면 안함)
             # secretary.add_job(dirBuilder, 'cron', hour='0', id='safety-todo-makedirs')
             secretary.add_job(dirBuilder, 'interval', seconds=60, id='safety-todo-makedirs')
 
@@ -161,13 +161,16 @@ class StreamService:
         self.video.release()
 
     def getScreenShotRecordPath(self):
-        return self.screenShotRecordPath11111
+        return self.screenShotRecordPath
 
     def getVideoRecordPath(self):
         return self.videoRecordPath
 
     def setCurrentPort(self, port):
         self.currentPort = port
+
+    def getCameraOnOff(self):
+        return self.cameraOnOff
 
     # 열린 스트림 카메라를 닫아주기 위한 메서드
     def setCameraOff(self):

@@ -321,7 +321,7 @@ const ObserveCamStream = ({
               itemProp={`${data.baseLine}|${data.dangerLine}`}
             />
           )}
-          <img
+          <iframe
             title="stream1"
             src={
               data.frameSrc.split('/').includes('area')
@@ -330,7 +330,6 @@ const ObserveCamStream = ({
             }
             width={camWidth}
             height={camHeight}
-            alt=""
           />
         </div>
       );

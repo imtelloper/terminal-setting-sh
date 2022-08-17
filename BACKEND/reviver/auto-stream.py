@@ -5,6 +5,8 @@ import os
 import pymongo
 from dotenv import load_dotenv
 
+print('######## auto-stream.py RUN ########')
+
 load_dotenv(verbose=True)
 area = os.getenv('AREA')
 camPort = os.getenv('CAMPORT')
@@ -51,9 +53,14 @@ while (cameraOnOff):
         # cv2.destroyAllWindows()
         vcap = cv2.VideoCapture(baseStreamGroupUrl)
         vcap.set(cv2.CAP_PROP_BUFFERSIZE, 3)
+        ret, frame = vcap.read()
+
+        ### imshow를 사용하면 재부팅시
+        # cv2.imshow('frame', frame)
 
     if frame is not None:
-        cv2.imshow('frame', frame)
+        # cv2.imshow('frame', frame)
+        # cnt가 50번 되었을때 다시 vcap을 초기화하여 보여주는것으로 해결
         '''
         waitKey(1)를 넣었을때는 작동하던 코드가 이걸 빼니깐 작동하지 않는 걸 발견하였습니다.
         waitKey(0)은 새로운 input이 들어올 때까지 무작정 기다리고, 
@@ -64,6 +71,8 @@ while (cameraOnOff):
         if cv2.waitKey(1) == ord('q'): break
     else:
         print("Frame is None")
-        break
+        vcap = cv2.VideoCapture(baseStreamGroupUrl)
+        vcap.set(cv2.CAP_PROP_BUFFERSIZE, 3)
+        # break
 
 print('GOOD BYE')

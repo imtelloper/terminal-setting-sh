@@ -42,7 +42,7 @@ async def autoStreamOn():
     # os.system("screen -x autoStreeam")
     os.system("echo hi")
     os.system("sudo sh /home/interx/SAFETY-AI/BACKEND/reviver/auto-stream-killer.sh")
-    os.system("nohup python /home/interx/SAFETY-AI/BACKEND/reviver/autoStream.py &")
+    os.system("nohup python /home/interx/SAFETY-AI/BACKEND/reviver/auto-stream.py &")
     return "autoStreamOn"
 
 

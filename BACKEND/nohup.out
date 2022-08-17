@@ -6,3 +6,4 @@ sensingGroup2:
 http://127.0.0.1:8000/api/stream/area/2/272,65,390,65,313,311,261,315,228,239/290,122,355,114,311,251,281,258,276,203/
 baseStreamGroupUrl http://127.0.0.1:8000/api/stream/area/2/272,65,390,65,313,311,261,315,228,239/290,122,355,114,311,251,281,258,276,203/
 Frame is None
+Warning: Ignoring XDG_SESSION_TYPE=wayland on Gnome. Use QT_QPA_PLATFORM=wayland to run on Wayland anyway.

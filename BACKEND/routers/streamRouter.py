@@ -78,15 +78,18 @@ async def test():
     # return await service.test()
     # return await service.isTodayObserveExist(2)
     # return await service.insertVideoRecordPath('62c796f09715acf6931d4e6b', '/home')
-    if isInternetConnected():
-        await service.getTrackerId()
-        observeChk = await service.isTodayObserveExist(1)
-        print('observeChk', observeChk)
-        print('observeChk type ', type(observeChk))
-        if type(observeChk) == dict:
-            print('hi')
-        await service.addTodayCamData(observeChk, 1)
-        return observeChk
+    service.setCameraOff()
+    # service.setCameraOn()
+    return 'cameraInit'
+    # if isInternetConnected():
+    #     await service.getTrackerId()
+    #     observeChk = await service.isTodayObserveExist(1)
+    #     print('observeChk', observeChk)
+    #     print('observeChk type ', type(observeChk))
+    #     if type(observeChk) == dict:
+    #         print('hi')
+    #     await service.addTodayCamData(observeChk, 1)
+    #     return observeChk
 
 
 # 스크린샷 캡쳐
@@ -162,6 +165,8 @@ async def streamVideoFirstAreaSet(groupNum, coordinate1, coordinate2):
     - **coordinate1**: 1차 그룹 yellow 좌표
     - **coordinate2**: 1차 그룹 red 좌표
     """
+    service.setCameraOff()
+    service.setCameraOn()
     print('groupNum     ', groupNum)
     print('coordinate1     ', coordinate1)
     print('coordinate2     ', coordinate2)
@@ -194,6 +199,8 @@ async def streamVideoSecondAreaSet(groupNum, coordinate1, coordinate2, coordinat
     - **coordinate3**: 2차 그룹 yellow 좌표
     - **coordinate4**: 2차 그룹 red 좌표
     """
+    service.setCameraOff()
+    service.setCameraOn()
     print('2차 감지 groupNum     ', groupNum)
     print('2차 감지 coordinate1     ', coordinate1)
     print('2차 감지 coordinate2     ', coordinate2)
