@@ -29,6 +29,7 @@ from tools.scheculder import *
 # W: 256 H: 192
 class StreamService:
     def __init__(self):
+        self.saveStatus = False
         self.camWidth = 512
         self.camHeight = 384
         self.camPort = config.CAMPORT  # 카메라 포트
@@ -47,9 +48,10 @@ class StreamService:
         self.screenShotFolderPath = '{0}/{1}/{2}/{3}/capture'.format(
             self.savePath, self.currentDate, self.camArea, self.camPort)
         # 캡쳐 파일 이름
-        self.screenShotRecordPath = '{0}/safety-shot{1}.png'.format(self.screenShotFolderPath, self.fileInfo)
-        self.fcc = cv2.VideoWriter_fourcc('M', 'J', 'P', 'G')
-        self.fps = 30
+        self.screenShotRecordPath = '{0}/safety-shot{1}.jpg'.format(self.screenShotFolderPath, self.fileInfo)
+        self.fcc = cv2.VideoWriter_fourcc('D', 'I', 'V', 'X') # avi
+        # self.fcc = cv2.VideoWriter_fourcc('M', '4', 'S', '2') # wmv
+        # self.fcc = cv2.VideoWriter_fourcc('M', 'P', '4', '3') # wmv
         self.videoWriter = None  # cv 녹화 객체
         self.recordGate = False  # 녹화 시작, 중지를 위한 bool
         self.captureGate = False  # 캡쳐를 위한 bool
@@ -64,6 +66,7 @@ class StreamService:
         else:
             os.system("fuser -k 8000/tcp")
             self.video = cv2.VideoCapture(0)
+        self.fps = self.video.get(cv2.CAP_PROP_FPS)
         self.cameraOnOff = True  # 스트림 카메라를 열었다면 닫아줘야 재활성화 되기 때문에 필요한 bool
         self.observeService = ObserveService()
         self.dbName = config.DB_NAME
@@ -187,7 +190,7 @@ class StreamService:
         self.fileInfo = '-{0}-{1}-{2}'.format(self.camArea, self.camPort, self.currentTime)
         self.screenShotFolderPath = '{0}/{1}/{2}/{3}/capture'.format(self.savePath, self.currentDate, self.camArea,
                                                                      self.camPort)
-        self.screenShotRecordPath = '{0}/safety-shot{1}.png'.format(self.screenShotFolderPath, self.fileInfo)
+        self.screenShotRecordPath = '{0}/safety-shot{1}.jpg'.format(self.screenShotFolderPath, self.fileInfo)
 
     # 캡쳐를 하기 위한 메서드
     def setCaptureGateOpen(self):
@@ -238,6 +241,7 @@ class StreamService:
     # 녹화 중지 메서드
     def setRecordGateClose(self):
         self.recordGate = False
+        self.saveStatus = True
         return False
 
     # 지금 PC의 area, camPort 정보로 tracker object id 가져오기
@@ -386,7 +390,7 @@ class StreamService:
 
     def updateDeviceIp(self, trackerId, ip: str):
         self.initScreenCapturePath()
-        print('updateDeviceIp trackerId',trackerId)
+        print('updateDeviceIp trackerId', trackerId)
         getConnection()[self.dbName][config.TABLE_TRACKER].update_one(
             {'_id': ObjectId(trackerId)},
             {'$set':
@@ -438,8 +442,6 @@ class StreamService:
 
     # 관제 PC에 파일 저장
     def saveFile(self, folderPath, recordPath):
-        # print('###### folderPath',folderPath)
-        # print('###### recordPath',recordPath)
         # 관제 PC
         host = "192.168.0.4"
         port = 22  # 고정
@@ -462,8 +464,12 @@ class StreamService:
         if not str(stderr.read()):
             return True
         else:
-            cmd = 'sudo mkdir -p ' + recordPath
+            cmd = 'sudo mkdir -p ' + folderPath
             client.exec_command(cmd)
+            cmd = 'sudo chmod o+w ' + folderPath
+            client.exec_command(cmd)
+
+        time.sleep(0.5)
 
         # Upload - 파일 업로드
         remotepath = recordPath
@@ -476,10 +482,11 @@ class StreamService:
             sftp.get(remotepath,
                      localpath)
 
-            os.remove(localpath)
+            # os.remove(localpath)
 
         # Close
         sftp.close()
+        client.close()
         transport.close()
 
     def video_streaming(self, coordinates1=[], coordinates2=[]):
@@ -677,7 +684,9 @@ class StreamService:
                     # cv2.imshow('frame', result_img)
                 else:
                     cv2.destroyAllWindows()
-                    # self.saveFile(self.videoFolderPath, self.videoRecordPath)
+                    if  self.saveStatus is True:
+                        self.saveFile(self.videoFolderPath, self.videoRecordPath)
+                        self.saveStatus = False
 
                 # 스크린 캡쳐
                 if self.captureGate:

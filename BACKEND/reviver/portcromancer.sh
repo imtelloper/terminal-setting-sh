@@ -2,6 +2,7 @@
 
 PROGRAM_PORT_WATCHER=port-watcher.py
 PROGRAM_BACKEND=main.py
+SAFETY_SH_LOG_FILE=/home/interx/safety-autostart.sh.log
 
 #portWatcherPidCnt=`ps -ef|grep $PROGRAM_PORT_WATCHER|grep -v grep|grep -v vi|wc -l`
 #PORT_WATCHER_PID=`ps -ef|grep $PROGRAM_PORT_WATCHER|grep -v grep|grep -v vi|awk '{print $2}'`
@@ -11,9 +12,17 @@ PORT_WATCHER_PID=`ps -ef|grep $PROGRAM_PORT_WATCHER|grep -v grep|awk '{print $2}
 
 BACKEND_PID=`ps -ef|grep $PROGRAM_BACKEND|grep -v grep|grep -v vi|awk '{print $2}'`
 
+SAFETY_SH_LOG_SIZE=`du $SAFETY_SH_LOG_FILE|awk '{print $1}'`
+
 echo $portWatcherPidCnt
 echo $PROGRAM_PORT_WATCHER running on $PORT_WATCHER_PID
 echo BACKEND $PROGRAM_BACKEND running on $BACKEND_PID
+
+if [ $SAFETY_SH_LOG_SIZE -gt 100000 ]
+then
+  cat /home/interx/safety-log.txt > $SAFETY_SH_LOG_FILE
+#  cat /dev/null > $SAFETY_SH_LOG_FILE
+fi
 
 if [ $portWatcherPidCnt -gt 0 ]
 then

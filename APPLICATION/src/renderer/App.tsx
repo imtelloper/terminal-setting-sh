@@ -11,6 +11,7 @@ import SensingViewPage from '../pages/SensingViewPage';
 import VideoArchivePage from '../pages/VideoArchivePage';
 import ImgArchivePage from '../pages/ImgArchivePage';
 import BinPage from '../pages/BinPage';
+import AllListCheck from '../pages/AllListCheckPage';
 
 export default function App() {
   return (
@@ -27,6 +28,7 @@ export default function App() {
           <Route path="/videoArchive" element={<VideoArchivePage />} />
           <Route path="/imgArchive" element={<ImgArchivePage />} />
           <Route path="/bin" element={<BinPage />} />
+          <Route path="/allListCheck" element={<AllListCheck />}/>
         </Routes>
       </LayoutForm>
     </Router>

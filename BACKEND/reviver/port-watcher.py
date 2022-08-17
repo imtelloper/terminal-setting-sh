@@ -25,6 +25,7 @@ def runPortChecker():
             print("Port is not Open")
             # backend 8000 port가 안돌아가고 있으면 실행시킴.
             os.system("pwd")
+            os.system("python /home/interx/SAFETY-AI/BACKEND/reviver/safety-log.py &")
             os.system("python /home/interx/SAFETY-AI/BACKEND/main.py")
 
 

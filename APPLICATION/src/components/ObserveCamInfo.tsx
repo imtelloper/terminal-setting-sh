@@ -3,9 +3,8 @@ import '../style/DesignSystem.scss';
 import '../style/pages/ObserveCamInfo.scss';
 import { useNavigate } from 'react-router-dom';
 import { flushSync } from 'react-dom';
-import Delete from '../images/delete.png';
 import { AiOutlinePlusCircle } from 'react-icons/ai';
-import { Feedback, HighlightOff } from '@material-ui/icons';
+import { Feedback, HighlightOff, Delete } from '@material-ui/icons';
 import { MdDangerous, MdOutlineTaskAlt } from 'react-icons/md';
 import Api from '../api/Api';
 
@@ -264,7 +263,7 @@ const ObserveCamInfo = ({
               itemID={stateInfo?.[groupNum]?.trackerId}
               datatype={groupNum}
             >
-              <img src={Delete} alt="" />
+              <Delete />
             </button>
           </div>
         </div>

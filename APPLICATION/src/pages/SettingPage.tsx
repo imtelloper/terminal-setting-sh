@@ -15,12 +15,13 @@ import {
   PhotoCamera,
   Textsms,
 } from '@material-ui/icons';
-import { MdViewInAr } from 'react-icons/md';
+import { MdViewInAr, MdWorkspaces } from 'react-icons/md';
 import KakaoIcon from '../images/kakao_icon.png';
 import Datathresholding from '../images/data_thresholding.png';
 import { useSWRState } from '../fetcher/useSWRState';
 import { flushSync } from 'react-dom';
 import { camDummyData } from '../initDatas/camSettingDummyData';
+import { useNavigate } from 'react-router-dom';
 
 /*
 tracker들을 가져와서 area를 고유값으로 select option에 셋팅
@@ -33,6 +34,7 @@ const SettingPage = () => {
   const [camAreasState, setCamAreasState] = useState<Array<string>>([]);
   const [curCamAreaState, setCurCamAreaState] = useState('');
   const [isPending, startTransition] = useTransition();
+  const navigation = useNavigate();
 
   const initSettingUI = () => {
     camSettingState.forEach((obj) => {
@@ -208,9 +210,13 @@ const SettingPage = () => {
               // @ts-ignore
               webkitdirectory=""
             />
-            <label id="inputFilePathLabel" htmlFor={`inputFilePath${idx + 1}`}>
+            <button
+              id="inputFilePathLabel"
+              className="btnR defaultPrimary"
+              htmlFor={`inputFilePath${idx + 1}`}
+            >
               선택
-            </label>
+            </button>
           </div>
           <div className="content">
             <PhotoCamera style={{ fontSize: '24px' }} />
@@ -265,7 +271,6 @@ const SettingPage = () => {
               <option>small</option>
               <option>medium</option>
             </select>
-            <button className="btnR defaultPrimary">선택</button>
           </div>
           <div className="content">
             {/* <DataThresholdingIcon /> */}
@@ -287,7 +292,6 @@ const SettingPage = () => {
               <option>90</option>
               <option>100</option>
             </select>
-            <button className="btnR defaultPrimary">선택</button>
           </div>
           <div className="content">
             <PermMedia style={{ fontSize: '24px' }} />
@@ -398,6 +402,24 @@ const SettingPage = () => {
           </div>
         </div>
         <div className="settingBox">
+          <div className="settingBoxTop">
+            <div className="settingBoxTopLeft">
+              <MdWorkspaces style={{ fontSize: '24px' }} />
+              <span>캠 그룹 이름 변경</span>
+              <input type="text" />
+              <button className="btnR defaultPrimary">확인</button>
+            </div>
+            <div className="settingBoxTopRight">
+              <button
+                className="btnR normalPrimary"
+                onClick={() => {
+                  navigation('/allListCheck');
+                }}
+              >
+                전체 CAM 리스트 확인
+              </button>
+            </div>
+          </div>
           <input
             className="tabInput"
             id="tab1"
