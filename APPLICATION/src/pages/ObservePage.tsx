@@ -98,8 +98,15 @@ const ObservePage = () => {
 
       const curVideoFrameState = videoFrameState;
       // console.log('processedData.length', processedData.length);
-      const { _id, ip, baseLine, dangerLine, sensingGroup1, sensingGroup2 } =
-        tracker;
+      const {
+        _id,
+        ip,
+        baseLine,
+        dangerLine,
+        sensingGroup1,
+        sensingGroup2,
+        camName,
+      } = tracker;
       // console.log('🐳sensingGroup1', sensingGroup1);
       // console.log('🐳sensingGroup2', sensingGroup2);
       // GYR
@@ -136,6 +143,7 @@ const ObservePage = () => {
       curVideoFrameState[idx].dangerLine = dangerLine;
       curVideoFrameState[idx].ip = ip;
       curVideoFrameState[idx].frameSrc = frameSrc;
+      curVideoFrameState[idx].camName = camName;
 
       const group1Coord = CoordinateTool.coordinateMaker(
         tracker.sensingGroup1.split('&')[2]?.split(',')
@@ -199,6 +207,9 @@ const ObservePage = () => {
         );
     }
     // console.log('rate', PolygonDraw.getDistanceRate(165, 12.5));
+    return () => {
+      setVideoFrameState(initVideoFrameData);
+    };
   }, [videoFrameState]);
 
   useEffect(() => {
