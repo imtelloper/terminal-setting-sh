@@ -252,6 +252,8 @@ const AreaInfo = () => {
   }, [getObserveState]);
 
   if (loadingState) return <Loading />;
+  if (!swrTrackerData) return <Loading />;
+  if (!swrObserveData) return <Loading />;
   return (
     <div className="areaInfoContainer">
       <div className="areaInfo">

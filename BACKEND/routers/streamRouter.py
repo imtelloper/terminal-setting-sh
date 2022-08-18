@@ -122,6 +122,13 @@ async def addObserveData(groupNum):
     return observeChk
 
 
+# 그룹 삭제했을때 카운트 초기화하기
+@router.get("/init-count/{groupNum}", response_description="")
+async def initGroupSensingCnt(groupNum):
+    service.setGroupCnt(int(groupNum))
+    return 'success'
+
+
 # 녹화 시작
 @router.get("/record-on", response_description="")
 async def videoRecordOn():
@@ -174,6 +181,7 @@ async def streamVideoFirstAreaSet(groupNum, coordinate1, coordinate2):
     if isInternetConnected():
         await service.getTrackerId()
         observeChk = await service.isTodayObserveExist(int(groupNum))
+        print('@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ observeChk: ',observeChk)
         await service.addTodayCamData(observeChk, int(groupNum))
 
     coordinates1 = [[], []]

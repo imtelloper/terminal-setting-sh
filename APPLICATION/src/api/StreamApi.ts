@@ -27,4 +27,15 @@ export default class StreamApi {
       console.error(error);
     }
   };
+
+  initGroupSensingCnt = async (ip, groupNum) => {
+    try {
+      const res = await axios.get(
+        `http://${ip}:81/api/stream/init-count/${groupNum}`
+      );
+      return res.status === 200 ? res.data : 'failed init group sensing count';
+    } catch (error) {
+      console.error(error);
+    }
+  };
 }
