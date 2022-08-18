@@ -11,6 +11,7 @@ const ObserveCamStream = ({
   recordState,
   setNewVideoSrcState,
   camTabState,
+  swrTrackerMutate,
 }) => {
   const camWidth = 512;
   const camHeight = 384;
@@ -264,6 +265,7 @@ const ObserveCamStream = ({
     flushSync(() => setVideoFrameState([...newArr]));
     flushSync(() => polySort(arrIndex, itemID));
     draw(canvas, true, trackerId);
+    swrTrackerMutate();
   };
 
   useEffect(() => {

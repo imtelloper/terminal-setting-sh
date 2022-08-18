@@ -34,10 +34,12 @@ const ObservePage = () => {
     axios.post(url, { area: swrState.curTrackerArea }).then((res) => res.data);
   const [loadingState, setLoadingState] = useState(false);
 
-  const { data: swrTrackerData, error: swrTrackerErr } = useSWR<
-    Array<TrackerObserve>
-  >('/api/tracker/find', findFetcher, {
-    refreshInterval: swrIntervalMilliSec,
+  const {
+    data: swrTrackerData,
+    error: swrTrackerErr,
+    mutate: swrTrackerMutate,
+  } = useSWR<Array<TrackerObserve>>('/api/tracker/find', findFetcher, {
+    // refreshInterval: swrIntervalMilliSec,
   });
 
   const observeFindFetcher = (url: string) =>
@@ -45,8 +47,8 @@ const ObservePage = () => {
 
   const { data: swrObserveData, error } = useSWR(
     '/api/observe/find',
-    observeFindFetcher,
-    { refreshInterval: swrIntervalMilliSec }
+    observeFindFetcher
+    // { refreshInterval: swrIntervalMilliSec }
   );
 
   const handleActive = (e) => {
@@ -297,6 +299,7 @@ const ObservePage = () => {
                 setVideoFrameState={setVideoFrameState}
                 getObserveState={getObserveState}
                 setNewVideoSrcState={setNewVideoSrcState}
+                swrTrackerMutate={swrTrackerMutate}
               />
             </div>
             <div className="bottomBtnBox">
@@ -336,6 +339,7 @@ const ObservePage = () => {
               recordState={recordState}
               setNewVideoSrcState={setNewVideoSrcState}
               camTabState={camTabState}
+              swrTrackerMutate={swrTrackerMutate}
             />
           </Suspense>
         </div>
