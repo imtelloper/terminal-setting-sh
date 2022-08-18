@@ -14,10 +14,12 @@ import { getFetcher } from '../fetcher/fetcher';
 import Api from '../api/Api';
 import dayjs from 'dayjs';
 import { areaInfoDummyData } from '../initDatas/areaInfoDummyData';
+import Loading from './Loading';
 
 const AreaInfo = () => {
   const navigate = useNavigate();
   const today = dayjs().format('YYYY-MM-DD');
+  const [loadingState, setLoadingState] = useState(false);
   const [getObserveState, setGetObserveState] = useState([]);
   const { data: swrState, mutate: setSwrState } = useSWRState();
 
@@ -48,6 +50,7 @@ const AreaInfo = () => {
 
   /* tracker데이터들을 메인 페이지에 맞게 데이터 가공해서 셋팅해주는 메서드‼️ */
   const setProcessedSwrData = useCallback(() => {
+    setLoadingState(true);
     const processedData = [];
     const areaData = [...new Set(swrTrackerData?.map((obj) => obj.area))];
     // console.log('areaData', areaData);
@@ -122,6 +125,7 @@ const AreaInfo = () => {
           //   yellowCnt: 0
           // }
           flushSync(() => setGetObserveState([...areaFilteredObj]));
+          flushSync(() => setLoadingState(false));
         });
     });
   }, [swrTrackerData, swrObserveData]);
@@ -186,10 +190,9 @@ const AreaInfo = () => {
           onClick={goObservePage}
           datatype={idx.toString()}
         >
-          <div className="titleBox">{card.area}</div>
-          {/*<div className="titleBox">*/}
-          {/*  <span>{getObjectKey}</span>*/}
-          {/*</div>*/}
+          <div className="titleBox">
+            <span>{getObjectKey || card.area}</span>
+          </div>
           <div className="areaContent">
             <div className="areaTop">
               <div className="imgBox">
@@ -248,6 +251,7 @@ const AreaInfo = () => {
     });
   }, [getObserveState]);
 
+  if (loadingState) return <Loading />;
   return (
     <div className="areaInfoContainer">
       <div className="areaInfo">
@@ -265,7 +269,7 @@ const AreaInfo = () => {
                 </span>
                 <div className="icon">
                   <img src={Videocam} alt="" />
-                  <span className="blue">4</span>
+                  <span className="blue">{getObserveState?.length}</span>
                 </div>
               </div>
               <div>

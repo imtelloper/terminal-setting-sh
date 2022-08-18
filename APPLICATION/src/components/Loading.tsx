@@ -10,7 +10,7 @@ export const loadingCss = css`
 `;
 const Loading = () => (
   <div className="loadingContainer">
-    <PulseLoader color="#fff" loading css={loadingCss} size={20} />
+    <PulseLoader color="#1E2941" loading css={loadingCss} size={20} />
   </div>
 );
 

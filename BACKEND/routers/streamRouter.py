@@ -165,6 +165,7 @@ async def streamVideoFirstAreaSet(groupNum, coordinate1, coordinate2):
     - **coordinate1**: 1차 그룹 yellow 좌표
     - **coordinate2**: 1차 그룹 red 좌표
     """
+    print("🥞🥞🥞1🥞🥞🥞1streamVideoFirstAreaSet🥞🥞🥞1🥞🥞🥞")
     service.setCameraOff()
     service.setCameraOn()
     print('groupNum     ', groupNum)
@@ -199,6 +200,7 @@ async def streamVideoSecondAreaSet(groupNum, coordinate1, coordinate2, coordinat
     - **coordinate3**: 2차 그룹 yellow 좌표
     - **coordinate4**: 2차 그룹 red 좌표
     """
+    print("🥞🥞🥞2🥞🥞🥞2streamVideoSecondAreaSet🥞🥞🥞2🥞🥞🥞")
     service.setCameraOff()
     service.setCameraOn()
     print('2차 감지 groupNum     ', groupNum)
