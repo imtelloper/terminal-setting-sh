@@ -98,4 +98,14 @@ export default class ArchiveApi {
       return 'failed to get count data';
     }
   };
+
+  getSensingCount = async () => {
+    try {
+      const res = await axios.get(`/api/${this.apiTarget}/count-part/`);
+      return res.status === 200 ? res.data : 'failed to get sensing count data';
+    } catch (error) {
+      console.error(error);
+      return 'failed to get count data';
+    }
+  };
 }
