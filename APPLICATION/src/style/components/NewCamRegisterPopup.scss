@@ -1,0 +1,92 @@
+@import "../color.scss";
+
+div.newCamContainer {
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.8);
+  border: 1px solid #555555;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 10000;
+
+  div.newCamBox {
+    max-width: 400px;
+    width: 100%;
+    height: 408px;
+    background-color: $white;
+    border: 1px solid #d4d4d4;
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+
+    div.newCamTitle {
+      width: 100%;
+      height: 48px;
+      font-size: 18px;
+      display: flex;
+      align-items: center;
+      padding-left: 24px;
+      box-sizing: border-box;
+      border-bottom: 1px solid #d4d4d4;
+    }
+
+    div.newCamContentBox {
+      width: 100%;
+      height: calc(100% - 48px);
+      position: relative;
+
+      div.newCamContent{
+        width: 100%;
+        height: 272px;
+        padding: 24px;
+        box-sizing: border-box;
+        display: flex;
+        flex-direction: column;
+        div.newCamCon{
+          width: 100%;
+          height: 65px;
+          margin-bottom: 16px;
+          span{
+            display: block;
+            margin-left: 8px;
+            margin-bottom: 8px;
+          }
+          input{
+            width: 100%;
+            height: 40px;
+            border: 1px solid #d4d4d4;
+            border-radius: 8px;
+            padding: 0 16px;
+            box-sizing: border-box;
+          }
+        }
+      }
+    }
+
+    div.newCamBtnBox{
+      width: 100%;
+      height: 172px;
+      border-top: 1px solid #d4d4d4;
+      div.newCamButtons {
+        width: 100%;
+        height: 88px;
+        padding: 24px;
+        box-sizing: border-box;
+        display: flex;
+        justify-content: end;
+        button{
+          width: calc(50% - 4px);
+          &:first-child{
+            margin-right: 8px;
+          }
+        }
+      }
+    }
+  }
+}
+
+

@@ -54,10 +54,13 @@ const ObservePage = () => {
   const handleActive = (e) => {
     const target = e.currentTarget;
     const recordTxtEl = document.querySelector('.recordTxt');
+    const iframeTitleEl = document.querySelector('.iframeTitle');
     target.classList.toggle('txtActive');
     target.classList.toggle('hoverCircleActive');
     setTxtChangeState((prev) => (prev === '녹화중' ? '녹화시작' : '녹화중'));
     recordTxtEl.classList.toggle('txtColorActive');
+    iframeTitleEl.classList.toggle('iframeTxtColorActive');
+    // iframeRecordingTxtEl.classList.toggle('iframeRecordingTxtActive');
     const camStateObj = {
       // cam1: camPort1Ip,
       // cam2: camPort2Ip,

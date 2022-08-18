@@ -8,11 +8,10 @@ const LandingPage = () => {
   useEffect(() => {
     setTimeout(() => {
       // navigate('/observe');
-      // navigate('/main');
-      navigate('/detail');
+      navigate('/main');
+      // navigate('/detail');
       // navigate('/setting');
       // navigate('/login');
-      // navigate('/allListCheck');
     }, 300);
   }, []);
 

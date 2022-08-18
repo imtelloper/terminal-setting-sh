@@ -3,14 +3,12 @@ import '../style/DesignSystem.scss';
 import '../style/components/ChangePwdPopup.scss';
 import LoginAlarmPopup from './LoginAlarmPopup';
 
-const ChangePwdPopupPopup = ({
-  setIsChangePwdPopupOpenState,
-  changePwdPopup,
+const ChangePwdPopup = ({
+  setIsChangePwdPopupOpenState, changePwdPopup,checkPw
 }) => {
   const [nowPwdState, setNowPwdState] = useState('');
   const [changePwdState, setChangePwdState] = useState('');
   const [checkPwdState, setCheckPwdState] = useState('');
-  const [alarmTxtState, setAlarmTxtState] = useState(false);
 
   const handleNowPwd = (e) => {
     setNowPwdState(e.currentTarget.value);
@@ -28,7 +26,9 @@ const ChangePwdPopupPopup = ({
   };
 
   //현재 패스워드, 변경 패스워드, 변경 패스워드 확인 모두 성공하면 '패스워드가 변경되었습니다'
+
   //현재 패스워드가 틀리면 '현재 패스워드가 일치 하지 않습니다'
+
   //변경 패스워드 & 변경 패스워드 확인 다르면 '변경 패스워드가 일치 하지 않습니다'
 
   return (
@@ -73,9 +73,8 @@ const ChangePwdPopupPopup = ({
           </div>
         </div>
       </div>
-      {}
     </div>
   );
 };
 
-export default ChangePwdPopupPopup;
+export default ChangePwdPopup;

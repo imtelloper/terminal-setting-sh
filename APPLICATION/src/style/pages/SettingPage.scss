@@ -98,7 +98,7 @@ div.settingWrap {
         display: none;
       }
 
-      label {
+      label.tabLabel {
         display: inline-block;
         margin: 0 0 -1px;
         padding: 15px 25px;
@@ -166,6 +166,24 @@ div.settingWrap {
 
           .inputFilePath {
             display: none;
+          }
+
+          label.contentLabel{
+            width: 64px;
+            height: 40px;
+            background-color: $blue-500;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-left: 8px;
+            padding: 0;
+            color: $white;
+            cursor: pointer;
+            transition: 0.3s;
+            &:hover{
+              background-color: $blue-700;
+            }
           }
 
           //#inputFilePathLabel {
@@ -253,11 +271,6 @@ div.settingWrap {
             justify-content: space-between;
             padding-left: 12px;
             padding-right: 8px;
-          }
-
-          button.btnR {
-            width: 68px;
-            margin-left: 8px;
           }
         }
       }
