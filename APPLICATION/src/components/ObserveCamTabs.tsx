@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { useSWRState } from '../fetcher/useSWRState';
 import Api from '../api/Api';
 
-const ObserveCamTabs = ({ setCamTabState, camTabState }) => {
+const ObserveCamTabs = ({ setCamTabState, camTabState, videoFrameState }) => {
   const { data: swrState, mutate: setSwrState } = useSWRState();
   const visibilityCamInfo = (e) => {
     const target = e.currentTarget;
@@ -21,28 +21,24 @@ const ObserveCamTabs = ({ setCamTabState, camTabState }) => {
   };
 
   /* cam1, 2, 3, 4 tab */
-  const getTabEles = () => {
-    const tabArr = [];
-    for (let i = 0; i < 4; i++) {
-      tabArr.push(
-        <div className="safetyTabBox" key={i}>
-          <input
-            className="safetyTab"
-            id={`safetyTab${i + 1}`}
-            datatype={(i + 1).toString()}
-            type="radio"
-            name="tabs"
-            defaultChecked={i === 0 && true}
-            onChange={visibilityCamInfo}
-          />
-          <label className="safeLabel" htmlFor={`safetyTab${i + 1}`}>
-            {`Cam${i + 1}`}
-          </label>
-        </div>
-      );
-    }
-    return tabArr;
-  };
+  const getTabEles = videoFrameState
+    .filter((obj) => obj?.ip?.length > 0)
+    .map((obj, idx) => (
+      <div className="safetyTabBox" key={idx}>
+        <input
+          className="safetyTab"
+          id={`safetyTab${idx + 1}`}
+          datatype={(idx + 1).toString()}
+          type="radio"
+          name="tabs"
+          defaultChecked={idx === 0 && true}
+          onChange={visibilityCamInfo}
+        />
+        <label className="safeLabel" htmlFor={`safetyTab${idx + 1}`}>
+          {`Cam${idx + 1}`}
+        </label>
+      </div>
+    ));
 
   useEffect(() => {
     Api.tracker
@@ -51,7 +47,7 @@ const ObserveCamTabs = ({ setCamTabState, camTabState }) => {
         camPort: `cam${camTabState}`,
       })
       .then((tracker) => {
-        console.log('🍋🍋🍋🍋🍋🍋tracker', tracker);
+        // console.log('🍋🍋🍋🍋🍋🍋tracker', tracker);
         // console.log('🍋🍋🍋🍋🍋🍋tracker', tracker[0].camPort);
         // console.log('🍋🍋🍋🍋🍋🍋tracker', tracker[0]._id);
 
@@ -69,7 +65,7 @@ const ObserveCamTabs = ({ setCamTabState, camTabState }) => {
       .catch((err) => console.error(err));
   }, [camTabState]);
 
-  return <>{getTabEles()}</>;
+  return <>{getTabEles}</>;
 };
 
 export default ObserveCamTabs;

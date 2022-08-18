@@ -49,6 +49,7 @@ type ViedeoFrameType = {
   trackerId: string;
   baseLine: string;
   dangerLine: string;
+  camName: string;
   firstCanvas: {
     visible: boolean;
     yellowSensingPercent: number;

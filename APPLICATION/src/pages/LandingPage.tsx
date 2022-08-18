@@ -24,14 +24,14 @@ const LandingPage = () => {
           xmlns="http:www.w3.org/2000/svg"
           viewBox="0 0 340 340"
         >
-          <circle cx="170" cy="170" r="160" stroke="#A85CF9" />
-          <circle cx="170" cy="170" r="135" stroke="#6240b7" />
-          <circle cx="170" cy="170" r="110" stroke="#4B7BE5" />
-          <circle cx="170" cy="170" r="85" stroke="#6FDFDF" />
+          <circle cx="170" cy="170" r="160" stroke="#1E2941" />
+          <circle cx="170" cy="170" r="135" stroke="#5ED057" />
+          <circle cx="170" cy="170" r="110" stroke="#FCB72B" />
+          <circle cx="170" cy="170" r="85" stroke="#FE0A02" />
         </svg>
       </div>
       <div className="appTitleContainer">
-        <span>Temp Humidity Caster</span>
+        <span>SAFETY-AI</span>
       </div>
 
       <div className="appBottomContainer">

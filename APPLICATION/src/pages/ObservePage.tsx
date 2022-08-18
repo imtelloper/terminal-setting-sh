@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState, Suspense } from 'react';
 import { flushSync } from 'react-dom';
 import '../style/pages/ObservePage.scss';
 import { useNavigate } from 'react-router-dom';
@@ -11,17 +11,14 @@ import { useSWRState } from '../fetcher/useSWRState';
 import useSWR from 'swr';
 import dayjs from 'dayjs';
 import ObserveCamTabs from '../components/ObserveCamTabs';
-import {
-  // camPort1Ip,
-  // camPort2Ip,
-  // camPort3Ip,
-  // camPort4Ip,
-  initVideoFrameData,
-} from '../initDatas/initVideoFrameData';
+import { initVideoFrameData } from '../initDatas/initVideoFrameData';
 import CoordinateTool from '../util/CoordinateTool';
 import ObserveCamStream from '../components/ObserveCamStream';
 import { today } from '../util/dateLibrary';
 import { FiX } from 'react-icons/all';
+import ClipLoader from 'react-spinners/ClipLoader';
+import { PulseLoader } from 'react-spinners';
+import Loading from '../components/Loading';
 
 const ObservePage = () => {
   const navigate = useNavigate();
@@ -35,6 +32,7 @@ const ObservePage = () => {
   const swrIntervalMilliSec = 300;
   const findFetcher = (url: string) =>
     axios.post(url, { area: swrState.curTrackerArea }).then((res) => res.data);
+  const [loadingState, setLoadingState] = useState(false);
 
   const { data: swrTrackerData, error: swrTrackerErr } = useSWR<
     Array<TrackerObserve>
@@ -59,10 +57,6 @@ const ObservePage = () => {
     setTxtChangeState((prev) => (prev === '녹화중' ? '녹화시작' : '녹화중'));
     recordTxtEl.classList.toggle('txtColorActive');
     const camStateObj = {
-      // cam1: camPort1Ip,
-      // cam2: camPort2Ip,
-      // cam3: camPort3Ip,
-      // cam4: camPort4Ip,
       cam1: videoFrameState[0].ip,
       cam2: videoFrameState[1].ip,
       cam3: videoFrameState[2].ip,
@@ -81,7 +75,11 @@ const ObservePage = () => {
 
   /* setVideoFrameState, setGetObserveState */
   const setProcessedSwrData = () => {
+    setLoadingState(true);
+    console.log('🍯🍯🍯🍯🍯🍯🍯🍯🍯🍯🍯🍯🍯🍯🍯🍯🍯🍯🍯🍯🍯🍯🍯🍯🍯🍯');
+    // console.log('initVideoFrameData', initVideoFrameData);
     const processedData = [];
+    setVideoFrameState([]);
 
     /* 정렬 */
     swrTrackerData.sort((prev, next) => {
@@ -90,16 +88,65 @@ const ObservePage = () => {
       return 0;
     });
 
-    console.log('🌈swrTrackerData', swrTrackerData);
+    // console.log('🌈swrTrackerData', swrTrackerData);
+    // console.log(
+    //   '🌈🌈swrTrackerData',
+    //   swrTrackerData.map((tracker) => tracker.camName)
+    // );
+    const camNames = swrTrackerData.map((tracker) => tracker.camName);
 
+    /*
+     * tracker 데이터와 videoFrameState와 일치하는 데이터만 초기값으로 주면 될듯 하다.
+     * */
     swrTrackerData.forEach(async (tracker, idx) => {
       // console.log('🪸tracker', tracker);
       // console.log('🪸tracker ip', tracker.ip);
 
-      const curVideoFrameState = videoFrameState;
+      // console.log(
+      //   '🪸🪸🪸🪸🪸🪸',
+      //   videoFrameState.filter((data) => camNames.includes(data.camName))
+      // );
+
+      // console.log('swrTrackerData.length', swrTrackerData.length);
+
+      console.log(
+        '🍥swrTrackerData.length',
+        initVideoFrameData.slice(0, swrTrackerData.length)
+      );
+
+      const curVideoFrameState = initVideoFrameData.slice(
+        0,
+        swrTrackerData.length
+      );
+
+      // const curVideoFrameState = videoFrameState.filter((obj) => {
+      //   console.log('🍰🍰🍰');
+      //   console.log('🍰🍰🍰obj.camName', obj.camName);
+      //   console.log(
+      //     swrTrackerData.map((tracker) => tracker.camName).includes(obj.camName)
+      //   );
+      //   return swrTrackerData
+      //     .map((tracker) => tracker.camName)
+      //     .includes(obj.camName);
+      // });
+
+      // const curVideoFrameState =
+      //   swrTrackerData.length === idx + 1
+      //     ? videoFrameState.filter((data) => camNames.includes(data.camName))
+      //     : videoFrameState;
+      // const curVideoFrameState = videoFrameState.filter((data) => camNames.includes(data.camName));
+
+      // console.log('🍕🍕🍕🍕🍕🍕videoFrameState', videoFrameState);
       // console.log('processedData.length', processedData.length);
-      const { _id, ip, baseLine, dangerLine, sensingGroup1, sensingGroup2 } =
-        tracker;
+      const {
+        _id,
+        ip,
+        baseLine,
+        dangerLine,
+        sensingGroup1,
+        sensingGroup2,
+        camName,
+      } = tracker;
       // console.log('🐳sensingGroup1', sensingGroup1);
       // console.log('🐳sensingGroup2', sensingGroup2);
       // GYR
@@ -131,33 +178,34 @@ const ObservePage = () => {
       // console.log('🍄camPort.at(-1)', camPort.at(-1));
       // console.log('🌳camIdx', camIdx);
       // console.log('🌺ip', ip);
-      curVideoFrameState[idx].trackerId = _id;
-      curVideoFrameState[idx].baseLine = baseLine;
-      curVideoFrameState[idx].dangerLine = dangerLine;
-      curVideoFrameState[idx].ip = ip;
-      curVideoFrameState[idx].frameSrc = frameSrc;
-
       const group1Coord = CoordinateTool.coordinateMaker(
         tracker.sensingGroup1.split('&')[2]?.split(',')
       );
       // console.log('🌸group1Coord', group1Coord);
       /* DB에 저장된 좌표값을 기준으로 좌표값이 있다면 visible true */
-      curVideoFrameState[idx].firstCanvas.visible = group1Coord.length > 0;
-      curVideoFrameState[idx].firstCanvas.coordinate = group1Coord;
-
       const group2Coord = CoordinateTool.coordinateMaker(
         tracker.sensingGroup2.split('&')[2]?.split(',')
       );
       // console.log('🌸group2Coord', group2Coord);
-      curVideoFrameState[idx].secondCanvas.visible = group2Coord.length > 0;
-      curVideoFrameState[idx].secondCanvas.coordinate = group2Coord;
+
+      if (curVideoFrameState[idx]) {
+        curVideoFrameState[idx].trackerId = _id;
+        curVideoFrameState[idx].baseLine = baseLine;
+        curVideoFrameState[idx].dangerLine = dangerLine;
+        curVideoFrameState[idx].ip = ip;
+        curVideoFrameState[idx].frameSrc = frameSrc;
+        curVideoFrameState[idx].camName = camName;
+        curVideoFrameState[idx].firstCanvas.visible = group1Coord.length > 0;
+        curVideoFrameState[idx].firstCanvas.coordinate = group1Coord;
+        curVideoFrameState[idx].secondCanvas.visible = group2Coord.length > 0;
+        curVideoFrameState[idx].secondCanvas.coordinate = group2Coord;
+      }
+
+      // console.log('🍟🍟🍟🍟🍟curVideoFrameState', curVideoFrameState);
       await setVideoFrameState([...curVideoFrameState]);
 
       await Api.observe
-        .findData({
-          trackerId: tracker._id,
-          date: today,
-        })
+        .findData({ trackerId: tracker._id, date: today })
         .then((observe) => {
           if (observe?.length > 0) {
             const processedObserve = observe.map((obj) => {
@@ -182,42 +230,48 @@ const ObservePage = () => {
 
             flushSync(() => setGetObserveState([...processedData]));
           }
-        });
+        })
+        .finally(() => setLoadingState(false));
     });
   };
 
+  /* INIT EFFECT */
+  useEffect(() => {
+    return () => {
+      console.log('🌽🌽🌽CLEAR EFFECT🌽🌽🌽');
+    };
+  }, []);
+
   useEffect(() => {
     // console.log('📀📀📀📀videoFrameState', videoFrameState);
-    if (videoFrameState[0]) {
-      const coor1 = videoFrameState[0]?.secondCanvas?.coordinate[0];
-      const coor2 = videoFrameState[0]?.secondCanvas?.coordinate[1];
-      coor1 &&
-        coor2 &&
-        console.log(
-          '2차그룹으로 거리재기 확인',
-          PolygonDraw.getTwoPointsDistance(coor1, coor2)
-        );
-    }
+    // if (videoFrameState[0]) {
+    //   const coor1 = videoFrameState[0]?.secondCanvas?.coordinate[0];
+    //   const coor2 = videoFrameState[0]?.secondCanvas?.coordinate[1];
+    //   coor1 &&
+    //     coor2 &&
+    //     console.log(
+    //       '2차그룹으로 거리재기 확인',
+    //       PolygonDraw.getTwoPointsDistance(coor1, coor2)
+    //     );
+    // }
     // console.log('rate', PolygonDraw.getDistanceRate(165, 12.5));
   }, [videoFrameState]);
 
+  /* SET FIRST */
   useEffect(() => {
+    console.log('🧀');
     // console.log('🌽🌽🌽🌽🌽getObserveState', getObserveState);
     if (getObserveState.length === 0)
       swrTrackerData?.length > 0 && setProcessedSwrData();
   }, [getObserveState]);
 
   useEffect(() => {
+    // console.log('🫑');
     // console.log('swrTrackerData', swrTrackerData);
     swrTrackerData?.length > 0 && setProcessedSwrData();
   }, [swrTrackerData, swrObserveData]);
 
-  // 녹화버튼 클릭시 iframeBox에 테두리 추가 및 색상 변경
-  // const handleAddStyle = (e) => {
-  //   const iframeTitleEl = document.querySelector('.iframeTitle');
-  //   iframeTitleEl.classList.toggle('iframeTitleActive');
-  // };
-
+  if (loadingState) return <Loading />;
   return (
     <div id="observeContainer" className="observeContainer">
       <div className="observeLeft">
@@ -226,7 +280,6 @@ const ObservePage = () => {
             <span className="subTitle">Place</span>
             {/* 구역 이름 */}
             <span className="mainTitle">{swrState?.curTrackerArea}</span>
-            {/* <span className="mainTitle">데이터 들어갈자리</span> */}
           </div>
           <div className="safetyTabWrap">
             <div className="safetyTabBox">
@@ -234,6 +287,7 @@ const ObservePage = () => {
               <ObserveCamTabs
                 setCamTabState={setCamTabState}
                 camTabState={camTabState}
+                videoFrameState={videoFrameState}
               />
             </div>
             <div className="safetyTabContainer">
@@ -274,14 +328,16 @@ const ObservePage = () => {
       </div>
       <div className="observeRight">
         <div className="rightBox">
-          {/* 카메라 영상 출력 박스 */}
-          <ObserveCamStream
-            videoFrameState={videoFrameState}
-            setVideoFrameState={setVideoFrameState}
-            recordState={recordState}
-            setNewVideoSrcState={setNewVideoSrcState}
-            camTabState={camTabState}
-          />
+          <Suspense fallback={<Loading />}>
+            {/* 카메라 영상 출력 박스 */}
+            <ObserveCamStream
+              videoFrameState={videoFrameState}
+              setVideoFrameState={setVideoFrameState}
+              recordState={recordState}
+              setNewVideoSrcState={setNewVideoSrcState}
+              camTabState={camTabState}
+            />
+          </Suspense>
         </div>
       </div>
     </div>

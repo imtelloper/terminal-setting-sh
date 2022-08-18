@@ -183,6 +183,14 @@ class StreamService:
     def setCameraOn(self):
         self.cameraOnOff = True
 
+    def setGroupCnt(self, groupNum):
+        if groupNum == 1:
+            self.fstYellowCnt = 0
+            self.fstRedCnt = 0
+        else:
+            self.secYellowCnt = 0
+            self.secRedCnt = 0
+
     # 스크린 캡쳐 경로, 파일명 초기화
     def initScreenCapturePath(self):
         self.currentDate = datetime.datetime.now().strftime('%Y-%m-%d')
@@ -356,6 +364,7 @@ class StreamService:
             print(e)
 
     def updateCurrentLevel(self, todayCamDataId, level):
+        print('updateCurrentLevel todayCamDataId', todayCamDataId)
         getConnection()[self.dbName][self.tableName].update_one(
             {'_id': ObjectId(todayCamDataId)},
             {'$set':
@@ -366,6 +375,7 @@ class StreamService:
         )
 
     def updateCurrentLevelCnt(self, todayCamDataId, level: str, cnt: int):
+        print('updateCurrentLevelCnt todayCamDataId', todayCamDataId)
         getConnection()[self.dbName][self.tableName].update_one(
             {'_id': ObjectId(todayCamDataId)},
             {'$set':

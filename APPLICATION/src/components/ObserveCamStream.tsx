@@ -1,8 +1,9 @@
-import React, { useEffect, useMemo } from 'react';
+import React, { Suspense, useEffect, useMemo } from 'react';
 import { flushSync } from 'react-dom';
 import PolygonDraw from '../util/PolygonDraw';
 import Api from '../api/Api';
 import { useSWRState } from '../fetcher/useSWRState';
+import Loading from './Loading';
 
 const ObserveCamStream = ({
   videoFrameState,
@@ -275,29 +276,24 @@ const ObserveCamStream = ({
     }
   }, [videoFrameState]);
 
-  // const addFontColor = () => {
-  //   if (document.querySelector('.iframeBox').contains.('iframeBorder')) {
-  //     document.querySelector('.iframeTitle').classList.toggle('.iframeTitleActive')
-  //   }
-  // };
-
   /* 카메라 영상 스트림 */
   const videoFrameMap = useMemo(() => {
     return videoFrameState.map((data: ViedeoFrameType, idx) => {
+      // console.log('data', data);
       return (
-        <div className="iframeBox" key={idx}>
+        <div
+          className={`iframeBox ${!data.ip ? 'hideIframeBox' : ''}`}
+          key={idx}
+        >
           {camTabState - 1 === idx && recordState && (
             <div className="iframeBorder" />
           )}
           <div className="iframeTitle">
             <div className="iframeTitleLeft">
               <div className="iframeCamNum">CAM{(idx + 1).toString()}</div>
-              <div className="iframeCamName">이름</div>
+              <div className="iframeCamName">{data.camName}</div>
             </div>
             <span className="iframeRecording">
-              {/* {camTabState - 1 === idx && recordState && ( */}
-              {/*  <div style={{ width: '16px', height: '16px', color: 'red' }}>REC</div> */}
-              {/* )} */}
               {camTabState - 1 === idx && recordState && (
                 <div>
                   <span />
@@ -346,7 +342,11 @@ const ObserveCamStream = ({
     });
   }, [videoFrameState, recordState]);
 
-  return <div className="iframeContent">{videoFrameMap}</div>;
+  return (
+    <Suspense fallback={<Loading />}>
+      <div className="iframeContent">{videoFrameMap}</div>
+    </Suspense>
+  );
 };
 
 export default ObserveCamStream;
