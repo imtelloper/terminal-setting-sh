@@ -1,21 +1,9 @@
 import '../style/components/CurrentTime.scss';
 import axios from 'axios';
+import React, { useState, useRef, useEffect } from 'react';
 
 const CurrentTime = () => {
   const today = new Date();
-
-  // const todayDate = today.toLocaleDateString('ko-KR', {
-  //   year: 'numeric',
-  //   month: 'long',
-  //   day: 'numeric',
-  // });
-  //
-  // const todayDay = today.toLocaleDateString('ko-KR', {
-  //   weekday: 'long',
-  //   hour: '2-digit',
-  //   minute: '2-digit',
-  //   second: '2-digit',
-  // });
 
   const year = today.toLocaleDateString('ko-KO', {
     year: 'numeric',
@@ -33,22 +21,26 @@ const CurrentTime = () => {
     weekday: 'long',
   });
 
-  // const hour = today.toLocaleTimeString('ko-KO',{
-  //   hour: '2-digit',
-  // });
-  //
-  // const minute = today.toLocaleTimeString('ko-KO',{
-  //   minute: '2-digit',
-  // });
-  //
-  // const second = today.toLocaleTimeString('ko-KO',{
-  //   second: '2-digit',
-  // });
+  const padNumber = (num, length) => {
+    return String(num).padStart(length, '0');
+  };
 
-  const hours = `0${today.getHours()}`.slice(-2);
-  const minutes = `0${today.getMinutes()}`.slice(-2);
-  const seconds = `0${today.getSeconds()}`.slice(-2);
-  const timeString = `${hours}:${minutes}:${seconds}`;
+  let now = new Date();
+  const [hour, setHour] = useState(padNumber(now.getHours(), 2));
+  const [min, setMin] = useState(padNumber(now.getMinutes(), 2));
+  const [sec, setSec] = useState(padNumber(now.getSeconds(), 2));
+  const interval = useRef(null);
+
+  useEffect(() => {
+    interval.current = setInterval(() => {
+      now = new Date();
+      setHour(padNumber(now.getHours(), 2));
+      setMin(padNumber(now.getMinutes(), 2));
+      setSec(padNumber(now.getSeconds(), 2));
+    }, 1000);
+    // clean-up 함수 리턴!
+    return () => clearInterval(interval.current);
+  }, []);
 
   const searchIps = () => {
     console.log('🍄🍄🍄🍄🍄🍄🍄🍄🍄🍄🍄🍄🍄🍄🍄🍄🍄api search');
@@ -67,15 +59,15 @@ const CurrentTime = () => {
       <span>{year.slice(0, 4)}</span>
       <span>
         {month.slice(0, 2)}
-        <div>/</div>
+        <p>/</p>
         {day.slice(0, 2)} <span>{weekday}</span>
       </span>
       <span>
-        {hours}
-        <div>:</div>
-        {minutes}
-        <div>:</div>
-        {seconds}
+        {hour}
+        <p>:</p>
+        {min}
+        <p>:</p>
+        {sec}
       </span>
     </div>
   );

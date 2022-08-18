@@ -3,7 +3,11 @@ import { flushSync } from 'react-dom';
 import PolygonDraw from '../util/PolygonDraw';
 import Api from '../api/Api';
 import { useSWRState } from '../fetcher/useSWRState';
+<<<<<<< HEAD
+import { Autorenew } from '@material-ui/icons';
+=======
 import Loading from './Loading';
+>>>>>>> 89e6e6e36d8537191ba3b88b67d71b196d71a729
 
 const ObserveCamStream = ({
   videoFrameState,
@@ -297,11 +301,12 @@ const ObserveCamStream = ({
             </div>
             <span className="iframeRecording">
               {camTabState - 1 === idx && recordState && (
-                <div>
-                  <span />
+                <div className="iframeRecordingIcon">
+                  <span className="iframeRecordingCircle" />
                   REC
                 </div>
               )}
+                <span className="iframeRenewIcon"><Autorenew /></span>
             </span>
           </div>
           {data.firstCanvas.visible && (
@@ -314,6 +319,7 @@ const ObserveCamStream = ({
               id={data.trackerId}
               onClick={canvasClick}
               itemProp={`${data.baseLine}|${data.dangerLine}`}
+              style={{ border: 'none' }}
             />
           )}
           {data.secondCanvas.visible && (
@@ -326,6 +332,7 @@ const ObserveCamStream = ({
               id={data.trackerId}
               onClick={canvasClick}
               itemProp={`${data.baseLine}|${data.dangerLine}`}
+              style={{ border: 'none' }}
             />
           )}
           <iframe
@@ -337,7 +344,8 @@ const ObserveCamStream = ({
             }
             width={camWidth}
             height={camHeight}
-            style={{ border: 'none' }}
+            // style={{ border: 'none' }}
+            alt=""
           />
         </div>
       );

@@ -210,26 +210,26 @@ const SettingPage = () => {
               // @ts-ignore
               webkitdirectory=""
             />
-            <button
+            <label
               id="inputFilePathLabel"
-              className="btnR defaultPrimary"
               htmlFor={`inputFilePath${idx + 1}`}
+              className="contentLabel"
             >
               선택
-            </button>
+            </label>
           </div>
           <div className="content">
             <PhotoCamera style={{ fontSize: '24px' }} />
             <span>카메라 이름</span>
             <input id={`camNameInput${idx + 1}`} defaultValue={data.camName} />
-            <button
+            <label
+              className="contentLabel"
               datatype="camName"
               itemID={`camNameInput${idx + 1}`}
-              className="btnR defaultPrimary"
               onClick={handleChangeValue}
             >
               적용
-            </button>
+            </label>
           </div>
           <div className="content">
             <Memory style={{ fontSize: '24px' }} />
@@ -427,13 +427,13 @@ const SettingPage = () => {
             name="tabs"
             defaultChecked
           />
-          <label htmlFor="tab1">Cam1</label>
+          <label htmlFor="tab1" className="tabLabel">Cam1</label>
           <input className="tabInput" id="tab2" type="radio" name="tabs" />
-          <label htmlFor="tab2">Cam2</label>
+          <label htmlFor="tab2" className="tabLabel">Cam2</label>
           <input className="tabInput" id="tab3" type="radio" name="tabs" />
-          <label htmlFor="tab3">Cam3</label>
+          <label htmlFor="tab3" className="tabLabel">Cam3</label>
           <input className="tabInput" id="tab4" type="radio" name="tabs" />
-          <label htmlFor="tab4">Cam4</label>
+          <label htmlFor="tab4" className="tabLabel">Cam4</label>
           {camSettingMap}
         </div>
       </div>

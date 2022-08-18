@@ -37,8 +37,8 @@ async def deleteOne(database: str, collection: str, param: dict):
     return await getConnection()[database][collection].delete_one(param)
 
 
-def dataCount(database: str, collection: str):
-    return getConnection()[database][collection].count_documents({})
+def dataCount(database: str, collection: str, data: dict):
+    return getConnection()[database][collection].count_documents(data)
 
 
 def findRange(database: str, collection: str, startNum: int, limitNum: int):

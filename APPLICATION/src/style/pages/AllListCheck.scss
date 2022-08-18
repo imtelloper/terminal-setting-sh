@@ -145,7 +145,7 @@ div.allListCheckWrap{
             align-items: center;
             justify-content: center;
           }
-          li.allListAlarmImgSave, li.allListMessageAlarm, li.allListKakaoAlarm{
+          li.allListSwitchBtn{
             button{
               all: unset;
               width: 64px;
@@ -157,7 +157,7 @@ div.allListCheckWrap{
               align-items: center;
               justify-content: center;
               cursor: pointer;
-              &.addBtnActive{
+              &.switchBtnActive{
                 background-color: $blue-500;
                 color: $white;
               }

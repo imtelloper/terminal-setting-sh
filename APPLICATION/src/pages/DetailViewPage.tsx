@@ -71,6 +71,13 @@ const DetailViewPage = () => {
     // }
   };
 
+  // const handleHistoryTab = () => {
+  //   const bottomBtnBoxEl = document.querySelector('.bottomBtnBox');
+  //   const settingBtnBoxEl = document.querySelector('.settingBtnBox');
+  //   settingBtnBoxEl.classList.add('settingBtnBoxActive');
+  //   bottomBtnBoxEl.classList.add('bottomBtnBoxActive');
+  // };
+
   const openClosePopup = (e) => {
     const target = e.currentTarget;
     const dType = target.getAttribute('datatype');
@@ -226,6 +233,7 @@ const DetailViewPage = () => {
                 className="label2"
                 htmlFor="menuTab2"
                 datatype="historyRefer"
+                // onClick={handleClickTab}
                 onClick={handleClickTab}
               >
                 이력조회
@@ -282,6 +290,47 @@ const DetailViewPage = () => {
                   <span>안전펜스 가동시간</span>
                   <span>1일 19시간 58분</span>
                 </div>
+
+                {/* 영역 재설정 | Calibration 설정 | 위험구간 설정 */}
+                <div className="settingBtnBox">
+                  <button>
+                    <div className="settingBtnCon">
+                      <MdModeEdit style={{ fontSize: '38px' }} />
+                      <span>영역 재설정</span>
+                    </div>
+                  </button>
+                  <button datatype="calibration" onClick={openClosePopup}>
+                    <div className="settingBtnCon">
+                      <Tune style={{ fontSize: '38px' }} />
+                      <span>Calibration 설정</span>
+                    </div>
+                  </button>
+                  <button datatype="dangerZone" onClick={openClosePopup}>
+                    <div className="settingBtnCon">
+                      <MdDangerous style={{ fontSize: '38px' }} />
+                      <span>위험구간 설정</span>
+                    </div>
+                  </button>
+                </div>
+                {/* 취소 | 확인 */}
+                <div className="bottomBtnBox">
+                  <button
+                    className="iconBtnR normalPrimary"
+                    onClick={() => {
+                      navigate('/observe');
+                    }}
+                  >
+                    취소
+                  </button>
+                  <button
+                    className="iconBtnR defaultPrimary"
+                    onClick={() => {
+                      navigate('/observe');
+                    }}
+                  >
+                    확인
+                  </button>
+                </div>
               </div>
 
               {/* 이력 조회 TAB */}
@@ -311,51 +360,9 @@ const DetailViewPage = () => {
                 </div>
 
                 <div className="alertBox">
-                  <div className="alertContent">{imgCaptureHistoryMap}</div>
+                   <div className="alertContent">{imgCaptureHistoryMap}</div>
                 </div>
               </div>
-            </div>
-
-            {/* 영역 재설정 | Calibration 설정 | 위험구간 설정 */}
-            <div className="settingBtnBox">
-              <button>
-                <div className="settingBtnCon">
-                  <MdModeEdit style={{ fontSize: '38px' }} />
-                  <span>영역 재설정</span>
-                </div>
-              </button>
-              <button datatype="calibration" onClick={openClosePopup}>
-                <div className="settingBtnCon">
-                  <Tune style={{ fontSize: '38px' }} />
-                  <span>Calibration 설정</span>
-                </div>
-              </button>
-              <button datatype="dangerZone" onClick={openClosePopup}>
-                <div className="settingBtnCon">
-                  <MdDangerous style={{ fontSize: '38px' }} />
-                  <span>위험구간 설정</span>
-                </div>
-              </button>
-            </div>
-
-            {/* 취소 | 확인 */}
-            <div className="bottomBtnBox">
-              <button
-                className="iconBtnR normalPrimary"
-                onClick={() => {
-                  navigate('/observe');
-                }}
-              >
-                취소
-              </button>
-              <button
-                className="iconBtnR defaultPrimary"
-                onClick={() => {
-                  navigate('/observe');
-                }}
-              >
-                확인
-              </button>
             </div>
           </div>
 

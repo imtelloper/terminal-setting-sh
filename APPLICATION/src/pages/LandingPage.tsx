@@ -12,7 +12,6 @@ const LandingPage = () => {
       // navigate('/detail');
       // navigate('/setting');
       // navigate('/login');
-      // navigate('/allListCheck');
     }, 300);
   }, []);
 

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import '../style/pages/AllListCheck.scss';
 import {
   CalendarToday,
@@ -11,14 +11,20 @@ import { MdDownload, MdGridView, MdWorkspaces } from 'react-icons/md';
 import VideoPopup from '../components/VideoPopup';
 import AlarmPopup from '../components/AlarmPopup';
 import { useNavigate } from 'react-router-dom';
+import NewCamRegisterPopup from '../components/NewCamRegisterPopup';
 
 const AllListCheckPage = () => {
   const navigation = useNavigate();
-  const [txtChangeState, setTxtChangeState] = useState('OFF');
+  const [isNewCamRegisterPopupOpenState, setIsNewCamRegisterPopupOpenState] =
+    useState(false);
 
   const handleActive = (e) => {
-    setTxtChangeState((prev) => (prev === 'OFF' ? 'ON' : 'OFF'));
-    e.currentTarget.classList.toggle('addBtnActive');
+    const target = e.currentTarget;
+    target.classList.toggle('switchBtnActive');
+  };
+
+  const newCamRegisterPopup = () => {
+    setIsNewCamRegisterPopupOpenState(!isNewCamRegisterPopupOpenState);
   };
 
   const dataLists = [
@@ -145,7 +151,9 @@ const AllListCheckPage = () => {
     <div className="allListCheckWrap">
       <div className="allListCheckContainer">
         <div className="allListCheckTitleBox">
-          <div className="allListCheckTitle">전체 CAM 리스트 확인</div>
+          <div className="allListCheckTitle">
+            전체 CAM 리스트 확인
+          </div>
           <div className="allListCheckTitleCon">
             <div className="allListCheckLeft">
               <div className="allListCheckLeftCon">
@@ -168,7 +176,7 @@ const AllListCheckPage = () => {
                 <Delete style={{ fontSize: '24px' }} />
               </button>
               <button className="btnR normalPrimary">
-                <span className="txt">새 카메라 등록</span>
+                <span className="txt" onClick={newCamRegisterPopup}>새 카메라 등록</span>
               </button>
             </div>
           </div>
@@ -209,20 +217,29 @@ const AllListCheckPage = () => {
                 <li>{list.sensing}</li>
                 <li>{list.threshold}</li>
                 <li>{`${list.saveFolder.slice(0, 17)}...`}</li>
-                <li className="allListAlarmImgSave">
-                  <button onClick={handleActive}>{txtChangeState}</button>
+                <li className="allListAlarmImgSave allListSwitchBtn">
+                  {/* 버튼 ON 상태일 때 switchBtnActive 추가 */}
+                  <button className="switchBtnActive" onClick={handleActive}>
+                    ON
+                  </button>
                 </li>
-                <li className="allListMessageAlarm">
-                  <button onClick={handleActive}>{txtChangeState}</button>
+                <li className="allListMessageAlarm allListSwitchBtn">
+                  <button onClick={handleActive}>OFF</button>
                 </li>
-                <li className="allListKakaoAlarm">
-                  <button onClick={handleActive}>{txtChangeState}</button>
+                <li className="allListKakaoAlarm allListSwitchBtn">
+                  <button onClick={handleActive}>OFF</button>
                 </li>
               </ul>
             ))}
           </div>
         </div>
-
+        {isNewCamRegisterPopupOpenState && (
+          <NewCamRegisterPopup
+            setIsNewCamRegisterPopupOpenState={
+              setIsNewCamRegisterPopupOpenState
+            }
+          />
+        )}
         {/* {isOpenPopupState && <VideoPopup openVideoPopup={openVideoPopup} />} */}
         {/* {alarmPopupState && <AlarmPopup openAlarmPopup={openAlarmPopup} />} */}
       </div>

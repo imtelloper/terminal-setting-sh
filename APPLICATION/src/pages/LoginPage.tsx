@@ -11,6 +11,7 @@ import WorldIcon from '../images/world.png';
 import ArrowDown from '../images/arrow-down.png';
 import ChangePwdPopup from '../components/ChangePwdPopup';
 import ForgetPwdPopup from '../components/ForgetPwdPopup';
+import LoginAlarmPopup from '../components/LoginAlarmPopup';
 
 const LoginPage = () => {
   const navigate = useNavigate();
@@ -18,6 +19,8 @@ const LoginPage = () => {
   const [isChangePwdPopupOpenState, setIsChangePwdPopupOpenState] =
     useState(false);
   const [isForgetPwdPopupOpenState, setIsForgetPwdPopupOpenState] =
+    useState(false);
+  const [isNewCamRegisterPopupState, setIsNewCamRegisterPopupState] =
     useState(false);
 
   const { data: swrState, mutate: setSwrState } = useSWRState();
@@ -36,6 +39,7 @@ const LoginPage = () => {
   const forgetPwdPopup = () => {
     setIsForgetPwdPopupOpenState(!isForgetPwdPopupOpenState);
   };
+
 
   const checkEmail = (e: FormEvent<HTMLInputElement>) => {
     const email = e.currentTarget.value;
@@ -172,7 +176,9 @@ const LoginPage = () => {
             <button className="btnR defaultPrimary">LOG IN</button>
           </div>
           <div className="loginPwdBtnBox">
-            <button className="btnR defaultES" onClick={forgetPwdPopup}>FORGET PASSWORD</button>
+            <button className="btnR defaultES" onClick={forgetPwdPopup}>
+              FORGET PASSWORD
+            </button>
             <button className="btnR defaultES" onClick={changePwdPopup}>
               CHANGE PASSWORD
             </button>
@@ -183,14 +189,10 @@ const LoginPage = () => {
         <ChangePwdPopup
           changePwdPopup={changePwdPopup}
           setIsChangePwdPopupOpenState={setIsChangePwdPopupOpenState}
+          checkPw={checkPw}
         />
       )}
-      {isForgetPwdPopupOpenState && (
-        <ForgetPwdPopup
-          forgetPwdPopup={forgetPwdPopup}
-          setIsForgetPwdPopupOpenState={setIsForgetPwdPopupOpenState}
-        />
-      )}
+
       <div className="interX">© INTERX</div>
     </div>
   );

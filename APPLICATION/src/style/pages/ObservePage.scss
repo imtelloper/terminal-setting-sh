@@ -259,7 +259,7 @@ div.observeContainer {
                 position: absolute;
                 width: 36px;
                 height: 36px;
-                background-color: #fff;
+                background-color: $white;
                 opacity: 0.12;
               }
             }
@@ -324,7 +324,7 @@ div.observeContainer {
               top:0;
               left: 0;
               background-color: $dark;
-              border-radius:  8px 8px 0 0;
+              border-radius: 8px 8px 0 0;
               &:after{
                 content: "";
                 width: 512px;
@@ -334,6 +334,7 @@ div.observeContainer {
                 top: 48px;
                 left: 0;
                 border: 8px solid $dark;
+                border-radius: 0 0 8px 8px;
               }
           }
 
@@ -352,8 +353,8 @@ div.observeContainer {
             z-index: 99;
             border-radius: 8px 8px 0 0;
 
-            &.iframeTitleActive{
-              color: $white;
+            &.iframeTxtColorActive{
+              color: $white
             }
 
             div.iframeTitleLeft{
@@ -376,10 +377,11 @@ div.observeContainer {
               align-items: center;
               justify-content: end;
               position: relative;
-              div{
+              div.iframeRecordingIcon{
                 display: flex;
                 align-items: center;
-                span{
+                margin-right: 16px;
+                span.iframeRecordingCircle{
                   display: block;
                   width: 16px;
                   height: 16px;
@@ -387,6 +389,20 @@ div.observeContainer {
                   background-color: $error-500;
                   margin-right: 4px;
                   animation: recIcon 1.5s infinite ease-in-out;
+                }
+              }
+              span.iframeRenewIcon{
+                width: 32px;
+                height: 32px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                transition: 0.3s;
+                border-radius: 8px;
+                cursor: pointer;
+                &:hover{
+                  background-color: $blue-100;
+                  color: $blue-500;
                 }
               }
             }
@@ -399,6 +415,7 @@ div.observeContainer {
             position: absolute;
             outline: none;
             border: none;
+            border-radius: 0 8px 8px 0;
           }
 
           canvas.firstCanvas {
@@ -409,6 +426,11 @@ div.observeContainer {
           canvas.secondCanvas {
             z-index: 2;
             //border: 2px solid red;
+          }
+
+          img{
+            background-color: #0CBEF4;
+            border-radius: 0 0 12px 12px;
           }
 
           iframe {

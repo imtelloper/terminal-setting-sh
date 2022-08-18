@@ -70,6 +70,6 @@ class TrackerService:
             dataArr.append(data)
         return dataArr
 
-    async def getDataCount(self):
-        count = await dataCount(self.dbName, self.tableName)
+    async def getDataCount(self, data: dict):
+        count = await dataCount(self.dbName, self.tableName, data)
         return count

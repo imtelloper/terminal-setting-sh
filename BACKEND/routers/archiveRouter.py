@@ -3,7 +3,8 @@ from fastapi.encoders import jsonable_encoder
 from dtos.archiveDto import ArchiveDto
 from models.archiveModel import *
 from services.archiveService import *
-
+import datetime
+from datetime import *
 
 '''
 Change below variables
@@ -100,7 +101,7 @@ async def getRangeData(start, limit):
 
 @router.post("/find-range-data", response_description="")
 async def getDetailRangeData(data=Body(...)):
-    print('🍋',data)
+    print('🍋', data)
     jsonData = jsonable_encoder(data)
     if "trackerId" in jsonData:
         jsonData["trackerId"] = ObjectId(jsonData["trackerId"])
@@ -116,5 +117,16 @@ async def getCount():
     """
     데이터 개수 출력
     """
-    serviceResult = await service.getDataCount()
+    serviceResult = await service.getDataCount({})
+    return serviceResult
+
+
+@router.get("/count-part/", response_description="")
+async def getCountPart():
+    startDate = datetime.now() - timedelta(hours=10)
+    param = {"createdAt": {"$gte": startDate}, "safetyLevel": "Red"}
+    # ---findDatas() -> 개수 제한---
+    # dataArr = await service.searchDatas(param)
+    # cntResult = len(dataArr)
+    serviceResult = await service.getDataCount(param)
     return serviceResult

@@ -113,5 +113,5 @@ async def getCount():
     """
     데이터 개수 출력
     """
-    serviceResult = await service.getDataCount()
+    serviceResult = await service.getDataCount({})
     return serviceResult
