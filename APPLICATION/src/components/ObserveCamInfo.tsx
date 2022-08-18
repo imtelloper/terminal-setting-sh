@@ -7,6 +7,8 @@ import { AiOutlinePlusCircle } from 'react-icons/ai';
 import { Feedback, HighlightOff, Delete } from '@material-ui/icons';
 import { MdDangerous, MdOutlineTaskAlt } from 'react-icons/md';
 import Api from '../api/Api';
+import Loading from './Loading';
+import { useSWRState } from '../fetcher/useSWRState';
 
 type Props = {
   videoFrameState: Array<any>;
@@ -22,6 +24,8 @@ const ObserveCamInfo = ({
   const navigate = useNavigate();
   const [camInfoState, setCamInfoState] = useState([]);
   const [ipState, setIpState] = useState('');
+  const [loadingState, setLoadingState] = useState(false);
+  const { data: swrState, mutate: setSwrState } = useSWRState();
 
   const saveParameter = () => {
     console.log('saveParameter');
@@ -31,6 +35,7 @@ const ObserveCamInfo = ({
     console.log('callParameter');
   };
 
+  // 그룹 ON | OFF
   const handleActive = (e) => {
     console.log('handleActive');
     const target = e.currentTarget;
@@ -44,25 +49,23 @@ const ObserveCamInfo = ({
         .modifyOneData(observeId, {
           observeSwitch: value === 'on',
         })
-        .then((res) => {
-          console.log('Api.observe.modifyOneData res', res);
-        })
+        .then((res) => console.log('Api.observe.modifyOneData done sir', res))
         .catch((err) => console.error(err));
     }, 20);
   };
 
   // 그룹안 삭제
   const handleDelete = (e) => {
+    setLoadingState(true);
     console.log('handleDelete');
     const target = e.currentTarget;
     const trackerId = target.getAttribute('itemID');
     const groupNum = target.getAttribute('datatype');
+    const observeId = target.getAttribute('name');
     console.log('handle delete trackerId', trackerId);
     console.log('handle delete groupNum', groupNum);
+    console.log('handle delete observeId', observeId);
 
-    Api.tracker.modifyOneData(trackerId, {
-      [`sensingGroup${groupNum}`]: '',
-    });
     /* 현재 비디오 스테이트 url 기본 url로 변경 */
     const targetIdx = videoFrameState.findIndex(
       (obj) => obj.trackerId === trackerId
@@ -72,11 +75,28 @@ const ObserveCamInfo = ({
       let { frameSrc } = videoFrameState[targetIdx];
       frameSrc = `${frameSrc.split(':81')[0]}:81`;
       setNewVideoSrcState(targetIdx, frameSrc);
-      // 해당 옵저브 데이터 삭제 필요
     }
+
+    /* 해당 옵저브 데이터 삭제 */
+    Api.observe
+      .deleteOneData(observeId)
+      .then((res) => console.log('observe.deleteOneData done sir', res))
+      .finally(() => setLoadingState(false))
+      .catch((err) => console.error(err));
+
+    /* 감지 데이터 좌표값 초기화 */
+    Api.tracker
+      .modifyOneData(trackerId, {
+        [`sensingGroup${groupNum}`]: '',
+      })
+      .then((res) => console.log('tracker.modifyOneData done sir', res))
+      .finally(() => setLoadingState(false))
+      .catch((err) => console.error(err));
+
+    Api.stream.initGroupSensingCnt(swrState.curCamIp, groupNum);
   };
 
-  // 그룹안 리셋
+  // 그룹안 상태 리셋
   const handleErrorReset = () => {
     console.log('handleErrorReset');
     const newArr = videoFrameState;
@@ -116,6 +136,7 @@ const ObserveCamInfo = ({
     camTabs.forEach((ele: HTMLElement, idx) => {
       if (idx !== 0) ele.style.display = 'none';
     });
+    console.log('swrState', swrState);
   }, []);
 
   useEffect(() => {
@@ -248,19 +269,23 @@ const ObserveCamInfo = ({
             <button className="btnR normalPrimary" onClick={handleErrorReset}>
               상태 리셋
             </button>
+
             {/* {(() => { */}
-            {/*  console.log('🌞stateInfo', stateInfo); */}
-            {/*  console.log('🌝groupNum', groupNum); */}
-            {/*  console.log('🌝🌝stateInfo?.[groupNum', stateInfo?.[groupNum]); */}
-            {/*  console.log( */}
-            {/*    '🌝🌝🌝stateInfo?.[groupNum]?.trackerId', */}
-            {/*    stateInfo?.[groupNum]?.trackerId */}
-            {/*  ); */}
+            {/* console.log('🌞stateInfo', stateInfo); */}
+            {/* console.log('🌝groupNum', groupNum); */}
+            {/* console.log('🌝🌝stateInfo?.[groupNum', stateInfo?.[groupNum]); */}
+            {/* console.log( */}
+            {/*   '🌝🌝🌝stateInfo?.[groupNum]?.trackerId', */}
+            {/*   stateInfo?.[groupNum]?.trackerId */}
+            {/* ); */}
             {/* })()} */}
+
+            {/* 그룹 삭제 버튼 */}
             <button
               className="btnR normalPrimary"
               onClick={handleDelete}
               itemID={stateInfo?.[groupNum]?.trackerId}
+              name={stateInfo?.[groupNum]?._id}
               datatype={groupNum}
             >
               <Delete />
@@ -279,27 +304,31 @@ const ObserveCamInfo = ({
         className="safetyContents"
         key={idx}
       >
-        <div className="safetyContentBox">
-          {/* {(() => { */}
-          {/*  console.log('🌟info', info); */}
-          {/*  console.log('🌟idx', idx); */}
-          {/* })()} */}
-          {videoFrameState[idx]?.firstCanvas?.visible &&
-            groupBoxComponent(info, idx + 1, 1)}
+        {loadingState ? (
+          <Loading />
+        ) : (
+          <div className="safetyContentBox">
+            {(() => {
+              console.log('🌟info', info);
+              // console.log('🌟idx', idx);
+            })()}
+            {videoFrameState[idx]?.firstCanvas?.visible &&
+              groupBoxComponent(info, idx + 1, 1)}
 
-          {videoFrameState[idx]?.secondCanvas?.visible &&
-            groupBoxComponent(info, idx + 1, 2)}
+            {videoFrameState[idx]?.secondCanvas?.visible &&
+              groupBoxComponent(info, idx + 1, 2)}
 
-          <div className="safetyCreateBtnBox">
-            <button
-              className="safetyCreateBtn btnL defaultPrimary"
-              datatype={idx.toString()}
-              onClick={createCanvas}
-            >
-              그룹 생성하기
-            </button>
+            <div className="safetyCreateBtnBox">
+              <button
+                className="safetyCreateBtn btnL defaultPrimary"
+                datatype={idx.toString()}
+                onClick={createCanvas}
+              >
+                그룹 생성하기
+              </button>
+            </div>
           </div>
-        </div>
+        )}
       </section>
     ));
   }, [camInfoState, videoFrameState]);

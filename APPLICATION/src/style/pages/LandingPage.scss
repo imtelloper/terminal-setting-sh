@@ -100,7 +100,7 @@ div.appBottomContainer {
         width: 6.2rem;
         height: 2.2rem;
         border-radius: 1.1rem;
-        background: radial-gradient(ellipse at center, rgba(116, 241, 252, 1) 0%, rgba(50, 230, 255, 1) 73%, rgba(21, 199, 250, 1) 100%);
+        background: radial-gradient(ellipse at center, rgba(255, 219, 153, 1) 0%, rgba(255, 194, 102, 1) 73%, rgba(255, 128, 0, 1) 100%);
         display: inline-block;
         animation: wave $waveDur linear infinite;
         will-change: width;
@@ -114,7 +114,7 @@ div.appBottomContainer {
   }
 
   div.logoText {
-    color: #fff;
+    color: #1E2941;
     font-size: 4rem;
     font-weight: normal;
     display: inline-block;
@@ -148,7 +148,7 @@ div.appBottomContainer {
     &X {
       left: 16rem;
       animation-delay: 510ms;
-      color: #8665F1;
+      color: #FCB72B;
     }
   }
 

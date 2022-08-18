@@ -29,6 +29,7 @@ from tools.scheculder import *
 # W: 256 H: 192
 class StreamService:
     def __init__(self):
+        self.saveStatus = False
         self.camWidth = 512
         self.camHeight = 384
         self.camPort = config.CAMPORT  # 카메라 포트
@@ -47,9 +48,10 @@ class StreamService:
         self.screenShotFolderPath = '{0}/{1}/{2}/{3}/capture'.format(
             self.savePath, self.currentDate, self.camArea, self.camPort)
         # 캡쳐 파일 이름
-        self.screenShotRecordPath = '{0}/safety-shot{1}.png'.format(self.screenShotFolderPath, self.fileInfo)
-        self.fcc = cv2.VideoWriter_fourcc('M', 'J', 'P', 'G')
-        self.fps = 30
+        self.screenShotRecordPath = '{0}/safety-shot{1}.jpg'.format(self.screenShotFolderPath, self.fileInfo)
+        self.fcc = cv2.VideoWriter_fourcc('D', 'I', 'V', 'X') # avi
+        # self.fcc = cv2.VideoWriter_fourcc('M', '4', 'S', '2') # wmv
+        # self.fcc = cv2.VideoWriter_fourcc('M', 'P', '4', '3') # wmv
         self.videoWriter = None  # cv 녹화 객체
         self.recordGate = False  # 녹화 시작, 중지를 위한 bool
         self.captureGate = False  # 캡쳐를 위한 bool
@@ -64,6 +66,7 @@ class StreamService:
         else:
             os.system("fuser -k 8000/tcp")
             self.video = cv2.VideoCapture(0)
+        self.fps = self.video.get(cv2.CAP_PROP_FPS)
         self.cameraOnOff = True  # 스트림 카메라를 열었다면 닫아줘야 재활성화 되기 때문에 필요한 bool
         self.observeService = ObserveService()
         self.dbName = config.DB_NAME
@@ -90,9 +93,9 @@ class StreamService:
         # self.detectTimeCntLimit가 낮을수록 Yellow, Red 업데이트 속도 빨라짐. 너무 빠르면 성능에 문제 있을 수 있음
         # 개발할때는 detectTimeCntLimit을 10 정도로 올려서 videoSleepCnt*10 번째에 DB 업데이트 되도록 하는게 좋다.
         self.detectTimeCntLimit = 0  # FOR DEV: 10, FOR PRODUCT: 0
+
         # 내부 IP 가져오기
         sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-
         try:
             socket.setdefaulttimeout(3)
             socket.socket(socket.AF_INET, socket.SOCK_STREAM).connect(("8.8.8.8", 53))
@@ -105,7 +108,6 @@ class StreamService:
             print(ex)
             self.deviceIp =""
 
-
         print('🔥platform.platform()', platform.platform())
         print('🔥platform.platform()', 'macOS' in platform.platform())
         # 각종 파일 저장 경로 폴더 생성
@@ -117,6 +119,7 @@ class StreamService:
                 print('🏗 build dir screenShotFolderPath: ', self.screenShotFolderPath)
 
             dirBuilder()
+            # 일정 시간 마다 저장 폴더 생성(이미 있으면 안함)
             # secretary.add_job(dirBuilder, 'cron', hour='0', id='safety-todo-makedirs')
             secretary.add_job(dirBuilder, 'interval', seconds=60, id='safety-todo-makedirs')
 
@@ -161,13 +164,16 @@ class StreamService:
         self.video.release()
 
     def getScreenShotRecordPath(self):
-        return self.screenShotRecordPath11111
+        return self.screenShotRecordPath
 
     def getVideoRecordPath(self):
         return self.videoRecordPath
 
     def setCurrentPort(self, port):
         self.currentPort = port
+
+    def getCameraOnOff(self):
+        return self.cameraOnOff
 
     # 열린 스트림 카메라를 닫아주기 위한 메서드
     def setCameraOff(self):
@@ -177,6 +183,14 @@ class StreamService:
     def setCameraOn(self):
         self.cameraOnOff = True
 
+    def setGroupCnt(self, groupNum):
+        if groupNum == 1:
+            self.fstYellowCnt = 0
+            self.fstRedCnt = 0
+        else:
+            self.secYellowCnt = 0
+            self.secRedCnt = 0
+
     # 스크린 캡쳐 경로, 파일명 초기화
     def initScreenCapturePath(self):
         self.currentDate = datetime.datetime.now().strftime('%Y-%m-%d')
@@ -184,7 +198,7 @@ class StreamService:
         self.fileInfo = '-{0}-{1}-{2}'.format(self.camArea, self.camPort, self.currentTime)
         self.screenShotFolderPath = '{0}/{1}/{2}/{3}/capture'.format(self.savePath, self.currentDate, self.camArea,
                                                                      self.camPort)
-        self.screenShotRecordPath = '{0}/safety-shot{1}.png'.format(self.screenShotFolderPath, self.fileInfo)
+        self.screenShotRecordPath = '{0}/safety-shot{1}.jpg'.format(self.screenShotFolderPath, self.fileInfo)
 
     # 캡쳐를 하기 위한 메서드
     def setCaptureGateOpen(self):
@@ -235,6 +249,7 @@ class StreamService:
     # 녹화 중지 메서드
     def setRecordGateClose(self):
         self.recordGate = False
+        self.saveStatus = True
         return False
 
     # 지금 PC의 area, camPort 정보로 tracker object id 가져오기
@@ -349,6 +364,7 @@ class StreamService:
             print(e)
 
     def updateCurrentLevel(self, todayCamDataId, level):
+        print('updateCurrentLevel todayCamDataId', todayCamDataId)
         getConnection()[self.dbName][self.tableName].update_one(
             {'_id': ObjectId(todayCamDataId)},
             {'$set':
@@ -359,6 +375,7 @@ class StreamService:
         )
 
     def updateCurrentLevelCnt(self, todayCamDataId, level: str, cnt: int):
+        print('updateCurrentLevelCnt todayCamDataId', todayCamDataId)
         getConnection()[self.dbName][self.tableName].update_one(
             {'_id': ObjectId(todayCamDataId)},
             {'$set':
@@ -383,7 +400,7 @@ class StreamService:
 
     def updateDeviceIp(self, trackerId, ip: str):
         self.initScreenCapturePath()
-        print('updateDeviceIp trackerId',trackerId)
+        print('updateDeviceIp trackerId', trackerId)
         getConnection()[self.dbName][config.TABLE_TRACKER].update_one(
             {'_id': ObjectId(trackerId)},
             {'$set':
@@ -435,8 +452,6 @@ class StreamService:
 
     # 관제 PC에 파일 저장
     def saveFile(self, folderPath, recordPath):
-        # print('###### folderPath',folderPath)
-        # print('###### recordPath',recordPath)
         # 관제 PC
         host = "192.168.0.4"
         port = 22  # 고정
@@ -459,8 +474,12 @@ class StreamService:
         if not str(stderr.read()):
             return True
         else:
-            cmd = 'sudo mkdir -p ' + recordPath
+            cmd = 'sudo mkdir -p ' + folderPath
             client.exec_command(cmd)
+            cmd = 'sudo chmod o+w ' + folderPath
+            client.exec_command(cmd)
+
+        time.sleep(0.5)
 
         # Upload - 파일 업로드
         remotepath = recordPath
@@ -473,10 +492,11 @@ class StreamService:
             sftp.get(remotepath,
                      localpath)
 
-            os.remove(localpath)
+            # os.remove(localpath)
 
         # Close
         sftp.close()
+        client.close()
         transport.close()
 
     def video_streaming(self, coordinates1=[], coordinates2=[]):
@@ -674,7 +694,9 @@ class StreamService:
                     # cv2.imshow('frame', result_img)
                 else:
                     cv2.destroyAllWindows()
-                    # self.saveFile(self.videoFolderPath, self.videoRecordPath)
+                    if  self.saveStatus is True:
+                        self.saveFile(self.videoFolderPath, self.videoRecordPath)
+                        self.saveStatus = False
 
                 # 스크린 캡쳐
                 if self.captureGate:
