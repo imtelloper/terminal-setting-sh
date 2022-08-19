@@ -24,6 +24,7 @@ import subprocess
 import stat
 import socket
 from tools.scheculder import *
+from netifaces import interfaces, ifaddresses, AF_INET
 
 
 # W: 256 H: 192
@@ -101,33 +102,48 @@ class StreamService:
             self.detectTimeCntLimit = 20
 
         # devMode()
-        print('******************************************************')
+
         print('************************* 내부 IP 가져오기 *****************************')
         # 내부 IP 가져오기
-        sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        try:
-            socket.setdefaulttimeout(3)
-            socket.socket(socket.AF_INET, socket.SOCK_STREAM).connect(("8.8.8.8", 53))
-            print('Internet connected ')
-            # 내부 IP 가져오기
-            sock.connect(("pwnbit.kr", 443))
-            print('sock.getsockname()[0]',sock.getsockname()[0])
-            print('sock.getsockname()[0]',sock.getsockname()[0][0:3])
-            sockIp = sock.getsockname()[0]
-            if sockIp[0:3] != '192':
-                print('hi')
-                print('socket.gethostbyname',socket.gethostbyname(socket.gethostname()))
-            else:
-                print('bye')
-                print('socket.gethostbyname', socket.gethostbyname(socket.gethostname()))
+        # sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        # try:
+        #     socket.setdefaulttimeout(3)
+        #     socket.socket(socket.AF_INET, socket.SOCK_STREAM).connect(("8.8.8.8", 53))
+        #     print('Internet connected ')
+        #     # 내부 IP 가져오기
+        #     sock.connect(("pwnbit.kr", 443))
+        #     print('sock.getsockname()[0]', sock.getsockname()[0])
+        #     print('sock.getsockname()[0]', sock.getsockname()[0][0:3])
+        #     sockIp = sock.getsockname()[0]
+        #     if sockIp[0:3] != '192':
+        #         print(sockIp)
+        #     self.deviceIp = sock.getsockname()[0]
+        # except socket.error as ex:
+        #     print('Internet is not connected')
+        #     print(ex)
+        #     self.deviceIp = ""
 
-            self.deviceIp = sock.getsockname()[0]
+        def ip4Addresses():
+            ipList = []
+            print('interfaces()',interfaces())
+            for interface in interfaces():
+                print('interface',interface)
+                try:
+                    print('ifaddresses(interface)[AF_INET]', ifaddresses(interface)[AF_INET])
+                    for link in ifaddresses(interface)[AF_INET]:
+                        print('link',link)
+                        print('link[addr]',link['addr'])
+                        ipList.append(link['addr'])
+                        print('')
+                except Exception as e:
+                    print(e)
+            print('ipList',ipList)
+            return ipList
 
-        except socket.error as ex:
-            print('Internet is not connected')
-            print(ex)
-            self.deviceIp = ""
-
+        print('ip4Addresses()',ip4Addresses())
+        # 내부 IP 가져오기
+        self.deviceIp = list(filter(lambda x: x[0:3] == '192', ip4Addresses()))[0]
+        print('ip4Addresses', ip4Addresses())
         print('self.deviceIp', self.deviceIp)
         print('******************************************************')
 
