@@ -120,56 +120,62 @@ const ObserveCamInfo = ({
 
   /* getObserveState를 가공하여 4개의 캠 셋트로 만들고 다시 해야된다. */
   const camInfosMap = useMemo(() => {
-    return camInfoState?.map((info, idx) => (
-      <section
-        id={`safetyContent${idx + 1}`}
-        className="safetyContents"
-        key={idx}
-      >
-        {loadingState ? (
-          <Loading />
-        ) : (
-          <div className="safetyContentBox">
-            {/* {(() => { */}
-            {/*  console.log('🌟info', info); */}
-            {/*  // console.log('🌟idx', idx); */}
-            {/* })()} */}
+    return camInfoState?.map((info, idx) => {
+      const fstCanvasVisible = videoFrameState[idx]?.firstCanvas?.visible;
+      const secCanvasVisible = videoFrameState[idx]?.secondCanvas?.visible;
+      return (
+        <section
+          id={`safetyContent${idx + 1}`}
+          className="safetyContents"
+          key={idx}
+        >
+          {loadingState ? (
+            <Loading />
+          ) : (
+            <div className="safetyContentBox">
+              {/* {(() => { */}
+              {/*  console.log('🌟info', info); */}
+              {/*  // console.log('🌟idx', idx); */}
+              {/* })()} */}
 
-            {videoFrameState[idx]?.firstCanvas?.visible && (
-              <ObserveGroupBox
-                stateInfo={info}
-                stateIdx={idx + 1}
-                groupNum={1}
-                videoFrameState={videoFrameState}
-                setNewVideoSrcState={setNewVideoSrcState}
-                swrTrackerMutate={swrTrackerMutate}
-              />
-            )}
+              {fstCanvasVisible && (
+                <ObserveGroupBox
+                  stateInfo={info}
+                  stateIdx={idx + 1}
+                  groupNum={1}
+                  videoFrameState={videoFrameState}
+                  setNewVideoSrcState={setNewVideoSrcState}
+                  swrTrackerMutate={swrTrackerMutate}
+                />
+              )}
 
-            {videoFrameState[idx]?.secondCanvas?.visible && (
-              <ObserveGroupBox
-                stateInfo={info}
-                stateIdx={idx + 1}
-                groupNum={2}
-                videoFrameState={videoFrameState}
-                setNewVideoSrcState={setNewVideoSrcState}
-                swrTrackerMutate={swrTrackerMutate}
-              />
-            )}
+              {secCanvasVisible && (
+                <ObserveGroupBox
+                  stateInfo={info}
+                  stateIdx={idx + 1}
+                  groupNum={2}
+                  videoFrameState={videoFrameState}
+                  setNewVideoSrcState={setNewVideoSrcState}
+                  swrTrackerMutate={swrTrackerMutate}
+                />
+              )}
 
-            <div className="safetyCreateBtnBox">
-              <button
-                className="safetyCreateBtn btnL defaultPrimary"
-                datatype={idx.toString()}
-                onClick={createCanvas}
-              >
-                그룹 생성하기
-              </button>
+              {(!fstCanvasVisible || !secCanvasVisible) && (
+                <div className="safetyCreateBtnBox">
+                  <button
+                    className="safetyCreateBtn btnL defaultPrimary"
+                    datatype={idx.toString()}
+                    onClick={createCanvas}
+                  >
+                    그룹 생성하기
+                  </button>
+                </div>
+              )}
             </div>
-          </div>
-        )}
-      </section>
-    ));
+          )}
+        </section>
+      );
+    });
   }, [camInfoState, videoFrameState]);
 
   return <>{camInfosMap}</>;

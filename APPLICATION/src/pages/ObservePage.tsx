@@ -38,9 +38,7 @@ const ObservePage = () => {
     data: swrTrackerData,
     error: swrTrackerErr,
     mutate: swrTrackerMutate,
-  } = useSWR<Array<TrackerObserve>>('/api/tracker/find', findFetcher, {
-    // refreshInterval: swrIntervalMilliSec,
-  });
+  } = useSWR<Array<TrackerObserve>>('/api/tracker/find', findFetcher);
 
   const observeFindFetcher = (url: string) =>
     axios.post(url, { date: today }).then((res) => res.data);
@@ -48,7 +46,6 @@ const ObservePage = () => {
   const { data: swrObserveData, error } = useSWR(
     '/api/observe/find',
     observeFindFetcher
-    // { refreshInterval: swrIntervalMilliSec }
   );
 
   const handleActive = (e) => {
@@ -61,11 +58,15 @@ const ObservePage = () => {
     recordTxtEl.classList.toggle('txtColorActive');
     iframeTitleEl.classList.toggle('iframeTxtColorActive');
     // iframeRecordingTxtEl.classList.toggle('iframeRecordingTxtActive');
+    console.log('videoFrameState[0].ip', videoFrameState[0]?.ip);
+    console.log('videoFrameState[1].ip', videoFrameState[1]?.ip);
+    console.log('videoFrameState[2].ip', videoFrameState[2]?.ip);
+    console.log('videoFrameState[3].ip', videoFrameState[3]?.ip);
     const camStateObj = {
-      cam1: videoFrameState[0].ip,
-      cam2: videoFrameState[1].ip,
-      cam3: videoFrameState[2].ip,
-      cam4: videoFrameState[3].ip,
+      cam1: videoFrameState[0]?.ip,
+      cam2: videoFrameState[1]?.ip,
+      cam3: videoFrameState[2]?.ip,
+      cam4: videoFrameState[3]?.ip,
     };
     const ip = camStateObj[`cam${camTabState.toString()}`];
     Api.stream.startRecordVideo(ip);
@@ -98,7 +99,6 @@ const ObservePage = () => {
     //   '🌈🌈swrTrackerData',
     //   swrTrackerData.map((tracker) => tracker.camName)
     // );
-    const camNames = swrTrackerData.map((tracker) => tracker.camName);
 
     /*
      * tracker 데이터와 videoFrameState와 일치하는 데이터만 초기값으로 주면 될듯 하다.
@@ -106,52 +106,13 @@ const ObservePage = () => {
     swrTrackerData.forEach(async (tracker, idx) => {
       // console.log('🪸tracker', tracker);
       // console.log('🪸tracker ip', tracker.ip);
-
-      // console.log(
-      //   '🪸🪸🪸🪸🪸🪸',
-      //   videoFrameState.filter((data) => camNames.includes(data.camName))
-      // );
-
-      // console.log('swrTrackerData.length', swrTrackerData.length);
-
-      console.log(
-        '🍥swrTrackerData.length',
-        initVideoFrameData.slice(0, swrTrackerData.length)
-      );
-
       const curVideoFrameState = initVideoFrameData.slice(
         0,
         swrTrackerData.length
       );
-
-      // const curVideoFrameState = videoFrameState.filter((obj) => {
-      //   console.log('🍰🍰🍰');
-      //   console.log('🍰🍰🍰obj.camName', obj.camName);
-      //   console.log(
-      //     swrTrackerData.map((tracker) => tracker.camName).includes(obj.camName)
-      //   );
-      //   return swrTrackerData
-      //     .map((tracker) => tracker.camName)
-      //     .includes(obj.camName);
-      // });
-
-      // const curVideoFrameState =
-      //   swrTrackerData.length === idx + 1
-      //     ? videoFrameState.filter((data) => camNames.includes(data.camName))
-      //     : videoFrameState;
-      // const curVideoFrameState = videoFrameState.filter((data) => camNames.includes(data.camName));
-
       // console.log('🍕🍕🍕🍕🍕🍕videoFrameState', videoFrameState);
       // console.log('processedData.length', processedData.length);
-      const {
-        _id,
-        ip,
-        baseLine,
-        dangerLine,
-        sensingGroup1,
-        sensingGroup2,
-        camName,
-      } = tracker;
+      const { ip, baseLine, sensingGroup1, sensingGroup2 } = tracker;
       // console.log('🐳sensingGroup1', sensingGroup1);
       // console.log('🐳sensingGroup2', sensingGroup2);
       // GYR
@@ -194,12 +155,12 @@ const ObservePage = () => {
       // console.log('🌸group2Coord', group2Coord);
 
       if (curVideoFrameState[idx]) {
-        curVideoFrameState[idx].trackerId = _id;
+        curVideoFrameState[idx].trackerId = tracker._id;
         curVideoFrameState[idx].baseLine = baseLine;
-        curVideoFrameState[idx].dangerLine = dangerLine;
-        curVideoFrameState[idx].ip = ip;
+        curVideoFrameState[idx].dangerLine = tracker.dangerLine;
+        curVideoFrameState[idx].ip = tracker.ip;
         curVideoFrameState[idx].frameSrc = frameSrc;
-        curVideoFrameState[idx].camName = camName;
+        curVideoFrameState[idx].camName = tracker.camName;
         curVideoFrameState[idx].firstCanvas.visible = group1Coord.length > 0;
         curVideoFrameState[idx].firstCanvas.coordinate = group1Coord;
         curVideoFrameState[idx].secondCanvas.visible = group2Coord.length > 0;

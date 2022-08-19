@@ -49,7 +49,7 @@ class StreamService:
             self.savePath, self.currentDate, self.camArea, self.camPort)
         # 캡쳐 파일 이름
         self.screenShotRecordPath = '{0}/safety-shot{1}.jpg'.format(self.screenShotFolderPath, self.fileInfo)
-        self.fcc = cv2.VideoWriter_fourcc('D', 'I', 'V', 'X') # avi
+        self.fcc = cv2.VideoWriter_fourcc('D', 'I', 'V', 'X')  # avi
         # self.fcc = cv2.VideoWriter_fourcc('M', '4', 'S', '2') # wmv
         # self.fcc = cv2.VideoWriter_fourcc('M', 'P', '4', '3') # wmv
         self.videoWriter = None  # cv 녹화 객체
@@ -106,7 +106,7 @@ class StreamService:
         except socket.error as ex:
             print('Internet is not connected')
             print(ex)
-            self.deviceIp =""
+            self.deviceIp = ""
 
         print('🔥platform.platform()', platform.platform())
         print('🔥platform.platform()', 'macOS' in platform.platform())
@@ -293,27 +293,28 @@ class StreamService:
         }).sort("groupNum", 1)
 
         dataArr = []
-        responseRes = {
-            "fst": False,
-            "sec": False
-        }
+        responseRes = {"fst": False, "sec": False}
         try:
             async for val in searchedData:
                 dataArr.append(val)
 
-            # 오늘 날짜로 첫번째 observe 데이터만 있는 경우
-            fstGroupData = dataArr[0]
-            # 데이터가 들어 있으므로 전역변수에 셋팅한다.
-            self.todayFstCamDataId = fstGroupData['_id']
-            self.fstYellowCnt = int(fstGroupData['yellowCnt'])
-            self.fstRedCnt = int(fstGroupData['redCnt'])
-            self.fstObserveSwitch = fstGroupData['observeSwitch']
-            print('self.todayFstCamDataId', self.todayFstCamDataId)
-            print('self.fstYellowCnt', self.fstYellowCnt)
-            print('self.fstRedCnt', self.fstRedCnt)
+            '''
+            그룹 2가 있는데로 불구하고 그룹 1을 지웠을때 오늘 날짜로의 데이터가 1개 남은 경우를 반영하지 않음
+            dataArr를 살펴보고 좀 더 적절하게 셋팅해야함
+            '''
 
+            # 오늘 날짜로 첫번째 observe 데이터만 있는 경우
+            # 데이터가 들어 있으므로 전역변수에 셋팅한다.
             if len(dataArr) > 0:
                 responseRes["fst"] = True
+                fstGroupData = dataArr[0]
+                self.todayFstCamDataId = fstGroupData['_id']
+                self.fstYellowCnt = int(fstGroupData['yellowCnt'])
+                self.fstRedCnt = int(fstGroupData['redCnt'])
+                self.fstObserveSwitch = fstGroupData['observeSwitch']
+                print('self.todayFstCamDataId', self.todayFstCamDataId)
+                print('self.fstYellowCnt', self.fstYellowCnt)
+                print('self.fstRedCnt', self.fstRedCnt)
 
             # 오늘 날짜로 두번째 observe 데이터도 있는 경우
             if len(dataArr) > 1:
@@ -489,8 +490,7 @@ class StreamService:
             sftp.put(localpath, remotepath)
 
             # Get - 파일 다운로드
-            sftp.get(remotepath,
-                     localpath)
+            sftp.get(remotepath, localpath)
 
             # os.remove(localpath)
 
@@ -694,7 +694,7 @@ class StreamService:
                     # cv2.imshow('frame', result_img)
                 else:
                     cv2.destroyAllWindows()
-                    if  self.saveStatus is True:
+                    if self.saveStatus is True:
                         self.saveFile(self.videoFolderPath, self.videoRecordPath)
                         self.saveStatus = False
 

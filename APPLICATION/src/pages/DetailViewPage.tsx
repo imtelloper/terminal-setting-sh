@@ -131,7 +131,7 @@ const DetailViewPage = () => {
         trackerId: swrState?.curTrackerId,
         fileType: 'img',
         start: 0,
-        limit: 20,
+        limit: 100,
       })
       .then((archives) => {
         dayjs.locale('ko');
@@ -158,14 +158,15 @@ const DetailViewPage = () => {
     console.log('imgArchiveState', imgArchiveState);
   }, [imgArchiveState]);
 
-  // useEffect(() => {
-  //   console.log('🍒swrObserveData', swrObserveData);
-  //   const getCurObserve = swrObserveData?.filter(
-  //     (obj) => obj.groupNum === groupNumState
-  //   );
-  //   console.log('🍒🍒🍒🍒🍒🍒getCurObserve', getCurObserve);
-  //   setCurObserveState(getCurObserve[0]);
-  // }, [swrObserveData, groupNumState]);
+  useEffect(() => {
+    console.log('🍒swrObserveData', swrObserveData);
+    console.log('🍒groupNumState', groupNumState);
+    const getCurObserve = swrObserveData?.filter(
+      (obj) => obj.groupNum === groupNumState
+    );
+    console.log('🍒🍒🍒🍒🍒🍒getCurObserve', getCurObserve);
+    setCurObserveState(getCurObserve[0]);
+  }, [swrObserveData, groupNumState]);
 
   useEffect(() => {
     console.log('🌷curObserveState', curObserveState);
@@ -187,7 +188,12 @@ const DetailViewPage = () => {
               color: levelColor[obj.safetyLevel.toLowerCase()],
             }}
           />
-          <span className={obj.safetyLevel.toLowerCase()}>YELLOW 2차 감지</span>
+          <span className={obj.safetyLevel.toLowerCase()}>
+            {`${obj.safetyLevel.toUpperCase()} ${
+              obj.safetyLevel === 'Yellow' ? '1' : '2'
+            }`}
+            차 감지
+          </span>
         </span>
         <span>{obj.date}</span>
         <span>{obj.time}</span>
@@ -360,7 +366,7 @@ const DetailViewPage = () => {
                 </div>
 
                 <div className="alertBox">
-                   <div className="alertContent">{imgCaptureHistoryMap}</div>
+                  <div className="alertContent">{imgCaptureHistoryMap}</div>
                 </div>
               </div>
             </div>

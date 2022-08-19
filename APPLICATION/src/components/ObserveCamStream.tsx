@@ -34,6 +34,17 @@ const ObserveCamStream = ({
     flushSync(() => setVideoFrameState([...newArr]));
   };
 
+  /* 카메라가 멈췄을 경우 다시 주소로 재요청하는 메서드 */
+  const refreshCamStream = async (e) => {
+    const target = e.currentTarget;
+    const arrIndex = target.getAttribute('tabIndex');
+    // console.log(arrIndex);
+    // console.log(videoFrameState[arrIndex].frameSrc);
+
+    await setNewVideoSrcState(arrIndex, '');
+    await setNewVideoSrcState(arrIndex, videoFrameState[arrIndex].frameSrc);
+  };
+
   const polySort = (arrIndex: number, itemID: string) => {
     const coordinate = getStateCoordinate(arrIndex, itemID);
     const centre = [
@@ -297,15 +308,24 @@ const ObserveCamStream = ({
               <div className="iframeCamName">{data.camName}</div>
             </div>
             <span className="iframeRecording">
+              {/* 녹화 상태 */}
               {camTabState - 1 === idx && recordState && (
                 <div className="iframeRecordingIcon">
                   <span className="iframeRecordingCircle" />
                   REC
                 </div>
               )}
-              <span className="iframeRenewIcon">
-                <Autorenew />
-              </span>
+
+              {/* 새로고침 버튼 */}
+              {!recordState && (
+                <span
+                  tabIndex={idx}
+                  className="iframeRenewIcon"
+                  onClick={refreshCamStream}
+                >
+                  <Autorenew />
+                </span>
+              )}
             </span>
           </div>
           {data.firstCanvas.visible && (
