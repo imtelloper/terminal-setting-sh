@@ -94,6 +94,15 @@ class StreamService:
         # 개발할때는 detectTimeCntLimit을 10 정도로 올려서 videoSleepCnt*10 번째에 DB 업데이트 되도록 하는게 좋다.
         self.detectTimeCntLimit = 0  # FOR DEV: 10, FOR PRODUCT: 0
 
+        def devMode():
+            self.isSetVideoFrameDelay = True
+            self.isSetDetectDelay = False
+            self.videoSleepCnt = 1
+            self.detectTimeCntLimit = 20
+
+        # devMode()
+        print('******************************************************')
+        print('************************* 내부 IP 가져오기 *****************************')
         # 내부 IP 가져오기
         sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         try:
@@ -102,11 +111,25 @@ class StreamService:
             print('Internet connected ')
             # 내부 IP 가져오기
             sock.connect(("pwnbit.kr", 443))
+            print('sock.getsockname()[0]',sock.getsockname()[0])
+            print('sock.getsockname()[0]',sock.getsockname()[0][0:3])
+            sockIp = sock.getsockname()[0]
+            if sockIp[0:3] != '192':
+                print('hi')
+                print('socket.gethostbyname',socket.gethostbyname(socket.gethostname()))
+            else:
+                print('bye')
+                print('socket.gethostbyname', socket.gethostbyname(socket.gethostname()))
+
             self.deviceIp = sock.getsockname()[0]
+
         except socket.error as ex:
             print('Internet is not connected')
             print(ex)
             self.deviceIp = ""
+
+        print('self.deviceIp', self.deviceIp)
+        print('******************************************************')
 
         print('🔥platform.platform()', platform.platform())
         print('🔥platform.platform()', 'macOS' in platform.platform())
@@ -303,9 +326,12 @@ class StreamService:
             dataArr를 살펴보고 좀 더 적절하게 셋팅해야함
             '''
 
-            # 오늘 날짜로 첫번째 observe 데이터만 있는 경우
-            # 데이터가 들어 있으므로 전역변수에 셋팅한다.
-            if len(dataArr) > 0:
+            print('************************************************************')
+            print('********************* dataArr ***********************')
+            print('dataArr : ', dataArr)
+            print('')
+
+            def addFstGroupData():
                 responseRes["fst"] = True
                 fstGroupData = dataArr[0]
                 self.todayFstCamDataId = fstGroupData['_id']
@@ -316,8 +342,7 @@ class StreamService:
                 print('self.fstYellowCnt', self.fstYellowCnt)
                 print('self.fstRedCnt', self.fstRedCnt)
 
-            # 오늘 날짜로 두번째 observe 데이터도 있는 경우
-            if len(dataArr) > 1:
+            def addSecGroupData():
                 responseRes["sec"] = True
                 secGroupData = dataArr[1]
                 self.todaySecCamDataId = secGroupData['_id']
@@ -327,6 +352,29 @@ class StreamService:
                 print('self.todaySecCamDataId', self.todaySecCamDataId)
                 print('self.secYellowCnt', self.secYellowCnt)
                 print('self.secRedCnt', self.secRedCnt)
+
+            print('len(dataArr)', len(dataArr))
+            # 오늘 날짜로 첫번째 observe 데이터만 있는 경우
+            # 데이터가 들어 있으므로 전역변수에 셋팅한다.
+            if len(dataArr) == 1:
+                currentGroupData: dict = dataArr[0]
+                print('currentGroupData', currentGroupData)
+                currentGroupNum = currentGroupData["groupNum"]
+                print('currentGroupNum', currentGroupNum)
+                if currentGroupNum == 1:
+                    print('첫번째 그룹만 남아 있습니다.')
+                    addFstGroupData()
+                elif currentGroupNum == 2:
+                    print('두번째 그룹만 남아 있습니다.')
+                    addSecGroupData()
+
+            # 오늘 날짜로 두번째 observe 데이터도 있는 경우
+            if len(dataArr) == 2:
+                addFstGroupData()
+                addSecGroupData()
+
+            print('responseRes', responseRes)
+            print('************************************************************')
             return responseRes
         except Exception as e:
             # 오늘 날짜로 observe 데이터가 없는 경우

@@ -1,10 +1,11 @@
 #!/usr/bin/zsh
 
-PROGRAM_AUTO_STREAM=auto-stream.py
 PROGRAM_PORT_WATCHER=auto-stream-watcher.py
+PROGRAM_AUTO_STREAM=auto-stream.py
 
 portWatcherPidCnt=`ps -ef|grep $PROGRAM_PORT_WATCHER|grep -v grep|wc -l`
 PORT_WATCHER_PID=`ps -ef|grep $PROGRAM_PORT_WATCHER|grep -v grep|awk '{print $2}'`
+
 AUTO_STREAM_PID=`ps -ef|grep $PROGRAM_AUTO_STREAM|grep -v grep|awk '{print $2}'`
 
 echo '#################################1'
