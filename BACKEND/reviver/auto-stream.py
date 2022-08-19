@@ -22,32 +22,54 @@ def setsUrlCoordinate():
     baseStreamAreaUrl = 'http://127.0.0.1:8000/api/stream'
     resultData = dbSafety["tracker"].find_one({"area": area, "camPort": camPort})
     print('resultData: ', resultData)
+    print()
     sensingGroup1: str = ''
     sensingGroup2: str = ''
     splitGrp1, splitGrp2 = resultData["sensingGroup1"].split('&'), resultData["sensingGroup2"].split('&')
+    print()
     print('splitGrp1: ', splitGrp1)
     print('splitGrp2: ', splitGrp2)
+    print()
 
     if len(splitGrp1) > 1: sensingGroup1 = splitGrp1[1] + '/' + splitGrp1[2]
     if len(splitGrp2) > 1: sensingGroup2 = splitGrp2[1] + '/' + splitGrp2[2]
 
+    print()
     print('### sensingGroup1: ', sensingGroup1)
     print('### sensingGroup2: ', sensingGroup2)
+    print()
     print('len(sensingGroup1): ', len(sensingGroup1))
     print('len(sensingGroup2): ', len(sensingGroup2))
+    print()
 
+    # 감지 좌표가 둘 다 있는 경우
     if len(sensingGroup1) > 0 and len(sensingGroup2) > 0:
+        print('*********************************************************')
+        print('*************************1*******************************')
+        print('**************** 감지 좌표가 둘 다 있는 경우 ******************')
         print('### sensingGroup2 is not None')
         sensingGroup = "/area/2/{}/{}".format(sensingGroup1, sensingGroup2)
 
+    # 감지 좌표가 1그룹에만 있는 경우
     if len(sensingGroup1) > 0 and len(sensingGroup2) == 0:
+        print('*********************************************************')
+        print('*************************2*******************************')
+        print('************* 감지 좌표가 1그룹에만 있는 경우 ******************')
         sensingGroup = "/area/1/{}/".format(sensingGroup1)
 
+    # 감지 좌표가 2그룹에만 있는 경우
     if len(sensingGroup1) == 0 and len(sensingGroup2) > 0:
-        sensingGroup = "/area/2/{}/".format(sensingGroup1)
+        print('*********************************************************')
+        print('*************************3*******************************')
+        print('************** 감지 좌표가 2그룹에만 있는 경우 *****************')
+        sensingGroup = "/area/2/{}/".format(sensingGroup2)
 
+    # 감지 좌표 없는 경우
     if len(sensingGroup1) == 0 and len(sensingGroup2) == 0:
-        sensingGroup = ''
+        print('*********************************************************')
+        print('*************************4*******************************')
+        print('******************** 감지 좌표 없는 경우 ********************')
+        sensingGroup = '/'
 
     print('###sensingGroup: ', sensingGroup)
 
