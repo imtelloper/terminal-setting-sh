@@ -223,6 +223,7 @@ const ObserveCamStream = ({
       redSensingCoordinate,
     ].join('&');
     console.log('sensingGroup', sensingGroup);
+    swrTrackerMutate()
 
     console.log('👗👗👗 itemID', itemID);
     if (itemID === 'firstCanvas') {
@@ -233,7 +234,10 @@ const ObserveCamStream = ({
       clicked && setNewVideoSrcState(arrIndex, newSrc);
       clicked &&
         trackerId &&
-        Api.tracker.modifyOneData(trackerId, { sensingGroup1: sensingGroup });
+        Api.tracker
+          .modifyOneData(trackerId, { sensingGroup1: sensingGroup })
+          .finally(() => swrTrackerMutate())
+          .catch((err) => console.error(err));
     } else {
       console.log('secondCanvas');
       const splitedSrc = frameSrc.split('/');
@@ -246,7 +250,10 @@ const ObserveCamStream = ({
       clicked && setNewVideoSrcState(arrIndex, newSrc);
       clicked &&
         trackerId &&
-        Api.tracker.modifyOneData(trackerId, { sensingGroup2: sensingGroup });
+        Api.tracker
+          .modifyOneData(trackerId, { sensingGroup2: sensingGroup })
+          .finally(() => swrTrackerMutate())
+          .catch((err) => console.error(err));
     }
   };
 
@@ -277,7 +284,6 @@ const ObserveCamStream = ({
     flushSync(() => setVideoFrameState([...newArr]));
     flushSync(() => polySort(arrIndex, itemID));
     draw(canvas, true, trackerId);
-    swrTrackerMutate();
   };
 
   useEffect(() => {
