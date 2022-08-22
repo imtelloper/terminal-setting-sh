@@ -13,6 +13,8 @@ from database.mongoDB import *
 from dtos.observeDto import ObserveDto
 from fastapi.encoders import jsonable_encoder
 import socket
+from netifaces import interfaces, ifaddresses, AF_INET
+
 
 warnings.filterwarnings('ignore')
 
