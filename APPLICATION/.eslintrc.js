@@ -28,6 +28,7 @@ module.exports = {
     'prefer-destructuring': 'off',
     'no-restricted-globals': 'off',
     '@typescript-eslint/naming-convention': 'off',
+    'react/jsx-no-bind': 'off',
   },
   parserOptions: {
     ecmaVersion: 2020,

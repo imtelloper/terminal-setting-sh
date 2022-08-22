@@ -13,6 +13,7 @@ import { flushSync } from 'react-dom';
 import useSWR from 'swr';
 import axios from 'axios';
 import { today } from '../util/dateLibrary';
+import ReactPaginate from 'react-paginate';
 
 const DetailViewPage = () => {
   const { data: swrState, mutate: setSwrState } = useSWRState();
@@ -27,9 +28,22 @@ const DetailViewPage = () => {
     `http://${swrState?.curCamIp}:81/api/stream/`
   );
   const [calibImgSrcState, setCalibImgSrcState] = useState('');
-  const [imgArchiveState, setImgArchiveState] = useState([]);
+
   const [groupNumState, setGroupNumState] = useState(1);
   const [curObserveState, setCurObserveState] = useState<Partial<Observe>>({});
+  const [currentPage, setCurrentPage] = useState(0);
+
+  /* 감지 이력 데이터 스테이트 */
+  const [imgArchiveState, setImgArchiveState] = useState([]);
+  const PER_PAGE = 10;
+  const offset = currentPage * PER_PAGE;
+  const currentPageData = imgArchiveState
+    .slice(offset, offset + PER_PAGE)
+    .map(({ thumburl }) => <div>{thumburl}</div>);
+  const pageCount = Math.ceil(imgArchiveState.length / PER_PAGE);
+  function handlePageClick({ selected: selectedPage }) {
+    setCurrentPage(selectedPage);
+  }
 
   const observeFindFetcher = (url: string) =>
     axios
@@ -207,7 +221,9 @@ const DetailViewPage = () => {
         <div className="leftBox">
           <div className="titleBox">
             <span className="subTitle">Place</span>
-            <span className="mainTitle">H1 공장 크레인</span>
+            <span className="mainTitle" onClick={() => navigate('/observe')}>
+              {swrState.curTrackerArea}
+            </span>
           </div>
           <div className="detailTabWrap">
             <div className="detailTabBox">
@@ -366,7 +382,21 @@ const DetailViewPage = () => {
                 </div>
 
                 <div className="alertBox">
-                  <div className="alertContent">{imgCaptureHistoryMap}</div>
+                  <div className="alertContent">
+                    <ReactPaginate
+                      previousLabel="← "
+                      nextLabel=" →"
+                      pageCount={pageCount}
+                      onPageChange={handlePageClick}
+                      containerClassName="pagination"
+                      previousLinkClassName="pagination__link"
+                      nextLinkClassName="pagination__link"
+                      disabledClassName="pagination__link--disabled"
+                      activeClassName="pagination__link--active"
+                    />
+
+                    {imgCaptureHistoryMap}
+                  </div>
                 </div>
               </div>
             </div>
@@ -394,13 +424,15 @@ const DetailViewPage = () => {
               {/* <div>{swrState.curCamPort?.toUpperCase()}</div> */}
               <div className="iframeTitleLeft">
                 {/* 캠번호 */}
-                <div className="iframeCamNum">Cam2</div>
-                <div className="iframeCamName">이름</div>
+                <div className="iframeCamNum">
+                  {swrState.curCamPort.toUpperCase()}
+                </div>
+                <div className="iframeCamName">{swrState.curCamName}</div>
               </div>
-              <div className="iframeIcon">
-                <span />
-                REC
-              </div>
+              {/* <div className="iframeIcon"> */}
+              {/*  <span /> */}
+              {/*  REC */}
+              {/* </div> */}
             </div>
             <canvas className="polygonCanvas" typeof="coordinate3" />
             <img

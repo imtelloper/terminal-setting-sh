@@ -17,6 +17,7 @@ type SwrStateType = {
   curCamBaseLine: string;
   curCamDangerLine: string;
   curCamIp: string;
+  curCamName: string;
   streamInfo: Array<ViedeoFrameType>;
   observe: Partial<Observe>;
   camInfo: {
@@ -38,6 +39,7 @@ let state: SwrStateType = {
   curCamBaseLine: '',
   curCamDangerLine: '',
   curCamIp: '',
+  curCamName: '',
   streamInfo: [],
   observe: {},
   camInfo: {

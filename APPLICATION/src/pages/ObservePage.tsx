@@ -245,7 +245,9 @@ const ObservePage = () => {
           <div className="titleBox">
             <span className="subTitle">Place</span>
             {/* 구역 이름 */}
-            <span className="mainTitle">{swrState?.curTrackerArea}</span>
+            <span className="mainTitle" onClick={() => navigate('/main')}>
+              {swrState?.curTrackerArea}
+            </span>
           </div>
           <div className="safetyTabWrap">
             <div className="safetyTabBox">
