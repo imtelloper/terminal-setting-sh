@@ -12,6 +12,7 @@ const ObserveCamStream = ({
   recordState,
   setNewVideoSrcState,
   camTabState,
+  swrTrackerMutate,
 }) => {
   const camWidth = 512;
   const camHeight = 384;
@@ -31,6 +32,17 @@ const ObserveCamStream = ({
     const newArr = videoFrameState;
     newArr[arrIndex][itemID].coordinate = coordinate;
     flushSync(() => setVideoFrameState([...newArr]));
+  };
+
+  /* 카메라가 멈췄을 경우 다시 주소로 재요청하는 메서드 */
+  const refreshCamStream = async (e) => {
+    const target = e.currentTarget;
+    const arrIndex = target.getAttribute('tabIndex');
+    // console.log(arrIndex);
+    // console.log(videoFrameState[arrIndex].frameSrc);
+
+    await setNewVideoSrcState(arrIndex, '');
+    await setNewVideoSrcState(arrIndex, videoFrameState[arrIndex].frameSrc);
   };
 
   const polySort = (arrIndex: number, itemID: string) => {
@@ -211,6 +223,7 @@ const ObserveCamStream = ({
       redSensingCoordinate,
     ].join('&');
     console.log('sensingGroup', sensingGroup);
+    swrTrackerMutate()
 
     console.log('👗👗👗 itemID', itemID);
     if (itemID === 'firstCanvas') {
@@ -221,7 +234,10 @@ const ObserveCamStream = ({
       clicked && setNewVideoSrcState(arrIndex, newSrc);
       clicked &&
         trackerId &&
-        Api.tracker.modifyOneData(trackerId, { sensingGroup1: sensingGroup });
+        Api.tracker
+          .modifyOneData(trackerId, { sensingGroup1: sensingGroup })
+          .finally(() => swrTrackerMutate())
+          .catch((err) => console.error(err));
     } else {
       console.log('secondCanvas');
       const splitedSrc = frameSrc.split('/');
@@ -234,7 +250,10 @@ const ObserveCamStream = ({
       clicked && setNewVideoSrcState(arrIndex, newSrc);
       clicked &&
         trackerId &&
-        Api.tracker.modifyOneData(trackerId, { sensingGroup2: sensingGroup });
+        Api.tracker
+          .modifyOneData(trackerId, { sensingGroup2: sensingGroup })
+          .finally(() => swrTrackerMutate())
+          .catch((err) => console.error(err));
     }
   };
 
@@ -295,6 +314,7 @@ const ObserveCamStream = ({
               <div className="iframeCamName">{data.camName}</div>
             </div>
             <span className="iframeRecording">
+              {/* 녹화 상태 */}
               {camTabState - 1 === idx && recordState && (
                 <div className="iframeRecordingIcon">
                   <span className="iframeRecordingCircle" />
@@ -304,6 +324,17 @@ const ObserveCamStream = ({
               <span className="iframeRenewIcon">
                 <Autorenew />
               </span>
+
+              {/* 새로고침 버튼 */}
+              {!recordState && (
+                <span
+                  tabIndex={idx}
+                  className="iframeRenewIcon"
+                  onClick={refreshCamStream}
+                >
+                  <Autorenew />
+                </span>
+              )}
             </span>
           </div>
           {data.firstCanvas.visible && (

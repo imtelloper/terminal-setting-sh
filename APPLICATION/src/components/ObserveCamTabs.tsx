@@ -47,7 +47,7 @@ const ObserveCamTabs = ({ setCamTabState, camTabState, videoFrameState }) => {
         camPort: `cam${camTabState}`,
       })
       .then((tracker) => {
-        // console.log('🍋🍋🍋🍋🍋🍋tracker', tracker);
+        console.log('🍋🍋🍋🍋🍋🍋tracker', tracker);
         // console.log('🍋🍋🍋🍋🍋🍋tracker', tracker[0].camPort);
         // console.log('🍋🍋🍋🍋🍋🍋tracker', tracker[0]._id);
 
@@ -60,6 +60,7 @@ const ObserveCamTabs = ({ setCamTabState, camTabState, videoFrameState }) => {
           curCamBaseLine: tracker[0].baseLine,
           curCamDangerLine: tracker[0].dangerLine,
           curCamIp: tracker[0].ip,
+          curCamName: tracker[0].camName,
         });
       })
       .catch((err) => console.error(err));

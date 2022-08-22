@@ -40,6 +40,14 @@ const AreaInfo = () => {
     refreshInterval: 1000,
   });
 
+  const { data: swrSensingCnt, error: swrSensingCntErr } = useSWR<number>(
+    '/api/archive/count-part/',
+    getFetcher,
+    {
+      refreshInterval: 1000,
+    }
+  );
+
   const goObservePage = (e) => {
     const target = e.currentTarget;
     const dType = target.getAttribute('datatype');
@@ -165,7 +173,7 @@ const AreaInfo = () => {
   }, []);
 
   useEffect(() => {
-    console.log('#####getObserveState', getObserveState);
+    // console.log('#####getObserveState', getObserveState);
     // console.log('🌸🌸🌸 swrObserveData', swrObserveData);
     /* getObserveState 데이터가 있을때 한번 가공 데이터 셋팅 */
     if (getObserveState.length === 0)
@@ -178,6 +186,8 @@ const AreaInfo = () => {
     // swrTrackerData?.length > 0 && console.log('swrTrackerData', swrTrackerData);
     swrTrackerData?.length > 0 && setProcessedSwrData();
   }, [swrTrackerData, swrObserveData]);
+
+
 
   const areaCardsMap = useMemo(() => {
     return (
@@ -312,7 +322,7 @@ const AreaInfo = () => {
                 </span>
                 <div className="icon">
                   <img src={Warning} alt="" />
-                  <span className="red">3</span>
+                  <span className="red">{swrSensingCnt}</span>
                 </div>
               </div>
             </div>

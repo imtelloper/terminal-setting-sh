@@ -13,6 +13,7 @@ import { flushSync } from 'react-dom';
 import useSWR from 'swr';
 import axios from 'axios';
 import { today } from '../util/dateLibrary';
+import ReactPaginate from 'react-paginate';
 
 const DetailViewPage = () => {
   const { data: swrState, mutate: setSwrState } = useSWRState();
@@ -27,9 +28,22 @@ const DetailViewPage = () => {
     `http://${swrState?.curCamIp}:81/api/stream/`
   );
   const [calibImgSrcState, setCalibImgSrcState] = useState('');
-  const [imgArchiveState, setImgArchiveState] = useState([]);
+
   const [groupNumState, setGroupNumState] = useState(1);
   const [curObserveState, setCurObserveState] = useState<Partial<Observe>>({});
+  const [currentPage, setCurrentPage] = useState(0);
+
+  /* 감지 이력 데이터 스테이트 */
+  const [imgArchiveState, setImgArchiveState] = useState([]);
+  const PER_PAGE = 10;
+  const offset = currentPage * PER_PAGE;
+  const currentPageData = imgArchiveState
+    .slice(offset, offset + PER_PAGE)
+    .map(({ thumburl }) => <div>{thumburl}</div>);
+  const pageCount = Math.ceil(imgArchiveState.length / PER_PAGE);
+  function handlePageClick({ selected: selectedPage }) {
+    setCurrentPage(selectedPage);
+  }
 
   const observeFindFetcher = (url: string) =>
     axios
@@ -131,7 +145,7 @@ const DetailViewPage = () => {
         trackerId: swrState?.curTrackerId,
         fileType: 'img',
         start: 0,
-        limit: 20,
+        limit: 100,
       })
       .then((archives) => {
         dayjs.locale('ko');
@@ -158,14 +172,15 @@ const DetailViewPage = () => {
     console.log('imgArchiveState', imgArchiveState);
   }, [imgArchiveState]);
 
-  // useEffect(() => {
-  //   console.log('🍒swrObserveData', swrObserveData);
-  //   const getCurObserve = swrObserveData?.filter(
-  //     (obj) => obj.groupNum === groupNumState
-  //   );
-  //   console.log('🍒🍒🍒🍒🍒🍒getCurObserve', getCurObserve);
-  //   setCurObserveState(getCurObserve[0]);
-  // }, [swrObserveData, groupNumState]);
+  useEffect(() => {
+    console.log('🍒swrObserveData', swrObserveData);
+    console.log('🍒groupNumState', groupNumState);
+    const getCurObserve = swrObserveData?.filter(
+      (obj) => obj.groupNum === groupNumState
+    );
+    console.log('🍒🍒🍒🍒🍒🍒getCurObserve', getCurObserve);
+    setCurObserveState(getCurObserve[0]);
+  }, [swrObserveData, groupNumState]);
 
   useEffect(() => {
     console.log('🌷curObserveState', curObserveState);
@@ -187,7 +202,12 @@ const DetailViewPage = () => {
               color: levelColor[obj.safetyLevel.toLowerCase()],
             }}
           />
-          <span className={obj.safetyLevel.toLowerCase()}>YELLOW 2차 감지</span>
+          <span className={obj.safetyLevel.toLowerCase()}>
+            {`${obj.safetyLevel.toUpperCase()} ${
+              obj.safetyLevel === 'Yellow' ? '1' : '2'
+            }`}
+            차 감지
+          </span>
         </span>
         <span>{obj.date}</span>
         <span>{obj.time}</span>
@@ -201,7 +221,9 @@ const DetailViewPage = () => {
         <div className="leftBox">
           <div className="titleBox">
             <span className="subTitle">Place</span>
-            <span className="mainTitle">H1 공장 크레인</span>
+            <span className="mainTitle" onClick={() => navigate('/observe')}>
+              {swrState.curTrackerArea}
+            </span>
           </div>
           <div className="detailTabWrap">
             <div className="detailTabBox">
@@ -389,6 +411,21 @@ const DetailViewPage = () => {
 
                 <div className="alertBox">
                   <div className="alertContent">{imgCaptureHistoryMap}</div>
+                  <div className="alertContent">
+                    <ReactPaginate
+                      previousLabel="← "
+                      nextLabel=" →"
+                      pageCount={pageCount}
+                      onPageChange={handlePageClick}
+                      containerClassName="pagination"
+                      previousLinkClassName="pagination__link"
+                      nextLinkClassName="pagination__link"
+                      disabledClassName="pagination__link--disabled"
+                      activeClassName="pagination__link--active"
+                    />
+
+                    {imgCaptureHistoryMap}
+                  </div>
                 </div>
               </div>
             </div>
@@ -428,16 +465,24 @@ const DetailViewPage = () => {
                   <Autorenew />
                 </span>
               </span>
+              <div className="iframeCamNum">
+                {swrState.curCamPort.toUpperCase()}
+              </div>
+              <div className="iframeCamName">{swrState.curCamName}</div>
             </div>
-            <canvas className="polygonCanvas" typeof="coordinate3" />
-            <img
-              title="stream1"
-              // src={streamUrl ??"http://127.0.0.1:8000/api/stream/area/"}
-              // src="http://192.168.0.4:81/api/stream/"
-              src={imgSrcState}
-              alt=""
-            />
+            {/* <div className="iframeIcon"> */}
+            {/*  <span /> */}
+            {/*  REC */}
+            {/* </div> */}
           </div>
+          <canvas className="polygonCanvas" typeof="coordinate3" />
+          <img
+            title="stream1"
+            // src={streamUrl ??"http://127.0.0.1:8000/api/stream/area/"}
+            // src="http://192.168.0.4:81/api/stream/"
+            src={imgSrcState}
+            alt=""
+          />
         </div>
       </div>
     </div>

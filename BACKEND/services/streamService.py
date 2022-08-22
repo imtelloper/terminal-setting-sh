@@ -24,7 +24,10 @@ import subprocess
 import stat
 import socket
 from tools.scheculder import *
+from netifaces import interfaces, ifaddresses, AF_INET
 
+from modules.yolov5.utils.torch_utils import select_device
+from modules.yolov5.models.common import DetectMultiBackend
 
 # W: 256 H: 192
 class StreamService:
@@ -49,7 +52,7 @@ class StreamService:
             self.savePath, self.currentDate, self.camArea, self.camPort)
         # 캡쳐 파일 이름
         self.screenShotRecordPath = '{0}/safety-shot{1}.jpg'.format(self.screenShotFolderPath, self.fileInfo)
-        self.fcc = cv2.VideoWriter_fourcc('D', 'I', 'V', 'X') # avi
+        self.fcc = cv2.VideoWriter_fourcc('D', 'I', 'V', 'X')  # avi
         # self.fcc = cv2.VideoWriter_fourcc('M', '4', 'S', '2') # wmv
         # self.fcc = cv2.VideoWriter_fourcc('M', 'P', '4', '3') # wmv
         self.videoWriter = None  # cv 녹화 객체
@@ -93,20 +96,62 @@ class StreamService:
         # self.detectTimeCntLimit가 낮을수록 Yellow, Red 업데이트 속도 빨라짐. 너무 빠르면 성능에 문제 있을 수 있음
         # 개발할때는 detectTimeCntLimit을 10 정도로 올려서 videoSleepCnt*10 번째에 DB 업데이트 되도록 하는게 좋다.
         self.detectTimeCntLimit = 0  # FOR DEV: 10, FOR PRODUCT: 0
+        # 욜로 모델 로드
+        self.weights = "/home/interx/SAFETY-AI/BACKEND/modules/yolov5/weights/small.pt"
+        self.device = select_device('')
+        self.model = DetectMultiBackend(weights=self.weights, device=self.device, dnn=False)
 
+        def devMode():
+            self.isSetVideoFrameDelay = True
+            self.isSetDetectDelay = False
+            self.videoSleepCnt = 1
+            self.detectTimeCntLimit = 20
+
+        # devMode()
+
+        print('************************* 내부 IP 가져오기 *****************************')
         # 내부 IP 가져오기
-        sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        try:
-            socket.setdefaulttimeout(3)
-            socket.socket(socket.AF_INET, socket.SOCK_STREAM).connect(("8.8.8.8", 53))
-            print('Internet connected ')
-            # 내부 IP 가져오기
-            sock.connect(("pwnbit.kr", 443))
-            self.deviceIp = sock.getsockname()[0]
-        except socket.error as ex:
-            print('Internet is not connected')
-            print(ex)
-            self.deviceIp =""
+        # sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        # try:
+        #     socket.setdefaulttimeout(3)
+        #     socket.socket(socket.AF_INET, socket.SOCK_STREAM).connect(("8.8.8.8", 53))
+        #     print('Internet connected ')
+        #     # 내부 IP 가져오기
+        #     sock.connect(("pwnbit.kr", 443))
+        #     print('sock.getsockname()[0]', sock.getsockname()[0])
+        #     print('sock.getsockname()[0]', sock.getsockname()[0][0:3])
+        #     sockIp = sock.getsockname()[0]
+        #     if sockIp[0:3] != '192':
+        #         print(sockIp)
+        #     self.deviceIp = sock.getsockname()[0]
+        # except socket.error as ex:
+        #     print('Internet is not connected')
+        #     print(ex)
+        #     self.deviceIp = ""
+
+        def ip4Addresses():
+            ipList = []
+            print('interfaces()',interfaces())
+            for interface in interfaces():
+                print('interface',interface)
+                try:
+                    print('ifaddresses(interface)[AF_INET]', ifaddresses(interface)[AF_INET])
+                    for link in ifaddresses(interface)[AF_INET]:
+                        print('link',link)
+                        print('link[addr]',link['addr'])
+                        ipList.append(link['addr'])
+                        print('')
+                except Exception as e:
+                    print(e)
+            print('ipList',ipList)
+            return ipList
+
+        print('ip4Addresses()',ip4Addresses())
+        # 내부 IP 가져오기
+        self.deviceIp = list(filter(lambda x: x[0:3] == '192', ip4Addresses()))[0]
+        print('ip4Addresses', ip4Addresses())
+        print('self.deviceIp', self.deviceIp)
+        print('******************************************************')
 
         print('🔥platform.platform()', platform.platform())
         print('🔥platform.platform()', 'macOS' in platform.platform())
@@ -293,30 +338,33 @@ class StreamService:
         }).sort("groupNum", 1)
 
         dataArr = []
-        responseRes = {
-            "fst": False,
-            "sec": False
-        }
+        responseRes = {"fst": False, "sec": False}
         try:
             async for val in searchedData:
                 dataArr.append(val)
 
-            # 오늘 날짜로 첫번째 observe 데이터만 있는 경우
-            fstGroupData = dataArr[0]
-            # 데이터가 들어 있으므로 전역변수에 셋팅한다.
-            self.todayFstCamDataId = fstGroupData['_id']
-            self.fstYellowCnt = int(fstGroupData['yellowCnt'])
-            self.fstRedCnt = int(fstGroupData['redCnt'])
-            self.fstObserveSwitch = fstGroupData['observeSwitch']
-            print('self.todayFstCamDataId', self.todayFstCamDataId)
-            print('self.fstYellowCnt', self.fstYellowCnt)
-            print('self.fstRedCnt', self.fstRedCnt)
+            '''
+            그룹 2가 있는데로 불구하고 그룹 1을 지웠을때 오늘 날짜로의 데이터가 1개 남은 경우를 반영하지 않음
+            dataArr를 살펴보고 좀 더 적절하게 셋팅해야함
+            '''
 
-            if len(dataArr) > 0:
+            print('************************************************************')
+            print('********************* dataArr ***********************')
+            print('dataArr : ', dataArr)
+            print('')
+
+            def addFstGroupData():
                 responseRes["fst"] = True
+                fstGroupData = dataArr[0]
+                self.todayFstCamDataId = fstGroupData['_id']
+                self.fstYellowCnt = int(fstGroupData['yellowCnt'])
+                self.fstRedCnt = int(fstGroupData['redCnt'])
+                self.fstObserveSwitch = fstGroupData['observeSwitch']
+                print('self.todayFstCamDataId', self.todayFstCamDataId)
+                print('self.fstYellowCnt', self.fstYellowCnt)
+                print('self.fstRedCnt', self.fstRedCnt)
 
-            # 오늘 날짜로 두번째 observe 데이터도 있는 경우
-            if len(dataArr) > 1:
+            def addSecGroupData():
                 responseRes["sec"] = True
                 secGroupData = dataArr[1]
                 self.todaySecCamDataId = secGroupData['_id']
@@ -326,6 +374,29 @@ class StreamService:
                 print('self.todaySecCamDataId', self.todaySecCamDataId)
                 print('self.secYellowCnt', self.secYellowCnt)
                 print('self.secRedCnt', self.secRedCnt)
+
+            print('len(dataArr)', len(dataArr))
+            # 오늘 날짜로 첫번째 observe 데이터만 있는 경우
+            # 데이터가 들어 있으므로 전역변수에 셋팅한다.
+            if len(dataArr) == 1:
+                currentGroupData: dict = dataArr[0]
+                print('currentGroupData', currentGroupData)
+                currentGroupNum = currentGroupData["groupNum"]
+                print('currentGroupNum', currentGroupNum)
+                if currentGroupNum == 1:
+                    print('첫번째 그룹만 남아 있습니다.')
+                    addFstGroupData()
+                elif currentGroupNum == 2:
+                    print('두번째 그룹만 남아 있습니다.')
+                    addSecGroupData()
+
+            # 오늘 날짜로 두번째 observe 데이터도 있는 경우
+            if len(dataArr) == 2:
+                addFstGroupData()
+                addSecGroupData()
+
+            print('responseRes', responseRes)
+            print('************************************************************')
             return responseRes
         except Exception as e:
             # 오늘 날짜로 observe 데이터가 없는 경우
@@ -489,8 +560,7 @@ class StreamService:
             sftp.put(localpath, remotepath)
 
             # Get - 파일 다운로드
-            sftp.get(remotepath,
-                     localpath)
+            sftp.get(remotepath, localpath)
 
             # os.remove(localpath)
 
@@ -502,7 +572,6 @@ class StreamService:
     def video_streaming(self, coordinates1=[], coordinates2=[]):
         print('video_streaming video check : ', self.currentPort)
         if self.currentPort is None: os.system("fuser -k 8000/tcp")
-        pt = "/home/interx/SAFETY-AI/BACKEND/modules/yolov5/weights/1_nano.pt"
         device_mode = ""
         print('쓰레쉬 홀드', self.thisCamThreshold)
         print('감지 모델', self.thisCamSensingModel)
@@ -544,7 +613,7 @@ class StreamService:
                 result_img = ""
                 if cnt == 0:
                     # 욜로 감지(딥러닝을 돌린다. 사람을 찾아주는 기능)
-                    humans = detect(weights=pt, device=device_mode, conf_thres=conf, source=self.camImg)
+                    humans = detect(weights=self.weights, device=self.device, model=self.model, conf_thres=conf, source=self.camImg)
                     multi_tracker.__init__()
                     track_signal = False
                     cnt += 1
@@ -694,7 +763,7 @@ class StreamService:
                     # cv2.imshow('frame', result_img)
                 else:
                     cv2.destroyAllWindows()
-                    if  self.saveStatus is True:
+                    if self.saveStatus is True:
                         self.saveFile(self.videoFolderPath, self.videoRecordPath)
                         self.saveStatus = False
 

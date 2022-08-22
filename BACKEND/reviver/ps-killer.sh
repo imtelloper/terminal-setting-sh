@@ -34,5 +34,6 @@ then
   sudo kill -9 $PORT_WATCHER_PID $BACKEND_PID
   sudo fuser -k 8000/tcp
   sudo kill -9 $(sudo lsof -t -i:8000)
+  sudo sh /home/interx/SAFETY-AI/BACKEND/reviver/auto-stream-killer.sh
   ps aux | grep python
 fi

@@ -41,6 +41,7 @@ def createApp() -> FastAPI:
 
 
 app = createApp()
+app.router.redirect_slashes = False
 
 # origins = [
 #     "http://localhost",

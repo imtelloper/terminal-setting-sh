@@ -6,33 +6,23 @@ import cv2
 import torch
 import torch.backends.cudnn as cudnn
 
-from modules.yolov5.models.common import DetectMultiBackend
 from modules.yolov5.utils.general import (check_img_size, non_max_suppression, scale_coords)
-# from utils.plots import Annotator
-from modules.yolov5.utils.torch_utils import select_device
+
 
 @torch.no_grad()
 def detect(weights='weights/small/best.pt',  # model.pt path(s)
-        source=None,  # Image
-        imgsz=480,  # inference size (pixels)
-        conf_thres=0.7,  # confidence threshold
-        iou_thres=0.45,  # NMS IOU threshold
-        max_det=1000,  # maximum detections per image
-        device='',  # cuda device, i.e. 0 or 0,1,2,3 or cpu
-        classes=None,  # filter by class: --class 0, or --class 0 2 3
-        agnostic_nms=False,  # class-agnostic NMS
-        augment=False,  # augmented inference
-        half=False,  # use FP16 half-precision inference
-        dnn=False,  # use OpenCV DNN for ONNX inference
-        ):
-
-    # Load model
-    device = select_device(device)
-    # print('weights : ', weights)
-    # print('device : ', device)
-    # print('dnn : ', dnn)
-    model = DetectMultiBackend(weights, device=device, dnn=dnn)
-    # print('model : ', model)
+           source=None,  # Image
+           imgsz=480,  # inference size (pixels)
+           conf_thres=0.7,  # confidence threshold
+           iou_thres=0.45,  # NMS IOU threshold
+           max_det=1000,  # maximum detections per image
+           device=None,  # cuda device, i.e. 0 or 0,1,2,3 or cpu
+           model=None,
+           classes=None,  # filter by class: --class 0, or --class 0 2 3
+           agnostic_nms=False,  # class-agnostic NMS
+           augment=False,  # augmented inference
+           half=False,  # use FP16 half-precision inference
+           ):
     stride, pt, engine = model.stride, model.pt, model.engine
     imgsz = check_img_size(imgsz, s=stride)  # check image size
 
@@ -40,7 +30,7 @@ def detect(weights='weights/small/best.pt',  # model.pt path(s)
     half &= (pt or engine) and device.type != 'cpu'  # half precision only supported by PyTorch on CUDA
     if pt:
         model.model.half() if half else model.model.float()
-    
+
     # cudnn
     cudnn.benchmark = True
 
@@ -84,7 +74,7 @@ def detect(weights='weights/small/best.pt',  # model.pt path(s)
             # Write results
             for *xyxy, conf, cls in reversed(det):
                 humans.append(xyxy)
-                
+
     return humans
 
 
