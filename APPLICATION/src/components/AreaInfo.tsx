@@ -15,6 +15,8 @@ import Api from '../api/Api';
 import dayjs from 'dayjs';
 import { areaInfoDummyData } from '../initDatas/areaInfoDummyData';
 import Loading from './Loading';
+import { MdDangerous, MdOutlineTaskAlt } from 'react-icons/md';
+import { Feedback } from '@material-ui/icons';
 
 const AreaInfo = () => {
   const navigate = useNavigate();
@@ -190,10 +192,10 @@ const AreaInfo = () => {
           onClick={goObservePage}
           datatype={idx.toString()}
         >
-           {/*<div className="titleBox">{card.area}</div>*/}
-          {/*<div className="titleBox">*/}
-          {/*  <span>{getObjectKey}</span>*/}
-          {/*</div>*/}
+          {/* <div className="titleBox">{card.area}</div> */}
+          {/* <div className="titleBox"> */}
+          {/*  <span>{getObjectKey}</span> */}
+          {/* </div> */}
           <div className="titleBox">
             <span>{getObjectKey || card.area}</span>
           </div>
@@ -227,15 +229,40 @@ const AreaInfo = () => {
                       : 'green'
                   }`}
                 >
-                  {
-                    // @ts-ignore
-                    card[getObjectKey]?.safetyLevel === 'Red'
-                      ? '작업자 위험 반경 진입'
-                      : // @ts-ignore
-                      card[getObjectKey]?.safetyLevel === 'Yellow'
-                      ? '작업자 진입'
-                      : '안전합니다.'
-                  }
+                  <div className="alarmBtnBoxContent">
+                    {
+                      // @ts-ignore
+                      card[getObjectKey]?.safetyLevel === 'Red' ? (
+                        <>
+                          <span className="alarmBtnBoxTxt red">
+                            <p>
+                              <MdDangerous style={{ fontSize: '32px' }} />
+                            </p>
+                            작업자 위험 반경 진입
+                          </span>
+                        </>
+                      ) : // @ts-ignore
+                      card[getObjectKey]?.safetyLevel === 'Yellow' ? (
+                        <>
+                          <span className="alarmBtnBoxTxt yellow">
+                            <p>
+                              <Feedback style={{ fontSize: '32px' }} />
+                            </p>
+                            작업자 진입 확인
+                          </span>
+                        </>
+                      ) : (
+                        <>
+                          <span className="alarmBtnBoxTxt green">
+                            <p>
+                              <MdOutlineTaskAlt style={{ fontSize: '32px' }} />
+                            </p>
+                            안전합니다
+                          </span>
+                        </>
+                      )
+                    }
+                  </div>
                 </div>
                 <div className="sensingBox">
                   <span>
@@ -255,9 +282,9 @@ const AreaInfo = () => {
     });
   }, [getObserveState]);
 
-  if (loadingState) return <Loading />;
-  if (!swrTrackerData) return <Loading />;
-  if (!swrObserveData) return <Loading />;
+  // if (loadingState) return <Loading />;
+  // if (!swrTrackerData) return <Loading />;
+  // if (!swrObserveData) return <Loading />;
   return (
     <div className="areaInfoContainer">
       <div className="areaInfo">

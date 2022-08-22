@@ -284,6 +284,9 @@ div.private{
     span.videoArchiveIcon, span.binIcon{
       display: none;
     }
+    &:nth-child(3){
+      margin-right: 16px;
+    }
   }
   ul.dropdown-list{
     left: unset;

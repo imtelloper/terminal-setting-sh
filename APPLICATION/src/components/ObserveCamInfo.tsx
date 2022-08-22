@@ -228,21 +228,50 @@ const ObserveCamInfo = ({
           </div>
         </div>
         <div className="btnBox">
-          {/* className : 색상별 green yellow red inactive */}
+          {/* className : 색상별 green yellow red inactive 추가 */}
           <div
             className={`alarmTxt ${stateInfo?.[
               groupNum
-            ]?.safetyLevel.toLowerCase()}`}
+            ]?.safetyLevel?.toLowerCase()}`}
           >
-            <MdOutlineTaskAlt style={{ fontSize: '32px' }} />
+            {/* <MdOutlineTaskAlt style={{ fontSize: '32px' }} /> */}
             {/* 작업자 진입 확인 / 작업자 위험 반경 진입 / 비활성화 되었습니다. */}
-            <span>
-              {stateInfo?.[groupNum]?.safetyLevel === 'Green'
-                ? '안전합니다.'
-                : stateInfo?.[groupNum]?.safetyLevel === 'Yellow'
-                ? '작업자 진입 확인'
-                : '작업자 위험 반경 진입'}
-            </span>
+            <div className="btnBoxContent">
+              {stateInfo?.[groupNum]?.safetyLevel === 'Green' ? (
+                <>
+                  <div className="btnBoxLine green" />
+                  <span className="btnBoxTxt green">
+                    <p>
+                      <MdOutlineTaskAlt style={{ fontSize: '32px' }} />
+                    </p>
+                    안전합니다
+                  </span>
+                  <div className="btnBoxLine green" />
+                </>
+              ) : stateInfo?.[groupNum]?.safetyLevel === 'Yellow' ? (
+                <>
+                  <div className="btnBoxLine yellow" />
+                  <span className="btnBoxTxt yellow">
+                    <p>
+                      <Feedback style={{ fontSize: '32px' }} />
+                    </p>
+                    작업자 진입 확인
+                  </span>
+                  <div className="btnBoxLine yellow" />
+                </>
+              ) : (
+                <>
+                  <div className="btnBoxLine red" />
+                  <span className="btnBoxTxt red">
+                    <p>
+                      <MdDangerous style={{ fontSize: '32px' }} />
+                    </p>
+                    작업자 위험 반경 진입
+                  </span>
+                  <div className="btnBoxLine red" />
+                </>
+              )}
+            </div>
           </div>
 
           <div className="sensingBox">
@@ -308,10 +337,10 @@ const ObserveCamInfo = ({
           <Loading />
         ) : (
           <div className="safetyContentBox">
-            {(() => {
-              console.log('🌟info', info);
-              // console.log('🌟idx', idx);
-            })()}
+            {/* {(() => { */}
+            {/*  console.log('🌟info', info); */}
+            {/*   console.log('🌟idx', idx); */}
+            {/* })()} */}
             {videoFrameState[idx]?.firstCanvas?.visible &&
               groupBoxComponent(info, idx + 1, 1)}
 

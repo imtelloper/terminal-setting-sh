@@ -53,12 +53,13 @@ const ObservePage = () => {
     const target = e.currentTarget;
     const recordTxtEl = document.querySelector('.recordTxt');
     const iframeTitleEl = document.querySelector('.iframeTitle');
+    const recordBtnCircleEl = document.querySelector('.recordBtnCircle');
     target.classList.toggle('txtActive');
     target.classList.toggle('hoverCircleActive');
     setTxtChangeState((prev) => (prev === '녹화중' ? '녹화시작' : '녹화중'));
     recordTxtEl.classList.toggle('txtColorActive');
     iframeTitleEl.classList.toggle('iframeTxtColorActive');
-    // iframeRecordingTxtEl.classList.toggle('iframeRecordingTxtActive');
+    recordBtnCircleEl.classList.toggle('spinnerActive');
     const camStateObj = {
       cam1: videoFrameState[0].ip,
       cam2: videoFrameState[1].ip,
@@ -306,7 +307,7 @@ const ObservePage = () => {
               {/* 녹화 버튼 */}
               <div className="recordBtnBox">
                 <button className="recordBtn">
-                  <div />
+                  <div className="recordBtnCircle"/>
                   <div className="hoverCircle" onClick={handleActive} />
                 </button>
                 <span className="recordTxt">{txtChangeState}</span>
