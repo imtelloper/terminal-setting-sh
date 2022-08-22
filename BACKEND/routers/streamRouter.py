@@ -31,15 +31,32 @@ def isInternetConnected(host="8.8.8.8", port=53, timeout=3) -> bool:
     OpenPort: 53/tcp
     Service: domain (DNS/TCP)
     """
+    # try:
+    #     socket.setdefaulttimeout(timeout)
+    #     socket.socket(socket.AF_INET, socket.SOCK_STREAM).connect((host, port))
+    #     print('Internet connected ')
+    #     return True
+    # except socket.error as ex:
+    #     print('Internet is not connected')
+    #     print(ex)
+    #     return False
+    ipList = []
+    for interface in interfaces():
+        try:
+            for link in ifaddresses(interface)[AF_INET]:
+                ipList.append(link['addr'])
+        except Exception as e:
+            print(e)
+
     try:
-        socket.setdefaulttimeout(timeout)
-        socket.socket(socket.AF_INET, socket.SOCK_STREAM).connect((host, port))
+        deviceIp = list(filter(lambda x: x[0:3] == '192', ipList))[0]
         print('Internet connected ')
         return True
-    except socket.error as ex:
+    except Exception as e:
         print('Internet is not connected')
-        print(ex)
         return False
+
+
 
 
 # query string 값으로부터 좌표 설정
