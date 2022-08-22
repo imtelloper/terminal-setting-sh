@@ -224,10 +224,10 @@ const AllListCheckPage = () => {
                   </button>
                 </li>
                 <li className="allListMessageAlarm allListSwitchBtn">
-                  <button onClick={handleActive}>OFF</button>
+                  <button>OFF</button>
                 </li>
                 <li className="allListKakaoAlarm allListSwitchBtn">
-                  <button onClick={handleActive}>OFF</button>
+                  <button>OFF</button>
                 </li>
               </ul>
             ))}

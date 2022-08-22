@@ -26,6 +26,8 @@ import socket
 from tools.scheculder import *
 from netifaces import interfaces, ifaddresses, AF_INET
 
+from modules.yolov5.utils.torch_utils import select_device
+from modules.yolov5.models.common import DetectMultiBackend
 
 # W: 256 H: 192
 class StreamService:
@@ -94,6 +96,10 @@ class StreamService:
         # self.detectTimeCntLimit가 낮을수록 Yellow, Red 업데이트 속도 빨라짐. 너무 빠르면 성능에 문제 있을 수 있음
         # 개발할때는 detectTimeCntLimit을 10 정도로 올려서 videoSleepCnt*10 번째에 DB 업데이트 되도록 하는게 좋다.
         self.detectTimeCntLimit = 0  # FOR DEV: 10, FOR PRODUCT: 0
+        # 욜로 모델 로드
+        self.weights = "/home/interx/SAFETY-AI/BACKEND/modules/yolov5/weights/small.pt"
+        self.device = select_device('')
+        self.model = DetectMultiBackend(weights=self.weights, device=self.device, dnn=False)
 
         def devMode():
             self.isSetVideoFrameDelay = True
@@ -566,7 +572,6 @@ class StreamService:
     def video_streaming(self, coordinates1=[], coordinates2=[]):
         print('video_streaming video check : ', self.currentPort)
         if self.currentPort is None: os.system("fuser -k 8000/tcp")
-        pt = "/home/interx/SAFETY-AI/BACKEND/modules/yolov5/weights/1_nano.pt"
         device_mode = ""
         print('쓰레쉬 홀드', self.thisCamThreshold)
         print('감지 모델', self.thisCamSensingModel)
@@ -608,7 +613,7 @@ class StreamService:
                 result_img = ""
                 if cnt == 0:
                     # 욜로 감지(딥러닝을 돌린다. 사람을 찾아주는 기능)
-                    humans = detect(weights=pt, device=device_mode, conf_thres=conf, source=self.camImg)
+                    humans = detect(weights=self.weights, device=self.device, model=self.model, conf_thres=conf, source=self.camImg)
                     multi_tracker.__init__()
                     track_signal = False
                     cnt += 1

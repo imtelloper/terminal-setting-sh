@@ -321,6 +321,9 @@ const ObserveCamStream = ({
                   REC
                 </div>
               )}
+              <span className="iframeRenewIcon">
+                <Autorenew />
+              </span>
 
               {/* 새로고침 버튼 */}
               {!recordState && (

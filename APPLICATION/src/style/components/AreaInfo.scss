@@ -26,7 +26,7 @@ div.areaInfoContainer {
 
       div.leftBox {
         width: calc(100% - 16px);
-        height: calc(100% - 88px);
+        height: calc(100% - 16px);
         margin: 16px;
         display: flex;
         flex-direction: column;
@@ -138,12 +138,13 @@ div.areaInfoContainer {
 
             div.areaContent {
               width: 100%;
+              height: calc(100% - 48px);
               display: flex;
               flex-direction: column;
 
               div.areaTop {
                 width: 100%;
-                height: 50%;
+                height: 160px;
                 position: relative;
 
                 div.imgBox {
@@ -196,16 +197,17 @@ div.areaInfoContainer {
                   div.activeBadge {
                     width: 84px;
                     height: 24px;
-                    background-color: $success-200;
+                    background-color: $blue-100;
                     border-radius: 12px;
                     display: flex;
                     align-items: center;
-                    justify-content: space-around;
+                    justify-content: center;
 
                     div.circle {
                       width: 12px;
                       height: 12px;
-                      background-color: $success-500;
+                      margin-right: 4px;
+                      background-color: $blue-500;
                       border-radius: 50%;
                       opacity: 0;
                       animation: activeAni 2s ease-in infinite;
@@ -213,56 +215,85 @@ div.areaInfoContainer {
                     }
                     span {
                       font-weight: 700;
+                      color: $blue-500;
+                      font-size: 12px;
                     }
                   }
                 }
 
                 div.alarmBox{
                   width: 100%;
+                  height: 112px;
+                  background-color: $dark;
+                  border-radius: 8px;
+                  display: flex;
+                  flex-direction: column;
+                  justify-content: center;
                   div.alarmTxt{
-                    width: 100%;
+                    width: calc(100% - 8px);
                     height: 48px;
                     border-radius: 8px;
-                    margin-bottom: 8px;
+                    margin-left: 4px;
+                    margin-bottom: 4px;
                     display: flex;
                     justify-content: center;
                     align-items: center;
                     font-weight: 700;
                     transition: 0.3s;
-                  }
-                  div.green {
-                    background-color: $success-500;
-                    &:hover{
-                      background-color: $success-700;
-                    }
-                  }
+                    div.alarmBtnBoxContent {
+                      margin-top: 4px;
+                      display: flex;
+                      flex-direction: column;
 
-                  div.yellow {
-                    background-color:$warning-500;
-                    &:hover{
-                      background-color: $warning-700;
-                    }
-                  }
+                      span.alarmBtnBoxTxt {
+                        display: flex;
+                        align-items: center;
+                        font-size: 16px;
 
-                  div.red {
-                    background-color: $error-500;
-                    color: $white;
-                    &:hover{
-                      background-color: $error-700;
-                    }
-                  }
+                        p {
+                          display: flex;
+                          align-items: center;
+                          margin-right: 8px;
+                        }
+                      }
 
-                  div.inactive {
-                      background-color: $inactive;
-                      color: $inactive-text;
+                      span.green {
+                        color: $success-500;
+                      }
+
+                      span.yellow {
+                        color: $warning-500;
+                      }
+
+                      span.red {
+                        color: $error-500;
+                      }
+
+                      div.green {
+                        background-color: $success-500;
+                        box-shadow: 0 0 16px $success-500;
+                      }
+
+                      div.yellow {
+                        background-color: $warning-500;
+                        box-shadow: 0 0 16px $warning-500;
+                      }
+
+                      div.red {
+                        background-color: $error-500;
+                        box-shadow: 0 0 16px $error-500;
+                      }
+
+                    }
                   }
 
                   div.sensingBox {
                     width: 100%;
                     display: flex;
+                    padding-bottom: 4px;
 
                     span {
-                      width: calc(50% - 4px);
+                      width: calc(50% - 6px);
                       height: 48px;
                       display: flex;
                       align-items: center;
@@ -274,23 +305,22 @@ div.areaInfoContainer {
                       transition: 0.3s;
 
                       &:first-child {
-                        margin-right: 8px;
-                        background-color: $warning-500;
-                        color: $dark;
-                        &:hover{
-                          background-color: $warning-700;
-                        }
+                        margin: 0 4px;
+                        border: 2px solid rgba(255, 202, 43, 0.43);
+                        color: $warning-500;
+                        background-color: rgba(255, 202, 43, 0.1);
+                        //&:hover{
+                        //  background-color: $warning-700;
+                        //}
                       }
 
                       &:last-child {
-                        background-color: $error-500;
-                        color: $white;
-                        &:hover{
-                          background-color: $error-700;
-                        }
+                        border: 2px solid rgba(255, 80, 61, 0.43);
+                        color: $error-500;
+                        background-color: rgba(255, 80, 61, 0.1);
                       }
 
-                      div {
+                      p{
                         font-size: 28px;
                       }
                     }
