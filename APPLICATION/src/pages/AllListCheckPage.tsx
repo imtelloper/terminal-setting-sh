@@ -34,7 +34,7 @@ const AllListCheckPage = () => {
       camName: 'H1 공장 크레인 기둥 옆',
       ip: '192.168.02',
       arithmetic: 'CPU',
-      sensing: 'Small',
+      sensing: 'Small',Ar
       threshold: '70',
       saveFolder: 'C:/Users/Download/Folder',
       alarmImgSave: 'ON',

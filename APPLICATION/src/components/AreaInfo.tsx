@@ -187,8 +187,6 @@ const AreaInfo = () => {
     swrTrackerData?.length > 0 && setProcessedSwrData();
   }, [swrTrackerData, swrObserveData]);
 
-
-
   const areaCardsMap = useMemo(() => {
     return (
       getObserveState.length > 0 ? getObserveState : areaInfoDummyData
@@ -243,33 +241,27 @@ const AreaInfo = () => {
                     {
                       // @ts-ignore
                       card[getObjectKey]?.safetyLevel === 'Red' ? (
-                        <>
-                          <span className="alarmBtnBoxTxt red">
-                            <p>
-                              <MdDangerous style={{ fontSize: '32px' }} />
-                            </p>
-                            작업자 위험 반경 진입
-                          </span>
-                        </>
+                        <span className="alarmBtnBoxTxt red">
+                          <p>
+                            <MdDangerous style={{ fontSize: '32px' }} />
+                          </p>
+                          작업자 위험 반경 진입
+                        </span>
                       ) : // @ts-ignore
                       card[getObjectKey]?.safetyLevel === 'Yellow' ? (
-                        <>
-                          <span className="alarmBtnBoxTxt yellow">
-                            <p>
-                              <Feedback style={{ fontSize: '32px' }} />
-                            </p>
-                            작업자 진입 확인
-                          </span>
-                        </>
+                        <span className="alarmBtnBoxTxt yellow">
+                          <p>
+                            <Feedback style={{ fontSize: '32px' }} />
+                          </p>
+                          작업자 진입 확인
+                        </span>
                       ) : (
-                        <>
-                          <span className="alarmBtnBoxTxt green">
-                            <p>
-                              <MdOutlineTaskAlt style={{ fontSize: '32px' }} />
-                            </p>
-                            안전합니다
-                          </span>
-                        </>
+                        <span className="alarmBtnBoxTxt green">
+                          <p>
+                            <MdOutlineTaskAlt style={{ fontSize: '32px' }} />
+                          </p>
+                          안전합니다
+                        </span>
                       )
                     }
                   </div>

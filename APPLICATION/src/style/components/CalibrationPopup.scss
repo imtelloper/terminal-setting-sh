@@ -151,6 +151,7 @@ div.calibrationZoneContainer {
           &:last-child{
             color: $inactive-text;
             background-color: $inactive;
+            margin-left: 8px;
             &.btnActive{
               color: $white;
               background-color: $blue-500;
