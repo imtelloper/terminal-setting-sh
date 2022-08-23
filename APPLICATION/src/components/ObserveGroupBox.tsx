@@ -24,7 +24,7 @@ const ObserveGroupBox = ({
     axios.get(url).then((res) => res.data);
 
   const { data: swrObserveOneData, error } = useSWR(
-    observeId ? `/api/observe/${observeId}`: null,
+    observeId ? `/api/observe/${observeId}` : null,
     observeOneFetcher,
     { refreshInterval: swrIntervalMilliSec }
   );
@@ -35,8 +35,9 @@ const ObserveGroupBox = ({
   const safetyLevel = swrObserveOneData?.safetyLevel;
 
   useEffect(() => {
-    console.log('swrObserveOneData', swrObserveOneData);
-    console.log('safetyLevel', safetyLevel);
+    // console.log('❤️swrState',swrState);
+    // console.log('swrObserveOneData', swrObserveOneData);
+    // console.log('safetyLevel', safetyLevel);
   }, [swrObserveOneData]);
 
   const saveParameter = () => {
@@ -69,6 +70,7 @@ const ObserveGroupBox = ({
   // 그룹안 삭제
   const handleDelete = async (e) => {
     setLoadingState(true);
+
     console.log('handleDelete');
     const target = e.currentTarget;
     const trackerId = target.getAttribute('itemID');
@@ -83,11 +85,23 @@ const ObserveGroupBox = ({
       (obj) => obj.trackerId === trackerId
     );
 
-    if (videoFrameState[targetIdx]) {
-      let { frameSrc } = videoFrameState[targetIdx];
+    const targetState = videoFrameState[targetIdx];
+
+    /*
+    현재는 group2가 있는데도 불구하고 1을 삭제하면 에러가남.
+    추후에 개별적 삭제 가능하도록 수정 필요
+    */
+    if (groupNum === '1' && targetState.secondCanvas.visible === true) {
+      alert('Group2부터 삭제해주세요.');
+      return;
+    }
+
+    if (targetState) {
+      let { frameSrc } = targetState;
       frameSrc = `${frameSrc.split(':81')[0]}:81`;
       setNewVideoSrcState(targetIdx, frameSrc);
     }
+    console.log('targetState', targetState);
 
     /* 해당 옵저브 데이터 삭제 */
     await Api.observe
@@ -114,10 +128,10 @@ const ObserveGroupBox = ({
     console.log('handleErrorReset');
   };
 
-  useEffect(() => {
-    console.log('stateInfo', stateInfo);
-    console.log('observeId', observeId);
-  }, [stateInfo]);
+  // useEffect(() => {
+  //   console.log('stateInfo', stateInfo);
+  //   console.log('observeId', observeId);
+  // }, [stateInfo]);
 
   return (
     <div className="observeCamInfoContainer">

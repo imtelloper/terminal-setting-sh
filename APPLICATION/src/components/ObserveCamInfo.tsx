@@ -9,6 +9,7 @@ import { MdDangerous, MdOutlineTaskAlt } from 'react-icons/md';
 import Api from '../api/Api';
 import Loading from './Loading';
 import { useSWRState } from '../fetcher/useSWRState';
+import ObserveGroupBox from './ObserveGroupBox';
 
 type Props = {
   videoFrameState: Array<any>;
@@ -20,92 +21,13 @@ const ObserveCamInfo = ({
   setVideoFrameState,
   getObserveState,
   setNewVideoSrcState,
+  swrTrackerMutate,
 }) => {
   const navigate = useNavigate();
   const [camInfoState, setCamInfoState] = useState([]);
   const [ipState, setIpState] = useState('');
   const [loadingState, setLoadingState] = useState(false);
   const { data: swrState, mutate: setSwrState } = useSWRState();
-
-  const saveParameter = () => {
-    console.log('saveParameter');
-  };
-
-  const callParameter = () => {
-    console.log('callParameter');
-  };
-
-  // 그룹 ON | OFF
-  const handleActive = (e) => {
-    console.log('handleActive');
-    const target = e.currentTarget;
-    const { value } = target;
-    const observeId = target.getAttribute('itemID');
-    console.log('value', value);
-    console.log('observeId', observeId);
-    console.log('value === 확인 하란 말이다 ', value === 'on');
-    setTimeout(() => {
-      Api.observe
-        .modifyOneData(observeId, {
-          observeSwitch: value === 'on',
-        })
-        .then((res) => console.log('Api.observe.modifyOneData done sir', res))
-        .catch((err) => console.error(err));
-    }, 20);
-  };
-
-  // 그룹안 삭제
-  const handleDelete = (e) => {
-    setLoadingState(true);
-    console.log('handleDelete');
-    const target = e.currentTarget;
-    const trackerId = target.getAttribute('itemID');
-    const groupNum = target.getAttribute('datatype');
-    const observeId = target.getAttribute('name');
-    console.log('handle delete trackerId', trackerId);
-    console.log('handle delete groupNum', groupNum);
-    console.log('handle delete observeId', observeId);
-
-    /* 현재 비디오 스테이트 url 기본 url로 변경 */
-    const targetIdx = videoFrameState.findIndex(
-      (obj) => obj.trackerId === trackerId
-    );
-
-    if (videoFrameState[targetIdx]) {
-      let { frameSrc } = videoFrameState[targetIdx];
-      frameSrc = `${frameSrc.split(':81')[0]}:81`;
-      setNewVideoSrcState(targetIdx, frameSrc);
-    }
-
-    /* 해당 옵저브 데이터 삭제 */
-    Api.observe
-      .deleteOneData(observeId)
-      .then((res) => console.log('observe.deleteOneData done sir', res))
-      .finally(() => setLoadingState(false))
-      .catch((err) => console.error(err));
-
-    /* 감지 데이터 좌표값 초기화 */
-    Api.tracker
-      .modifyOneData(trackerId, {
-        [`sensingGroup${groupNum}`]: '',
-      })
-      .then((res) => console.log('tracker.modifyOneData done sir', res))
-      .finally(() => setLoadingState(false))
-      .catch((err) => console.error(err));
-
-    Api.stream.initGroupSensingCnt(swrState.curCamIp, groupNum);
-  };
-
-  // 그룹안 상태 리셋
-  const handleErrorReset = () => {
-    console.log('handleErrorReset');
-    const newArr = videoFrameState;
-    newArr[0].secondCanvas.visible = true;
-    newArr[1].secondCanvas.visible = true;
-    newArr[2].secondCanvas.visible = true;
-    newArr[3].secondCanvas.visible = true;
-    flushSync(() => setVideoFrameState([...newArr]));
-  };
 
   // 생성
   const createCanvas = (e) => {
@@ -196,170 +118,63 @@ const ObserveCamInfo = ({
     });
   }, [camInfoState]);
 
-  const groupBoxComponent = (stateInfo, stateIdx, groupNum) => (
-    <div className="observeCamInfoContainer">
-      <div className="observeBox">
-        <div className="groupBox">
-          <span className="groupName">{`Group${groupNum}`}</span>
-          <div className="switchToggle">
-            <input
-              datatype="messageSwitch"
-              type="radio"
-              id={`toggleOnRadio${stateIdx}`}
-              name="messageRadio"
-              value="on"
-              onChange={handleActive}
-              itemID={stateInfo?.[groupNum]?._id}
-            />
-            <label htmlFor={`toggleOnRadio${stateIdx}`}>ON</label>
-            <input
-              datatype="messageSwitch"
-              type="radio"
-              id={`toggleOffRadio${stateIdx}`}
-              name="messageRadio"
-              value="off"
-              onChange={handleActive}
-              itemID={stateInfo?.[groupNum]?._id}
-            />
-            <label htmlFor={`toggleOffRadio${stateIdx}`}>OFF</label>
-            <span
-              className={`move ${stateInfo?.[groupNum]?.camPort}ObserveSwitch${groupNum}`}
-            />
-          </div>
-        </div>
-        <div className="btnBox">
-          {/* className : 색상별 green yellow red inactive 추가 */}
-          <div
-            className={`alarmTxt ${stateInfo?.[
-              groupNum
-            ]?.safetyLevel?.toLowerCase()}`}
-          >
-            {/* <MdOutlineTaskAlt style={{ fontSize: '32px' }} /> */}
-            {/* 작업자 진입 확인 / 작업자 위험 반경 진입 / 비활성화 되었습니다. */}
-            <div className="btnBoxContent">
-              {stateInfo?.[groupNum]?.safetyLevel === 'Green' ? (
-                <>
-                  <div className="btnBoxLine green" />
-                  <span className="btnBoxTxt green">
-                    <p>
-                      <MdOutlineTaskAlt style={{ fontSize: '32px' }} />
-                    </p>
-                    안전합니다
-                  </span>
-                  <div className="btnBoxLine green" />
-                </>
-              ) : stateInfo?.[groupNum]?.safetyLevel === 'Yellow' ? (
-                <>
-                  <div className="btnBoxLine yellow" />
-                  <span className="btnBoxTxt yellow">
-                    <p>
-                      <Feedback style={{ fontSize: '32px' }} />
-                    </p>
-                    작업자 진입 확인
-                  </span>
-                  <div className="btnBoxLine yellow" />
-                </>
-              ) : (
-                <>
-                  <div className="btnBoxLine red" />
-                  <span className="btnBoxTxt red">
-                    <p>
-                      <MdDangerous style={{ fontSize: '32px' }} />
-                    </p>
-                    작업자 위험 반경 진입
-                  </span>
-                  <div className="btnBoxLine red" />
-                </>
-              )}
-            </div>
-          </div>
-
-          <div className="sensingBox">
-            <span>
-              1차 감지<p>{stateInfo?.[groupNum]?.yellowCnt}</p>
-            </span>
-            <span>
-              2차 감지<p>{stateInfo?.[groupNum]?.redCnt}</p>
-            </span>
-          </div>
-        </div>
-        <div className="safetyBtnBox">
-          <div>
-            <button
-              className="btnR normalPrimary"
-              onClick={saveParameter}
-              datatype={stateInfo?.[groupNum]?.trackerId}
-            >
-              저장
-            </button>
-            <button className="btnR normalPrimary" onClick={callParameter}>
-              불러오기
-            </button>
-            <button className="btnR normalPrimary" onClick={handleErrorReset}>
-              상태 리셋
-            </button>
-
-            {/* {(() => { */}
-            {/* console.log('🌞stateInfo', stateInfo); */}
-            {/* console.log('🌝groupNum', groupNum); */}
-            {/* console.log('🌝🌝stateInfo?.[groupNum', stateInfo?.[groupNum]); */}
-            {/* console.log( */}
-            {/*   '🌝🌝🌝stateInfo?.[groupNum]?.trackerId', */}
-            {/*   stateInfo?.[groupNum]?.trackerId */}
-            {/* ); */}
-            {/* })()} */}
-
-            {/* 그룹 삭제 버튼 */}
-            <button
-              className="btnR normalPrimary"
-              onClick={handleDelete}
-              itemID={stateInfo?.[groupNum]?.trackerId}
-              name={stateInfo?.[groupNum]?._id}
-              datatype={groupNum}
-            >
-              <Delete />
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-
   /* getObserveState를 가공하여 4개의 캠 셋트로 만들고 다시 해야된다. */
   const camInfosMap = useMemo(() => {
-    return camInfoState?.map((info, idx) => (
-      <section
-        id={`safetyContent${idx + 1}`}
-        className="safetyContents"
-        key={idx}
-      >
-        {loadingState ? (
-          <Loading />
-        ) : (
-          <div className="safetyContentBox">
-            {/* {(() => { */}
-            {/*  console.log('🌟info', info); */}
-            {/*   console.log('🌟idx', idx); */}
-            {/* })()} */}
-            {videoFrameState[idx]?.firstCanvas?.visible &&
-              groupBoxComponent(info, idx + 1, 1)}
+    return camInfoState?.map((info, idx) => {
+      const fstCanvasVisible = videoFrameState[idx]?.firstCanvas?.visible;
+      const secCanvasVisible = videoFrameState[idx]?.secondCanvas?.visible;
+      return (
+        <section
+          id={`safetyContent${idx + 1}`}
+          className="safetyContents"
+          key={idx}
+        >
+          {loadingState ? (
+            <Loading />
+          ) : (
+            <div className="safetyContentBox">
+              {/* {(() => { */}
+              {/*  console.log('🌟info', info); */}
+              {/*   console.log('🌟idx', idx); */}
+              {/* })()} */}
+              {fstCanvasVisible && (
+                <ObserveGroupBox
+                  stateInfo={info}
+                  stateIdx={idx + 1}
+                  groupNum={1}
+                  videoFrameState={videoFrameState}
+                  setNewVideoSrcState={setNewVideoSrcState}
+                  swrTrackerMutate={swrTrackerMutate}
+                />
+              )}
 
-            {videoFrameState[idx]?.secondCanvas?.visible &&
-              groupBoxComponent(info, idx + 1, 2)}
+              {secCanvasVisible && (
+                <ObserveGroupBox
+                  stateInfo={info}
+                  stateIdx={idx + 1}
+                  groupNum={2}
+                  videoFrameState={videoFrameState}
+                  setNewVideoSrcState={setNewVideoSrcState}
+                  swrTrackerMutate={swrTrackerMutate}
+                />
+              )}
 
-            <div className="safetyCreateBtnBox">
-              <button
-                className="safetyCreateBtn btnL defaultPrimary"
-                datatype={idx.toString()}
-                onClick={createCanvas}
-              >
-                그룹 생성하기
-              </button>
+              {(!fstCanvasVisible || !secCanvasVisible) && (
+                <div className="safetyCreateBtnBox">
+                  <button
+                    className="safetyCreateBtn btnL defaultPrimary"
+                    datatype={idx.toString()}
+                    onClick={createCanvas}
+                  >
+                    그룹 생성하기
+                  </button>
+                </div>
+              )}
             </div>
-          </div>
-        )}
-      </section>
-    ));
+          )}
+        </section>
+      );
+    });
   }, [camInfoState, videoFrameState]);
 
   return <>{camInfosMap}</>;

@@ -112,13 +112,27 @@ async def getDetailRangeData(data=Body(...)):
     return resultArr
 
 
-@router.get("/count/", response_description="")
-async def getCount():
+# @router.get("/count/", response_description="")
+# async def getCount():
+#     """
+#     데이터 개수 출력
+#     """
+#     serviceResult = await service.getDataCount({"trackerId": ObjectId("62cf7e49b3811a9852f918e9")})
+#     return serviceResult
+
+@router.post("/count", response_description="")
+async def getCount(data=Body(...)):
     """
     데이터 개수 출력
     """
-    serviceResult = await service.getDataCount({})
+    print('🍋', data)
+    jsonData = jsonable_encoder(data)
+    if "trackerId" in jsonData:
+        jsonData["trackerId"] = ObjectId(jsonData["trackerId"])
+    print('🍋 jsonData', jsonData)
+    serviceResult = await service.getDataCount(jsonData)
     return serviceResult
+
 
 
 @router.get("/count-part/", response_description="")

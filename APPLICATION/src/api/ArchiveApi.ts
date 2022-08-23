@@ -91,7 +91,7 @@ export default class ArchiveApi {
 
   getCount = async (data) => {
     try {
-      const res = await axios.get(`/api/${this.apiTarget}/count/`);
+      const res = await axios.post(`/api/${this.apiTarget}/count`, data);
       return res.status === 200 ? res.data : 'failed to get count data';
     } catch (error) {
       console.error(error);
