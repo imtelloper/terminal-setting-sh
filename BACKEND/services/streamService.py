@@ -29,6 +29,7 @@ from netifaces import interfaces, ifaddresses, AF_INET
 from modules.yolov5.utils.torch_utils import select_device
 from modules.yolov5.models.common import DetectMultiBackend
 
+
 # W: 256 H: 192
 class StreamService:
     def __init__(self):
@@ -96,10 +97,6 @@ class StreamService:
         # self.detectTimeCntLimit가 낮을수록 Yellow, Red 업데이트 속도 빨라짐. 너무 빠르면 성능에 문제 있을 수 있음
         # 개발할때는 detectTimeCntLimit을 10 정도로 올려서 videoSleepCnt*10 번째에 DB 업데이트 되도록 하는게 좋다.
         self.detectTimeCntLimit = 0  # FOR DEV: 10, FOR PRODUCT: 0
-        # 욜로 모델 로드
-        self.weights = "/home/interx/SAFETY-AI/BACKEND/modules/yolov5/weights/small.pt"
-        self.device = select_device('')
-        self.model = DetectMultiBackend(weights=self.weights, device=self.device, dnn=False)
 
         def devMode():
             self.isSetVideoFrameDelay = True
@@ -110,43 +107,25 @@ class StreamService:
         # devMode()
 
         print('************************* 내부 IP 가져오기 *****************************')
-        # 내부 IP 가져오기
-        # sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        # try:
-        #     socket.setdefaulttimeout(3)
-        #     socket.socket(socket.AF_INET, socket.SOCK_STREAM).connect(("8.8.8.8", 53))
-        #     print('Internet connected ')
-        #     # 내부 IP 가져오기
-        #     sock.connect(("pwnbit.kr", 443))
-        #     print('sock.getsockname()[0]', sock.getsockname()[0])
-        #     print('sock.getsockname()[0]', sock.getsockname()[0][0:3])
-        #     sockIp = sock.getsockname()[0]
-        #     if sockIp[0:3] != '192':
-        #         print(sockIp)
-        #     self.deviceIp = sock.getsockname()[0]
-        # except socket.error as ex:
-        #     print('Internet is not connected')
-        #     print(ex)
-        #     self.deviceIp = ""
 
         def ip4Addresses():
             ipList = []
-            print('interfaces()',interfaces())
+            print('interfaces()', interfaces())
             for interface in interfaces():
-                print('interface',interface)
+                print('interface', interface)
                 try:
                     print('ifaddresses(interface)[AF_INET]', ifaddresses(interface)[AF_INET])
                     for link in ifaddresses(interface)[AF_INET]:
-                        print('link',link)
-                        print('link[addr]',link['addr'])
+                        print('link', link)
+                        print('link[addr]', link['addr'])
                         ipList.append(link['addr'])
                         print('')
                 except Exception as e:
                     print(e)
-            print('ipList',ipList)
+            print('ipList', ipList)
             return ipList
 
-        print('ip4Addresses()',ip4Addresses())
+        print('ip4Addresses()', ip4Addresses())
         # 내부 IP 가져오기
         self.deviceIp = list(filter(lambda x: x[0:3] == '192', ip4Addresses()))[0]
         print('ip4Addresses', ip4Addresses())
@@ -157,6 +136,11 @@ class StreamService:
         print('🔥platform.platform()', 'macOS' in platform.platform())
         # 각종 파일 저장 경로 폴더 생성
         if not ('macOS' in platform.platform()):
+            # 욜로 모델 로드
+            self.weights = "/home/interx/SAFETY-AI/BACKEND/modules/yolov5/weights/small.pt"
+            self.device = select_device('')
+            self.model = DetectMultiBackend(weights=self.weights, device=self.device, dnn=False)
+
             def dirBuilder():
                 makedirs(self.videoFolderPath)
                 makedirs(self.screenShotFolderPath)
@@ -613,7 +597,8 @@ class StreamService:
                 result_img = ""
                 if cnt == 0:
                     # 욜로 감지(딥러닝을 돌린다. 사람을 찾아주는 기능)
-                    humans = detect(weights=self.weights, device=self.device, model=self.model, conf_thres=conf, source=self.camImg)
+                    humans = detect(weights=self.weights, device=self.device, model=self.model, conf_thres=conf,
+                                    source=self.camImg)
                     multi_tracker.__init__()
                     track_signal = False
                     cnt += 1

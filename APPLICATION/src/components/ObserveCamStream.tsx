@@ -223,7 +223,7 @@ const ObserveCamStream = ({
       redSensingCoordinate,
     ].join('&');
     console.log('sensingGroup', sensingGroup);
-    swrTrackerMutate()
+    swrTrackerMutate();
 
     console.log('👗👗👗 itemID', itemID);
     if (itemID === 'firstCanvas') {
@@ -271,6 +271,7 @@ const ObserveCamStream = ({
     const x = e.clientX - bbox.left;
     const y = e.clientY - bbox.top;
     const { coordinate } = videoFrameState[arrIndex][itemID];
+    console.log('coordinate', coordinate);
     console.log('x', x);
     console.log('y', y);
 
