@@ -546,7 +546,7 @@ class StreamService:
             # Get - 파일 다운로드
             sftp.get(remotepath, localpath)
 
-            # os.remove(localpath)
+            os.remove(localpath)
 
         # Close
         sftp.close()

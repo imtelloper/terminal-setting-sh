@@ -4,7 +4,7 @@ import '../style/pages/DetailViewPage.scss';
 import DangerZonePopup from '../components/DangerZonePopup';
 import CalibrationPopup from '../components/CalibrationPopup';
 import { MdDangerous, MdModeEdit, MdOutlineTaskAlt } from 'react-icons/md';
-import { Feedback, Tune } from '@material-ui/icons';
+import { Autorenew, Feedback, Tune } from '@material-ui/icons';
 import Api from '../api/Api';
 import { useSWRState } from '../fetcher/useSWRState';
 import { useNavigate } from 'react-router-dom';
@@ -205,7 +205,7 @@ const DetailViewPage = () => {
       (obj) => obj.groupNum === groupNumState
     );
     // console.log('🍒🍒🍒🍒🍒🍒getCurObserve', getCurObserve);
-    setCurObserveState(getCurObserve[0]);
+    getCurObserve?.length > 0 && setCurObserveState(getCurObserve[0]);
   }, [swrObserveData, groupNumState]);
 
   useEffect(() => {
@@ -304,14 +304,42 @@ const DetailViewPage = () => {
                   <div
                     className={`alarmTxt ${curObserveState?.safetyLevel?.toLowerCase()}`}
                   >
-                    <MdOutlineTaskAlt style={{ fontSize: '32px' }} />
-                    <span>
-                      {curObserveState?.safetyLevel === 'Green'
-                        ? '안전합니다.'
-                        : curObserveState?.safetyLevel === 'Yellow'
-                        ? '작업자 진입 확인'
-                        : '작업자 위험 반경 진입'}
-                    </span>
+                    <div>
+                      {curObserveState?.safetyLevel === 'Green' ? (
+                        <>
+                          <div className="btnBoxLine green" />
+                          <span className="btnBoxTxt green">
+                            <p>
+                              <MdOutlineTaskAlt style={{ fontSize: '32px' }} />
+                            </p>
+                            안전합니다
+                          </span>
+                          <div className="btnBoxLine green" />
+                        </>
+                      ) : curObserveState?.safetyLevel === 'Yellow' ? (
+                        <>
+                          <div className="btnBoxLine yellow" />
+                          <span className="btnBoxTxt yellow">
+                            <p>
+                              <Feedback style={{ fontSize: '32px' }} />
+                            </p>
+                            작업자 진입 확인
+                          </span>
+                          <div className="btnBoxLine yellow" />
+                        </>
+                      ) : (
+                        <>
+                          <div className="btnBoxLine red" />
+                          <span className="btnBoxTxt red">
+                            <p>
+                              <MdDangerous style={{ fontSize: '32px' }} />
+                            </p>
+                            작업자 위험 반경 진입
+                          </span>
+                          <div className="btnBoxLine red" />
+                        </>
+                      )}
+                    </div>
                   </div>
                   <div className="sensingBox">
                     <span>
@@ -440,15 +468,26 @@ const DetailViewPage = () => {
               {/* <div>{swrState.curCamPort?.toUpperCase()}</div> */}
               <div className="iframeTitleLeft">
                 {/* 캠번호 */}
+                {/* <div className="iframeCamNum">Cam2</div> */}
+                {/* <div className="iframeCamName">이름</div> */}
                 <div className="iframeCamNum">
-                  {swrState.curCamPort.toUpperCase()}
+                  {swrState.curCamPort?.toUpperCase()}
                 </div>
                 <div className="iframeCamName">{swrState.curCamName}</div>
               </div>
-              {/* <div className="iframeIcon"> */}
-              {/*  <span /> */}
-              {/*  REC */}
+              <span className="iframeRecording">
+                <div className="iframeIcon">
+                  <span className="iframeRecordingCircle" />
+                  REC
+                </div>
+                <span className="iframeRenewIcon">
+                  <Autorenew />
+                </span>
+              </span>
+              {/* <div className="iframeCamNum"> */}
+              {/*  {swrState.curCamPort?.toUpperCase()} */}
               {/* </div> */}
+              {/* <div className="iframeCamName">{swrState.curCamName}</div> */}
             </div>
             {/* <canvas className="polygonCanvas" typeof="coordinate3" /> */}
             <canvas

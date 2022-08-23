@@ -185,16 +185,23 @@ div.observeContainer {
               border-radius: 50%;
             }
 
-            div {
-              &:first-child {
-                width: 48px;
-                height: 48px;
-                background-color: $white;
-                border-radius: 50%;
+            div.recordBtnCircle {
+              width: 48px;
+              height: 48px;
+              background-color: $white;
+              border-radius: 50%;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              &.spinnerActive {
+                border: 3px solid $dark;
+                border-top: 3px solid $error-500;
+                border-right: 3px solid $error-500;
+                animation: spinner 1.1s cubic-bezier(0,-0.01, 0.62, 0.91) infinite;
               }
-
+            }
               //안에 작은 네모
-              &:last-child {
+              div.hoverCircle {
                 width: 14px;
                 height: 14px;
                 background-color: #979797;
@@ -207,7 +214,6 @@ div.observeContainer {
                   border-radius: 50%;
                   background-color: $error-500;
                 }
-              }
             }
           }
 
@@ -456,5 +462,23 @@ div.observeContainer {
   }
   100%{
     opacity: 1;
+  }
+}
+
+@keyframes spinner {
+  0%{
+    transform: rotate(0deg);
+  }
+
+  25%{
+    transform: rotate(40deg);
+  }
+
+  50%{
+    transform: rotate(180deg);
+  }
+
+  100%{
+    transform: rotate(360deg);
   }
 }

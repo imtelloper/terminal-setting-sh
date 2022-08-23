@@ -73,7 +73,7 @@ div.detailViewContainer {
             border-bottom: 1px solid #d4d4d4;
             cursor: pointer;
 
-            &:hover{
+            &:hover {
               color: $black;
               border-bottom: 4px solid $blue-100;
             }
@@ -112,17 +112,19 @@ div.detailViewContainer {
 
           div.realTimeBox {
             height: calc(100% - 152px);
+            box-sizing: border-box;
+
             div.realTimeContent {
-              width: 100%;
+              margin: 0 auto;
+              width: calc(100% - 48px);
               height: 144px;
               display: flex;
-              padding: 0 24px;
-              box-sizing: border-box;
+              background-color: $dark;
+              border-radius: 8px;
 
               div.alarmTxt {
                 width: calc(60% - 4px);
                 height: 144px;
-                background-color: $success-500;
                 border-radius: 8px;
                 display: flex;
                 flex-direction: column;
@@ -131,64 +133,110 @@ div.detailViewContainer {
                 font-weight: 700;
                 margin-right: 8px;
 
-                span {
-                  margin-top: 4px;
+              }
+
+              div {
+                display: flex;
+                flex-direction: column;
+
+                span.btnBoxTxt {
+                  display: flex;
+                  flex-direction: column;
+                  align-items: center;
+                  font-size: 16px;
+
+                  p {
+                    display: block;
+                    width: 32px;
+                    height: 32px;
+                    margin-bottom: 8px;
+                  }
                 }
-              }
 
-              div.green {
-                background-color: $quality-good;
-              }
+                span.green {
+                  color: $success-500;
+                }
 
-              div.yellow {
-                background-color: $warning-500;
-              }
+                span.yellow {
+                  color: $warning-500;
+                }
 
-              div.red {
-                background-color: $error-500;
-                color: $white;
-              }
+                span.red {
+                  color: $error-500;
+                }
 
-              div.inactive {
-                background-color: $inactive;
-                color: $inactive-text;
+                div.btnBoxLine {
+                  width: 188px;
+                  height: 4px;
+                  background-color: pink;
+                  border-radius: 8px;
+
+                  &:first-child {
+                    margin-bottom: 20px;
+                  }
+
+                  &:last-child {
+                    margin-top: 20px;
+                  }
+                }
+
+                div.green {
+                  background-color: $success-500;
+                  box-shadow: 0 0 16px $success-500;
+                }
+
+                div.yellow {
+                  background-color: $warning-500;
+                  box-shadow: 0 0 16px $warning-500;
+                }
+
+                div.red {
+                  background-color: $error-500;
+                  box-shadow: 0 0 16px $error-500;
+                }
+
               }
 
               div.sensingBox {
                 width: calc(40% - 4px);
                 display: flex;
                 flex-direction: column;
+                margin-right: 4px;
 
                 span {
                   width: 100%;
-                  height: 68px;
+                  height: 66px;
                   display: flex;
                   flex-direction: column;
                   align-items: center;
                   justify-content: center;
-                  padding: 0 16px;
+                  padding: 0 8px;
                   box-sizing: border-box;
                   font-size: 14px;
                   font-weight: 700;
                   border-radius: 8px;
+                  cursor: pointer;
+                  margin-top: 4px;
 
                   &:first-child {
-                    margin-bottom: 8px;
-                    background-color: $warning-500;
-                    color: $dark;
+                    border: 2px solid rgba(255, 202, 43, 0.43);
+                    color: $warning-500;
+                    background-color: rgba(255, 202, 43, 0.1);
                   }
 
                   &:last-child {
-                    background-color: $error-500;
-                    color: $white;
+                    border: 2px solid rgba(255, 80, 61, 0.43);
+                    color: $error-500;
+                    background-color: rgba(255, 80, 61, 0.1);
                   }
 
                   p {
                     font-size: 28px;
                   }
                 }
+              }
             }
-            }
+
             div.realTimeBox {
               width: 100%;
               margin-top: 24px;
@@ -212,7 +260,7 @@ div.detailViewContainer {
               height: 124px;
               display: flex;
 
-              &.settingBtnBoxActive{
+              &.settingBtnBoxActive {
                 display: none;
               }
 
@@ -228,7 +276,7 @@ div.detailViewContainer {
                 border-bottom: 1px solid #d4d4d4;
                 cursor: pointer;
 
-                div.settingBtnCon{
+                div.settingBtnCon {
                   width: 124px;
                   height: 92px;
                   display: flex;
@@ -237,10 +285,12 @@ div.detailViewContainer {
                   align-items: center;
                   border-radius: 8px;
                   transition: 0.3s;
+
                   span {
                     margin-top: 4px;
                   }
-                  &:hover{
+
+                  &:hover {
                     background-color: $blue-100;
                     color: $blue-500;
                   }
@@ -254,7 +304,8 @@ div.detailViewContainer {
               padding: 24px;
               box-sizing: border-box;
               display: flex;
-              &.bottomBtnBoxActive{
+
+              &.bottomBtnBoxActive {
                 display: none;
               }
 
@@ -275,35 +326,41 @@ div.detailViewContainer {
               }
             }
           }
-          div.historyBox{
+
+          div.historyBox {
             div.sensingBox {
-              width: 100%;
+              width: calc(100% - 48px);
+              height: 68px;
+              margin: 0 auto;
               display: flex;
-              padding: 0 24px;
               box-sizing: border-box;
+              background-color: $dark;
+              border-radius: 8px;
 
               span {
-                width: calc(50% - 4px);
-                height: 68px;
+                width: calc(50% - 12px);
+                height: calc(68px - 16px);
                 display: flex;
-                flex-direction: column;
                 align-items: center;
-                justify-content: center;
+                justify-content: space-between;
                 padding: 0 16px;
                 box-sizing: border-box;
                 font-size: 14px;
                 font-weight: 700;
                 border-radius: 8px;
+                margin: 8px;
 
                 &:first-child {
-                  background-color: $warning-500;
-                  color: $dark;
-                  margin-right: 8px;
+                  border: 2px solid rgba(255, 202, 43, 0.43);
+                  color: $warning-500;
+                  background-color: rgba(255, 202, 43, 0.1);
+                  margin-right: 0;
                 }
 
                 &:last-child {
-                  background-color: $error-500;
-                  color: $white;
+                  border: 2px solid rgba(255, 80, 61, 0.43);
+                  color: $error-500;
+                  background-color: rgba(255, 80, 61, 0.1);
                 }
 
                 p {
@@ -311,28 +368,33 @@ div.detailViewContainer {
                 }
               }
             }
-            div.historyTimeBox{
+
+            div.historyTimeBox {
               position: relative;
               padding: 24px 24px;
               box-sizing: border-box;
-              div{
+
+              div {
                 display: flex;
                 justify-content: space-between;
 
-                &:first-child{
+                &:first-child {
                   margin-bottom: 16px;
                 }
-                span{
-                  &:last-child{
+
+                span {
+                  &:last-child {
                     font-size: 20px;
                     font-weight: 500;
                   }
-                  span{
+
+                  span {
                     margin-left: 40px;
                   }
                 }
               }
-              &:after{
+
+              &:after {
                 content: "";
                 width: 100%;
                 height: 1px;
@@ -342,7 +404,8 @@ div.detailViewContainer {
                 bottom: 0;
               }
             }
-            div.alertBox{
+
+            div.alertBox {
               width: 100%;
               height: 98%;
               div.alertContent{
@@ -352,11 +415,12 @@ div.detailViewContainer {
                 overflow-y: auto;
                 padding: 4px 24px 0 24px;
                 box-sizing: border-box;
-                &::-webkit-scrollbar{
+
+                &::-webkit-scrollbar {
                   display: none;
                 }
 
-                p{
+                p {
                   width: 100%;
                   height: 32px;
                   display: flex;
@@ -367,6 +431,7 @@ div.detailViewContainer {
                   &:hover{
                     color: $warning-500;
                   }
+
                   div{
                     display: flex;
                     justify-content: start;
@@ -379,6 +444,7 @@ div.detailViewContainer {
                       margin-right: 5px;
                     }
                   }
+
                   span{
                     display: flex;
                     align-items: center;
@@ -386,7 +452,8 @@ div.detailViewContainer {
                       width: 45%;
                       //background-color: #00a000;
                     }
-                    &:nth-child(2){
+
+                    &:nth-child(2) {
                       margin-left: 4px;
                     }
                   }
@@ -412,6 +479,8 @@ div.detailViewContainer {
       align-items: center;
 
       div.iframeBox {
+        //width: 1048px;
+        //height: 834px;
         width: 512px;
         height: 432px;
         background-color: $white;
@@ -428,38 +497,85 @@ div.detailViewContainer {
           justify-content: space-between;
           align-items: center;
           position: relative;
-          div.iframeTitleLeft{
+
+          div.iframeTitleLeft {
             display: flex;
             align-items: center;
-            div.iframeCamNum{
+
+            div.iframeCamNum {
               border-right: 1px solid #d4d4d4;
               padding-right: 12px;
             }
-            div.iframeCamName{
+
+            div.iframeCamName {
               padding-left: 12px;
               font-size: 14px;
             }
           }
-          div.iframeIcon{
+
+          span.iframeRecording {
+            width: 50%;
+            height: 30px;
             display: flex;
             align-items: center;
-            span{
-              display: block;
-              width: 16px;
-              height: 16px;
-              border-radius: 50%;
-              background-color: $error-500;
-              margin-right: 4px;
-              animation: recIcon 1.5s infinite ease-in-out;
+            justify-content: end;
+            position: relative;
+
+            div.iframeIcon {
+              display: flex;
+              align-items: center;
+              margin-right: 16px;
+
+              span.iframeRecordingCircle {
+                display: block;
+                width: 16px;
+                height: 16px;
+                border-radius: 50%;
+                background-color: $error-500;
+                margin-right: 4px;
+                animation: recIcon 1.5s infinite ease-in-out;
+              }
+            }
+
+            span.iframeRenewIcon {
+              width: 32px;
+              height: 32px;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              transition: 0.3s;
+              border-radius: 8px;
+              cursor: pointer;
+
+              &:hover {
+                background-color: $blue-100;
+                color: $blue-500;
+              }
             }
           }
+
+          //div.iframeIcon{
+          //  display: flex;
+          //  align-items: center;
+          //  span{
+          //    display: block;
+          //    width: 16px;
+          //    height: 16px;
+          //    border-radius: 50%;
+          //    background-color: $error-500;
+          //    margin-right: 4px;
+          //    animation: recIcon 1.5s infinite ease-in-out;
+          //  }
+          //}
         }
+      }
 
         canvas {
           all: unset;
           width: 100%;
           height: calc(100% - 48px);
-          position: absolute;
+          //background-color: #0CBEF4;
+          border-radius: 0 0 8px 8px;
         }
 
         canvas.firstCanvas {
@@ -470,10 +586,9 @@ div.detailViewContainer {
           z-index: 2;
         }
 
-        iframe {
+        img {
           border: none;
         }
-      }
     }
   }
 }

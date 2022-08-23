@@ -151,7 +151,66 @@
       background-color: $blue-100;
       color: $blue-500;
       border: 1px solid $blue-200;
-    }
+    }div.btnBoxContent {
+       margin-top: 4px;
+       display: flex;
+       flex-direction: column;
+
+       span.btnBoxTxt {
+         display: flex;
+         flex-direction: column;
+         align-items: center;
+         font-size: 16px;
+
+         p {
+           display: block;
+           width: 32px;
+           height: 32px;
+           margin-bottom: 8px;
+         }
+       }
+
+       span.green {
+         color: $success-500;
+       }
+
+       span.yellow {
+         color: $warning-500;
+       }
+
+       span.red {
+         color: $error-500;
+       }
+
+       div.btnBoxLine{
+         width: 188px;
+         height: 4px;
+         background-color: pink;
+         border-radius: 8px;
+         &:first-child{
+           margin-bottom: 20px;
+         }
+         &:last-child{
+           margin-top: 20px;
+         }
+       }
+
+       div.green {
+         background-color: $success-500;
+         box-shadow: 0 0 16px $success-500;
+       }
+
+       div.yellow {
+         background-color: $warning-500;
+         box-shadow: 0 0 16px $warning-500;
+       }
+
+       div.red {
+         background-color: $error-500;
+         box-shadow: 0 0 16px $error-500;
+       }
+
+     }
   }
 
   button.defaultGhost{

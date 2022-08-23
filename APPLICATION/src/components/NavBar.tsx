@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import '../style/components/NavBar.scss';
 import 'style/DesignSystem.scss';
 import { useNavigate } from 'react-router-dom';
@@ -9,9 +9,12 @@ import {
   PhotoLibrary,
   Settings,
 } from '@material-ui/icons';
+import { MdLogout } from 'react-icons/md';
+import LogoutPopup from './LogoutPopup';
 
 const NaviBar = () => {
   const navigate = useNavigate();
+  const [logoutPopupState, setLogoutPopupState] = useState(false);
 
   const handleMenuBar = (e) => {
     const target = e.currentTarget;
@@ -52,6 +55,12 @@ const NaviBar = () => {
         ?.classList.remove('dropdownActive');
     }
   });
+
+  //로그아웃 컴포넌트
+  const openLogoutPopup = () => {
+    setLogoutPopupState(!logoutPopupState)
+  }
+
   return (
     <>
       <div className="header">
@@ -179,7 +188,7 @@ const NaviBar = () => {
           {/*  </div> */}
         </div>
         <div className="private">
-          {/*<div className="block" />*/}
+          {/* <div className="block" /> */}
           {/* 오른쪽 아이콘 */}
           <div className="btn-dropdown">
             <span
@@ -188,7 +197,7 @@ const NaviBar = () => {
                 navigate('/videoArchive');
               }}
             >
-              <PhotoLibrary />
+              <PhotoLibrary style={{ fontSize: '24px' }} />
             </span>
           </div>
           <div className="btn-dropdown">
@@ -198,14 +207,21 @@ const NaviBar = () => {
                 navigate('/bin');
               }}
             >
-              <Delete />
+              <Delete style={{ fontSize: '24px' }} />
             </span>
           </div>
           <div className="group btn-dropdown">
             <span className="settingIcon" onClick={() => navigate('/setting')}>
-              <Settings />
+              <Settings style={{ fontSize: '24px' }} />
             </span>
           </div>
+          <div className="block" />
+          <div className="btn-dropdown">
+            <span className="logOutIcon" onClick={openLogoutPopup}>
+              <MdLogout style={{ fontSize: '24px' }} />
+            </span>
+          </div>
+          {logoutPopupState && <LogoutPopup setLogoutPopupState={setLogoutPopupState}/>}
         </div>
       </div>
     </>
