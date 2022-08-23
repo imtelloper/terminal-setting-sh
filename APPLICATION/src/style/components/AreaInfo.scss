@@ -210,7 +210,7 @@ div.areaInfoContainer {
                       background-color: $blue-500;
                       border-radius: 50%;
                       opacity: 0;
-                      animation: activeAni 2s ease-in infinite;
+                      animation: activeAni 0.65s ease-in-out infinite;
 
                     }
                     span {

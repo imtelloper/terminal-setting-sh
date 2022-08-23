@@ -151,9 +151,7 @@ const AllListCheckPage = () => {
     <div className="allListCheckWrap">
       <div className="allListCheckContainer">
         <div className="allListCheckTitleBox">
-          <div className="allListCheckTitle">
-            전체 CAM 리스트 확인
-          </div>
+          <div className="allListCheckTitle">전체 CAM 리스트 확인</div>
           <div className="allListCheckTitleCon">
             <div className="allListCheckLeft">
               <div className="allListCheckLeftCon">
@@ -176,7 +174,9 @@ const AllListCheckPage = () => {
                 <Delete style={{ fontSize: '24px' }} />
               </button>
               <button className="btnR normalPrimary">
-                <span className="txt" onClick={newCamRegisterPopup}>새 카메라 등록</span>
+                <span className="txt" onClick={newCamRegisterPopup}>
+                  새 카메라 등록
+                </span>
               </button>
             </div>
           </div>

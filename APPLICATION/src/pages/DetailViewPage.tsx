@@ -17,33 +17,20 @@ import ReactPaginate from 'react-paginate';
 
 const DetailViewPage = () => {
   const { data: swrState, mutate: setSwrState } = useSWRState();
+  const camWidth = 512;
+  const camHeight = 384;
   const navigate = useNavigate();
-  const levelColor = {
-    yellow: '#ffca2b',
-    red: '#ff530d',
-  };
+  const levelColor = { yellow: '#ffca2b', red: '#ff530d' };
   const [isOpenDangerZoneState, setIsOpenDangerZoneState] = useState(false);
   const [isOpenCalibrationState, setIsOpenCalibrationState] = useState(false);
   const [imgSrcState, setImgSrcState] = useState(
     `http://${swrState?.curCamIp}:81/api/stream/`
   );
   const [calibImgSrcState, setCalibImgSrcState] = useState('');
-
   const [groupNumState, setGroupNumState] = useState(1);
   const [curObserveState, setCurObserveState] = useState<Partial<Observe>>({});
-  const [currentPage, setCurrentPage] = useState(0);
-
-  /* 감지 이력 데이터 스테이트 */
-  const [imgArchiveState, setImgArchiveState] = useState([]);
-  const PER_PAGE = 10;
-  const offset = currentPage * PER_PAGE;
-  const currentPageData = imgArchiveState
-    .slice(offset, offset + PER_PAGE)
-    .map(({ thumburl }) => <div>{thumburl}</div>);
-  const pageCount = Math.ceil(imgArchiveState.length / PER_PAGE);
-  function handlePageClick({ selected: selectedPage }) {
-    setCurrentPage(selectedPage);
-  }
+  const [archiveImgsCnt, setArchiveImgsCnt] = useState(0);
+  const [pageNumState, setPageNumState] = useState<number>(1);
 
   const observeFindFetcher = (url: string) =>
     axios
@@ -55,6 +42,72 @@ const DetailViewPage = () => {
     observeFindFetcher,
     { refreshInterval: 1000 }
   );
+
+  /* 감지 이력 데이터 스테이트 */
+  const [imgArchiveState, setImgArchiveState] = useState([]);
+  const pageRange = 15;
+
+  const setArchiveImgData = (startNum: number, limitNum: number) => {
+    /* 이력조회에서 조회할 이미지 정보들 셋팅 */
+    Api.archive
+      .getDetailRangeData({
+        trackerId: swrState?.curTrackerId,
+        fileType: 'img',
+        start: startNum,
+        limit: limitNum,
+      })
+      .then((archives) => {
+        dayjs.locale('ko');
+        setImgArchiveState(
+          archives.map((obj) => {
+            return {
+              id: obj._id,
+              path: obj.path,
+              safetyLevel: obj.safetyLevel,
+              date: dayjs(obj.createdAt).format('YYYY-MM-DD'),
+              time: dayjs(obj.createdAt).format('hh:mm:ss'),
+            };
+          })
+        );
+      })
+      .catch((err) => console.error(err));
+  };
+
+  const changePage = (data) => {
+    const pageNum = data.selected;
+    setPageNumState(pageNum + 1);
+    console.log('pageNum', pageNum);
+    setArchiveImgData(pageNum * pageRange, pageRange);
+  };
+
+  const canvasClick = (e) => {
+    const canvas = e.currentTarget;
+    /* Viedeo Frames Array Index */
+    const arrIndex = canvas?.getAttribute('tabIndex');
+    /* firstCanvas | secondCanvas */
+    const itemID = canvas?.getAttribute('itemID');
+    const bbox = canvas.getBoundingClientRect(); // viewport 기준으로 나의 위치 알려줌
+    const trackerId = canvas.id;
+
+    // offsetLeft:원소의 왼쪽 바깥쪽 테두리 에서 원소를 포함하는 왼쪽 안쪽 테두리 사이의 픽셀 거리까지 입니다.
+    // offsetTop:요소의 상단 경계선 에서 요소를 포함하는 상단 경계선 사이의 픽셀 거리 까지.
+    const x = e.clientX - bbox.left;
+    const y = e.clientY - bbox.top;
+    // const { coordinate } = videoFrameState[arrIndex][itemID];
+    console.log('x', x);
+    console.log('y', y);
+
+    // const match = coordinate?.findIndex(
+    //   ([x0, y0]) => Math.abs(x0 - x) + Math.abs(y0 - y) <= 6
+    // );
+    // if (match < 0) coordinate.push([Math.round(x), Math.round(y)]);
+    // else coordinate.splice(match, 1); // delete point when user clicks near it.
+    // const newArr = videoFrameState;
+    // newArr[arrIndex][itemID].coordinate = coordinate;
+    // flushSync(() => setVideoFrameState([...newArr]));
+    // flushSync(() => polySort(arrIndex, itemID));
+    // draw(canvas, true, trackerId);
+  };
 
   /* 그룹 선택 */
   const handleSelectGroupNum = (e) => {
@@ -84,13 +137,6 @@ const DetailViewPage = () => {
     //   setImgSrcState('http://192.168.0.4:81/api/stream/');
     // }
   };
-
-  // const handleHistoryTab = () => {
-  //   const bottomBtnBoxEl = document.querySelector('.bottomBtnBox');
-  //   const settingBtnBoxEl = document.querySelector('.settingBtnBox');
-  //   settingBtnBoxEl.classList.add('settingBtnBoxActive');
-  //   bottomBtnBoxEl.classList.add('bottomBtnBoxActive');
-  // };
 
   const openClosePopup = (e) => {
     const target = e.currentTarget;
@@ -123,15 +169,11 @@ const DetailViewPage = () => {
                 );
               });
             })
-            .finally(() => {
-              type[dType]();
-            })
+            .finally(() => type[dType]())
             .catch((err) => console.error(err));
         })
         .catch((err) => console.error(err));
-    } else {
-      type[dType]();
-    }
+    } else type[dType]();
   };
 
   /* INIT EFFECT */
@@ -139,29 +181,13 @@ const DetailViewPage = () => {
     console.log('🍓swr', swrState);
     console.log('🍓swrState.curTrackerId', swrState?.curTrackerId);
 
-    /* 이력조회에서 조회할 이미지 정보들 셋팅 */
     Api.archive
-      .getDetailRangeData({
-        trackerId: swrState?.curTrackerId,
-        fileType: 'img',
-        start: 0,
-        limit: 100,
-      })
-      .then((archives) => {
-        dayjs.locale('ko');
-        setImgArchiveState(
-          archives.map((obj) => {
-            return {
-              id: obj._id,
-              path: obj.path,
-              safetyLevel: obj.safetyLevel,
-              date: dayjs(obj.createdAt).format('YYYY-MM-DD'),
-              time: dayjs(obj.createdAt).format('hh:mm:ss'),
-            };
-          })
-        );
-      })
+      .getCount({ trackerId: swrState?.curTrackerId, fileType: 'img' })
+      .then((res) => setArchiveImgsCnt(res))
       .catch((err) => console.error(err));
+
+    /* 이력조회에서 조회할 이미지 정보들 셋팅 */
+    setArchiveImgData(0, pageRange);
   }, []);
 
   useEffect(() => {
@@ -173,13 +199,13 @@ const DetailViewPage = () => {
   }, [imgArchiveState]);
 
   useEffect(() => {
-    console.log('🍒swrObserveData', swrObserveData);
-    console.log('🍒groupNumState', groupNumState);
+    // console.log('🍒swrObserveData', swrObserveData);
+    // console.log('🍒groupNumState', groupNumState);
     const getCurObserve = swrObserveData?.filter(
       (obj) => obj.groupNum === groupNumState
     );
-    console.log('🍒🍒🍒🍒🍒🍒getCurObserve', getCurObserve);
-    setCurObserveState(getCurObserve[0]);
+    // console.log('🍒🍒🍒🍒🍒🍒getCurObserve', getCurObserve);
+    getCurObserve?.length > 0 && setCurObserveState(getCurObserve[0]);
   }, [swrObserveData, groupNumState]);
 
   useEffect(() => {
@@ -188,7 +214,7 @@ const DetailViewPage = () => {
 
   /* 감지 이력 리스트 */
   const imgCaptureHistoryMap = useMemo(() => {
-    return imgArchiveState.map((obj) => (
+    return imgArchiveState.map((obj, idx) => (
       <p
         datatype={obj.path}
         onClick={handleSetArchiveImg}
@@ -196,12 +222,16 @@ const DetailViewPage = () => {
         role="presentation"
       >
         <span>
-          <Feedback
-            style={{
-              fontSize: '20px',
-              color: levelColor[obj.safetyLevel.toLowerCase()],
-            }}
-          />
+          <div>
+            <span>{pageRange * (pageNumState - 1) + (idx + 1)}</span>
+            <Feedback
+              style={{
+                fontSize: '20px',
+                color: levelColor[obj.safetyLevel.toLowerCase()],
+              }}
+            />
+          </div>
+
           <span className={obj.safetyLevel.toLowerCase()}>
             {`${obj.safetyLevel.toUpperCase()} ${
               obj.safetyLevel === 'Yellow' ? '1' : '2'
@@ -311,22 +341,6 @@ const DetailViewPage = () => {
                       )}
                     </div>
                   </div>
-
-                  {/* <div className="alarmTxt yellow"> */}
-                  {/*  <Feedback style={{ fontSize: '32px' }}/> */}
-                  {/*  <span>작업자 진입 확인</span> */}
-                  {/* </div> */}
-
-                  {/* <div className="alarmTxt red"> */}
-                  {/*  <MdDangerous style={{ fontSize: '32px' }} /> */}
-                  {/*  <span>작업자 위험 반경 진입</span> */}
-                  {/* </div> */}
-
-                  {/* <div className="alarmTxt inactive"> */}
-                  {/*  <HighlightOff style={{ fontSize: '32px' }} /> */}
-                  {/*  <span>비활성화 되었습니다.</span> */}
-                  {/* </div> */}
-
                   <div className="sensingBox">
                     <span>
                       1차 감지<p>{curObserveState?.yellowCnt}</p>
@@ -393,6 +407,7 @@ const DetailViewPage = () => {
                     2차 감지<p>{curObserveState?.redCnt}</p>
                   </span>
                 </div>
+                {/* 생성 시간, 가동 시간 */}
                 <div className="historyTimeBox">
                   <div>
                     <span>생성시간</span>
@@ -411,21 +426,21 @@ const DetailViewPage = () => {
 
                 <div className="alertBox">
                   <div className="alertContent">{imgCaptureHistoryMap}</div>
-                  <div className="alertContent">
-                    <ReactPaginate
-                      previousLabel="← "
-                      nextLabel=" →"
-                      pageCount={pageCount}
-                      onPageChange={handlePageClick}
-                      containerClassName="pagination"
-                      previousLinkClassName="pagination__link"
-                      nextLinkClassName="pagination__link"
-                      disabledClassName="pagination__link--disabled"
-                      activeClassName="pagination__link--active"
-                    />
-
-                    {imgCaptureHistoryMap}
-                  </div>
+                  <ReactPaginate
+                    pageCount={Math.ceil(archiveImgsCnt / pageRange)}
+                    pageRangeDisplayed={7}
+                    marginPagesDisplayed={0}
+                    breakLabel=""
+                    previousLabel="이전"
+                    nextLabel="다음"
+                    onPageChange={changePage}
+                    containerClassName="paginationUl"
+                    activeClassName="currentPage"
+                    previousClassName="pageLabelBtn"
+                    nextClassName="pageLabelBtn"
+                    disabledClassName="paginationDisabled"
+                    pageClassName="paginationLi"
+                  />
                 </div>
               </div>
             </div>
@@ -453,8 +468,12 @@ const DetailViewPage = () => {
               {/* <div>{swrState.curCamPort?.toUpperCase()}</div> */}
               <div className="iframeTitleLeft">
                 {/* 캠번호 */}
-                <div className="iframeCamNum">Cam2</div>
-                <div className="iframeCamName">이름</div>
+                {/* <div className="iframeCamNum">Cam2</div> */}
+                {/* <div className="iframeCamName">이름</div> */}
+                <div className="iframeCamNum">
+                  {swrState.curCamPort?.toUpperCase()}
+                </div>
+                <div className="iframeCamName">{swrState.curCamName}</div>
               </div>
               <span className="iframeRecording">
                 <div className="iframeIcon">
@@ -465,24 +484,33 @@ const DetailViewPage = () => {
                   <Autorenew />
                 </span>
               </span>
-              <div className="iframeCamNum">
-                {swrState.curCamPort.toUpperCase()}
-              </div>
-              <div className="iframeCamName">{swrState.curCamName}</div>
+              {/* <div className="iframeCamNum"> */}
+              {/*  {swrState.curCamPort?.toUpperCase()} */}
+              {/* </div> */}
+              {/* <div className="iframeCamName">{swrState.curCamName}</div> */}
             </div>
-            {/* <div className="iframeIcon"> */}
-            {/*  <span /> */}
-            {/*  REC */}
-            {/* </div> */}
+            {/* <canvas className="polygonCanvas" typeof="coordinate3" /> */}
+            <canvas
+              // className={`firstCanvas polygonCanvas ${data.canvasClass}`}
+              // tabIndex={idx}
+              itemID="firstCanvas"
+              width={camWidth}
+              height={camHeight}
+              // id={data.trackerId}
+              onClick={canvasClick}
+              // itemProp={`${data.baseLine}|${data.dangerLine}`}
+              style={{ border: 'none' }}
+            />
+
+            <iframe
+              title="stream1"
+              // src={streamUrl ??"http://127.0.0.1:8000/api/stream/area/"}
+              // src="http://192.168.0.4:81/api/stream/"
+              src={imgSrcState}
+              width={512}
+              height={384}
+            />
           </div>
-          <canvas className="polygonCanvas" typeof="coordinate3" />
-          <img
-            title="stream1"
-            // src={streamUrl ??"http://127.0.0.1:8000/api/stream/area/"}
-            // src="http://192.168.0.4:81/api/stream/"
-            src={imgSrcState}
-            alt=""
-          />
         </div>
       </div>
     </div>
