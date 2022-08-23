@@ -175,29 +175,28 @@ const ObservePage = () => {
       await Api.observe
         .findData({ trackerId: tracker._id, date: today })
         .then((observe) => {
-          if (observe?.length > 0) {
-            const processedObserve = observe.map((obj) => {
-              return { ...tracker, ...obj };
-            });
-            processedData.push(...processedObserve);
-            // console.log('🌺🌺🌺processedData', processedData);
-            /* 정렬 */
-            processedData.sort((prev, next) => {
-              if (
-                `${prev.camPort}${prev.groupNum}` >
-                `${next.camPort}${next.groupNum}`
-              )
-                return 1;
-              if (
-                `${prev.camPort}${prev.groupNum}` <
-                `${next.camPort}${next.groupNum}`
-              )
-                return -1;
-              return 0;
-            });
+          if (observe?.length === 0) return;
+          const processedObserve = observe.map((obj) => {
+            return { ...tracker, ...obj };
+          });
+          processedData.push(...processedObserve);
+          // console.log('🌺🌺🌺processedData', processedData);
+          /* 정렬 */
+          processedData.sort((prev, next) => {
+            if (
+              `${prev.camPort}${prev.groupNum}` >
+              `${next.camPort}${next.groupNum}`
+            )
+              return 1;
+            if (
+              `${prev.camPort}${prev.groupNum}` <
+              `${next.camPort}${next.groupNum}`
+            )
+              return -1;
+            return 0;
+          });
 
-            flushSync(() => setGetObserveState([...processedData]));
-          }
+          flushSync(() => setGetObserveState([...processedData]));
         })
         .finally(() => setLoadingState(false));
     });
@@ -227,7 +226,7 @@ const ObservePage = () => {
 
   /* SET FIRST */
   useEffect(() => {
-    console.log('🧀');
+    // console.log('🧀');
     // console.log('🌽🌽🌽🌽🌽getObserveState', getObserveState);
     if (getObserveState.length === 0)
       swrTrackerData?.length > 0 && setProcessedSwrData();
@@ -274,7 +273,7 @@ const ObservePage = () => {
               {/* 녹화 버튼 */}
               <div className="recordBtnBox">
                 <button className="recordBtn">
-                  <div className="recordBtnCircle"/>
+                  <div className="recordBtnCircle" />
                   <div className="hoverCircle" onClick={handleActive} />
                 </button>
                 <span className="recordTxt">{txtChangeState}</span>

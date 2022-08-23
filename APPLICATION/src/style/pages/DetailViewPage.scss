@@ -408,7 +408,8 @@ div.detailViewContainer {
             div.alertBox {
               width: 100%;
               height: 98%;
-              div.alertContent{
+
+              div.alertContent {
                 width: 100%;
                 height: 100%;
                 //height: 568px;
@@ -428,16 +429,16 @@ div.detailViewContainer {
                   justify-content: space-between;
                   cursor: pointer;
 
-                  &:hover{
+                  &:hover {
                     color: $warning-500;
                   }
 
-                  div{
+                  div {
                     display: flex;
                     justify-content: start;
                     align-items: center;
                     //background-color: #0CBEF4;
-                    span{
+                    span {
                       border-right: 0.5px solid #1E2941;
                       padding-right: 5px;
                       //border-radius: 3px;
@@ -445,10 +446,11 @@ div.detailViewContainer {
                     }
                   }
 
-                  span{
+                  span {
                     display: flex;
                     align-items: center;
-                    &:first-child{
+
+                    &:first-child {
                       width: 45%;
                       //background-color: #00a000;
                     }
@@ -489,6 +491,7 @@ div.detailViewContainer {
         box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.2);
 
         div.iframeTitle {
+          width: calc(100% - 32px);
           height: 48px;
           font-size: 18px;
           padding: 0 16px;
@@ -497,8 +500,15 @@ div.detailViewContainer {
           justify-content: space-between;
           align-items: center;
           position: relative;
+          z-index: 99;
+          border-radius: 8px 8px 0 0;
+
+          &.iframeTxtColorActive {
+            color: $white
+          }
 
           div.iframeTitleLeft {
+            width: 50%;
             display: flex;
             align-items: center;
 
@@ -521,7 +531,7 @@ div.detailViewContainer {
             justify-content: end;
             position: relative;
 
-            div.iframeIcon {
+            div.iframeRecordingIcon {
               display: flex;
               align-items: center;
               margin-right: 16px;
@@ -553,42 +563,40 @@ div.detailViewContainer {
               }
             }
           }
-
-          //div.iframeIcon{
-          //  display: flex;
-          //  align-items: center;
-          //  span{
-          //    display: block;
-          //    width: 16px;
-          //    height: 16px;
-          //    border-radius: 50%;
-          //    background-color: $error-500;
-          //    margin-right: 4px;
-          //    animation: recIcon 1.5s infinite ease-in-out;
-          //  }
-          //}
         }
-      }
 
         canvas {
           all: unset;
           width: 100%;
           height: calc(100% - 48px);
-          //background-color: #0CBEF4;
-          border-radius: 0 0 8px 8px;
+          position: absolute;
+          outline: none;
+          border: none;
+          border-radius: 0 8px 8px 0;
         }
 
         canvas.firstCanvas {
           z-index: 1;
+          //border: 2px solid #0CBEF4;
         }
 
         canvas.secondCanvas {
           z-index: 2;
+          //border: 2px solid red;
         }
 
         img {
+          background-color: #0CBEF4;
+          border-radius: 0 0 12px 12px;
+        }
+
+        iframe {
           border: none;
         }
+      }
+      img {
+        border: none;
+      }
     }
   }
 }
@@ -599,7 +607,7 @@ div.detailViewContainer {
 }
 
 /* PAGENATION START*/
-.paginationUl{
+.paginationUl {
   width: 100%;
   list-style: none;
   display: flex;
@@ -609,7 +617,8 @@ div.detailViewContainer {
   margin-top: 2px;
   padding: 0;
 }
-.pageLabelBtn{
+
+.pageLabelBtn {
   cursor: pointer;
   background-color: #1E2941;
   color: white;
@@ -621,14 +630,17 @@ div.detailViewContainer {
   display: flex;
   justify-content: center;
   align-items: center;
-  a{
+
+  a {
     color: white;
-    &:hover{
+
+    &:hover {
       color: $warning-500;
     }
   }
 }
-.paginationLi{
+
+.paginationLi {
   cursor: pointer;
   background-color: transparent;
   border: 1px solid #1E2941;
@@ -637,31 +649,40 @@ div.detailViewContainer {
   height: 25px;
   border-radius: 5px;
   text-align: center;
-  a{
+
+  a {
     color: #1E2941;
     width: 25px;
     height: 25px;
     display: flex;
     justify-content: center;
     align-items: center;
-    &:hover{
+
+    &:hover {
       color: $warning-500;
     }
   }
 }
-.currentPage{
+
+.currentPage {
   cursor: pointer;
   background-color: #1E2941;
   border: 1px solid #1E2941;
   color: white;
-  a{
+
+  a {
     color: white;
   }
 }
-.paginationDisabled{
+
+.paginationDisabled {
   border: 1px solid #1E2941;
   cursor: pointer;
   background-color: #eaeaea;
-  a{color: #1E2941}
+
+  a {
+    color: #1E2941
+  }
 }
+
 /* PAGENATION END*/

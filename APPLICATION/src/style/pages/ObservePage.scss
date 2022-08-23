@@ -78,7 +78,7 @@ div.observeContainer {
             cursor: pointer;
             border-bottom: 1px solid #d4d4d4;
 
-            &:hover{
+            &:hover {
               color: $black;
               border-bottom: 4px solid $blue-100;
             }
@@ -103,7 +103,7 @@ div.observeContainer {
           flex-direction: column;
           align-items: center;
 
-          &::-webkit-scrollbar{
+          &::-webkit-scrollbar {
             display: none;
           }
 
@@ -138,7 +138,8 @@ div.observeContainer {
               }
             }
           }
-          section.safetyContents:nth-child(1){
+
+          section.safetyContents:nth-child(1) {
             display: block;
           }
 
@@ -193,6 +194,7 @@ div.observeContainer {
               display: flex;
               align-items: center;
               justify-content: center;
+
               &.spinnerActive {
                 //border: 2px solid $dark;
                 //border-top: 1px solid $error-500;
@@ -203,20 +205,22 @@ div.observeContainer {
                 animation: loaderSpin 1600ms infinite;
               }
             }
-              //안에 작은 네모
-              div.hoverCircle {
-                width: 14px;
-                height: 14px;
-                background-color: #979797;
-                border-radius: 2px;
-                position: absolute;
-                transition-duration: 0.2s;
-                &.hoverCircleActive{
-                  width: 26px;
-                  height: 26px;
-                  border-radius: 50%;
-                  background-color: $error-500;
-                }
+
+            //안에 작은 네모
+            div.hoverCircle {
+              width: 14px;
+              height: 14px;
+              background-color: #979797;
+              border-radius: 2px;
+              position: absolute;
+              transition-duration: 0.2s;
+
+              &.hoverCircleActive {
+                width: 26px;
+                height: 26px;
+                border-radius: 50%;
+                background-color: $error-500;
+              }
             }
           }
 
@@ -225,18 +229,20 @@ div.observeContainer {
             display: block;
             position: absolute;
             bottom: 6px;
-            &.hoverTxtActive{
+
+            &.hoverTxtActive {
               width: 26px;
               height: 26px;
               background-color: $error-500;
             }
-            &.txtColorActive{
+
+            &.txtColorActive {
               color: $error-500;
             }
           }
         }
 
-        div.rightBtnBox{
+        div.rightBtnBox {
           width: 80px;
           height: 40px;
           position: absolute;
@@ -246,7 +252,8 @@ div.observeContainer {
           align-items: center;
           //justify-content: space-between;
           justify-content: end;
-          button{
+
+          button {
             all: unset;
             width: 24px;
             height: 24px;
@@ -257,15 +264,17 @@ div.observeContainer {
             display: flex;
             align-items: center;
             justify-content: center;
-            &::after{
+
+            &::after {
               content: '';
               transition: 0.3s;
               position: absolute;
               border-radius: 50%;
               opacity: 0;
             }
-            &:hover{
-              &::after{
+
+            &:hover {
+              &::after {
                 position: absolute;
                 width: 36px;
                 height: 36px;
@@ -274,6 +283,7 @@ div.observeContainer {
               }
             }
           }
+
           //button{
           //  all: unset;
           //  width: 40px;
@@ -316,39 +326,28 @@ div.observeContainer {
           border-radius: 8px;
           position: relative;
           box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.2);
-          //&.iframeBoxActive{
-          //  &:after{
-          //    content: '';
-          //    width: 100%;
-          //    height: calc(100% - 48px);
-          //    position: absolute;
-          //    top: 48px;
-          //    left: 0;
-          //    box-sizing: border-box;
-          //    border: 8px solid $dark;
-          //  }
-            div.iframeBorder{
-              width: 100%;
-              height: 48px;
-              position: absolute;
-              top:0;
-              left: 0;
-              background-color: $dark;
-              border-radius: 8px 8px 0 0;
-              &:after{
-                content: "";
-                width: 512px;
-                height: 384px;
-                box-sizing: border-box;
-                position: absolute;
-                top: 48px;
-                left: 0;
-                border: 8px solid $dark;
-                border-radius: 0 0 8px 8px;
-              }
-          }
 
-          //border: 2px solid black;
+          div.iframeBorder {
+            width: 100%;
+            height: 48px;
+            position: absolute;
+            top: 0;
+            left: 0;
+            background-color: $dark;
+            border-radius: 8px 8px 0 0;
+
+            &:after {
+              content: "";
+              width: 512px;
+              height: 384px;
+              box-sizing: border-box;
+              position: absolute;
+              top: 48px;
+              left: 0;
+              border: 8px solid $dark;
+              border-radius: 0 0 8px 8px;
+            }
+          }
 
           div.iframeTitle {
             width: calc(100% - 32px);
@@ -363,35 +362,40 @@ div.observeContainer {
             z-index: 99;
             border-radius: 8px 8px 0 0;
 
-            &.iframeTxtColorActive{
+            &.iframeTxtColorActive {
               color: $white
             }
 
-            div.iframeTitleLeft{
+            div.iframeTitleLeft {
               width: 50%;
               display: flex;
               align-items: center;
-              div.iframeCamNum{
+
+              div.iframeCamNum {
                 border-right: 1px solid #d4d4d4;
                 padding-right: 12px;
               }
-              div.iframeCamName{
+
+              div.iframeCamName {
                 padding-left: 12px;
                 font-size: 14px;
               }
             }
-            span.iframeRecording{
+
+            span.iframeRecording {
               width: 50%;
               height: 30px;
               display: flex;
               align-items: center;
               justify-content: end;
               position: relative;
-              div.iframeRecordingIcon{
+
+              div.iframeRecordingIcon {
                 display: flex;
                 align-items: center;
                 margin-right: 16px;
-                span.iframeRecordingCircle{
+
+                span.iframeRecordingCircle {
                   display: block;
                   width: 16px;
                   height: 16px;
@@ -401,7 +405,8 @@ div.observeContainer {
                   animation: recIcon 1.5s infinite ease-in-out;
                 }
               }
-              span.iframeRenewIcon{
+
+              span.iframeRenewIcon {
                 width: 32px;
                 height: 32px;
                 display: flex;
@@ -410,7 +415,8 @@ div.observeContainer {
                 transition: 0.3s;
                 border-radius: 8px;
                 cursor: pointer;
-                &:hover{
+
+                &:hover {
                   background-color: $blue-100;
                   color: $blue-500;
                 }
@@ -438,7 +444,7 @@ div.observeContainer {
             //border: 2px solid red;
           }
 
-          img{
+          img {
             background-color: #0CBEF4;
             border-radius: 0 0 12px 12px;
           }
@@ -448,7 +454,7 @@ div.observeContainer {
           }
         }
 
-        .hideIframeBox{
+        .hideIframeBox {
           display: none;
         }
       }
@@ -457,21 +463,19 @@ div.observeContainer {
 }
 
 @keyframes recIcon {
-  0%{
+  0% {
     opacity: 0.2;
   }
-  50%{
+  50% {
     opacity: 0.8;
   }
-  100%{
+  100% {
     opacity: 1;
   }
 }
 
-@keyframes loaderSpin
-{
-  0%
-  {
+@keyframes loaderSpin {
+  0% {
     transform: rotate(0deg);
     border-left: 2px solid rgb(255 80 61 / 1);
     border-top: 2px solid rgb(255 80 61 / 0.3);
@@ -479,16 +483,14 @@ div.observeContainer {
     border-bottom: 2px solid rgb(255 80 61 / 0.3);
     box-shadow: 0px 0px 10px 0px rgb(255 80 61 / 0);
   }
-  50%
-  {
+  50% {
     box-shadow: 0px 0px 80px 0px rgb(255 80 61 / 0.5);
     border-left: 2px solid rgb(255 80 61 / 1);
     border-top: 2px solid rgb(255 80 61 / 1);
     border-right: 2px solid rgb(255 80 61 / 1);
     border-bottom: 2px solid rgb(255 80 61 / 1);
   }
-  100%
-  {
+  100% {
     transform: rotate(720deg);
     border-left: 2px solid rgb(255 80 61 / 1);
     border-top: 2px solid rgb(255 80 61 / 0.3);

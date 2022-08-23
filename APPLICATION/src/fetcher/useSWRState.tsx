@@ -1,11 +1,5 @@
 import useSWR from 'swr';
 
-type CamInfo = {
-  ip: string;
-  camPort: string;
-  area: string;
-};
-
 type SwrStateType = {
   user: {
     email: string;
@@ -18,14 +12,10 @@ type SwrStateType = {
   curCamDangerLine: string;
   curCamIp: string;
   curCamName: string;
+  curGroup1Coordinates: Partial<Array<Array<number>>>;
+  curGroup2Coordinates: Partial<Array<Array<number>>>;
   streamInfo: Array<ViedeoFrameType>;
   observe: Partial<Observe>;
-  camInfo: {
-    cam1: CamInfo;
-    cam2: CamInfo;
-    cam3: CamInfo;
-    cam4: CamInfo;
-  };
 };
 
 let state: SwrStateType = {
@@ -40,30 +30,10 @@ let state: SwrStateType = {
   curCamDangerLine: '',
   curCamIp: '',
   curCamName: '',
+  curGroup1Coordinates: [],
+  curGroup2Coordinates: [],
   streamInfo: [],
   observe: {},
-  camInfo: {
-    cam1: {
-      ip: '',
-      camPort: '',
-      area: '',
-    },
-    cam2: {
-      ip: '',
-      camPort: '',
-      area: '',
-    },
-    cam3: {
-      ip: '',
-      camPort: '',
-      area: '',
-    },
-    cam4: {
-      ip: '',
-      camPort: '',
-      area: '',
-    },
-  },
 };
 
 export const useSWRState = () => {

@@ -38,11 +38,10 @@ const ObserveCamStream = ({
   const refreshCamStream = async (e) => {
     const target = e.currentTarget;
     const arrIndex = target.getAttribute('tabIndex');
-    // console.log(arrIndex);
-    // console.log(videoFrameState[arrIndex].frameSrc);
-
-    await setNewVideoSrcState(arrIndex, '');
-    await setNewVideoSrcState(arrIndex, videoFrameState[arrIndex].frameSrc);
+    const curSrc = videoFrameState[arrIndex].frameSrc;
+    const baseSrc = `${videoFrameState[arrIndex].frameSrc.split(':81')[0]}:81`;
+    await setNewVideoSrcState(arrIndex, baseSrc);
+    await setNewVideoSrcState(arrIndex, curSrc);
   };
 
   const polySort = (arrIndex: number, itemID: string) => {
