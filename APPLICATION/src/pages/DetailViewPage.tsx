@@ -179,7 +179,7 @@ const DetailViewPage = () => {
       (obj) => obj.groupNum === groupNumState
     );
     console.log('🍒🍒🍒🍒🍒🍒getCurObserve', getCurObserve);
-    setCurObserveState(getCurObserve[0]);
+    getCurObserve?.length > 0 && setCurObserveState(getCurObserve[0]);
   }, [swrObserveData, groupNumState]);
 
   useEffect(() => {
@@ -410,7 +410,7 @@ const DetailViewPage = () => {
                 </div>
 
                 <div className="alertBox">
-                  <div className="alertContent">{imgCaptureHistoryMap}</div>
+                  {/*<div className="alertContent">{imgCaptureHistoryMap}</div>*/}
                   <div className="alertContent">
                     <ReactPaginate
                       previousLabel="← "
@@ -453,8 +453,12 @@ const DetailViewPage = () => {
               {/* <div>{swrState.curCamPort?.toUpperCase()}</div> */}
               <div className="iframeTitleLeft">
                 {/* 캠번호 */}
-                <div className="iframeCamNum">Cam2</div>
-                <div className="iframeCamName">이름</div>
+                {/* <div className="iframeCamNum">Cam2</div> */}
+                {/* <div className="iframeCamName">이름</div> */}
+                <div className="iframeCamNum">
+                  {swrState.curCamPort?.toUpperCase()}
+                </div>
+                <div className="iframeCamName">{swrState.curCamName}</div>
               </div>
               <span className="iframeRecording">
                 <div className="iframeIcon">
@@ -465,24 +469,24 @@ const DetailViewPage = () => {
                   <Autorenew />
                 </span>
               </span>
-              <div className="iframeCamNum">
-                {swrState.curCamPort.toUpperCase()}
-              </div>
-              <div className="iframeCamName">{swrState.curCamName}</div>
+              {/* <div className="iframeCamNum"> */}
+              {/*  {swrState.curCamPort?.toUpperCase()} */}
+              {/* </div> */}
+              {/* <div className="iframeCamName">{swrState.curCamName}</div> */}
             </div>
             {/* <div className="iframeIcon"> */}
             {/*  <span /> */}
             {/*  REC */}
             {/* </div> */}
+            <canvas className="polygonCanvas" typeof="coordinate3" />
+            <img
+              title="stream1"
+              // src={streamUrl ??"http://127.0.0.1:8000/api/stream/area/"}
+              // src="http://192.168.0.4:81/api/stream/"
+              src={imgSrcState}
+              alt=""
+            />
           </div>
-          <canvas className="polygonCanvas" typeof="coordinate3" />
-          <img
-            title="stream1"
-            // src={streamUrl ??"http://127.0.0.1:8000/api/stream/area/"}
-            // src="http://192.168.0.4:81/api/stream/"
-            src={imgSrcState}
-            alt=""
-          />
         </div>
       </div>
     </div>

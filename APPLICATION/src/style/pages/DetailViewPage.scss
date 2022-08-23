@@ -467,10 +467,10 @@ div.detailViewContainer {
       align-items: center;
 
       div.iframeBox {
-        width: 1048px;
-        height: 834px;
-        //width: 512px;
-        //height: 432px;
+        //width: 1048px;
+        //height: 834px;
+        width: 512px;
+        height: 432px;
         background-color: $white;
         border-radius: 8px;
         position: relative;
@@ -556,12 +556,14 @@ div.detailViewContainer {
           //  }
           //}
         }
+      }
 
         canvas {
           all: unset;
           width: 100%;
           height: calc(100% - 48px);
-          position: absolute;
+          //background-color: #0CBEF4;
+          border-radius: 0 0 8px 8px;
         }
 
         canvas.firstCanvas {
@@ -572,10 +574,9 @@ div.detailViewContainer {
           z-index: 2;
         }
 
-        iframe {
+        img {
           border: none;
         }
-      }
     }
   }
 }
