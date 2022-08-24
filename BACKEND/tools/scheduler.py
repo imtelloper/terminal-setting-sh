@@ -5,9 +5,11 @@ from apscheduler.schedulers.background import BackgroundScheduler
 from apscheduler.jobstores.base import JobLookupError
 import time
 
+
 def job():
     print('🌪🌪🌪🌪🌪🌪🌪🌪🌪🌪🌪🌪🌪')
 
-secretary = BackgroundScheduler()
+
+secretary = BackgroundScheduler(job_defaults={'misfire_grace_time': 300})
 secretary.start()
 # secretary.add_job(job, 'cron', second='*/5', id='safety-todo1')

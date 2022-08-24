@@ -13,6 +13,7 @@ mongodbUri = "mongodb://interx:interx12!@192.168.0.4:27017/interx"
 # mongodbUri = "mongodb://interx:interx12!@127.0.0.1:27017/admin"
 connection = pymongo.MongoClient(mongodbUri)
 dbSafety = connection.get_database("safety")
+isObserving = False
 
 '''
 DB에서 좌표가 업데이트 될때마다 여기서도 업데이트 되어야함
@@ -20,9 +21,13 @@ DB에서 좌표가 업데이트 될때마다 여기서도 업데이트 되어야
 
 
 def setsUrlCoordinate():
+    global isObserving
     baseStreamAreaUrl = 'http://127.0.0.1:8000/api/stream'
     resultData = dbSafety["tracker"].find_one({"area": area, "camPort": camPort})
     print('resultData: ', resultData)
+    print()
+    print('@isObserving', resultData['isObserving'])
+    isObserving = resultData['isObserving']
     print()
     sensingGroup1: str = ''
     sensingGroup2: str = ''
@@ -79,13 +84,30 @@ def setsUrlCoordinate():
     return baseStreamGroupUrl
 
 
-print('##### setsUrlCoordinate(): ', setsUrlCoordinate())
+# print('##### setsUrlCoordinate(): ', setsUrlCoordinate())
 vcap = cv2.VideoCapture(setsUrlCoordinate())
 vcap.set(cv2.CAP_PROP_BUFFERSIZE, 3)
 
 cameraOnOff = True
 cnt = 0
+isObservingCnt=0
 while (cameraOnOff):
+    print('--------------------- CAMERA RUNNING ---------------------')
+    print('isObserving', isObserving)
+    if isObserving == True:
+        print('트루')
+        time.sleep(1)
+        print('isObservingCnt',isObservingCnt)
+        isObservingCnt += 1
+        if isObservingCnt == 5:
+            isObservingCnt = 0
+            resultData = dbSafety["tracker"].find_one({"area": area, "camPort": camPort})
+            print('resultData: ', resultData)
+            print()
+            isObserving = resultData['isObserving']
+            print('isObserving',isObserving)
+        continue
+    print("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$")
     cnt += 1
     print('cnt', cnt)
     ret, frame = vcap.read()
@@ -101,6 +123,14 @@ while (cameraOnOff):
 
         ### imshow를 사용하면 재부팅시
         # cv2.imshow('frame', frame)
+
+    if cnt == 150:
+        cnt = 0
+        # resultData = dbSafety["tracker"].find_one({"area": area, "camPort": camPort})
+        # print('resultData: ', resultData)
+        # print()
+        # isObserving = resultData['isObserving']
+        # print('isObserving', isObserving)
 
     if frame is not None:
         # cv2.imshow('frame', frame)

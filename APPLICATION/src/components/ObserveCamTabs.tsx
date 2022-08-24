@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { useSWRState } from '../fetcher/useSWRState';
 import Api from '../api/Api';
+import CoordinateTool from '../util/CoordinateTool';
 
 const ObserveCamTabs = ({ setCamTabState, camTabState, videoFrameState }) => {
   const { data: swrState, mutate: setSwrState } = useSWRState();
@@ -55,6 +56,17 @@ const ObserveCamTabs = ({ setCamTabState, camTabState, videoFrameState }) => {
         console.log('🍋🍋🍋🍋🍋🍋tracker', tracker);
         // console.log('🍋🍋🍋🍋🍋🍋tracker', tracker[0].camPort);
         // console.log('🍋🍋🍋🍋🍋🍋tracker', tracker[0]._id);
+        // console.log('🍰 tracker sensingGroup1', tracker[0].sensingGroup1);
+        // console.log('🍰 tracker sensingGroup2', tracker[0].sensingGroup2);
+
+        const group1Coord = CoordinateTool.coordinateMaker(
+          tracker[0].sensingGroup1.split('&')[2]?.split(',')
+        );
+        const group2Coord = CoordinateTool.coordinateMaker(
+          tracker[0].sensingGroup2.split('&')[2]?.split(',')
+        );
+        // console.log('🌸🌸🌸group1Coord', group1Coord);
+        // console.log('🌸🌸🌸group2Coord', group2Coord);
 
         /* DetailViewPage에서 사용하기 위함 */
         setSwrState({
@@ -66,6 +78,8 @@ const ObserveCamTabs = ({ setCamTabState, camTabState, videoFrameState }) => {
           curCamDangerLine: tracker[0].dangerLine,
           curCamIp: tracker[0].ip,
           curCamName: tracker[0].camName,
+          curGroup1Coordinates: group1Coord,
+          curGroup2Coordinates: group2Coord,
         })
           .finally(() => {
             /* 재렌더링 됐을때 cam1으로 설정되는것 막기 위함. */

@@ -405,7 +405,7 @@ const SettingPage = () => {
           <div className="settingBoxTop">
             <div className="settingBoxTopLeft">
               <MdWorkspaces style={{ fontSize: '24px' }} />
-              <span>캠 그룹 이름 변경</span>
+              <span>캠 구역 이름 변경</span>
               <input type="text" />
               <button className="btnR defaultPrimary">확인</button>
             </div>

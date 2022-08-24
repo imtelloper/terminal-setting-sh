@@ -58,7 +58,7 @@ const ObserveCamInfo = ({
     camTabs.forEach((ele: HTMLElement, idx) => {
       if (idx !== 0) ele.style.display = 'none';
     });
-    console.log('swrState', swrState);
+    // console.log('swrState', swrState);
   }, []);
 
   useEffect(() => {

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { MdOutlineTaskAlt } from 'react-icons/md';
-import { Delete } from '@material-ui/icons';
+import { MdDangerous, MdOutlineTaskAlt } from 'react-icons/md';
+import { Delete, Feedback } from '@material-ui/icons';
 import Api from '../api/Api';
 import { useSWRState } from '../fetcher/useSWRState';
 import axios from 'axios';
@@ -165,17 +165,48 @@ const ObserveGroupBox = ({
           </div>
         </div>
         <div className="btnBox">
-          {/* className : 색상별 green yellow red inactive */}
-          <div className={`alarmTxt ${safetyLevel?.toLowerCase()}`}>
-            <MdOutlineTaskAlt style={{ fontSize: '32px' }} />
+          {/* className : 색상별 green yellow red inactive 추가 */}
+          <div
+            className={`alarmTxt ${safetyLevel?.toLowerCase()}`}
+          >
+            {/* <MdOutlineTaskAlt style={{ fontSize: '32px' }} /> */}
             {/* 작업자 진입 확인 / 작업자 위험 반경 진입 / 비활성화 되었습니다. */}
-            <span>
-              {safetyLevel === 'Green'
-                ? '안전합니다.'
-                : safetyLevel === 'Yellow'
-                ? '작업자 진입 확인'
-                : '작업자 위험 반경 진입'}
-            </span>
+            <div className="btnBoxContent">
+              {safetyLevel === 'Green' ? (
+                <>
+                  <div className="btnBoxLine green" />
+                  <span className="btnBoxTxt green">
+                    <p>
+                      <MdOutlineTaskAlt style={{ fontSize: '32px' }} />
+                    </p>
+                    안전합니다
+                  </span>
+                  <div className="btnBoxLine green" />
+                </>
+              ) : safetyLevel === 'Yellow' ? (
+                <>
+                  <div className="btnBoxLine yellow" />
+                  <span className="btnBoxTxt yellow">
+                    <p>
+                      <Feedback style={{ fontSize: '32px' }} />
+                    </p>
+                    작업자 진입 확인
+                  </span>
+                  <div className="btnBoxLine yellow" />
+                </>
+              ) : (
+                <>
+                  <div className="btnBoxLine red" />
+                  <span className="btnBoxTxt red">
+                    <p>
+                      <MdDangerous style={{ fontSize: '32px' }} />
+                    </p>
+                    작업자 위험 반경 진입
+                  </span>
+                  <div className="btnBoxLine red" />
+                </>
+              )}
+            </div>
           </div>
 
           <div className="sensingBox">

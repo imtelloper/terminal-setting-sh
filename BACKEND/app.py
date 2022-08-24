@@ -8,6 +8,7 @@ from routers.authRouter import router as AuthRouter
 from routers.observeRouter import router as ObserveRouter
 from routers.archiveRouter import router as ArchiveRouter
 from routers.trackerRouter import router as TrackerRouter
+from routers.configRouter import router as ConfigRouter
 import logging.config
 import warnings
 from fastapi.responses import FileResponse
@@ -78,6 +79,7 @@ app.include_router(AuthRouter, prefix="/api/auth")
 app.include_router(ObserveRouter, prefix="/api/observe")
 app.include_router(ArchiveRouter, prefix="/api/archive")
 app.include_router(TrackerRouter, prefix="/api/tracker")
+app.include_router(ConfigRouter, prefix="/api/config")
 
 
 @app.on_event("startup")
