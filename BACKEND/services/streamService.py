@@ -97,6 +97,7 @@ class StreamService:
         # self.detectTimeCntLimit가 낮을수록 Yellow, Red 업데이트 속도 빨라짐. 너무 빠르면 성능에 문제 있을 수 있음
         # 개발할때는 detectTimeCntLimit을 10 정도로 올려서 videoSleepCnt*10 번째에 DB 업데이트 되도록 하는게 좋다.
         self.detectTimeCntLimit = 0  # FOR DEV: 10, FOR PRODUCT: 0
+        self.camRestartCnt = 0
 
         def devMode():
             self.isSetVideoFrameDelay = True
@@ -553,9 +554,48 @@ class StreamService:
         client.close()
         transport.close()
 
+    async def getCamRestartCnt(self):
+        dataArr = []
+        searchedData = findDatas(self.dbName, config.TABLE_CONFIG, {
+            "trackerId": self.trackerId,
+        })
+        async for val in searchedData:
+            dataArr.append(val)
+        foundData = dataArr[0]
+        camRestartCnt = int(foundData['camRestartCnt'])
+        self.camRestartCnt = camRestartCnt
+        return camRestartCnt
+
+    def updateCamRestartCnt(self):
+        connection = pymongo.MongoClient(config.DB_ADDRESS)
+        dbSafety = connection.get_database("safety")
+        configData = dbSafety["config"].find_one({"trackerId": ObjectId(self.trackerId)})
+        print('configData: ', configData)
+        dbSafety["config"].update_one(
+            {'_id': ObjectId(configData["_id"])},
+            {'$set':
+                {
+                    'camRestartCnt': self.camRestartCnt,
+                }
+            }
+        )
+
+
     def video_streaming(self, coordinates1=[], coordinates2=[]):
+        print(self.trackerId)
         print('video_streaming video check : ', self.currentPort)
-        if self.currentPort is None: os.system("fuser -k 8000/tcp")
+        print('CamRestartCnt : ', self.camRestartCnt)
+        if self.currentPort is None:
+            if self.camRestartCnt == 3:
+                self.camRestartCnt = 0
+                self.updateCamRestartCnt()
+                os.system("sudo reboot")
+            else:
+                self.camRestartCnt += 1
+                print(self.camRestartCnt)
+                self.updateCamRestartCnt()
+                os.system("fuser -k 8000/tcp")
+
         device_mode = ""
         print('쓰레쉬 홀드', self.thisCamThreshold)
         print('감지 모델', self.thisCamSensingModel)
