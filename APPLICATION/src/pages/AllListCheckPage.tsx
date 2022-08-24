@@ -11,11 +11,13 @@ import { MdDownload, MdGridView, MdWorkspaces } from 'react-icons/md';
 import VideoPopup from '../components/VideoPopup';
 import { useNavigate } from 'react-router-dom';
 import NewCamRegisterPopup from '../components/NewCamRegisterPopup';
+import RemoveAlarmPopup from '../components/RemoveAlarmPopup';
 
 const AllListCheckPage = () => {
   const navigation = useNavigate();
   const [isNewCamRegisterPopupOpenState, setIsNewCamRegisterPopupOpenState] =
     useState(false);
+  const [removeAlarmPopupState, setRemoveAlarmPopupState] = useState(false);
 
   const handleActive = (e) => {
     const target = e.currentTarget;
@@ -24,6 +26,10 @@ const AllListCheckPage = () => {
 
   const newCamRegisterPopup = () => {
     setIsNewCamRegisterPopupOpenState(!isNewCamRegisterPopupOpenState);
+  };
+
+  const openRemoveAlarmPopup = () => {
+    setRemoveAlarmPopupState(!removeAlarmPopupState);
   };
 
   const dataLists = [
@@ -169,11 +175,11 @@ const AllListCheckPage = () => {
               </div>
             </div>
             <div className="allListCheckRight">
-              <button className="btnR normalPrimary">
+              <button className="btnR normalPrimary" onClick={openRemoveAlarmPopup}>
                 <Delete style={{ fontSize: '24px' }} />
               </button>
-              <button className="btnR normalPrimary">
-                <span className="txt" onClick={newCamRegisterPopup}>
+              <button className="btnR normalPrimary" onClick={newCamRegisterPopup}>
+                <span className="txt">
                   새 카메라 등록
                 </span>
               </button>
@@ -239,8 +245,9 @@ const AllListCheckPage = () => {
             }
           />
         )}
-        {/* {isOpenPopupState && <VideoPopup openVideoPopup={openVideoPopup} />} */}
-        {/* {alarmPopupState && <AlarmPopup openAlarmPopup={openAlarmPopup} />} */}
+        {removeAlarmPopupState && (
+          <RemoveAlarmPopup openRemoveAlarmPopup={openRemoveAlarmPopup} />
+        )}
       </div>
     </div>
   );
