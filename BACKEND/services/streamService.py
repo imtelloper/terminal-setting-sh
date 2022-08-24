@@ -581,8 +581,6 @@ class StreamService:
         )
 
     def video_streaming(self, coordinates1=[], coordinates2=[]):
-        # trackerId = "62c796f09715acf6931d4e6b"
-        # configId = "63057c8e26894a2b1ec5b218"
         print(self.trackerId)
         print('video_streaming video check : ', self.currentPort)
         if self.currentPort is None:
