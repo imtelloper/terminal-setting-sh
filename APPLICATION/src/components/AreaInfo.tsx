@@ -173,8 +173,8 @@ const AreaInfo = () => {
   }, []);
 
   useEffect(() => {
-    // console.log('#####getObserveState', getObserveState);
-    // console.log('🌸🌸🌸 swrObserveData', swrObserveData);
+    console.log('#####getObserveState', getObserveState);
+    console.log('🌸🌸🌸 swrObserveData', swrObserveData);
     /* getObserveState 데이터가 있을때 한번 가공 데이터 셋팅 */
     if (getObserveState.length === 0)
       swrTrackerData?.length > 0 && setProcessedSwrData();
