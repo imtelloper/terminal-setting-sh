@@ -82,6 +82,7 @@ async def streamVideo():
     print('isInternetConnected :', isInternetConnected)
     if isInternetConnected():
         await service.getTrackerId()
+        await service.getCamRestartCnt()
     service.setCameraOff()
     service.setCameraOn()
     return StreamingResponse(service.video_streaming(), media_type="multipart/x-mixed-replace; boundary=frame")
