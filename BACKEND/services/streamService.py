@@ -577,7 +577,10 @@ class StreamService:
 
         self.updateDeviceIp(self.trackerId, self.deviceIp)
 
+        videoInitCnt = 0
+
         while self.cameraOnOff:
+
             k = cv2.waitKey(1) & 0xFF
             # For Dev, isSetDetectDelay have to set True
             if self.isSetDetectDelay: self.detectTimeCnt += 1
@@ -585,6 +588,17 @@ class StreamService:
             if self.isSetVideoFrameDelay: time.sleep(self.videoSleepCnt)
 
             ret, frame = self.video.read()
+
+            videoInitCnt += 1
+            # print('videoInitCnt',videoInitCnt)
+            if videoInitCnt == 50:
+                videoInitCnt = 0
+                # print('self.currentPort: ',self.currentPort)
+                # self.video = cv2.VideoCapture(self.currentPort)
+                # self.video.set(cv2.CAP_PROP_FRAME_WIDTH, 640)
+                # self.video.set(cv2.CAP_PROP_FRAME_HEIGHT, 480)
+                # ret, frame = self.video.read()
+
             if frame is None: return
             self.camImg = frame.copy()
             self.camImg = np.array(self.camImg)
