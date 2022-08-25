@@ -206,6 +206,10 @@ const ObservePage = () => {
   useEffect(() => {
     return () => {
       console.log('🌽🌽🌽CLEAR EFFECT🌽🌽🌽');
+      console.log('🌽🌽🌽videoFrameState🌽🌽🌽', videoFrameState);
+      videoFrameState.forEach((obj) => {
+        Api.tracker.modifyOneData(obj.trackerId, { isObserving: false });
+      });
     };
   }, []);
 

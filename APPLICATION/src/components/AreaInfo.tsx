@@ -23,6 +23,7 @@ const AreaInfo = () => {
   const today = dayjs().format('YYYY-MM-DD');
   const [loadingState, setLoadingState] = useState(false);
   const [getObserveState, setGetObserveState] = useState([]);
+  const [observingSetTrigger, setObservingSetTrigger] = useState(true);
   const { data: swrState, mutate: setSwrState } = useSWRState();
 
   const findFetcher = (url: string) =>
@@ -128,12 +129,6 @@ const AreaInfo = () => {
             }
           });
           // console.log('2 💐💐💐💐💐', areaFilteredObj);
-
-          // {
-          //   safetyLevel: string,
-          //   redCnt: 0,
-          //   yellowCnt: 0
-          // }
           flushSync(() => setGetObserveState([...areaFilteredObj]));
           flushSync(() => setLoadingState(false));
         });
@@ -184,7 +179,17 @@ const AreaInfo = () => {
     // console.log('swrTrackerData?.length', swrTrackerData?.length);
     /* db에서 tracker 데이터가 바뀔때마다 가공 데이터 셋팅 */
     // swrTrackerData?.length > 0 && console.log('swrTrackerData', swrTrackerData);
-    swrTrackerData?.length > 0 && setProcessedSwrData();
+    if (swrTrackerData) {
+      console.log('swrTrackerData', swrTrackerData);
+      setProcessedSwrData();
+
+      const setAllIsObservingFalse = (id) =>
+        Api.tracker.modifyOneData(id, { isObserving: false });
+
+      observingSetTrigger
+        ? swrTrackerData.forEach((obj) => setAllIsObservingFalse(obj._id))
+        : setObservingSetTrigger(false);
+    }
   }, [swrTrackerData, swrObserveData]);
 
   const areaCardsMap = useMemo(() => {
