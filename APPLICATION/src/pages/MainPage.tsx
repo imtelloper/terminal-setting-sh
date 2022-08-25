@@ -36,7 +36,6 @@ const MainPage = () => {
     //   .then((res) => {
     //     console.log('res', res);
     //   });
-
     /* 강제 부팅 api */
     // axios.get(`http://192.168.0.17:81/api/util/reboot/`).then((res) => {
     //   console.log(res);

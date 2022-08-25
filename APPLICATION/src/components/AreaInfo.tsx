@@ -1,5 +1,4 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import Crane from '../images/crane.png';
 import Videocam from '../images/videocam.png';
 import Warning from '../images/warning.png';
 import BgImg from '../images/bg.png';
@@ -29,24 +28,21 @@ const AreaInfo = () => {
   const findFetcher = (url: string) =>
     axios.post(url, { date: today }).then((res) => res.data);
 
+  /* 오늘 날짜의 Observe 데이터 가져오기 */
   const { data: swrObserveData, error: swrObserveErr } = useSWR<
     Array<TrackerObserve>
-  >('/api/observe/find', findFetcher, {
-    refreshInterval: 1000,
-  });
+  >('/api/observe/find', findFetcher, { refreshInterval: 1000 });
 
+  /* 전체 tracker 데이터 가져오기 */
   const { data: swrTrackerData, error: swrTrackerErr } = useSWR<
     Array<TrackerObserve>
-  >('/api/tracker', getFetcher, {
-    refreshInterval: 1000,
-  });
+  >('/api/tracker', getFetcher, { refreshInterval: 1000 });
 
+  /* 최근 10시간중 감지된 위험 가져오기 */
   const { data: swrSensingCnt, error: swrSensingCntErr } = useSWR<number>(
     '/api/archive/count-part/',
     getFetcher,
-    {
-      refreshInterval: 1000,
-    }
+    { refreshInterval: 1000 }
   );
 
   const goObservePage = (e) => {
@@ -68,10 +64,7 @@ const AreaInfo = () => {
     /* 메인 화면에 리스트들이 안뜨는 이유는 오늘 날짜의 observe 데이터가 없어서 그렇다. */
     swrTrackerData.forEach(async (tracker, idx) => {
       await Api.observe
-        .findData({
-          trackerId: tracker._id,
-          date: today,
-        })
+        .findData({ trackerId: tracker._id, date: today })
         .then((observe) => {
           // console.log('observe', observe);
           let processedObserve = [];
@@ -137,31 +130,11 @@ const AreaInfo = () => {
 
   /* INIT EFFECT */
   useEffect(() => {
-    let count = 20;
+    const count = 20;
     window.onscroll = (e) => {
       if (window.innerHeight + window.scrollY >= document.body.offsetHeight) {
         setTimeout(() => {
-          const addContent = document.createElement('div');
-          addContent.classList.add('areaCardBox');
-          addContent.innerHTML = `<h3>H${++count} 공장 크레인</h3>
-          <div className="areaContent">
-            <div className="areaImgContent">
-              <img src={Crane} />
-              <div className="areaZone areaZoneGreen">
-                Green Zone
-              </div>
-            </div>
-            <div className="areaTextContent">
-              <span className="camContent">Cam(2):<span>Active</span></span>
-              <span>Alarms:</span><span>없음</span>
-              <div className="detectContent">
-                <button>1차 감지: <span>0</span></button>
-                <button>2차 감지: <span>0</span></button>
-              </span>
-            </span>
-          </div>`;
-          document.querySelector('section')?.appendChild(addContent);
-          // document.querySelector("section").createElement(addContent);
+          /* do something for infinite scroll */
         }, 1000);
       }
     };
@@ -176,16 +149,14 @@ const AreaInfo = () => {
   }, [getObserveState]);
 
   useEffect(() => {
-    // console.log('swrTrackerData?.length', swrTrackerData?.length);
     /* db에서 tracker 데이터가 바뀔때마다 가공 데이터 셋팅 */
-    // swrTrackerData?.length > 0 && console.log('swrTrackerData', swrTrackerData);
     if (swrTrackerData) {
       console.log('swrTrackerData', swrTrackerData);
       setProcessedSwrData();
 
+      /* isObserving 데이터 전부 false로 만들기 */
       const setAllIsObservingFalse = (id) =>
         Api.tracker.modifyOneData(id, { isObserving: false });
-
       observingSetTrigger
         ? swrTrackerData.forEach((obj) => setAllIsObservingFalse(obj._id))
         : setObservingSetTrigger(false);
@@ -205,10 +176,6 @@ const AreaInfo = () => {
           onClick={goObservePage}
           datatype={idx.toString()}
         >
-          {/* <div className="titleBox">{card.area}</div> */}
-          {/* <div className="titleBox"> */}
-          {/*  <span>{getObjectKey}</span> */}
-          {/* </div> */}
           <div className="titleBox">
             <span>{getObjectKey || card.area}</span>
           </div>
@@ -221,7 +188,6 @@ const AreaInfo = () => {
             <div className="areaBottom">
               <div className="camBox">
                 <div className="camPort">
-                  {/* @ts-ignore */}
                   CAM <span>{card[getObjectKey]?.camCnt}</span>
                 </div>
                 <div className="activeBadge">
@@ -233,51 +199,43 @@ const AreaInfo = () => {
                 {/* className : green yellow red inactive => alarmTxt 에 추가해주시면 됩니다! */}
                 <div
                   className={`alarmTxt ${
-                    // @ts-ignore
                     card[getObjectKey]?.safetyLevel === 'Red'
                       ? 'red'
-                      : // @ts-ignore
-                      card[getObjectKey]?.safetyLevel === 'Yellow'
+                      : card[getObjectKey]?.safetyLevel === 'Yellow'
                       ? 'yellow'
                       : 'green'
                   }`}
                 >
                   <div className="alarmBtnBoxContent">
-                    {
-                      // @ts-ignore
-                      card[getObjectKey]?.safetyLevel === 'Red' ? (
-                        <span className="alarmBtnBoxTxt red">
-                          <p>
-                            <MdDangerous style={{ fontSize: '32px' }} />
-                          </p>
-                          작업자 위험 반경 진입
-                        </span>
-                      ) : // @ts-ignore
-                      card[getObjectKey]?.safetyLevel === 'Yellow' ? (
-                        <span className="alarmBtnBoxTxt yellow">
-                          <p>
-                            <Feedback style={{ fontSize: '32px' }} />
-                          </p>
-                          작업자 진입 확인
-                        </span>
-                      ) : (
-                        <span className="alarmBtnBoxTxt green">
-                          <p>
-                            <MdOutlineTaskAlt style={{ fontSize: '32px' }} />
-                          </p>
-                          안전합니다
-                        </span>
-                      )
-                    }
+                    {card[getObjectKey]?.safetyLevel === 'Red' ? (
+                      <span className="alarmBtnBoxTxt red">
+                        <p>
+                          <MdDangerous style={{ fontSize: '32px' }} />
+                        </p>
+                        작업자 위험 반경 진입
+                      </span>
+                    ) : card[getObjectKey]?.safetyLevel === 'Yellow' ? (
+                      <span className="alarmBtnBoxTxt yellow">
+                        <p>
+                          <Feedback style={{ fontSize: '32px' }} />
+                        </p>
+                        작업자 진입 확인
+                      </span>
+                    ) : (
+                      <span className="alarmBtnBoxTxt green">
+                        <p>
+                          <MdOutlineTaskAlt style={{ fontSize: '32px' }} />
+                        </p>
+                        안전합니다
+                      </span>
+                    )}
                   </div>
                 </div>
                 <div className="sensingBox">
                   <span>
-                    {/* @ts-ignore */}
                     1차 감지<p>{card[getObjectKey]?.yellowCnt}</p>
                   </span>
                   <span>
-                    {/* @ts-ignore */}
                     2차 감지<p>{card[getObjectKey]?.redCnt}</p>
                   </span>
                 </div>
@@ -289,9 +247,9 @@ const AreaInfo = () => {
     });
   }, [getObserveState]);
 
-  // if (loadingState) return <Loading />;
-  // if (!swrTrackerData) return <Loading />;
-  // if (!swrObserveData) return <Loading />;
+  if (loadingState) return <Loading />;
+  if (!swrTrackerData) return <Loading />;
+  if (!swrObserveData) return <Loading />;
   return (
     <div className="areaInfoContainer">
       <div className="areaInfo">
@@ -303,8 +261,7 @@ const AreaInfo = () => {
             <div className="bottom">
               <div>
                 <span>
-                  Safety.AI가
-                  <br />
+                  Safety.AI가 <br />
                   <span className="bold">감시중인 구역</span>
                 </span>
                 <div className="icon">
@@ -314,7 +271,7 @@ const AreaInfo = () => {
               </div>
               <div>
                 <span>
-                  최근 10시간 중<br />
+                  최근 10시간 중 <br />
                   <span className="bold">감지된 위험</span>
                 </span>
                 <div className="icon">

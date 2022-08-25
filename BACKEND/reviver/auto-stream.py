@@ -90,14 +90,14 @@ vcap.set(cv2.CAP_PROP_BUFFERSIZE, 3)
 
 cameraOnOff = True
 cnt = 0
-isObservingCnt=0
-while (cameraOnOff):
-    print('--------------------- CAMERA RUNNING ---------------------')
+isObservingCnt = 0
+while cameraOnOff:
+    print('--------------------- CAMERA IS RUNNING, NOW IN WHILE ---------------------')
     print('isObserving', isObserving)
-    if isObserving == True:
+    if isObserving:
         print('트루')
         time.sleep(1)
-        print('isObservingCnt',isObservingCnt)
+        print('isObservingCnt', isObservingCnt)
         isObservingCnt += 1
         if isObservingCnt == 5:
             isObservingCnt = 0
@@ -105,7 +105,7 @@ while (cameraOnOff):
             print('resultData: ', resultData)
             print()
             isObserving = resultData['isObserving']
-            print('isObserving',isObserving)
+            print('isObserving', isObserving)
         continue
     print("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$")
     cnt += 1
@@ -123,14 +123,6 @@ while (cameraOnOff):
 
         ### imshow를 사용하면 재부팅시
         # cv2.imshow('frame', frame)
-
-    if cnt == 150:
-        cnt = 0
-        # resultData = dbSafety["tracker"].find_one({"area": area, "camPort": camPort})
-        # print('resultData: ', resultData)
-        # print()
-        # isObserving = resultData['isObserving']
-        # print('isObserving', isObserving)
 
     if frame is not None:
         # cv2.imshow('frame', frame)

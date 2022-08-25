@@ -22,7 +22,7 @@ def find(database: str, collection: str):
 
 
 def findDatas(database: str, collection: str, param: dict):
-    return getConnection()[database][collection].find(param).limit(100)
+    return getConnection()[database][collection].find(param).limit(1000)
 
 
 async def findOne(database: str, collection: str, param: dict):

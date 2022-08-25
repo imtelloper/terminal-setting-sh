@@ -320,13 +320,16 @@ class StreamService:
 
     async def isTodayObserveExist(self, groupNum: int):
         print('######## isTodayObserveExist ########')
+        '''
+        observe 테이블에서 현재 디바이스 trackerId와 오늘 날짜의 데이터 가져오기
+        '''
         searchedData = getConnection()[self.dbName][self.tableName].find({
             'trackerId': self.trackerId,
             'date': self.getToday(),
         }).sort("groupNum", 1)
 
         dataArr = []
-        responseRes = {"fst": False, "sec": False}
+        responseRes = {"fst": False, "sec": False} # 첫번째 그룹, 두번째 그룹 여부
         try:
             async for val in searchedData:
                 dataArr.append(val)
@@ -379,7 +382,7 @@ class StreamService:
                     addSecGroupData()
 
             # 오늘 날짜로 두번째 observe 데이터도 있는 경우
-            if len(dataArr) == 2:  # 오늘 날짜로 observe 데이터 갯수가 2개일 경우
+            if len(dataArr) >= 2:  # 오늘 날짜로 observe 데이터 갯수가 2개일 경우
                 addFstGroupData()
                 addSecGroupData()
 
@@ -407,6 +410,9 @@ class StreamService:
     async def addTodayCamData(self, observeChk: dict, groupNum: int):
         print('############ addTodayCamData ############')
         try:
+            if observeChk["fst"] and observeChk["sec"]:
+                print('두 그룹 모두 이미 있습니다.')
+                return
             if groupNum == 1 and observeChk["fst"]:
                 print('첫번째 그룹은 이미 있습니다.')
                 return
