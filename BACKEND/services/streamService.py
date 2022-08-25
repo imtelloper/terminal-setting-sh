@@ -36,7 +36,7 @@ class StreamService:
         self.saveStatus = False
         self.camWidth = 512
         self.camHeight = 384
-        self.today = str(datetime.date.today())
+
         self.camPort = config.CAMPORT  # 카메라 포트
         self.camArea = config.AREA.replace(" ", "")  # 카메라 설치 구역
         self.savePath = '/home/interx/SAFETY-AI/BACKEND/safety-archives'  # 각 파일들의 폴더들이 저장될 루트 경로
@@ -168,6 +168,9 @@ class StreamService:
                 }
             )
         print('##### CONNECTED CAMERA ##### : ', self.listPorts)
+
+    def getToday(self) -> str:
+        return str(datetime.date.today())
 
     async def test(self):
         print('self.dbName', self.dbName)
@@ -319,7 +322,7 @@ class StreamService:
         print('######## isTodayObserveExist ########')
         searchedData = getConnection()[self.dbName][self.tableName].find({
             'trackerId': self.trackerId,
-            'date': self.today,
+            'date': self.getToday(),
         }).sort("groupNum", 1)
 
         dataArr = []
@@ -390,7 +393,7 @@ class StreamService:
     def insertTodayObserveData(self, groupNum):
         insertData = {
             'trackerId': ObjectId(self.trackerId),
-            "date": self.today,
+            "date": self.getToday(),
             "groupNum": int(groupNum),
             "safetyLevel": "Green",
             "yellowCnt": 0,
@@ -414,7 +417,7 @@ class StreamService:
             # 데이터가 없으므로 오늘자 데이터를 삽입한다.
             insertData = {
                 'trackerId': ObjectId(self.trackerId),
-                "date": self.today,
+                "date": self.getToday(),
                 "groupNum": int(groupNum),
                 "safetyLevel": "Green",
                 "yellowCnt": 0,
@@ -593,7 +596,6 @@ class StreamService:
             }
         )
 
-
     def video_streaming(self, coordinates1=[], coordinates2=[]):
         print(self.trackerId)
         print('video_streaming video check : ', self.currentPort)
@@ -636,7 +638,8 @@ class StreamService:
             cntForAddTodayObserve += 1
             if cntForAddTodayObserve == 10:
                 cntForAddTodayObserve = 0
-                searchedData = list(self.dbSafety["observe"].find({'trackerId': self.trackerId, 'date': self.today}))
+                searchedData = list(
+                    self.dbSafety["observe"].find({'trackerId': self.trackerId, 'date': self.getToday()}))
                 groupNums = list(map(lambda x: x["groupNum"], searchedData))
                 isObserve1Exist = 1 in groupNums
                 isObserve2Exist = 2 in groupNums

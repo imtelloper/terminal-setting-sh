@@ -85,7 +85,7 @@
       ]
     },
     "linux": {
-      "icon": "assets/icon.png",
+      "icon": "./assets/icon.png",
       "target": [
         "AppImage",
         "deb",
@@ -192,7 +192,7 @@
     "electron-builder": "^23.0.3",
     "electron-devtools-installer": "^3.2.0",
     "electron-notarize": "^1.2.1",
-    "electron-rebuild": "^3.2.7",
+    "electron-rebuild": "^3.2.9",
     "eslint": "^8.12.0",
     "eslint-config-airbnb-base": "^15.0.0",
     "eslint-config-erb": "^4.0.3",
