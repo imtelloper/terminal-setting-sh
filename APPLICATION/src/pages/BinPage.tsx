@@ -1,12 +1,18 @@
 import React, { useCallback, useState } from 'react';
 import '../style/pages/BinPage.scss';
-import { CalendarToday, Delete, Image, ViewHeadline, ViewList } from '@material-ui/icons';
+import {
+  CalendarToday,
+  Delete,
+  Image,
+  ViewHeadline,
+  ViewList,
+} from '@material-ui/icons';
 import { MdDownload, MdGridView } from 'react-icons/md';
-import AlarmPopup from '../components/AlarmPopup';
+import DownAlarmPopup from '../components/DownAlarmPopup';
 
 const BinPage = () => {
   const [txtChangeState, setTxtChangeState] = useState('모두 다운로드');
-  const [alarmPopupState, setAlarmPopupState] = useState(false);
+  const [downAlarmPopupState, setDownAlarmPopupState] = useState(false);
   const [checkedListState, setCheckedListsState] = useState([]);
 
   const handleChecked = (e) => {
@@ -21,8 +27,8 @@ const BinPage = () => {
       : setTxtChangeState('모두 다운로드');
   };
 
-  const openAlarmPopup = () => {
-    setAlarmPopupState(!alarmPopupState);
+  const openDownAlarmPopup = () => {
+    setDownAlarmPopupState(!downAlarmPopupState);
   };
 
   const dataLists = [
@@ -157,15 +163,15 @@ const BinPage = () => {
                 <span className="iconL">
                   <MdDownload style={{ fontSize: '24px' }} />
                 </span>
-                <span className="txt" onClick={openAlarmPopup}>{txtChangeState}</span>
+                <span className="txt" onClick={openDownAlarmPopup}>
+                  {txtChangeState}
+                </span>
               </button>
               <button className="iconBtnL normalPrimary">
                 <span className="iconL">
                   <Delete style={{ fontSize: '24px' }} />
                 </span>
-                <span className="txt">
-                  모두 버리기
-                </span>
+                <span className="txt">모두 버리기</span>
               </button>
             </div>
           </div>
@@ -290,8 +296,8 @@ const BinPage = () => {
           <div className="pageBtn" />
         </div>
 
-        {alarmPopupState && (
-          <AlarmPopup openAlarmPopup={openAlarmPopup} />
+        {downAlarmPopupState && (
+          <DownAlarmPopup openDownAlarmPopup={openDownAlarmPopup} />
         )}
       </div>
     </div>

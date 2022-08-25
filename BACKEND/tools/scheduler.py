@@ -13,4 +13,3 @@ def job():
 secretary = BackgroundScheduler(job_defaults={'misfire_grace_time': 300})
 secretary.start()
 # secretary.add_job(job, 'cron', second='*/5', id='safety-todo1')
-0

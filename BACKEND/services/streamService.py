@@ -23,7 +23,7 @@ import time
 import subprocess
 import stat
 import socket
-from tools.scheculder import *
+from tools.scheduler import *
 from netifaces import interfaces, ifaddresses, AF_INET
 
 from modules.yolov5.utils.torch_utils import select_device
@@ -36,6 +36,7 @@ class StreamService:
         self.saveStatus = False
         self.camWidth = 512
         self.camHeight = 384
+
         self.camPort = config.CAMPORT  # 카메라 포트
         self.camArea = config.AREA.replace(" ", "")  # 카메라 설치 구역
         self.savePath = '/home/interx/SAFETY-AI/BACKEND/safety-archives'  # 각 파일들의 폴더들이 저장될 루트 경로
@@ -97,6 +98,7 @@ class StreamService:
         # self.detectTimeCntLimit가 낮을수록 Yellow, Red 업데이트 속도 빨라짐. 너무 빠르면 성능에 문제 있을 수 있음
         # 개발할때는 detectTimeCntLimit을 10 정도로 올려서 videoSleepCnt*10 번째에 DB 업데이트 되도록 하는게 좋다.
         self.detectTimeCntLimit = 0  # FOR DEV: 10, FOR PRODUCT: 0
+        self.camRestartCnt = 0
 
         def devMode():
             self.isSetVideoFrameDelay = True
@@ -131,7 +133,8 @@ class StreamService:
         print('ip4Addresses', ip4Addresses())
         print('self.deviceIp', self.deviceIp)
         print('******************************************************')
-
+        connection = pymongo.MongoClient(config.DB_ADDRESS)
+        self.dbSafety = connection.get_database("safety")
         print('🔥platform.platform()', platform.platform())
         print('🔥platform.platform()', 'macOS' in platform.platform())
         # 각종 파일 저장 경로 폴더 생성
@@ -153,11 +156,10 @@ class StreamService:
             secretary.add_job(dirBuilder, 'interval', seconds=60, id='safety-todo-makedirs')
 
             # 현재 Device의 내부IP DB에 셋팅
-            connection = pymongo.MongoClient(config.DB_ADDRESS)
-            dbSafety = connection.get_database("safety")
-            trackerData = dbSafety["tracker"].find_one({"area": config.AREA, "camPort": config.CAMPORT})
+
+            trackerData = self.dbSafety["tracker"].find_one({"area": config.AREA, "camPort": config.CAMPORT})
             print('trackerData: ', trackerData)
-            dbSafety["tracker"].update_one(
+            self.dbSafety["tracker"].update_one(
                 {'_id': ObjectId(trackerData["_id"])},
                 {'$set':
                     {
@@ -166,6 +168,9 @@ class StreamService:
                 }
             )
         print('##### CONNECTED CAMERA ##### : ', self.listPorts)
+
+    def getToday(self) -> str:
+        return str(datetime.date.today())
 
     async def test(self):
         print('self.dbName', self.dbName)
@@ -315,10 +320,9 @@ class StreamService:
 
     async def isTodayObserveExist(self, groupNum: int):
         print('######## isTodayObserveExist ########')
-        today = str(datetime.date.today())
         searchedData = getConnection()[self.dbName][self.tableName].find({
             'trackerId': self.trackerId,
-            'date': today,
+            'date': self.getToday(),
         }).sort("groupNum", 1)
 
         dataArr = []
@@ -362,7 +366,7 @@ class StreamService:
             print('len(dataArr)', len(dataArr))
             # 오늘 날짜로 첫번째 observe 데이터만 있는 경우
             # 데이터가 들어 있으므로 전역변수에 셋팅한다.
-            if len(dataArr) == 1:
+            if len(dataArr) == 1:  # 오늘 날짜로 observe 데이터 갯수가 1개일 경우
                 currentGroupData: dict = dataArr[0]
                 print('currentGroupData', currentGroupData)
                 currentGroupNum = currentGroupData["groupNum"]
@@ -375,7 +379,7 @@ class StreamService:
                     addSecGroupData()
 
             # 오늘 날짜로 두번째 observe 데이터도 있는 경우
-            if len(dataArr) == 2:
+            if len(dataArr) == 2:  # 오늘 날짜로 observe 데이터 갯수가 2개일 경우
                 addFstGroupData()
                 addSecGroupData()
 
@@ -386,9 +390,22 @@ class StreamService:
             # 오늘 날짜로 observe 데이터가 없는 경우
             return responseRes
 
+    def insertTodayObserveData(self, groupNum):
+        insertData = {
+            'trackerId': ObjectId(self.trackerId),
+            "date": self.getToday(),
+            "groupNum": int(groupNum),
+            "safetyLevel": "Green",
+            "yellowCnt": 0,
+            "redCnt": 0,
+            "observeSwitch": True,
+            "observeTime": datetime.datetime.now(),
+        }
+        self.dbSafety["observe"].insert_one(insertData)
+
+    # 오늘 날짜로의 observe데이터 추가
     async def addTodayCamData(self, observeChk: dict, groupNum: int):
         print('############ addTodayCamData ############')
-        today = str(datetime.date.today())
         try:
             if groupNum == 1 and observeChk["fst"]:
                 print('첫번째 그룹은 이미 있습니다.')
@@ -400,7 +417,7 @@ class StreamService:
             # 데이터가 없으므로 오늘자 데이터를 삽입한다.
             insertData = {
                 'trackerId': ObjectId(self.trackerId),
-                "date": today,
+                "date": self.getToday(),
                 "groupNum": int(groupNum),
                 "safetyLevel": "Green",
                 "yellowCnt": 0,
@@ -553,17 +570,57 @@ class StreamService:
         client.close()
         transport.close()
 
+    async def getCamRestartCnt(self):
+        dataArr = []
+        searchedData = findDatas(self.dbName, config.TABLE_CONFIG, {
+            "trackerId": self.trackerId,
+        })
+        async for val in searchedData:
+            dataArr.append(val)
+        foundData = dataArr[0]
+        camRestartCnt = int(foundData['camRestartCnt'])
+        self.camRestartCnt = camRestartCnt
+        return camRestartCnt
+
+    def updateCamRestartCnt(self):
+        connection = pymongo.MongoClient(config.DB_ADDRESS)
+        dbSafety = connection.get_database("safety")
+        configData = dbSafety["config"].find_one({"trackerId": ObjectId(self.trackerId)})
+        print('configData: ', configData)
+        dbSafety["config"].update_one(
+            {'_id': ObjectId(configData["_id"])},
+            {'$set':
+                {
+                    'camRestartCnt': self.camRestartCnt,
+                }
+            }
+        )
+
     def video_streaming(self, coordinates1=[], coordinates2=[]):
+        print(self.trackerId)
         print('video_streaming video check : ', self.currentPort)
-        if self.currentPort is None: os.system("fuser -k 8000/tcp")
+        print('CamRestartCnt : ', self.camRestartCnt)
+        if self.currentPort is None:
+            if self.camRestartCnt == 3:
+                self.camRestartCnt = 0
+                self.updateCamRestartCnt()
+                os.system("sudo reboot")
+            else:
+                self.camRestartCnt += 1
+                print(self.camRestartCnt)
+                self.updateCamRestartCnt()
+                os.system("fuser -k 8000/tcp")
+
         device_mode = ""
         print('쓰레쉬 홀드', self.thisCamThreshold)
         print('감지 모델', self.thisCamSensingModel)
         conf = self.thisCamThreshold
         # rois = [[[1차 그룹 yellow영역], [1차 그룹 red영역]], [[1차영역], [2차영역]], ... , [[1차영역], [2차영역]]]
         rois = []
-        if len(coordinates1) > 0: rois.append(coordinates1)
-        if len(coordinates2) > 0: rois.append(coordinates2)
+        isCood1Exist = len(coordinates1) > 0
+        isCood2Exist = len(coordinates2) > 0
+        if isCood1Exist: rois.append(coordinates1)
+        if isCood2Exist: rois.append(coordinates2)
 
         cnt = 0  # 트랙킹시 사라진 객체를 프레임수마다 카운팅
         track_signal = False  # 트랙킹 신호 True면 트랙킹한다
@@ -571,33 +628,31 @@ class StreamService:
         warn_sig = None
         multi_tracker = cv2.MultiTracker_create()  # tracking api 호출
         imgType = 'jpeg'
-
         fstSensingLevel = None
         secSensingLevel = None
-
         self.updateDeviceIp(self.trackerId, self.deviceIp)
-
-        videoInitCnt = 0
+        cntForAddTodayObserve = 0
 
         while self.cameraOnOff:
+            # 현재 좌표는 있는데 observe 데이터가 없어서 에러가 날 경우 대비
+            cntForAddTodayObserve += 1
+            if cntForAddTodayObserve == 10:
+                cntForAddTodayObserve = 0
+                searchedData = list(
+                    self.dbSafety["observe"].find({'trackerId': self.trackerId, 'date': self.getToday()}))
+                groupNums = list(map(lambda x: x["groupNum"], searchedData))
+                isObserve1Exist = 1 in groupNums
+                isObserve2Exist = 2 in groupNums
+                # 첫번째 좌표는 존재하는데 observe 데이터가 없는 경우
+                if isCood1Exist and isObserve1Exist == False: self.insertTodayObserveData(1)
+                # 두번째 좌표는 존재하는데 observe 데이터가 없는 경우
+                if isCood2Exist and isObserve2Exist == False: self.insertTodayObserveData(2)
 
-            k = cv2.waitKey(1) & 0xFF
             # For Dev, isSetDetectDelay have to set True
             if self.isSetDetectDelay: self.detectTimeCnt += 1
             # For Dev, isSetVideoFrameDelay have to set True
             if self.isSetVideoFrameDelay: time.sleep(self.videoSleepCnt)
-
             ret, frame = self.video.read()
-
-            videoInitCnt += 1
-            # print('videoInitCnt',videoInitCnt)
-            if videoInitCnt == 50:
-                videoInitCnt = 0
-                # print('self.currentPort: ',self.currentPort)
-                # self.video = cv2.VideoCapture(self.currentPort)
-                # self.video.set(cv2.CAP_PROP_FRAME_WIDTH, 640)
-                # self.video.set(cv2.CAP_PROP_FRAME_HEIGHT, 480)
-                # ret, frame = self.video.read()
 
             if frame is None: return
             self.camImg = frame.copy()
@@ -780,15 +835,6 @@ class StreamService:
                     cv2.imwrite(self.screenShotRecordPath, result_img, params=[cv2.IMWRITE_PNG_COMPRESSION, 0])
                     self.calibCaptureGate = False
                     # self.saveFile(self.screenShotFolderPath, self.screenShotRecordPath)
-
-                # 키보드 눌렀을 시 이벤트 발생
-                if k == ord('s'):
-                    print("Screenshot saved...")
-                    # 이미지 저장 메서드
-                    cv2.imwrite(self.screenShotRecordPath, result_img, params=[cv2.IMWRITE_PNG_COMPRESSION, 0])
-                    self.saveFile(self.screenShotFolderPath, self.screenShotRecordPath)
-                elif k == ord('q'):
-                    break
 
                 yield (b'--frame\r\n' b'Content-Type: image/jpeg\r\n\r\n' + bytearray(frame) + b'\r\n')
 
