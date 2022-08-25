@@ -11,29 +11,36 @@ import {
 import { MdDownload, MdGridView } from 'react-icons/md';
 import { useNavigate } from 'react-router-dom';
 import ImgPopup from '../components/ImgPopup';
-import AlarmPopup from '../components/AlarmPopup';
+import DownAlarmPopup from '../components/DownAlarmPopup';
+import RemoveAlarmPopup from '../components/RemoveAlarmPopup';
 
 const ImgArchive = () => {
   const navigation = useNavigate();
   const [isOpenPopupState, setIsOpenPopupState] = useState(false);
-  const [txtChangeState, setTxtChangeState] = useState('모두 다운로드');
-  const [alarmPopupState, setAlarmPopupState] = useState(false);
+  const [txtChangeState, setTxtChangeState] = useState('모두');
+  const [downAlarmPopupState, setDownAlarmPopupState] = useState(false);
+  const [removeAlarmPopupState, setRemoveAlarmPopupState] = useState(false);
   const [checkedListState, setCheckedListsState] = useState([]);
-
 
   const openImgPopup = () => {
     setIsOpenPopupState(!isOpenPopupState);
   };
 
-  const openAlarmPopup = () => {
-    setAlarmPopupState(!alarmPopupState);
+  const openDownAlarmPopup = () => {
+    setDownAlarmPopupState(!downAlarmPopupState);
   };
+
+  const openRemoveAlarmPopup = () => {
+    setRemoveAlarmPopupState(!removeAlarmPopupState);
+  };
+
   const handleChecked = (e) => {
     const isChecked = e.currentTarget.checked;
     console.log(isChecked, '체크됨');
+
     isChecked > 0
-      ? setTxtChangeState('선택 다운로드')
-      : setTxtChangeState('모두 다운로드');
+      ? setTxtChangeState('선택')
+      : setTxtChangeState('모두');
 
     if (isChecked) {
       document.querySelectorAll('.archiveImgsList').forEach((ele) => {
@@ -174,19 +181,23 @@ const ImgArchive = () => {
               </div>
             </div>
             <div className="imgArchiveRight">
-              <button className="iconBtnL normalPrimary">
+              <button
+                className="iconBtnL normalPrimary"
+                onClick={openDownAlarmPopup}
+              >
                 <span className="iconL">
                   <MdDownload style={{ fontSize: '24px' }} />
                 </span>
-                <span className="txt" onClick={openAlarmPopup}>
-                  {txtChangeState}
-                </span>
+                <span className="txt">{txtChangeState} 다운로드</span>
               </button>
-              <button className="iconBtnL normalPrimary">
+              <button
+                className="iconBtnL normalPrimary"
+                onClick={openRemoveAlarmPopup}
+              >
                 <span className="iconL">
                   <Delete style={{ fontSize: '24px' }} />
                 </span>
-                <span className="txt">모두 버리기</span>
+                <span className="txt">{txtChangeState} 버리기</span>
               </button>
             </div>
           </div>
@@ -321,7 +332,12 @@ const ImgArchive = () => {
 
         {isOpenPopupState && <ImgPopup openImgPopup={openImgPopup} />}
 
-        {alarmPopupState && <AlarmPopup openAlarmPopup={openAlarmPopup} />}
+        {downAlarmPopupState && (
+          <DownAlarmPopup openDownAlarmPopup={openDownAlarmPopup} />
+        )}
+        {removeAlarmPopupState && (
+          <RemoveAlarmPopup openRemoveAlarmPopup={openRemoveAlarmPopup} />
+        )}
       </div>
     </div>
   );

@@ -31,7 +31,7 @@ async def saveData(data: dataModel = Body(...)):
     """
     데이터 저장
 
-    - **trackerId**: ObjectId
+    - **trackerId**: Tracker ObjectId
     - **fileType**: video|img
     - **path**: 카메라 녹화 혹은 캡쳐 파일 저장 경로
     - **safetyLevel**: 이미지 캡쳐 시 안전 레벨 기록 - Green|Yellow|Red

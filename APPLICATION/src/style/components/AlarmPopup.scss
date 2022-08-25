@@ -1,6 +1,6 @@
 @import '../../style/color.scss';
 
-div.removeAlarmPopupContainer{
+div.alarmPopupContainer{
   width: 100vw;
   height: 100vh;
   background-color: rgba(0,0,0,0.7);
@@ -21,12 +21,12 @@ div.removeAlarmPopupContainer{
     display: flex;
     flex-direction: column;
     align-items: center;
+    justify-content: center;
     span.icon{
       display: block;
-      width: 80px;
-      height: 80px;
+      width: 60px;
+      height: 60px;
       margin-top: 16px;
-      background: center / cover url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80' viewBox='0 0 80 80'%3E%3Cpath id='good' d='M43.7,83.7a39.039,39.039,0,0,1-15.665-3.153A39.8,39.8,0,0,1,6.853,59.365,39.039,39.039,0,0,1,3.7,43.7,39.6,39.6,0,0,1,15.326,15.375,40.956,40.956,0,0,1,28.035,6.853,39.039,39.039,0,0,1,43.7,3.7a39.256,39.256,0,0,1,22.66,7L60.055,17a32.373,32.373,0,0,0-7.685-3.4A30.234,30.234,0,0,0,43.7,12.37a30.231,30.231,0,0,0-22.217,9.113A30.231,30.231,0,0,0,12.37,43.7a30.231,30.231,0,0,0,9.113,22.217A30.231,30.231,0,0,0,43.7,75.03a30.232,30.232,0,0,0,22.217-9.113A30.231,30.231,0,0,0,75.03,43.7a29.5,29.5,0,0,0-.2-3.448q-.2-1.675-.493-3.251l7-7a38.953,38.953,0,0,1,1.773,6.65A41.052,41.052,0,0,1,83.7,43.7a39.039,39.039,0,0,1-3.153,15.665,40.956,40.956,0,0,1-8.522,12.709A39.6,39.6,0,0,1,43.7,83.7ZM38.183,62.025,21.138,44.981l6.108-6.108L38.281,49.907,77.69,10.5l6.01,6.01Z' transform='translate(-3.7 -3.7)' fill='%2371e887'/%3E%3C/svg%3E%0A") no-repeat;
     }
     span.txt{
       margin-top: 28px;

@@ -337,15 +337,9 @@ div.areaInfoContainer {
 
 @keyframes activeAni {
   0%{
-    opacity: 0.2;
-  }
-  50%{
-    opacity: 1;
-  }
-  75%{
-    opacity: 1;
+    opacity: 0;
   }
   100%{
-    opacity: 0.5;
+    opacity: 1  ;
   }
 }

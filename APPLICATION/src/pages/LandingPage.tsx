@@ -12,6 +12,7 @@ const LandingPage = () => {
       // navigate('/detail');
       // navigate('/setting');
       // navigate('/login');
+      // navigate('/imgArchive');
     }, 300);
   }, []);
 
