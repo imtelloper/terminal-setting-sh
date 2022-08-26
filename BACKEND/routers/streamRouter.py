@@ -253,5 +253,3 @@ async def streamVideoSecondAreaSet(groupNum, coordinate1, coordinate2, coordinat
     print('streamVideoAreaSet 2data :', coordinates2)
     return StreamingResponse(service.video_streaming(coordinates1, coordinates2),
                              media_type="multipart/x-mixed-replace; boundary=frame")
-
-

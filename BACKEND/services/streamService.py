@@ -25,7 +25,7 @@ import stat
 import socket
 from tools.scheduler import *
 from netifaces import interfaces, ifaddresses, AF_INET
-
+from dotenv import load_dotenv
 from modules.yolov5.utils.torch_utils import select_device
 from modules.yolov5.models.common import DetectMultiBackend
 
@@ -534,8 +534,8 @@ class StreamService:
         host = "192.168.0.4"
         port = 22  # 고정
         transport = paramiko.transport.Transport(host, port)
-        userId = "interx"
-        password = "interx12!"
+        userId = os.getenv('USERID')
+        password = os.getenv('USERPW')
 
         # 연결
         transport.connect(username=userId, password=password)

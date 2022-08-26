@@ -1,6 +1,8 @@
 from bson import ObjectId
 import config
 from repo.baseRepo import *
+import re
+import datetime
 
 
 '''
@@ -67,3 +69,31 @@ class ObserveService:
     async def getDataCount(self, data: dict):
         count = await dataCount(self.dbName, self.tableName, data)
         return count
+
+
+    async def countOperatingTime(self, id, grpNum):
+        currentDate = datetime.datetime.now().strftime('%Y-%m-%d')
+        dataArr = []
+        searchedData = findDatas(self.dbName, self.tableName, {
+            "trackerId": ObjectId(id),
+            "date": currentDate,
+            "groupNum": int(grpNum),
+        })
+        async for val in searchedData:
+            dataArr.append(val)
+        foundData = dataArr[0]
+        startTime = foundData['observeTime']
+        observeSwitch = foundData['observeSwitch']
+
+        if observeSwitch is True:
+            endTime = datetime.datetime.now()
+            resultTime = endTime - startTime
+            replaceResultTime = str(resultTime).replace(" ", "")
+            resultList = re.split(r'days,|:', replaceResultTime)
+            if len(resultList) == 4:
+                result = ("{}일 {}시간 {}분").format(resultList[0], resultList[1], resultList[2])
+            else:
+                result = ("{}시간 {}분").format(resultList[0], resultList[1])
+        else:
+            result = "00시간 00분"
+        return result

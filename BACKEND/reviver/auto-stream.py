@@ -9,8 +9,8 @@ print('######## auto-stream.py RUN ########')
 load_dotenv(verbose=True)
 area = os.getenv('AREA')
 camPort = os.getenv('CAMPORT')
-mongodbUri = "mongodb://interx:interx12!@192.168.0.4:27017/interx"
-# mongodbUri = "mongodb://interx:interx12!@127.0.0.1:27017/admin"
+#mongodbUri = "mongodb://interx:interx12!@192.168.0.4:27017/interx"
+mongodbUri = os.getenv('MONGO_ADDRESS')
 connection = pymongo.MongoClient(mongodbUri)
 dbSafety = connection.get_database("safety")
 isObserving = False
