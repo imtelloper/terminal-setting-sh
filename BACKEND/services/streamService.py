@@ -669,6 +669,7 @@ class StreamService:
             if not ret: return
             humans, rsigs = [], []
             try:
+                self.camImg = cv2.resize(self.camImg, (256,192), interpolation=cv2.INTER_AREA)
                 result_img = ""
                 if cnt == 0:
                     # 욜로 감지(딥러닝을 돌린다. 사람을 찾아주는 기능)
@@ -717,6 +718,8 @@ class StreamService:
                             result_img = self.camImg
                     else:
                         result_img = self.camImg
+
+                result_img = cv2.resize(result_img, (512,384), interpolation=cv2.INTER_CUBIC)
 
                 fstGroupSensing = None
                 secGroupSensing = None
