@@ -37,77 +37,80 @@ class HumanCalculator:
         #     sigs.append(warning_signal)
 
         # Yellow 영역 True or False push
-            rsigs = []
-            for roi in rois:
-                sigs, sig_poly1, sig_poly2 = [], [], []
-                roi1, roi2 = roi
-                if roi1:
-                    for human_roi in human_box:
-                        human_point = Point(human_roi)
-                        rois1 = list((np.array(roi1)).round(0))
-                        poly1 = Polygon(rois1)
-                        point_in_poly1.append(human_point.within(poly1))
-                        sig_poly1.append(human_point.within(poly1))
+            line_width = 2
+            if rois:
+                rsigs = []
+                for roi in rois:
+                    sigs, sig_poly1, sig_poly2 = [], [], []
+                    roi1, roi2 = roi
+                    if roi1:
+                        for human_roi in human_box:
+                            human_point = Point(human_roi)
+                            rois1 = list((np.array(roi1)/2).round(0))
+                            poly1 = Polygon(rois1)
+                            point_in_poly1.append(human_point.within(poly1))
+                            sig_poly1.append(human_point.within(poly1))
 
-                if roi2:
-                    for human_roi in human_box:
-                        human_point = Point(human_roi)
-                        rois2 = list((np.array(roi2)).round(0))
-                        poly2 = Polygon(rois2)
-                        point_in_poly2.append(human_point.within(poly2))
-                        sig_poly2.append(human_point.within(poly2))
+                    if roi2:
+                        for human_roi in human_box:
+                            human_point = Point(human_roi)
+                            rois2 = list((np.array(roi2)/2).round(0))
+                            poly2 = Polygon(rois2)
+                            point_in_poly2.append(human_point.within(poly2))
+                            sig_poly2.append(human_point.within(poly2))
 
-                if not roi1 and not roi2:
-                    self.camImg = cv2.rectangle(self.camImg, (x1, y1), (x2, y2), self.GREEN, 3)
-                    # camSigSetting(0, GREEN)
+                    if not roi1 and not roi2:
+                        self.camImg = cv2.rectangle(self.camImg, (x1, y1), (x2, y2), self.GREEN, line_width)
+                        # camSigSetting(0, GREEN)
 
-                    # draw rectangle
-                elif True in point_in_poly1 and True in point_in_poly2:
-                    self.camImg = cv2.rectangle(self.camImg, (x1, y1), (x2, y2), self.RED, 3)
-                    # camSigSetting(2, RED)
+                        # draw rectangle
+                    elif True in point_in_poly1 and True in point_in_poly2:
+                        self.camImg = cv2.rectangle(self.camImg, (x1, y1), (x2, y2), self.RED, line_width)
+                        # camSigSetting(2, RED)
 
-                elif True in point_in_poly2 and not True in point_in_poly1:
-                    self.camImg = cv2.rectangle(self.camImg, (x1, y1), (x2, y2), self.RED, 3)
-                    # camSigSetting(2, RED)
+                    elif True in point_in_poly2 and not True in point_in_poly1:
+                        self.camImg = cv2.rectangle(self.camImg, (x1, y1), (x2, y2), self.RED, line_width)
+                        # camSigSetting(2, RED)
 
-                elif True in point_in_poly1 and not True in point_in_poly2:
-                    self.camImg = cv2.rectangle(self.camImg, (x1, y1), (x2, y2), self.YELLOW, 3)
-                    # camSigSetting(1, YELLOW)
+                    elif True in point_in_poly1 and not True in point_in_poly2:
+                        self.camImg = cv2.rectangle(self.camImg, (x1, y1), (x2, y2), self.YELLOW, line_width)
+                        # camSigSetting(1, YELLOW)
 
-                elif not True in point_in_poly1 and not True in point_in_poly2:
-                    self.camImg = cv2.rectangle(self.camImg, (x1, y1), (x2, y2), self.GREEN, 3)
-                    # camSigSetting(0, GREEN)
+                    elif not True in point_in_poly1 and not True in point_in_poly2:
+                        self.camImg = cv2.rectangle(self.camImg, (x1, y1), (x2, y2), self.GREEN, line_width)
+                        # camSigSetting(0, GREEN)
 
-                if not roi1 and not roi2:
-                    warning_signal = 0
-                    sigs.append(warning_signal)
-                    # camSigSetting(0, GREEN)
+                    if not roi1 and not roi2:
+                        warning_signal = 0
+                        sigs.append(warning_signal)
+                        # camSigSetting(0, GREEN)
 
-                    # draw rectangle
-                elif True in sig_poly1 and True in sig_poly2:
-                    warning_signal = 2
-                    sigs.append(warning_signal)
-                    # camSigSetting(2, RED)
+                        # draw rectangle
+                    elif True in sig_poly1 and True in sig_poly2:
+                        warning_signal = 2
+                        sigs.append(warning_signal)
+                        # camSigSetting(2, RED)
 
-                elif True in sig_poly2 and not True in sig_poly1:
-                    warning_signal = 2
-                    sigs.append(warning_signal)
-                    # camSigSetting(2, RED)
+                    elif True in sig_poly2 and not True in sig_poly1:
+                        warning_signal = 2
+                        sigs.append(warning_signal)
+                        # camSigSetting(2, RED)
 
-                elif True in sig_poly1 and not True in sig_poly2:
-                    warning_signal = 1
-                    sigs.append(warning_signal)
-                    # camSigSetting(1, YELLOW)
+                    elif True in sig_poly1 and not True in sig_poly2:
+                        warning_signal = 1
+                        sigs.append(warning_signal)
+                        # camSigSetting(1, YELLOW)
 
-                elif not True in sig_poly1 and not True in sig_poly2:
-                    warning_signal = 0
-                    sigs.append(warning_signal)
-                    # camSigSetting(0, GREEN)
+                    elif not True in sig_poly1 and not True in sig_poly2:
+                        warning_signal = 0
+                        sigs.append(warning_signal)
+                        # camSigSetting(0, GREEN)
 
-                sig = max(sigs)
-                rsigs.append(sig),
-            results.append(rsigs)
-
+                    sig = max(sigs)
+                    rsigs.append(sig)
+                results.append(rsigs)
+            else:
+                self.camImg = cv2.rectangle(self.camImg, (x1, y1), (x2, y2), self.GREEN, line_width)
         return results, self.camImg
 
 
