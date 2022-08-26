@@ -28,7 +28,7 @@ const AreaInfo = () => {
   const findFetcher = (url: string) =>
     axios.post(url, { date: today }).then((res) => res.data);
 
-  /* 오늘 날짜의 Observe 데이터 가져오기 */
+  /* 오늘 날짜의 observe 데이터 가져오기 */
   const { data: swrObserveData, error: swrObserveErr } = useSWR<
     Array<TrackerObserve>
   >('/api/observe/find', findFetcher, { refreshInterval: 1000 });
@@ -45,12 +45,10 @@ const AreaInfo = () => {
     { refreshInterval: 1000 }
   );
 
+  /* 카메라 감지 페이지 넘어가기 */
   const goObservePage = (e) => {
     const target = e.currentTarget;
-    const dType = target.getAttribute('datatype');
     const targetArea = target.getAttribute('itemID');
-    // console.log('dType', dType);
-    // console.log('targetArea', targetArea);
     setSwrState({ ...swrState, curTrackerArea: targetArea });
     navigate('/observe');
   };
@@ -59,6 +57,7 @@ const AreaInfo = () => {
   const setProcessedSwrData = useCallback(() => {
     setLoadingState(true);
     const processedData = [];
+    /* 각 구역들만 추출 */
     const areaData = [...new Set(swrTrackerData?.map((obj) => obj.area))];
     // console.log('areaData', areaData);
     /* 메인 화면에 리스트들이 안뜨는 이유는 오늘 날짜의 observe 데이터가 없어서 그렇다. */
@@ -74,9 +73,7 @@ const AreaInfo = () => {
             processedObserve = observe.map((obj) => {
               return { ...tracker, ...obj };
             });
-          } else {
-            processedObserve = [{ ...tracker }];
-          }
+          } else processedObserve = [{ ...tracker }];
           // console.log('processedObserve', processedObserve);
           processedData.push(...processedObserve);
           /* 정렬 */
@@ -140,6 +137,8 @@ const AreaInfo = () => {
     };
   }, []);
 
+  /* 1 */
+  /* 처음 한번 가공 데이터 셋팅. 가공 데이터는 getObserveState에 셋팅된다. */
   useEffect(() => {
     console.log('#####getObserveState', getObserveState);
     console.log('🌸🌸🌸 swrObserveData', swrObserveData);
@@ -148,6 +147,8 @@ const AreaInfo = () => {
       swrTrackerData?.length > 0 && setProcessedSwrData();
   }, [getObserveState]);
 
+  /* 2 */
+  /* tracker, observe데이터가 갱신될때마다 지속적 가공 데이터 셋팅 */
   useEffect(() => {
     /* db에서 tracker 데이터가 바뀔때마다 가공 데이터 셋팅 */
     if (swrTrackerData) {
