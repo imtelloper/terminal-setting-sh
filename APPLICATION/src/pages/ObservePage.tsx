@@ -60,10 +60,10 @@ const ObservePage = () => {
     iframeTitleEl.classList.toggle('iframeTxtColorActive');
     recordBtnCircleEl.classList.toggle('spinnerActive');
     // iframeRecordingTxtEl.classList.toggle('iframeRecordingTxtActive');
-    console.log('videoFrameState[0].ip', videoFrameState[0]?.ip);
-    console.log('videoFrameState[1].ip', videoFrameState[1]?.ip);
-    console.log('videoFrameState[2].ip', videoFrameState[2]?.ip);
-    console.log('videoFrameState[3].ip', videoFrameState[3]?.ip);
+    // console.log('videoFrameState[0].ip', videoFrameState[0]?.ip);
+    // console.log('videoFrameState[1].ip', videoFrameState[1]?.ip);
+    // console.log('videoFrameState[2].ip', videoFrameState[2]?.ip);
+    // console.log('videoFrameState[3].ip', videoFrameState[3]?.ip);
     const camStateObj = {
       cam1: videoFrameState[0]?.ip,
       cam2: videoFrameState[1]?.ip,

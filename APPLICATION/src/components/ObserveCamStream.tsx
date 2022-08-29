@@ -288,8 +288,10 @@ const ObserveCamStream = ({
 
   /* INIT EFFECT */
   useEffect(() => {
-    videoFrameState.forEach((obj) =>
-      Api.tracker.modifyOneData(obj.trackerId, { isObserving: true })
+    videoFrameState.forEach(
+      (obj) =>
+        obj.trackerId &&
+        Api.tracker.modifyOneData(obj.trackerId, { isObserving: true })
     );
   }, []);
 
