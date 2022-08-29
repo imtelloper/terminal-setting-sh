@@ -2,13 +2,13 @@ from bson import ObjectId
 import config
 from repo.baseRepo import *
 
-
 '''
 Change below variables
 - class name
 - self.dbName =
 - self.tableName =
 '''
+
 
 class TrackerService:
     def __init__(self):

@@ -114,8 +114,8 @@ const createWindow = async () => {
     },
   });
 
-  mainWindow.maximize();
-  mainWindow.setFullScreen(!mainWindow.isFullScreen());
+  // mainWindow.maximize();
+  // mainWindow.setFullScreen(!mainWindow.isFullScreen());
 
   mainWindow.loadURL(resolveHtmlPath('index.html'));
   mainWindow.on('ready-to-show', () => {

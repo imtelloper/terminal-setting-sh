@@ -5,6 +5,7 @@ import Api from '../api/Api';
 import { useSWRState } from '../fetcher/useSWRState';
 import axios from 'axios';
 import useSWR from 'swr';
+import Loading from './Loading';
 
 const ObserveGroupBox = ({
   stateInfo,
@@ -15,7 +16,10 @@ const ObserveGroupBox = ({
   swrTrackerMutate,
 }) => {
   const { data: swrState, mutate: setSwrState } = useSWRState();
-  const [loadingState, setLoadingState] = useState(false);
+  const [loadingState, setLoadingState] = useState({
+    delete: false,
+    stateReset: false,
+  });
   const observeId = stateInfo?.[groupNum]?._id;
 
   const swrIntervalMilliSec = 300;
@@ -69,7 +73,7 @@ const ObserveGroupBox = ({
 
   // 그룹안 삭제
   const handleDelete = async (e) => {
-    setLoadingState(true);
+    setLoadingState({ ...loadingState, delete: true });
 
     console.log('handleDelete');
     const target = e.currentTarget;
@@ -107,7 +111,7 @@ const ObserveGroupBox = ({
     await Api.observe
       .deleteOneData(observeId)
       .then((res) => console.log('observe.deleteOneData done sir', res))
-      .finally(() => setLoadingState(false))
+      .finally(() => setLoadingState({ ...loadingState, delete: false }))
       .catch((err) => console.error(err));
 
     /* 감지 데이터 좌표값 초기화 */
@@ -116,7 +120,7 @@ const ObserveGroupBox = ({
         [`sensingGroup${groupNum}`]: '',
       })
       .then((res) => console.log('tracker.modifyOneData done sir', res))
-      .finally(() => setLoadingState(false))
+      .finally(() => setLoadingState({ ...loadingState, delete: false }))
       .catch((err) => console.error(err));
 
     await Api.stream.initGroupSensingCnt(swrState.curCamIp, groupNum);
@@ -124,20 +128,30 @@ const ObserveGroupBox = ({
   };
 
   // 그룹안 상태 리셋
-  const handleErrorReset = () => {
+  const handleErrorReset = (e) => {
     console.log('handleErrorReset');
+    setLoadingState({ ...loadingState, stateReset: true });
+    const target = e.currentTarget;
+    const dType = target.getAttribute('datatype');
+    console.log('handleErrorReset dType', dType);
+
+    Api.observe
+      .modifyOneData(dType, { yellowCnt: 0, redCnt: 0 })
+      .finally(() => setLoadingState({ ...loadingState, stateReset: false }))
+      .catch((err) => console.error(err));
   };
 
-  // useEffect(() => {
-  //   console.log('stateInfo', stateInfo);
-  //   console.log('observeId', observeId);
-  // }, [stateInfo]);
+  useEffect(() => {
+    console.log('stateInfo', stateInfo);
+    console.log('observeId', observeId);
+  }, [stateInfo]);
 
   return (
     <div className="observeCamInfoContainer">
       <div className="observeBox">
         <div className="groupBox">
           <span className="groupName">{`Group${groupNum}`}</span>
+          {/* ON | OFF */}
           <div className="switchToggle">
             <input
               datatype="messageSwitch"
@@ -164,11 +178,11 @@ const ObserveGroupBox = ({
             />
           </div>
         </div>
+
+        {/* Alarm Box */}
         <div className="btnBox">
           {/* className : 색상별 green yellow red inactive 추가 */}
-          <div
-            className={`alarmTxt ${safetyLevel?.toLowerCase()}`}
-          >
+          <div className={`alarmTxt ${safetyLevel?.toLowerCase()}`}>
             {/* <MdOutlineTaskAlt style={{ fontSize: '32px' }} /> */}
             {/* 작업자 진입 확인 / 작업자 위험 반경 진입 / 비활성화 되었습니다. */}
             <div className="btnBoxContent">
@@ -218,44 +232,53 @@ const ObserveGroupBox = ({
             </span>
           </div>
         </div>
-        <div className="safetyBtnBox">
-          <div>
-            <button
-              className="btnR normalPrimary"
-              onClick={saveParameter}
-              datatype={stateInfo?.[groupNum]?.trackerId}
-            >
-              저장
-            </button>
-            <button className="btnR normalPrimary" onClick={callParameter}>
-              불러오기
-            </button>
-            <button className="btnR normalPrimary" onClick={handleErrorReset}>
-              상태 리셋
-            </button>
 
-            {/* {(() => { */}
-            {/* console.log('🌞stateInfo', stateInfo); */}
-            {/* console.log('🌝groupNum', groupNum); */}
-            {/* console.log('🌝🌝stateInfo?.[groupNum', stateInfo?.[groupNum]); */}
-            {/* console.log( */}
-            {/*   '🌝🌝🌝stateInfo?.[groupNum]?.trackerId', */}
-            {/*   stateInfo?.[groupNum]?.trackerId */}
-            {/* ); */}
-            {/* })()} */}
+        {loadingState.stateReset ? (
+          <Loading />
+        ) : (
+          <div className="safetyBtnBox">
+            <div>
+              <button
+                className="btnR normalPrimary"
+                onClick={saveParameter}
+                datatype={stateInfo?.[groupNum]?.trackerId}
+              >
+                저장
+              </button>
+              <button className="btnR normalPrimary" onClick={callParameter}>
+                불러오기
+              </button>
+              <button
+                className="btnR normalPrimary"
+                onClick={handleErrorReset}
+                datatype={stateInfo?.[groupNum]?._id}
+              >
+                상태 리셋
+              </button>
 
-            {/* 그룹 삭제 버튼 */}
-            <button
-              className="btnR normalPrimary"
-              onClick={handleDelete}
-              itemID={stateInfo?.[groupNum]?.trackerId}
-              name={observeId}
-              datatype={groupNum}
-            >
-              <Delete />
-            </button>
+              {/* {(() => { */}
+              {/* console.log('🌞stateInfo', stateInfo); */}
+              {/* console.log('🌝groupNum', groupNum); */}
+              {/* console.log('🌝🌝stateInfo?.[groupNum', stateInfo?.[groupNum]); */}
+              {/* console.log( */}
+              {/*   '🌝🌝🌝stateInfo?.[groupNum]?.trackerId', */}
+              {/*   stateInfo?.[groupNum]?.trackerId */}
+              {/* ); */}
+              {/* })()} */}
+
+              {/* 그룹 삭제 버튼 */}
+              <button
+                className="btnR normalPrimary"
+                onClick={handleDelete}
+                itemID={stateInfo?.[groupNum]?.trackerId}
+                name={observeId}
+                datatype={groupNum}
+              >
+                <Delete />
+              </button>
+            </div>
           </div>
-        </div>
+        )}
       </div>
     </div>
   );

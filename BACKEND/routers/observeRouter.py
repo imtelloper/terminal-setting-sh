@@ -119,4 +119,5 @@ async def getCount():
 @router.get("/fence-operating-time/{id}/{grpNum}")
 async def getOperatingTime(id, grpNum):
     serviceResult = await service.countOperatingTime(id, grpNum)
+    print('serviceResult',serviceResult)
     return serviceResult

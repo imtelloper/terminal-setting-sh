@@ -137,6 +137,8 @@ const ObserveCamInfo = ({
               {/*  console.log('🌟info', info); */}
               {/*   console.log('🌟idx', idx); */}
               {/* })()} */}
+
+              {/* Group1 */}
               {fstCanvasVisible && (
                 <ObserveGroupBox
                   stateInfo={info}
@@ -148,6 +150,7 @@ const ObserveCamInfo = ({
                 />
               )}
 
+              {/* Group2 */}
               {secCanvasVisible && (
                 <ObserveGroupBox
                   stateInfo={info}

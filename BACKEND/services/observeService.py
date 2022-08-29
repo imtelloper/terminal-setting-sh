@@ -72,6 +72,9 @@ class ObserveService:
 
 
     async def countOperatingTime(self, id, grpNum):
+        print('countOperatingTime')
+        print('id',id)
+        print('grpNum',grpNum)
         currentDate = datetime.datetime.now().strftime('%Y-%m-%d')
         dataArr = []
         searchedData = findDatas(self.dbName, self.tableName, {
