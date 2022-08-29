@@ -1,4 +1,6 @@
 import os
+os.system('python /home/interx/SAFETY-AI/BACKEND/controlTowerFinder.py')
+
 import platform
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
@@ -14,6 +16,7 @@ from routers.controlTowerRouter import router as ContorlTowerRouter
 import logging.config
 import warnings
 from fastapi.responses import FileResponse
+
 
 
 warnings.filterwarnings('ignore')
@@ -88,7 +91,6 @@ app.include_router(ContorlTowerRouter, prefix="/api/control-tower")
 @app.on_event("startup")
 async def onAppStart():
     print("############ SERVER START ############")
-    os.system('python /home/interx/SAFETY-AI/BACKEND/controlTowerFinder.py')
     await connectMongo()
 
 
