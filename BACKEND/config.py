@@ -23,8 +23,6 @@ DEFAULT = "default"
 DATABASE KEYWORD
 """
 DB_NAME = "safety"
-# DB_NAME = "DC4F67F8"
-# DB_NAME = "testdb"
 
 """
 COLLECTION KEYWORD
@@ -57,9 +55,6 @@ def getDatabaseIp():
         ipAddr = "192.168.0." + str(num)
         pingCmd = "ping -c " + ipAddr
 
-
-
-
         # if response == 0:
         #     Netstatus = "Network Active"
         # else:
@@ -81,8 +76,9 @@ def getDatabaseIp():
     #     except Exception as e:
     #         continue
 
-dbAddressBase = os.getenv('MONGO_ADDRESS')
-index = dbAddressBase.find(":27017")
+
+# dbAddressBase = os.getenv('MONGO_ADDRESS')
+# index = dbAddressBase.find(":27017")
 
 # IP_ADDRESS = getDatabaseIp()
 # DB_ADDRESS = dbAddressBase[:index] + IP_ADDRESS + dbAddressBase[index:]
@@ -98,6 +94,8 @@ DB_ADDRESS = os.getenv('MONGO_ADDRESS')
 """
 관제PC PW
 """
+
+
 # USER_PW = foundData['password']
 # print(USER_PW)
 

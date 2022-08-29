@@ -95,6 +95,8 @@ if __name__ == '__main__':
         addr = "192.168.0." + str(num)
         try:
             response = requests.get('http://'+addr+":81", timeout=0.008)
+
+
             if response.status_code == 200:
                 print(addr)
                 print(response.status_code)
