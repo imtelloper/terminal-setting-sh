@@ -1,5 +1,8 @@
 import os
 from dotenv import load_dotenv
+import pymongo
+from database.mongoDB import *
+from pymongo.cursor import CursorType
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
@@ -16,10 +19,6 @@ DEFAULT KEYWORD
 """
 DEFAULT = "default"
 
-"""
-DATABASE ADDRESS
-"""
-DB_ADDRESS = os.getenv('MONGO_ADDRESS')
 """
 DATABASE KEYWORD
 """
@@ -45,6 +44,62 @@ DB_TABLE = {
     TABLE_CONFIG: TABLE_CONFIG,
     TABLE_CONTROL_TOWER: TABLE_CONTROL_TOWER,
 }
+
+"""
+DATABASE ADDRESS
+"""
+
+
+def getDatabaseIp():
+    # for num in range(2,256):
+    #     IP_ADDRESS = "192.168.0." + str(num)
+    #     connection = pymongo.MongoClient(IP_ADDRESS, 27017, connectTimeoutMS=1000)
+    #     dbSafety = connection.get_database(DB_NAME)
+    #     configData = dbSafety["controlTower"].find().max_time_ms(10)
+    #     # try:
+    #     #     # dbList = connection.list_database_names()
+    #     #     configData = dbSafety["controlTower"].find().maxTimeMS(100)
+    #     # except Exception as e:
+    #     #     continue
+    #     if configData is not None:
+    #         print(configData)
+    #         return IP_ADDRESS
+    ipList = []
+    for num in range(2, 256):
+        ipAddr = "192.168.0." + str(num)
+        pingCmd = "ping -c 1" + ipAddr
+        response = os.system(pingCmd)
+        if response == 0:
+            ipList.append(ipAddr)
+            print(ipList)
+        else:
+            continue
+    for list in ipList:
+        connection = pymongo.MongoClient(list, 27017, connectTimeoutMS=1000)
+        try:
+            dbList = connection.list_database_names()
+            return list
+        except Exception as e:
+            continue
+
+dbAddressBase = os.getenv('MONGO_ADDRESS')
+index = dbAddressBase.find(":27017")
+
+IP_ADDRESS = getDatabaseIp()
+# DB_ADDRESS = dbAddressBase[:index] + IP_ADDRESS + dbAddressBase[index:]
+
+print(IP_ADDRESS)
+
+"""
+관제PC ID
+"""
+# USER_ID = foundData['username']
+# print(USER_ID)
+"""
+관제PC PW
+"""
+# USER_PW = foundData['password']
+# print(USER_PW)
 
 
 def getMessageResponse(custom_code):

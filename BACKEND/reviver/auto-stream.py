@@ -4,13 +4,15 @@ import time
 import os
 import pymongo
 from dotenv import load_dotenv
+import config
 
 print('######## auto-stream.py RUN ########')
 load_dotenv(verbose=True)
 area = os.getenv('AREA')
 camPort = os.getenv('CAMPORT')
 #mongodbUri = "mongodb://interx:interx12!@192.168.0.4:27017/interx"
-mongodbUri = os.getenv('MONGO_ADDRESS')
+# mongodbUri = os.getenv('MONGO_ADDRESS')
+mongodbUri = config.DB_ADDRESS
 connection = pymongo.MongoClient(mongodbUri)
 dbSafety = connection.get_database("safety")
 isObserving = False

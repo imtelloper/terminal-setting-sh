@@ -167,6 +167,18 @@ class StreamService:
                     }
                 }
             )
+
+            if os.getenv('CONTROL_TOWER') == "1":
+                controlData = self.dbSafety["controlTower"].find_one({})
+                print(os.getenv('CONTROL_TOWER'))
+                self.dbSafety["controlTower"].update_one(
+                    {'_id': ObjectId(controlData["_id"])},
+                    {'$set':
+                        {
+                            'ip': self.deviceIp,
+                        }
+                    }
+                )
         print('##### CONNECTED CAMERA ##### : ', self.listPorts)
 
     def getToday(self) -> str:
@@ -850,3 +862,4 @@ class StreamService:
             except Exception as e:
                 print('예외가 발생했습니다.', e)
                 print(traceback.format_exc())
+

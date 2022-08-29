@@ -10,8 +10,8 @@ import glob
 # ser_off = chr(0x31)
 ser_stx = "STX"
 ser_etx = "ETX"
-ser_on = "6"
-ser_off = "1"
+ser_on = "4"
+ser_off = "2"
 line = ''
 # port = '/dev/ttyUSB0'
 port = '/dev/ttyACM0'
@@ -61,7 +61,6 @@ def serial_ports():
 
 
 def serial_send_on(opend_ser):
-
     strcmd = ser_stx + ser_on + ser_etx
     print('send data = ON[' + strcmd + ']')
     return opend_ser.write(strcmd.encode())
@@ -80,7 +79,7 @@ def serial_open():
 
 
 def read(ser, size=1, timeout=1):
-    print('read ser',ser)
+    print('read ser', ser)
     ser.timeout = timeout
     while 1:
         try:
@@ -88,28 +87,33 @@ def read(ser, size=1, timeout=1):
             if readed != "":
                 print('receive data = ' + readed)
                 serial_send_on(ser)
+                serial_send_on(ser)
+                serial_send_on(ser)
                 time.sleep(5)
                 serial_send_off(ser)
-        except serial.serialutil.SerialException:
+                serial_send_off(ser)
+                serial_send_off(ser)
+        except serial.serialutil.SerialException as e:
+            print(e)
             continue
 
 
 def main():
-    print('##ser : ',ser)
+    print('##ser : ', ser)
     # thread = threading.Thread(target=readthread, args=(ser,))
     # thread.start()
 
-    print('##serial_ports',serial_ports())
+    print('##serial_ports', serial_ports())
     # ser_connected = serial.Serial(serial_ports()[0], baud, timeout=1)
 
     count = 10
-    # while count > 0:
-    #     serial_send_on(ser)
-    #     time.sleep(1)
-    #     serial_send_off(ser)
-    #     time.sleep(1)
-    #     count -= 1
-    read(ser)
+    while count > 0:
+        # serial_send_on(ser)
+        time.sleep(1)
+        serial_send_off(ser)
+        time.sleep(1)
+        count -= 1
+    # read(ser)
 
 
 main()

@@ -67,3 +67,10 @@ class ControlTowerService:
     async def getDataCount(self):
         count = await dataCount(self.dbName, self.tableName, {})
         return count
+
+    # async def getControlIp(self, num):
+    #     dbAddressBase = os.getenv('MONGO_ADDRESS')
+    #     index = dbAddressBase.find(":27017")
+    #     controlIp = "192.168.0." + str(num)
+    #     dbAddress = dbAddressBase[:index] + IP_ADDRESS + dbAddressBase[index:]
+    #     return controlIp, dbAddress
