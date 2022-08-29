@@ -51,44 +51,44 @@ DATABASE ADDRESS
 
 
 def getDatabaseIp():
-    # for num in range(2,256):
-    #     IP_ADDRESS = "192.168.0." + str(num)
-    #     connection = pymongo.MongoClient(IP_ADDRESS, 27017, connectTimeoutMS=1000)
-    #     dbSafety = connection.get_database(DB_NAME)
-    #     configData = dbSafety["controlTower"].find().max_time_ms(10)
-    #     # try:
-    #     #     # dbList = connection.list_database_names()
-    #     #     configData = dbSafety["controlTower"].find().maxTimeMS(100)
-    #     # except Exception as e:
-    #     #     continue
-    #     if configData is not None:
-    #         print(configData)
-    #         return IP_ADDRESS
+    print('********************* getDatabaseIp start **********************')
     ipList = []
     for num in range(2, 256):
         ipAddr = "192.168.0." + str(num)
-        pingCmd = "ping -c 1" + ipAddr
-        response = os.system(pingCmd)
+        pingCmd = "ping -c " + ipAddr
+
+
+
+
+        # if response == 0:
+        #     Netstatus = "Network Active"
+        # else:
+        #     Netstatus = "Network Error"
+
+        response = os.system("ping -n 1 " + ipAddr)
+        # response = os.system(pingCmd)
         if response == 0:
             ipList.append(ipAddr)
             print(ipList)
         else:
             continue
-    for list in ipList:
-        connection = pymongo.MongoClient(list, 27017, connectTimeoutMS=1000)
-        try:
-            dbList = connection.list_database_names()
-            return list
-        except Exception as e:
-            continue
+
+    # for list in ipList:
+    #     connection = pymongo.MongoClient(list, 27017, connectTimeoutMS=1000)
+    #     try:
+    #         dbList = connection.list_database_names()
+    #         return list
+    #     except Exception as e:
+    #         continue
 
 dbAddressBase = os.getenv('MONGO_ADDRESS')
 index = dbAddressBase.find(":27017")
 
-IP_ADDRESS = getDatabaseIp()
+# IP_ADDRESS = getDatabaseIp()
 # DB_ADDRESS = dbAddressBase[:index] + IP_ADDRESS + dbAddressBase[index:]
+DB_ADDRESS = os.getenv('MONGO_ADDRESS')
 
-print(IP_ADDRESS)
+# print(IP_ADDRESS)
 
 """
 관제PC ID

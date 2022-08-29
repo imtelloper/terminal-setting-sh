@@ -6,9 +6,10 @@ https://www.erdcloud.com/d/ca5xyxoCFGmyY3bHj
 # SAMPLE
 ```dotenv
 MONGO_ADDRESS=
-JWT_SECRET=ABCD1234!
-JWT_ALGORITHM=HS256
-TOKEN_URL=/api/auth/token
+JWT_SECRET=jwt 알고리즘 조합 비밀키  ex.)   ABCD1234!
+JWT_ALGORITHM=jwt 알고리즘  ex.)   HS256
+TOKEN_URL= 로그인 인증 auth url ex.)   /api/auth/token
+IS_CONTROL_TOWER=  관제 PC 여부  ex.)   관제면 1 아니면 0
 AREA=MAC
 CAMPORT=cam1
 ```
