@@ -618,6 +618,7 @@ class StreamService:
         print(self.trackerId)
         print('video_streaming video check : ', self.currentPort)
         print('CamRestartCnt : ', self.camRestartCnt)
+
         if self.currentPort is None:
             if self.camRestartCnt == 3:
                 self.camRestartCnt = 0
@@ -627,6 +628,7 @@ class StreamService:
                 self.camRestartCnt += 1
                 print(self.camRestartCnt)
                 self.updateCamRestartCnt()
+                print("### SERVER WILL BE DOWN ###")
                 os.system("fuser -k 8000/tcp")
 
         device_mode = ""
