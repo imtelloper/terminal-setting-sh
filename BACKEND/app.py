@@ -88,6 +88,7 @@ app.include_router(ArchiveRouter, prefix="/api/archive")
 app.include_router(TrackerRouter, prefix="/api/tracker")
 app.include_router(ConfigRouter, prefix="/api/config")
 app.include_router(ContorlTowerRouter, prefix="/api/control-tower")
+app.include_router(BuzzerRouter, prefix="/api/buzzer")
 
 
 @app.on_event("startup")
