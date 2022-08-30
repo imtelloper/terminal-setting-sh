@@ -1,7 +1,6 @@
+import os
 import serial
-from bson import ObjectId
 import config
-from repo.baseRepo import *
 
 '''
 Change below variables
@@ -16,6 +15,7 @@ class BuzzerService:
         '''
         sudo chmod 777 /dev/ttyACM0
         '''
+        os.system('sudo chmod 777 /dev/ttyACM0')
         self.dbName = config.DB_NAME
         self.tableName = config.TABLE_OBSERVE
         # self.SER_STX = chr(0x02)
