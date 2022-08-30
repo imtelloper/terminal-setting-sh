@@ -4,14 +4,14 @@ import time
 import sys
 import glob
 
-# ser_stx = chr(0x02)
-# ser_etx = chr(0x03)
-# ser_on = chr(0x36)
-# ser_off = chr(0x31)
-ser_stx = "STX"
-ser_etx = "ETX"
-ser_on = "4"
-ser_off = "2"
+# SER_STX = chr(0x02)
+# SER_ETX = chr(0x03)
+# SER_ON = chr(0x36)
+# SER_OFF = chr(0x31)
+SER_STX = "STX"
+SER_ETX = "ETX"
+SER_ON = "4"
+SER_OFF = "2"
 line = ''
 # port = '/dev/ttyUSB0'
 port = '/dev/ttyACM0'
@@ -31,13 +31,13 @@ def readthread(ser):
         print('3 alivethread ser.read() type', type(ser.read()))
         for c in ser.read():
             line += (chr(c))
-            if line.startswith(ser_stx) and line.endswith(ser_etx):
+            if line.startswith(SER_STX) and line.endswith(SER_ETX):
                 print('receive data=' + line)
                 line = ''
     ser.close()
 
 
-def serial_ports():
+def serialPorts():
     if sys.platform.startswith('win'):
         ports = ['COM%s' % (i + 1) for i in range(256)]
     elif sys.platform.startswith('linux') or sys.platform.startswith('cygwin'):
@@ -62,14 +62,14 @@ def serial_ports():
 
 # 경광등 on
 def serialSendOn(opend_ser):
-    strcmd = ser_stx + ser_on + ser_etx
+    strcmd = SER_STX + SER_ON + SER_ETX
     print('send data = ON[' + strcmd + ']')
     return opend_ser.write(strcmd.encode())
 
 
 # 경광등 off
 def serialSendOff(opend_ser):
-    strcmd = ser_stx + ser_off + ser_etx
+    strcmd = SER_STX + SER_OFF + SER_ETX
     print('send data = OFF[' + strcmd + ']')
     opend_ser.write(strcmd.encode())
 
@@ -105,8 +105,8 @@ def main():
     # thread = threading.Thread(target=readthread, args=(ser,))
     # thread.start()
 
-    print('##serial_ports', serial_ports())
-    # ser_connected = serial.Serial(serial_ports()[0], baud, timeout=1)
+    print('##serialPorts', serialPorts())
+    # ser_connected = serial.Serial(serialPorts()[0], baud, timeout=1)
 
     count = 10
     while count > 0:

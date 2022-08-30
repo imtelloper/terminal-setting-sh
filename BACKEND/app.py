@@ -14,6 +14,7 @@ from routers.archiveRouter import router as ArchiveRouter
 from routers.trackerRouter import router as TrackerRouter
 from routers.configRouter import router as ConfigRouter
 from routers.controlTowerRouter import router as ContorlTowerRouter
+from routers.buzzerRouter import router as BuzzerRouter
 import logging.config
 import warnings
 from fastapi.responses import FileResponse
