@@ -34,15 +34,15 @@ class BuzzerService:
         self.alivethread = True
 
     # 경광등 on
-    async def serialSendOn(self):
+    def serialSendOn(self):
         strcmd = self.SER_STX + self.SER_ON + self.SER_ETX
         print('send data = ON[' + strcmd + ']')
-        await self.ser.write(strcmd.encode())
+        self.ser.write(strcmd.encode())
         return 'send data = ON[' + strcmd + ']'
 
     # 경광등 off
-    async def serialSendOff(self):
+    def serialSendOff(self):
         strcmd = self.SER_STX + self.SER_OFF + self.SER_ETX
         print('send data = OFF[' + strcmd + ']')
-        await self.ser.write(strcmd.encode())
+        self.ser.write(strcmd.encode())
         return 'send data = OFF[' + strcmd + ']'
