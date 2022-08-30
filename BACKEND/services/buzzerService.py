@@ -13,6 +13,9 @@ Change below variables
 
 class BuzzerService:
     def __init__(self):
+        '''
+        sudo chmod 777 /dev/ttyACM0
+        '''
         self.dbName = config.DB_NAME
         self.tableName = config.TABLE_OBSERVE
         # self.SER_STX = chr(0x02)
@@ -41,5 +44,5 @@ class BuzzerService:
     async def serialSendOff(self):
         strcmd = self.SER_STX + self.SER_OFF + self.SER_ETX
         print('send data = OFF[' + strcmd + ']')
-        await self.write(strcmd.encode())
+        await self.ser.write(strcmd.encode())
         return 'send data = OFF[' + strcmd + ']'
