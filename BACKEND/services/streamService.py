@@ -11,6 +11,7 @@ import datetime
 from modules.calculate import HumanCalculator
 from modules.yolov5.detect import detect
 from database.mongoDB import *
+from services.buzzerService import BuzzerService
 from services.observeService import ObserveService
 from fastapi.encoders import jsonable_encoder
 from repo.baseRepo import *
@@ -29,6 +30,7 @@ from dotenv import load_dotenv
 from modules.yolov5.utils.torch_utils import select_device
 from modules.yolov5.models.common import DetectMultiBackend
 
+buzzerService = BuzzerService()
 
 # W: 256 H: 192
 class StreamService:
@@ -773,6 +775,7 @@ class StreamService:
                                 # rsig에서 첫번째 배열이 첫번째 그룹이고 여기서 1이 하나라도 있으면 yellow, 2가 하나라도 있으면 red가 된다.
                                 if len(str(self.todayFstCamDataId)) > 0:
                                     self.updateCurrentLevel(self.todayFstCamDataId, 'Green')
+                                    buzzerService.serialSendOff()
                             fstSensingLevel = 'GREEN'
                         elif fstGroupSensing == 1:
                             print('1 FST YELLOW FST YELLOW FST YELLOW FST YELLOW FST YELLOW FST YELLOW 1')
@@ -790,6 +793,7 @@ class StreamService:
                                     self.fstRedCnt = self.fstRedCnt + 1
                                     self.updateCurrentLevelCnt(self.todayFstCamDataId, 'Red', self.fstRedCnt)
                                     self.screenCaptureInsertData(result_img, 'Red')
+                                    buzzerService.serialSendOn()
                             fstSensingLevel = 'RED'
 
                 # print('str(self.todaySecCamDataId)', str(self.todaySecCamDataId))
@@ -802,6 +806,7 @@ class StreamService:
                             if secSensingLevel != 'GREEN':
                                 if len(str(self.todaySecCamDataId)) > 0:  # 두번째 그룹에서 감지 되었을 경우
                                     self.updateCurrentLevel(self.todaySecCamDataId, 'Green')
+                                    buzzerService.serialSendOff()
                             secSensingLevel = 'GREEN'
                         elif secGroupSensing == 1:
                             print('2 SEC YELLOW SEC YELLOW SEC YELLOW SEC YELLOW SEC YELLOW SEC YELLOW 2')
@@ -818,6 +823,7 @@ class StreamService:
                                     self.secRedCnt = self.secRedCnt + 1
                                     self.updateCurrentLevelCnt(self.todaySecCamDataId, 'Red', self.secRedCnt)
                                     self.screenCaptureInsertData(result_img, 'Red')
+                                    buzzerService.serialSendOn()
                             secSensingLevel = 'RED'
 
                 if self.detectTimeCnt == self.detectTimeCntLimit:
