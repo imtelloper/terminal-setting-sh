@@ -785,6 +785,7 @@ class StreamService:
                                     self.fstYellowCnt = self.fstYellowCnt + 1
                                     self.updateCurrentLevelCnt(self.todayFstCamDataId, 'Yellow', self.fstYellowCnt)
                                     self.screenCaptureInsertData(result_img, 'Yellow')
+                                    buzzerService.serialSendOff()
                             fstSensingLevel = 'YELLOW'
                         elif fstGroupSensing == 2:
                             print('1 FST RED FST RED FST RED FST RED FST RED FST RED 1')
@@ -815,6 +816,7 @@ class StreamService:
                                     self.secYellowCnt = self.secYellowCnt + 1
                                     self.updateCurrentLevelCnt(self.todaySecCamDataId, 'Yellow', self.secYellowCnt)
                                     self.screenCaptureInsertData(result_img, 'Yellow')
+                                    buzzerService.serialSendOff()
                             secSensingLevel = 'YELLOW'
                         elif secGroupSensing == 2:
                             print('2 SEC RED SEC RED SEC RED SEC RED SEC RED SEC RED 2')

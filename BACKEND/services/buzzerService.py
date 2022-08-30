@@ -29,22 +29,33 @@ class BuzzerService:
             self.SER_ON = "4"
             self.SER_OFF = "2"
             self.line = ''
+            self.alivethread = True
             # self.port = '/dev/ttyUSB0'
             self.port = '/dev/ttyACM0'
             self.baud = 9600
-            self.ser = serial.Serial(self.port, self.baud, timeout=1)
-            self.alivethread = True
+            try:
+                self.ser = serial.Serial(self.port, self.baud, timeout=1)
+            except Exception as e:
+                pass
+            
 
     # 경광등 on
     def serialSendOn(self):
-        strcmd = self.SER_STX + self.SER_ON + self.SER_ETX
-        print('send data = ON[' + strcmd + ']')
-        self.ser.write(strcmd.encode())
-        return 'send data = ON[' + strcmd + ']'
+        try:
+            strcmd = self.SER_STX + self.SER_ON + self.SER_ETX
+            print('send data = ON[' + strcmd + ']')
+            self.ser.write(strcmd.encode())
+        except Exception as e:
+            return 'send data = ON[' + strcmd + ']'
+        return 'buzzer not connected'
 
     # 경광등 off
     def serialSendOff(self):
-        strcmd = self.SER_STX + self.SER_OFF + self.SER_ETX
-        print('send data = OFF[' + strcmd + ']')
-        self.ser.write(strcmd.encode())
-        return 'send data = OFF[' + strcmd + ']'
+        try:
+            strcmd = self.SER_STX + self.SER_OFF + self.SER_ETX
+            print('send data = OFF[' + strcmd + ']')
+            self.ser.write(strcmd.encode())
+        except Exception as e:
+            return 'send data = OFF[' + strcmd + ']'
+        return 'buzzer not connected'
+
