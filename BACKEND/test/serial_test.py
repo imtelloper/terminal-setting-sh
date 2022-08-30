@@ -115,5 +115,4 @@ def main():
         count -= 1
     # read(ser)
 
-
-main()
+# main()
