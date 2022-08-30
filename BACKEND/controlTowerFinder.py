@@ -4,9 +4,8 @@ import time
 import requests
 import asyncio
 
-start = time.time()  # 시작 시간 저장
 
-
+# ping sample1
 async def ping(host):
     """
     Prints the hosts that respond to ping request
@@ -18,10 +17,9 @@ async def ping(host):
         print(host)
     return
 
-
+# ping sample2
 async def ping_all():
     tasks = []
-
     for i in range(1, 255):
         ip = "192.168.0.{}".format(i)
         task = asyncio.ensure_future(ping(ip))
@@ -29,52 +27,20 @@ async def ping_all():
 
     await asyncio.gather(*tasks, return_exceptions=True)
 
-
+# ping sample3
 def getDatabaseIp():
     print('********************* getDatabaseIp start **********************')
     ipList = []
-    # for num in range(2, 256):
-    for num in range(2, 5):
-        # ipAddr = "192.168.0." + str(num)+":81"
+    for num in range(2, 256):
         ipAddr = "192.168.0." + str(num)
-        # pingCmd = "ping -c 1 " + ipAddr+" -l 1"
-        # pingCmd = "ping -c 1 " + ipAddr+" -i 0.02"
         pingCmd = "ping -c 1 " + ipAddr
-        #
-        #     # if response == 0:
-        #     #     Netstatus = "Network Active"
-        #     # else:
-        #     #     Netstatus = "Network Error"
-        #
-        #     # response = os.system("ping -n 1 " + ipAddr)
         response = os.system(pingCmd)
         if response == 0:
             print(ipAddr)
-
     print('********************* getDatabaseIp end **********************')
-    #     ipList.append(ipAddr)
-    #     print(ipList)
-    # else:
-    #     continue
-
-    # for list in ipList:
-    #     connection = pymongo.MongoClient(list, 27017, connectTimeoutMS=1000)
-    #     try:
-    #         dbList = connection.list_database_names()
-    #         return list
-    #     except Exception as e:
-    #         continue
 
 
 if __name__ == '__main__':
-    # getDatabaseIp()
-    # asyncio.run(ping_all())
-    print("1=======================================time :", time.time() - start)
-
-    start = time.time()  # 시작 시간 저장
-    # getDatabaseIp()
-    print("2=======================================time :", time.time() - start)
-
     start = time.time()  # 시작 시간 저장
     for num in range(1, 256):
         addr = "192.168.0." + str(num)
@@ -86,12 +52,10 @@ if __name__ == '__main__':
 
             if response.json() == '1':
                 print(addr)
-                # connection = pymongo.MongoClient(config.DB_ADDRESS)
-                # self.dbSafety = connection.get_database("safety")
                 os.system(
                     "sed -n -i -e '/^MONGO_ADDRESS/c\MONGO_ADDRESS=mongodb://interx:interx12!@" + addr + "':27017/interx -e '1,$p' /home/interx/SAFETY-AI/BACKEND/.env")
 
         except Exception as e:
             pass
 
-    print("3=======================================time :", time.time() - start)
+    print("=======================================Work finished at :", time.time() - start)

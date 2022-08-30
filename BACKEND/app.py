@@ -1,4 +1,5 @@
 import os
+
 os.system('python /home/interx/SAFETY-AI/BACKEND/controlTowerFinder.py')
 
 import platform
@@ -17,8 +18,6 @@ import logging.config
 import warnings
 from fastapi.responses import FileResponse
 
-
-
 warnings.filterwarnings('ignore')
 
 # load_dotenv(dotenv_path=f".{os.getenv('DOT_ENV', 'test')}.env")
@@ -28,6 +27,7 @@ logger = logging.getLogger(__name__)
 print('app start')
 print('platform.system: ', platform.system())
 print('platform.platform: ', platform.platform())
+
 
 # def speak(text):
 #     tts = gTTS(text=text, lang='ko')
@@ -72,6 +72,7 @@ async def main(saveFolder, dateFolder, areaFolder, camPortFolder, fileTypeFolder
         "/home/interx/SAFETY-AI/BACKEND/{0}/{1}/{2}/{3}/{4}/{5}".format(saveFolder, dateFolder, areaFolder,
                                                                         camPortFolder, fileTypeFolder, file))
 
+
 @app.get("/")
 async def greeting():
     return 'hi'
@@ -98,5 +99,3 @@ async def onAppStart():
 async def onAppShutdown():
     print("############ SERVER DOWN ############")
     await disconnectMongo()
-
-
