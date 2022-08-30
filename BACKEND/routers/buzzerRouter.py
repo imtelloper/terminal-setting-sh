@@ -25,7 +25,8 @@ async def buzzerOn():
     """
     경광등이 울립니다.
     """
-    return await service.serialSendOn()
+
+    return service.serialSendOn()
 
 
 @router.get("/off", response_description="경광등 turn off")
@@ -33,4 +34,4 @@ async def buzzerOff():
     """
     경광등이 꺼집니다.
     """
-    return await service.serialSendOff()
+    return service.serialSendOff()

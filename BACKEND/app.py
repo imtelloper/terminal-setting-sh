@@ -93,11 +93,11 @@ app.include_router(BuzzerRouter, prefix="/api/buzzer")
 
 @app.on_event("startup")
 async def onAppStart():
-    print("############ SERVER START ############")
+    print("💥🚀 SERVER START ⚗️💥")
     await connectMongo()
 
 
 @app.on_event("shutdown")
 async def onAppShutdown():
-    print("############ SERVER DOWN ############")
+    print("🖐🏻🏖 SERVER DOWN 🫡🖐🏻")
     await disconnectMongo()
