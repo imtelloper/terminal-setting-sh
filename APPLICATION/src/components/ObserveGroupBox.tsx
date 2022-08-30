@@ -80,9 +80,9 @@ const ObserveGroupBox = ({
     const trackerId = target.getAttribute('itemID');
     const groupNum = target.getAttribute('datatype');
     const observeId = target.getAttribute('name');
-    console.log('handle delete trackerId', trackerId);
-    console.log('handle delete groupNum', groupNum);
-    console.log('handle delete observeId', observeId);
+    // console.log('handle delete trackerId', trackerId);
+    // console.log('handle delete groupNum', groupNum);
+    // console.log('handle delete observeId', observeId);
 
     /* 현재 비디오 스테이트 url 기본 url로 변경 */
     const targetIdx = videoFrameState.findIndex(
@@ -123,28 +123,33 @@ const ObserveGroupBox = ({
       .finally(() => setLoadingState({ ...loadingState, delete: false }))
       .catch((err) => console.error(err));
 
+    console.log('swrState.curCamIp', swrState.curCamIp);
+    /* Backend에서의 감지 카운트 초기화 */
     await Api.stream.initGroupSensingCnt(swrState.curCamIp, groupNum);
     swrTrackerMutate();
   };
 
   // 그룹안 상태 리셋
-  const handleErrorReset = (e) => {
+  const handleErrorReset = async (e) => {
     console.log('handleErrorReset');
     setLoadingState({ ...loadingState, stateReset: true });
     const target = e.currentTarget;
     const dType = target.getAttribute('datatype');
-    console.log('handleErrorReset dType', dType);
 
-    Api.observe
+    /* DB에서의 감지 카운트 초기화 */
+    await Api.observe
       .modifyOneData(dType, { yellowCnt: 0, redCnt: 0 })
       .finally(() => setLoadingState({ ...loadingState, stateReset: false }))
       .catch((err) => console.error(err));
+
+    /* Backend에서의 감지 카운트 초기화 */
+    await Api.stream.initGroupSensingCnt(swrState.curCamIp, groupNum);
   };
 
-  useEffect(() => {
-    console.log('stateInfo', stateInfo);
-    console.log('observeId', observeId);
-  }, [stateInfo]);
+  // useEffect(() => {
+  //   console.log('stateInfo', stateInfo);
+  //   console.log('observeId', observeId);
+  // }, [stateInfo]);
 
   return (
     <div className="observeCamInfoContainer">

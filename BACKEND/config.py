@@ -1,7 +1,6 @@
 import os
 from dotenv import load_dotenv
 import pymongo
-import requests
 from database.mongoDB import *
 from pymongo.cursor import CursorType
 

@@ -36,7 +36,6 @@ class StreamService:
         self.saveStatus = False
         self.camWidth = 512
         self.camHeight = 384
-
         self.camPort = config.CAMPORT  # 카메라 포트
         self.camArea = config.AREA.replace(" ", "")  # 카메라 설치 구역
         self.savePath = '/home/interx/SAFETY-AI/BACKEND/safety-archives'  # 각 파일들의 폴더들이 저장될 루트 경로
@@ -112,13 +111,13 @@ class StreamService:
 
         def ip4Addresses():
             ipList = []
-            print('interfaces()', interfaces())
+            # print('interfaces()', interfaces())
             for interface in interfaces():
-                print('interface', interface)
+                # print('interface', interface)
                 try:
-                    print('ifaddresses(interface)[AF_INET]', ifaddresses(interface)[AF_INET])
+                    # print('ifaddresses(interface)[AF_INET]', ifaddresses(interface)[AF_INET])
                     for link in ifaddresses(interface)[AF_INET]:
-                        print('link', link)
+                        # print('link', link)
                         print('link[addr]', link['addr'])
                         ipList.append(link['addr'])
                         print('')
@@ -130,7 +129,6 @@ class StreamService:
         print('ip4Addresses()', ip4Addresses())
         # 내부 IP 가져오기
         self.deviceIp = list(filter(lambda x: x[0:3] == '192', ip4Addresses()))[0]
-        print('ip4Addresses', ip4Addresses())
         print('self.deviceIp', self.deviceIp)
         print('******************************************************')
         connection = pymongo.MongoClient(config.DB_ADDRESS)
@@ -229,6 +227,7 @@ class StreamService:
     def setCameraOn(self):
         self.cameraOnOff = True
 
+    # init sensing count, 감지 횟수 초기화
     def setGroupCnt(self, groupNum):
         if groupNum == 1:
             self.fstYellowCnt = 0
@@ -341,7 +340,7 @@ class StreamService:
         }).sort("groupNum", 1)
 
         dataArr = []
-        responseRes = {"fst": False, "sec": False} # 첫번째 그룹, 두번째 그룹 여부
+        responseRes = {"fst": False, "sec": False}  # 첫번째 그룹, 두번째 그룹 여부
         try:
             async for val in searchedData:
                 dataArr.append(val)
@@ -683,7 +682,7 @@ class StreamService:
             if not ret: return
             humans, rsigs = [], []
             try:
-                self.camImg = cv2.resize(self.camImg, (256,192), interpolation=cv2.INTER_AREA)
+                self.camImg = cv2.resize(self.camImg, (256, 192), interpolation=cv2.INTER_AREA)
                 result_img = ""
                 if cnt == 0:
                     # 욜로 감지(딥러닝을 돌린다. 사람을 찾아주는 기능)
@@ -733,7 +732,7 @@ class StreamService:
                     else:
                         result_img = self.camImg
 
-                result_img = cv2.resize(result_img, (512,384), interpolation=cv2.INTER_CUBIC)
+                result_img = cv2.resize(result_img, (512, 384), interpolation=cv2.INTER_CUBIC)
 
                 fstGroupSensing = None
                 secGroupSensing = None
@@ -864,4 +863,3 @@ class StreamService:
             except Exception as e:
                 print('예외가 발생했습니다.', e)
                 print(traceback.format_exc())
-

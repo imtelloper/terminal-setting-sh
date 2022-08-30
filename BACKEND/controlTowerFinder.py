@@ -17,6 +17,7 @@ async def ping(host):
         print(host)
     return
 
+
 # ping sample2
 async def ping_all():
     tasks = []
@@ -26,6 +27,7 @@ async def ping_all():
         tasks.append(task)
 
     await asyncio.gather(*tasks, return_exceptions=True)
+
 
 # ping sample3
 def getDatabaseIp():
@@ -42,6 +44,9 @@ def getDatabaseIp():
 
 if __name__ == '__main__':
     start = time.time()  # 시작 시간 저장
+    '''
+    ip 2 ~ 255번까지 확인. ping은 시간이 오래걸려서 각 minipc에서 돌아가는 Backend api를 통해서 확인
+    '''
     for num in range(1, 256):
         addr = "192.168.0." + str(num)
         try:
@@ -52,6 +57,9 @@ if __name__ == '__main__':
 
             if response.json() == '1':
                 print(addr)
+                '''
+                sed를 사용하여 명령어로 file 수정하는법
+                '''
                 os.system(
                     "sed -n -i -e '/^MONGO_ADDRESS/c\MONGO_ADDRESS=mongodb://interx:interx12!@" + addr + "':27017/interx -e '1,$p' /home/interx/SAFETY-AI/BACKEND/.env")
 

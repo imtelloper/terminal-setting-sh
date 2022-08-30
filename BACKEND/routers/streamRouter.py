@@ -15,7 +15,6 @@ from fastapi.encoders import jsonable_encoder
 import socket
 from netifaces import interfaces, ifaddresses, AF_INET
 
-
 warnings.filterwarnings('ignore')
 
 router = APIRouter(
@@ -57,8 +56,6 @@ def isInternetConnected(host="8.8.8.8", port=53, timeout=3) -> bool:
     except Exception as e:
         print('Internet is not connected')
         return False
-
-
 
 
 # query string 값으로부터 좌표 설정
@@ -119,6 +116,7 @@ async def screenCapture():
     스크린샷 캡쳐
     """
     return service.setCaptureGateOpen()
+
 
 # 칼리브레이션 이미지 캡쳐
 @router.get("/calib-capture", response_description="")
@@ -201,7 +199,7 @@ async def streamVideoFirstAreaSet(groupNum, coordinate1, coordinate2):
     if isInternetConnected():
         await service.getTrackerId()
         observeChk = await service.isTodayObserveExist(int(groupNum))
-        print('@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ observeChk: ',observeChk)
+        print('@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ observeChk: ', observeChk)
         await service.addTodayCamData(observeChk, int(groupNum))
 
     coordinates1 = [[], []]
