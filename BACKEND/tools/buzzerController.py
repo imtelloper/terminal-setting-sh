@@ -22,7 +22,7 @@ ser = serial.Serial(port, baud, timeout=1)
 alivethread = True
 
 
-def readthread(ser):
+def readThread(ser):
     global line
 
     while alivethread:
@@ -74,10 +74,10 @@ def serialSendOff(opend_ser):
     opend_ser.write(strcmd.encode())
 
 
-def serial_open():
-    open_serial = serial.Serial(port, baud, timeout=1)
+def serialOpen():
+    openSerial = serial.Serial(port, baud, timeout=1)
     print("serial open")
-    return open_serial
+    return openSerial
 
 
 def read(ser, size=1, timeout=1):
@@ -88,13 +88,13 @@ def read(ser, size=1, timeout=1):
             readed = ser.readline(size).decode()
             if readed != "":
                 print('receive data = ' + readed)
-                serial_send_on(ser)
-                serial_send_on(ser)
-                serial_send_on(ser)
+                serialSendOn(ser)
+                serialSendOn(ser)
+                serialSendOn(ser)
                 time.sleep(5)
-                serial_send_off(ser)
-                serial_send_off(ser)
-                serial_send_off(ser)
+                serialSendOff(ser)
+                serialSendOff(ser)
+                serialSendOff(ser)
         except serial.serialutil.SerialException as e:
             print(e)
             continue
@@ -102,7 +102,7 @@ def read(ser, size=1, timeout=1):
 
 def main():
     print('##ser : ', ser)
-    # thread = threading.Thread(target=readthread, args=(ser,))
+    # thread = threading.Thread(target=readThread, args=(ser,))
     # thread.start()
 
     print('##serialPorts', serialPorts())

@@ -152,7 +152,7 @@ const AreaInfo = () => {
   useEffect(() => {
     /* db에서 tracker 데이터가 바뀔때마다 가공 데이터 셋팅 */
     if (swrTrackerData) {
-      console.log('swrTrackerData', swrTrackerData);
+      // console.log('swrTrackerData', swrTrackerData);
       setProcessedSwrData();
 
       /* isObserving 데이터 전부 false로 만들기 */

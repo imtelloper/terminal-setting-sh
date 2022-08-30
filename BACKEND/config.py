@@ -1,8 +1,5 @@
 import os
 from dotenv import load_dotenv
-import pymongo
-from database.mongoDB import *
-from pymongo.cursor import CursorType
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 

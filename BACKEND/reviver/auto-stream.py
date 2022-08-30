@@ -2,12 +2,10 @@ import os
 
 os.system('python /home/interx/SAFETY-AI/BACKEND/controlTowerFinder.py')
 
-import numpy as np
 import cv2
 import time
 import pymongo
 from dotenv import load_dotenv
-import config
 
 print('######## auto-stream.py RUN ########')
 load_dotenv(verbose=True)

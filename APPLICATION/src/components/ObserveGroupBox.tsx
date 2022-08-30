@@ -143,7 +143,12 @@ const ObserveGroupBox = ({
       .catch((err) => console.error(err));
 
     /* Backend에서의 감지 카운트 초기화 */
-    await Api.stream.initGroupSensingCnt(swrState.curCamIp, groupNum);
+    await Api.stream
+      .initGroupSensingCnt(swrState.curCamIp, groupNum)
+      .finally(() => setLoadingState({ ...loadingState, stateReset: false }))
+      .catch((err) => console.error(err));
+
+    await Api.buzzer.serialSendOff(swrState.curCamIp);
   };
 
   // useEffect(() => {
@@ -289,4 +294,5 @@ const ObserveGroupBox = ({
   );
 };
 
+// @ts-ignore
 export default ObserveGroupBox;
