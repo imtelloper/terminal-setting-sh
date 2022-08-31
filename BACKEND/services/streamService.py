@@ -122,13 +122,11 @@ class StreamService:
                         # print('link', link)
                         print('link[addr]', link['addr'])
                         ipList.append(link['addr'])
-                        print('')
+                        # print('')
                 except Exception as e:
-                    print(e)
+                    pass
             print('ipList', ipList)
             return ipList
-
-        print('ip4Addresses()', ip4Addresses())
         # 내부 IP 가져오기
         self.deviceIp = list(filter(lambda x: x[0:3] == '192', ip4Addresses()))[0]
         print('self.deviceIp', self.deviceIp)
@@ -519,6 +517,7 @@ class StreamService:
         """
         Test the ports and returns a tuple with the available ports and the ones that are working.
         """
+        print('📷📷📷📷📷📷 CAMERA PORT LIST START 📷📷📷📷📷📷')
         non_working_ports = []
         dev_port = 0
         working_ports = []
@@ -539,6 +538,7 @@ class StreamService:
                     print("Port %s for camera ( %s x %s) is present but does not reads." % (dev_port, h, w))
                     available_ports.append(dev_port)
             dev_port += 1
+        print('🛥🛥🛥🛥🛥🛥 CAMERA PORT LIST END 🛥🛥🛥🛥🛥🛥')
         return available_ports, working_ports, non_working_ports
 
     # 관제 PC에 파일 저장

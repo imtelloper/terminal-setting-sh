@@ -1,10 +1,11 @@
-import React, { Suspense, useEffect, useMemo } from 'react';
+import React, { Suspense, useEffect, useMemo, useState } from 'react';
 import { flushSync } from 'react-dom';
 import PolygonDraw from '../util/PolygonDraw';
 import Api from '../api/Api';
 import { useSWRState } from '../fetcher/useSWRState';
 import { Autorenew } from '@material-ui/icons';
 import Loading from './Loading';
+import { useInterval } from '../hooks/useInterval';
 
 const ObserveCamStream = ({
   videoFrameState,
@@ -23,6 +24,14 @@ const ObserveCamStream = ({
     yellow: '#FFFA7C',
     red: '#FF374B',
   };
+
+  const [isRunning, setIsRunning] = useState(false);
+  const [timer, setTimer] = useState(0);
+  // useInterval(() => isRunning && setTimer((timer) => timer + 1), 1000);
+  useInterval(() => setTimer((timer) => timer + 1), 1000);
+  const handleStopwatch = () => setIsRunning((isRunning) => !isRunning);
+  const handleReset = () => setTimer(0);
+
   const { data: swrState, mutate: setSwrState } = useSWRState();
 
   const getStateCoordinate = (arrIndex: number, itemID: string) =>
@@ -34,14 +43,18 @@ const ObserveCamStream = ({
     flushSync(() => setVideoFrameState([...newArr]));
   };
 
+  const refreshVideoStreaming = async (idx) => {
+    const curSrc = videoFrameState[idx].frameSrc;
+    const baseSrc = `${videoFrameState[idx].frameSrc.split(':81')[0]}:81`;
+    await setNewVideoSrcState(idx, baseSrc);
+    await setNewVideoSrcState(idx, curSrc);
+  };
+
   /* 카메라가 멈췄을 경우 다시 주소로 재요청하는 메서드 */
   const refreshCamStream = async (e) => {
     const target = e.currentTarget;
     const arrIndex = target.getAttribute('tabIndex');
-    const curSrc = videoFrameState[arrIndex].frameSrc;
-    const baseSrc = `${videoFrameState[arrIndex].frameSrc.split(':81')[0]}:81`;
-    await setNewVideoSrcState(arrIndex, baseSrc);
-    await setNewVideoSrcState(arrIndex, curSrc);
+    await refreshVideoStreaming(arrIndex);
   };
 
   const polySort = (arrIndex: number, itemID: string) => {
@@ -257,6 +270,7 @@ const ObserveCamStream = ({
   };
 
   const canvasClick = (e) => {
+    handleReset();
     const canvas = e.currentTarget;
     /* Viedeo Frames Array Index */
     const arrIndex = canvas?.getAttribute('tabIndex');
@@ -294,6 +308,14 @@ const ObserveCamStream = ({
         Api.tracker.modifyOneData(obj.trackerId, { isObserving: true })
     );
   }, []);
+
+  /* 60초마다 동영상, 타이머 reset  */
+  useEffect(() => {
+    if (timer === 60) {
+      videoFrameState.forEach((data, idx) => refreshVideoStreaming(idx));
+      setTimer(0);
+    }
+  }, [timer]);
 
   useEffect(() => {
     if (videoFrameState.length > 0) {
@@ -387,6 +409,7 @@ const ObserveCamStream = ({
 
   return (
     <Suspense fallback={<Loading />}>
+      {timer}
       <div className="iframeContent">{videoFrameMap}</div>
     </Suspense>
   );

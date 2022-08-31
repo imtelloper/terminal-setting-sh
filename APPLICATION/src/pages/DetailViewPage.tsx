@@ -84,7 +84,7 @@ const DetailViewPage = () => {
               path: obj.path,
               safetyLevel: obj.safetyLevel,
               date: dayjs(obj.createdAt).format('YYYY-MM-DD'),
-              time: dayjs(obj.createdAt).format('hh:mm:ss'),
+              time: dayjs(obj.createdAt).format('HH:mm:ss'),
             };
           })
         );
@@ -675,7 +675,7 @@ const DetailViewPage = () => {
                   </div>
                   <div>
                     <span>가동 시간</span>
-                    <span>32분</span>
+                    <span>{swrFenceOperatingTime}</span>
                   </div>
                 </div>
 

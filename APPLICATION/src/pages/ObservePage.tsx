@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState, Suspense } from 'react';
+import React, { useEffect, useMemo, useState, Suspense, useRef } from 'react';
 import { flushSync } from 'react-dom';
 import '../style/pages/ObservePage.scss';
 import { useNavigate } from 'react-router-dom';
@@ -19,6 +19,7 @@ import { FiX } from 'react-icons/all';
 import ClipLoader from 'react-spinners/ClipLoader';
 import { PulseLoader } from 'react-spinners';
 import Loading from '../components/Loading';
+import { useInterval } from '../hooks/useInterval';
 
 const ObservePage = () => {
   const navigate = useNavigate();
@@ -29,10 +30,10 @@ const ObservePage = () => {
   const [getObserveState, setGetObserveState] = useState([]);
   const [camTabState, setCamTabState] = useState(1);
   const [recordState, setRecordState] = useState(false);
-  const swrIntervalMilliSec = 300;
+  const [loadingState, setLoadingState] = useState(false);
+
   const findFetcher = (url: string) =>
     axios.post(url, { area: swrState.curTrackerArea }).then((res) => res.data);
-  const [loadingState, setLoadingState] = useState(false);
 
   const {
     data: swrTrackerData,
