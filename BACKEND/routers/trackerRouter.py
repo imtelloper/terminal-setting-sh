@@ -56,7 +56,7 @@ async def saveData(data: dataModel = Body(...)):
     return dto(**resultData)
 
 
-@router.get("", description = "")
+@router.get("", description="")
 async def getAllDatas():
     """
     모든 데이터 검색
@@ -85,7 +85,7 @@ async def findData(data=Body(...)):
     - body example -> **{ "date": "2022-06-22" }**
     """
     jsonData = jsonable_encoder(data)
-    print('jsonData',jsonData)
+    print('jsonData', jsonData)
     serviceResult = await service.searchDatas(jsonData)
     resultArr = []
     for res in serviceResult:

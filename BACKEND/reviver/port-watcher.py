@@ -1,12 +1,7 @@
 import socket
-import subprocess
 import time
 import os
 import sys
-import daemon
-from daemon import pidfile
-from daemon import runner
-import argparse
 
 
 def runPortChecker():

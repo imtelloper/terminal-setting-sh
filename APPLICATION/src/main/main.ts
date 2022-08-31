@@ -6,6 +6,8 @@ import log from 'electron-log';
 import MenuBuilder from './menu';
 import { resolveHtmlPath } from './util';
 
+const nativeImage = require('electron').nativeImage;
+
 export default class AppUpdater {
   constructor() {
     console.log('AppUpdater constructed');
@@ -17,6 +19,7 @@ export default class AppUpdater {
 
 let mainWindow: BrowserWindow | null = null;
 // @ts-ignore
+// eslint-disable-next-line @typescript-eslint/no-redeclare
 const log = require('electron-log');
 
 const NOTIFICATION_TITLE = 'Basic Notification';
@@ -58,6 +61,7 @@ ipcMain.handle('get-ip', async (event, arg) => {
 });
 
 if (process.env.NODE_ENV === 'production') {
+  // eslint-disable-next-line global-require
   const sourceMapSupport = require('source-map-support');
   sourceMapSupport.install();
 }
@@ -66,10 +70,12 @@ const isDevelopment =
   process.env.NODE_ENV === 'development' || process.env.DEBUG_PROD === 'true';
 console.log('isDevelopment', isDevelopment);
 
+// eslint-disable-next-line global-require
 if (isDevelopment) require('electron-debug')();
 
 const installExtensions = async () => {
   console.log('installExtensions start');
+  // eslint-disable-next-line global-require
   const installer = require('electron-devtools-installer');
   const forceDownload = !!process.env.UPGRADE_EXTENSIONS;
   const extensions = ['REACT_DEVELOPER_TOOLS'];
@@ -89,11 +95,18 @@ const createWindow = async () => {
   const getAssetPath = (...paths: string[]): string => {
     return path.join(RESOURCES_PATH, ...paths);
   };
+  console.log('kick in the door __dirname', __dirname);
+  console.log('waving coco getAssetPath(icon.png)', getAssetPath('icon.png'));
+  console.log('waving coco getAssetPath(/icon.png)', getAssetPath('/icon.png'));
+  const image = nativeImage.createFromPath(getAssetPath('/icon.png'));
+
   mainWindow = new BrowserWindow({
     show: false,
     width: 1600,
     height: 1200,
-    icon: getAssetPath('assets/icon.png'),
+    // icon: getAssetPath('assets/icon.png'),
+    // icon: NativeImage.createFromPath(`${__dirname}/icon.png`),
+    icon: image,
     webPreferences: {
       preload: app.isPackaged
         ? path.join(__dirname, 'preload.js')
@@ -118,6 +131,7 @@ const createWindow = async () => {
     shell.openExternal(edata.url);
     return { action: 'deny' };
   });
+  // eslint-disable-next-line no-new
   new AppUpdater();
 };
 

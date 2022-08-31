@@ -14,6 +14,15 @@ router = APIRouter(
     responses={404: {"description": "not found"}, 200: {"description": "ok"}},
 )
 
+@router.get("/is-control-tower")
+async def isControlTower():
+    """
+    관제 PC여부 반환
+    """
+
+    return os.getenv("IS_CONTROL_TOWER")
+
+
 @router.get("/echoTest")
 async def echoTest():
     """

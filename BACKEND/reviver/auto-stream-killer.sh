@@ -6,6 +6,7 @@ PROGRAM_AUTO_STREAM=auto-stream.py
 portWatcherPidCnt=`ps -ef|grep $PROGRAM_PORT_WATCHER|grep -v grep|wc -l`
 PORT_WATCHER_PID=`ps -ef|grep $PROGRAM_PORT_WATCHER|grep -v grep|awk '{print $2}'`
 
+autoStreamPidCnt=`ps -ef|grep $PROGRAM_AUTO_STREAM|grep -v grep|wc -l`
 AUTO_STREAM_PID=`ps -ef|grep $PROGRAM_AUTO_STREAM|grep -v grep|awk '{print $2}'`
 
 echo '#################################1'
@@ -27,7 +28,14 @@ then
   echo 'port is running'
   sudo service cron stop
   sudo service crond stop
-  sudo kill -9 $PORT_WATCHER_PID $AUTO_STREAM_PID
-  sudo kill -9 `pgrep -f auto-stream.py`
+  sudo kill -9 $PORT_WATCHER_PID
+  ps -ef | grep auto-stream-watcher
+fi
+
+if [ $autoStreamPidCnt -gt 0 ]
+then
+  echo 'port is running'
+  sudo kill -9 $AUTO_STREAM_PID
+  sudo kill -9 'pgrep -f auto-stream.py'
   ps -ef | grep auto-stream
 fi

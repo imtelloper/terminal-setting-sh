@@ -1,8 +1,6 @@
 from bson import ObjectId
 import config
 from repo.baseRepo import *
-import re
-import datetime
 
 
 '''
@@ -12,10 +10,10 @@ Change below variables
 - self.tableName =
 '''
 
-class ObserveService:
+class ControlTowerService:
     def __init__(self):
         self.dbName = config.DB_NAME
-        self.tableName = config.TABLE_OBSERVE
+        self.tableName = config.TABLE_CONTROL_TOWER
 
     def getDataOne(self, id):
         return findOne(self.dbName, self.tableName, {"_id": ObjectId(id)})
@@ -66,37 +64,13 @@ class ObserveService:
             dataArr.append(data)
         return dataArr
 
-    async def getDataCount(self, data: dict):
-        count = await dataCount(self.dbName, self.tableName, data)
+    async def getDataCount(self):
+        count = await dataCount(self.dbName, self.tableName, {})
         return count
 
-
-    async def countOperatingTime(self, id, grpNum):
-        print('countOperatingTime')
-        print('id',id)
-        print('grpNum',grpNum)
-        currentDate = datetime.datetime.now().strftime('%Y-%m-%d')
-        dataArr = []
-        searchedData = findDatas(self.dbName, self.tableName, {
-            "trackerId": ObjectId(id),
-            "date": currentDate,
-            "groupNum": int(grpNum),
-        })
-        async for val in searchedData:
-            dataArr.append(val)
-        foundData = dataArr[0]
-        startTime = foundData['observeTime']
-        observeSwitch = foundData['observeSwitch']
-
-        if observeSwitch is True:
-            endTime = datetime.datetime.now()
-            resultTime = endTime - startTime
-            replaceResultTime = str(resultTime).replace(" ", "")
-            resultList = re.split(r'days,|:', replaceResultTime)
-            if len(resultList) == 4:
-                result = ("{}일 {}시간 {}분").format(resultList[0], resultList[1], resultList[2])
-            else:
-                result = ("{}시간 {}분").format(resultList[0], resultList[1])
-        else:
-            result = "00시간 00분"
-        return result
+    # async def getControlIp(self, num):
+    #     dbAddressBase = os.getenv('MONGO_ADDRESS')
+    #     index = dbAddressBase.find(":27017")
+    #     controlIp = "192.168.0." + str(num)
+    #     dbAddress = dbAddressBase[:index] + IP_ADDRESS + dbAddressBase[index:]
+    #     return controlIp, dbAddress

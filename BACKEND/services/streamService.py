@@ -11,6 +11,7 @@ import datetime
 from modules.calculate import HumanCalculator
 from modules.yolov5.detect import detect
 from database.mongoDB import *
+from services.buzzerService import BuzzerService
 from services.observeService import ObserveService
 from fastapi.encoders import jsonable_encoder
 from repo.baseRepo import *
@@ -25,10 +26,11 @@ import stat
 import socket
 from tools.scheduler import *
 from netifaces import interfaces, ifaddresses, AF_INET
-
+from dotenv import load_dotenv
 from modules.yolov5.utils.torch_utils import select_device
 from modules.yolov5.models.common import DetectMultiBackend
 
+buzzerService = BuzzerService()
 
 # W: 256 H: 192
 class StreamService:
@@ -36,7 +38,6 @@ class StreamService:
         self.saveStatus = False
         self.camWidth = 512
         self.camHeight = 384
-        self.today = str(datetime.date.today())
         self.camPort = config.CAMPORT  # 카메라 포트
         self.camArea = config.AREA.replace(" ", "")  # 카메라 설치 구역
         self.savePath = '/home/interx/SAFETY-AI/BACKEND/safety-archives'  # 각 파일들의 폴더들이 저장될 루트 경로
@@ -112,13 +113,13 @@ class StreamService:
 
         def ip4Addresses():
             ipList = []
-            print('interfaces()', interfaces())
+            # print('interfaces()', interfaces())
             for interface in interfaces():
-                print('interface', interface)
+                # print('interface', interface)
                 try:
-                    print('ifaddresses(interface)[AF_INET]', ifaddresses(interface)[AF_INET])
+                    # print('ifaddresses(interface)[AF_INET]', ifaddresses(interface)[AF_INET])
                     for link in ifaddresses(interface)[AF_INET]:
-                        print('link', link)
+                        # print('link', link)
                         print('link[addr]', link['addr'])
                         ipList.append(link['addr'])
                         print('')
@@ -130,7 +131,6 @@ class StreamService:
         print('ip4Addresses()', ip4Addresses())
         # 내부 IP 가져오기
         self.deviceIp = list(filter(lambda x: x[0:3] == '192', ip4Addresses()))[0]
-        print('ip4Addresses', ip4Addresses())
         print('self.deviceIp', self.deviceIp)
         print('******************************************************')
         connection = pymongo.MongoClient(config.DB_ADDRESS)
@@ -167,7 +167,22 @@ class StreamService:
                     }
                 }
             )
+
+            if os.getenv('CONTROL_TOWER') == "1":
+                controlData = self.dbSafety["controlTower"].find_one({})
+                print(os.getenv('CONTROL_TOWER'))
+                self.dbSafety["controlTower"].update_one(
+                    {'_id': ObjectId(controlData["_id"])},
+                    {'$set':
+                        {
+                            'ip': self.deviceIp,
+                        }
+                    }
+                )
         print('##### CONNECTED CAMERA ##### : ', self.listPorts)
+
+    def getToday(self) -> str:
+        return str(datetime.date.today())
 
     async def test(self):
         print('self.dbName', self.dbName)
@@ -214,6 +229,7 @@ class StreamService:
     def setCameraOn(self):
         self.cameraOnOff = True
 
+    # init sensing count, 감지 횟수 초기화
     def setGroupCnt(self, groupNum):
         if groupNum == 1:
             self.fstYellowCnt = 0
@@ -317,13 +333,16 @@ class StreamService:
 
     async def isTodayObserveExist(self, groupNum: int):
         print('######## isTodayObserveExist ########')
+        '''
+        observe 테이블에서 현재 디바이스 trackerId와 오늘 날짜의 데이터 가져오기
+        '''
         searchedData = getConnection()[self.dbName][self.tableName].find({
             'trackerId': self.trackerId,
-            'date': self.today,
+            'date': self.getToday(),
         }).sort("groupNum", 1)
 
         dataArr = []
-        responseRes = {"fst": False, "sec": False}
+        responseRes = {"fst": False, "sec": False}  # 첫번째 그룹, 두번째 그룹 여부
         try:
             async for val in searchedData:
                 dataArr.append(val)
@@ -376,7 +395,7 @@ class StreamService:
                     addSecGroupData()
 
             # 오늘 날짜로 두번째 observe 데이터도 있는 경우
-            if len(dataArr) == 2:  # 오늘 날짜로 observe 데이터 갯수가 2개일 경우
+            if len(dataArr) >= 2:  # 오늘 날짜로 observe 데이터 갯수가 2개일 경우
                 addFstGroupData()
                 addSecGroupData()
 
@@ -390,7 +409,7 @@ class StreamService:
     def insertTodayObserveData(self, groupNum):
         insertData = {
             'trackerId': ObjectId(self.trackerId),
-            "date": self.today,
+            "date": self.getToday(),
             "groupNum": int(groupNum),
             "safetyLevel": "Green",
             "yellowCnt": 0,
@@ -404,6 +423,9 @@ class StreamService:
     async def addTodayCamData(self, observeChk: dict, groupNum: int):
         print('############ addTodayCamData ############')
         try:
+            if observeChk["fst"] and observeChk["sec"]:
+                print('두 그룹 모두 이미 있습니다.')
+                return
             if groupNum == 1 and observeChk["fst"]:
                 print('첫번째 그룹은 이미 있습니다.')
                 return
@@ -414,7 +436,7 @@ class StreamService:
             # 데이터가 없으므로 오늘자 데이터를 삽입한다.
             insertData = {
                 'trackerId': ObjectId(self.trackerId),
-                "date": self.today,
+                "date": self.getToday(),
                 "groupNum": int(groupNum),
                 "safetyLevel": "Green",
                 "yellowCnt": 0,
@@ -525,8 +547,8 @@ class StreamService:
         host = "192.168.0.4"
         port = 22  # 고정
         transport = paramiko.transport.Transport(host, port)
-        userId = "interx"
-        password = "interx12!"
+        userId = os.getenv('USERID')
+        password = os.getenv('USERPW')
 
         # 연결
         transport.connect(username=userId, password=password)
@@ -593,11 +615,11 @@ class StreamService:
             }
         )
 
-
     def video_streaming(self, coordinates1=[], coordinates2=[]):
         print(self.trackerId)
         print('video_streaming video check : ', self.currentPort)
         print('CamRestartCnt : ', self.camRestartCnt)
+
         if self.currentPort is None:
             if self.camRestartCnt == 3:
                 self.camRestartCnt = 0
@@ -607,6 +629,7 @@ class StreamService:
                 self.camRestartCnt += 1
                 print(self.camRestartCnt)
                 self.updateCamRestartCnt()
+                print("### SERVER WILL BE DOWN ###")
                 os.system("fuser -k 8000/tcp")
 
         device_mode = ""
@@ -636,7 +659,8 @@ class StreamService:
             cntForAddTodayObserve += 1
             if cntForAddTodayObserve == 10:
                 cntForAddTodayObserve = 0
-                searchedData = list(self.dbSafety["observe"].find({'trackerId': self.trackerId, 'date': self.today}))
+                searchedData = list(
+                    self.dbSafety["observe"].find({'trackerId': self.trackerId, 'date': self.getToday()}))
                 groupNums = list(map(lambda x: x["groupNum"], searchedData))
                 isObserve1Exist = 1 in groupNums
                 isObserve2Exist = 2 in groupNums
@@ -660,6 +684,7 @@ class StreamService:
             if not ret: return
             humans, rsigs = [], []
             try:
+                self.camImg = cv2.resize(self.camImg, (256, 192), interpolation=cv2.INTER_AREA)
                 result_img = ""
                 if cnt == 0:
                     # 욜로 감지(딥러닝을 돌린다. 사람을 찾아주는 기능)
@@ -709,6 +734,8 @@ class StreamService:
                     else:
                         result_img = self.camImg
 
+                result_img = cv2.resize(result_img, (512, 384), interpolation=cv2.INTER_CUBIC)
+
                 fstGroupSensing = None
                 secGroupSensing = None
 
@@ -748,6 +775,7 @@ class StreamService:
                                 # rsig에서 첫번째 배열이 첫번째 그룹이고 여기서 1이 하나라도 있으면 yellow, 2가 하나라도 있으면 red가 된다.
                                 if len(str(self.todayFstCamDataId)) > 0:
                                     self.updateCurrentLevel(self.todayFstCamDataId, 'Green')
+                                    buzzerService.serialSendOff()
                             fstSensingLevel = 'GREEN'
                         elif fstGroupSensing == 1:
                             print('1 FST YELLOW FST YELLOW FST YELLOW FST YELLOW FST YELLOW FST YELLOW 1')
@@ -757,6 +785,7 @@ class StreamService:
                                     self.fstYellowCnt = self.fstYellowCnt + 1
                                     self.updateCurrentLevelCnt(self.todayFstCamDataId, 'Yellow', self.fstYellowCnt)
                                     self.screenCaptureInsertData(result_img, 'Yellow')
+                                    buzzerService.serialSendOff()
                             fstSensingLevel = 'YELLOW'
                         elif fstGroupSensing == 2:
                             print('1 FST RED FST RED FST RED FST RED FST RED FST RED 1')
@@ -765,6 +794,7 @@ class StreamService:
                                     self.fstRedCnt = self.fstRedCnt + 1
                                     self.updateCurrentLevelCnt(self.todayFstCamDataId, 'Red', self.fstRedCnt)
                                     self.screenCaptureInsertData(result_img, 'Red')
+                                    buzzerService.serialSendOn()
                             fstSensingLevel = 'RED'
 
                 # print('str(self.todaySecCamDataId)', str(self.todaySecCamDataId))
@@ -777,6 +807,7 @@ class StreamService:
                             if secSensingLevel != 'GREEN':
                                 if len(str(self.todaySecCamDataId)) > 0:  # 두번째 그룹에서 감지 되었을 경우
                                     self.updateCurrentLevel(self.todaySecCamDataId, 'Green')
+                                    buzzerService.serialSendOff()
                             secSensingLevel = 'GREEN'
                         elif secGroupSensing == 1:
                             print('2 SEC YELLOW SEC YELLOW SEC YELLOW SEC YELLOW SEC YELLOW SEC YELLOW 2')
@@ -785,6 +816,7 @@ class StreamService:
                                     self.secYellowCnt = self.secYellowCnt + 1
                                     self.updateCurrentLevelCnt(self.todaySecCamDataId, 'Yellow', self.secYellowCnt)
                                     self.screenCaptureInsertData(result_img, 'Yellow')
+                                    buzzerService.serialSendOff()
                             secSensingLevel = 'YELLOW'
                         elif secGroupSensing == 2:
                             print('2 SEC RED SEC RED SEC RED SEC RED SEC RED SEC RED 2')
@@ -793,6 +825,7 @@ class StreamService:
                                     self.secRedCnt = self.secRedCnt + 1
                                     self.updateCurrentLevelCnt(self.todaySecCamDataId, 'Red', self.secRedCnt)
                                     self.screenCaptureInsertData(result_img, 'Red')
+                                    buzzerService.serialSendOn()
                             secSensingLevel = 'RED'
 
                 if self.detectTimeCnt == self.detectTimeCntLimit:

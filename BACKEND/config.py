@@ -17,15 +17,9 @@ DEFAULT KEYWORD
 DEFAULT = "default"
 
 """
-DATABASE ADDRESS
-"""
-DB_ADDRESS = os.getenv('MONGO_ADDRESS')
-"""
 DATABASE KEYWORD
 """
 DB_NAME = "safety"
-# DB_NAME = "DC4F67F8"
-# DB_NAME = "testdb"
 
 """
 COLLECTION KEYWORD
@@ -35,6 +29,7 @@ TABLE_OBSERVE = "observe"
 TABLE_ARCHIVE = "archive"
 TABLE_TRACKER = "tracker"
 TABLE_CONFIG = "config"
+TABLE_CONTROL_TOWER = "controlTower"
 
 DB_TABLE = {
     TABLE_USERS: TABLE_USERS,
@@ -42,7 +37,13 @@ DB_TABLE = {
     TABLE_ARCHIVE: TABLE_ARCHIVE,
     TABLE_TRACKER: TABLE_TRACKER,
     TABLE_CONFIG: TABLE_CONFIG,
+    TABLE_CONTROL_TOWER: TABLE_CONTROL_TOWER,
 }
+
+"""
+DATABASE ADDRESS
+"""
+DB_ADDRESS = os.getenv('MONGO_ADDRESS')
 
 
 def getMessageResponse(custom_code):

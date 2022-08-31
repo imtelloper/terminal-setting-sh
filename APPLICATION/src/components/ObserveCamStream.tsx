@@ -286,6 +286,15 @@ const ObserveCamStream = ({
     draw(canvas, true, trackerId);
   };
 
+  /* INIT EFFECT */
+  useEffect(() => {
+    videoFrameState.forEach(
+      (obj) =>
+        obj.trackerId &&
+        Api.tracker.modifyOneData(obj.trackerId, { isObserving: true })
+    );
+  }, []);
+
   useEffect(() => {
     if (videoFrameState.length > 0) {
       console.log('🥹videoFrameState', videoFrameState);

@@ -15,6 +15,7 @@ import axios from 'axios';
 import { today } from '../util/dateLibrary';
 import ReactPaginate from 'react-paginate';
 import PolygonDraw from '../util/PolygonDraw';
+import { findFetcher } from '../fetcher/fetcher';
 
 const DetailViewPage = () => {
   const { data: swrState, mutate: setSwrState } = useSWRState();
@@ -43,11 +44,23 @@ const DetailViewPage = () => {
       .post(url, { date: today, trackerId: swrState.curTrackerId })
       .then((res) => res.data);
 
-  const { data: swrObserveData, error } = useSWR(
+  const { data: swrObserveData } = useSWR(
     '/api/observe/find',
     observeFindFetcher,
     { refreshInterval: 1000 }
   );
+
+  const { data: swrFenceOperatingTime } = useSWR(
+    `/api/observe/fence-operating-time/${
+      swrState.curTrackerId
+    }/${groupNumState.toString()}`,
+    findFetcher,
+    { refreshInterval: 1000 }
+  );
+
+  useEffect(() => {
+    console.log('swrFenceOperatingTime', swrFenceOperatingTime);
+  }, [swrFenceOperatingTime]);
 
   /* 감지 이력 데이터 스테이트 */
   const [imgArchiveState, setImgArchiveState] = useState([]);
@@ -595,7 +608,7 @@ const DetailViewPage = () => {
                 </div>
                 <div className="realTimeBox">
                   <span>안전펜스 가동시간</span>
-                  <span>1일 19시간 58분</span>
+                  <span>{swrFenceOperatingTime}</span>
                 </div>
 
                 {/* 영역 재설정 | Calibration 설정 | 위험구간 설정 */}

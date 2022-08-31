@@ -35,13 +35,9 @@ win:
   target:
     - nsis
 linux:
-  icon: assets/icon.png
+  icon: ./assets/icon.png
   target:
     - AppImage
-    - deb
-    - rpm
-    - zip
-    - tar.gz
   category: Development
 extraResources:
   - filter:

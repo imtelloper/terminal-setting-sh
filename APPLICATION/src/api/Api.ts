@@ -4,6 +4,7 @@ import ObserveApi from './ObserveApi';
 import StreamApi from './StreamApi';
 import ArchiveApi from './ArchiveApi';
 import TrackerApi from './TrackerApi';
+import BuzzerApi from './BuzzerApi';
 
 export default class Api {
   static login = new LoginApi();
@@ -15,4 +16,6 @@ export default class Api {
   static archive = new ArchiveApi();
 
   static tracker = new TrackerApi();
+
+  static buzzer = new BuzzerApi();
 }

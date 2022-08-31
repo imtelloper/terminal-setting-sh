@@ -30,6 +30,7 @@ export default class TrackerApi {
     } catch (error) {
       console.error(error);
     }
+    return 'failed to get data';
   };
 
   findData = async (data) => {
@@ -37,10 +38,11 @@ export default class TrackerApi {
       const res = await axios.post(`/api/${this.apiTarget}/find`, data, {
         withCredentials: false,
       });
-      return res.status === 200 ? res.data : 'failed to get data';
+      return res.status === 200 ? res.data : 'failed to find data';
     } catch (error) {
       console.error(error);
     }
+    return 'failed to find data';
   };
 
   modifyOneData = async (id, data) => {

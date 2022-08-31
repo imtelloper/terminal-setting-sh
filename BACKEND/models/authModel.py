@@ -14,6 +14,7 @@ class NewUser(BaseModel):
     email: str
     pw: str
     createdAt: datetime = datetime.now()
+
     class Config:
         schema_extra = {
             "example": {
@@ -22,10 +23,12 @@ class NewUser(BaseModel):
             }
         }
 
+
 # type fixed
 class Token(BaseModel):
     access_token: str
     token_type: str
+
 
 class TokenData(BaseModel):
     email: Optional[str] = None
