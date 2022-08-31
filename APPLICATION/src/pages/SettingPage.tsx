@@ -9,6 +9,7 @@ import '../style/pages/SettingPage.scss';
 import '../style/DesignSystem.scss';
 import Api from '../api/Api';
 import {
+  ArrowDropDown,
   Folder,
   Memory,
   PermMedia,
@@ -293,12 +294,7 @@ const SettingPage = () => {
           {/* 👉🏻 감지모델 */}
           <div className="content">
             <MdViewInAr style={{ fontSize: '24px' }} />
-            <span>감지모델</span>
-
-            {/* {console.log('🌈🌈🌈🌈🌈🌈🌈🌈🌈🌈🌈🌈🌈🌈🌈🌈🌈🌈🌈')} */}
-            {/* {console.log('😍 data.camPort', data.camPort)} */}
-            {/* {console.log('☘️ data.sensingModel', data.sensingModel)} */}
-            {/* {console.log('🌿 data.threshold', data.threshold)} */}
+            <span className="contentName">감지모델</span>
             <select
               onChange={handleChangeValue}
               datatype="sensingModel"
@@ -308,12 +304,15 @@ const SettingPage = () => {
               <option>small</option>
               <option>medium</option>
             </select>
+            <span className="arrowIcon">
+              <ArrowDropDown />
+            </span>
           </div>
           {/* 👉🏻 Threshold */}
           <div className="content">
             {/* <DataThresholdingIcon /> */}
             <img src={Datathresholding} alt="" />
-            <span>Threshold</span>
+            <span className="contentName">Threshold</span>
             <select
               onChange={handleChangeValue}
               value={data.threshold}
@@ -330,6 +329,9 @@ const SettingPage = () => {
               <option>90</option>
               <option>100</option>
             </select>
+            <span className="arrowIcon">
+              <ArrowDropDown />
+            </span>
           </div>
           {/* 👉🏻 알람 이미지 저장 */}
           <div className="content">
@@ -430,7 +432,7 @@ const SettingPage = () => {
             <span id="settingAreaTitle" />
           </div>
           <div className="titleRight">
-            <span>구역 선택</span>
+            <span className="titleRightName">구역 선택</span>
             <select
               id="settingCamAreaSelect"
               onChange={handleSelectCamArea}
@@ -440,6 +442,9 @@ const SettingPage = () => {
                 <option key={key}>{area}</option>
               ))}
             </select>
+            <span className="arrowIcon">
+              <ArrowDropDown />
+            </span>
           </div>
         </div>
         <div className="settingBox">
