@@ -24,7 +24,7 @@ const ObserveCamStream = ({
     yellow: '#FFFA7C',
     red: '#FF374B',
   };
-
+  const resetTimeSec = 30;
   const [isRunning, setIsRunning] = useState(false);
   const [timer, setTimer] = useState(0);
   // useInterval(() => isRunning && setTimer((timer) => timer + 1), 1000);
@@ -311,7 +311,7 @@ const ObserveCamStream = ({
 
   /* 60초마다 동영상, 타이머 reset  */
   useEffect(() => {
-    if (timer === 60) {
+    if (timer === resetTimeSec) {
       videoFrameState.forEach((data, idx) => refreshVideoStreaming(idx));
       setTimer(0);
     }
@@ -336,7 +336,7 @@ const ObserveCamStream = ({
           className={`iframeBox ${!data.ip ? 'hideIframeBox' : ''}`}
           key={idx}
         >
-          {camTabState - 1 === idx && recordState && (
+          {camTabState - 1 === idx && recordState[`cam${idx + 1}`] && (
             <div className="iframeBorder" />
           )}
           <div className="iframeTitle">
@@ -346,7 +346,7 @@ const ObserveCamStream = ({
             </div>
             <span className="iframeRecording">
               {/* 녹화 상태 */}
-              {camTabState - 1 === idx && recordState && (
+              {camTabState - 1 === idx && recordState[`cam${idx + 1}`] && (
                 <div className="iframeRecordingIcon">
                   <span className="iframeRecordingCircle" />
                   REC
@@ -354,7 +354,7 @@ const ObserveCamStream = ({
               )}
 
               {/* 새로고침 버튼 */}
-              {!recordState && (
+              {!recordState[`cam${idx + 1}`] && (
                 <span
                   tabIndex={idx}
                   className="iframeRenewIcon"

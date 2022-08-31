@@ -372,11 +372,17 @@ div.observeContainer {
               div.iframeCamNum {
                 border-right: 1px solid #d4d4d4;
                 padding-right: 12px;
+                &.iframeTxtColorActive {
+                  color: $white
+                }
               }
 
               div.iframeCamName {
                 padding-left: 12px;
                 font-size: 14px;
+                &.iframeTxtColorActive {
+                  color: $white
+                }
               }
             }
 

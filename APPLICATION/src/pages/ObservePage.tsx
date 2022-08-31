@@ -29,7 +29,12 @@ const ObservePage = () => {
     useState<Array<ViedeoFrameType>>(initVideoFrameData);
   const [getObserveState, setGetObserveState] = useState([]);
   const [camTabState, setCamTabState] = useState(1);
-  const [recordState, setRecordState] = useState(false);
+  const [recordState, setRecordState] = useState({
+    cam1: false,
+    cam2: false,
+    cam3: false,
+    cam4: false,
+  });
   const [loadingState, setLoadingState] = useState(false);
 
   const findFetcher = (url: string) =>
@@ -52,34 +57,48 @@ const ObservePage = () => {
   const handleActive = (e) => {
     const target = e.currentTarget;
     const recordTxtEl = document.querySelector('.recordTxt');
-    const iframeTitleEl = document.querySelector('.iframeTitle');
     const recordBtnCircleEl = document.querySelector('.recordBtnCircle');
-    target.classList.toggle('txtActive');
-    target.classList.toggle('hoverCircleActive');
-    setTxtChangeState((prev) => (prev === '녹화중' ? '녹화시작' : '녹화중'));
-    recordTxtEl.classList.toggle('txtColorActive');
-    iframeTitleEl.classList.toggle('iframeTxtColorActive');
-    recordBtnCircleEl.classList.toggle('spinnerActive');
-    // iframeRecordingTxtEl.classList.toggle('iframeRecordingTxtActive');
-    // console.log('videoFrameState[0].ip', videoFrameState[0]?.ip);
-    // console.log('videoFrameState[1].ip', videoFrameState[1]?.ip);
-    // console.log('videoFrameState[2].ip', videoFrameState[2]?.ip);
-    // console.log('videoFrameState[3].ip', videoFrameState[3]?.ip);
+    const iframeTitleEl = document.querySelectorAll('.iframeTitle');
     const camStateObj = {
       cam1: videoFrameState[0]?.ip,
       cam2: videoFrameState[1]?.ip,
       cam3: videoFrameState[2]?.ip,
       cam4: videoFrameState[3]?.ip,
     };
-    const ip = camStateObj[`cam${camTabState.toString()}`];
-    Api.stream.startRecordVideo(ip);
-    !recordState ? setRecordState(true) : setRecordState(false);
+    const cam = `cam${camTabState.toString()}`;
+    const ip = camStateObj[cam];
+
+    if (recordState[cam]) {
+      /* 녹화 중지 */
+      setTxtChangeState('녹화시작');
+      setRecordState((prevState) => ({ ...prevState, [cam]: false }));
+      target.classList.remove('txtActive');
+      target.classList.remove('hoverCircleActive');
+      recordTxtEl.classList.remove('txtColorActive');
+      recordBtnCircleEl.classList.remove('spinnerActive');
+      iframeTitleEl[(camTabState - 1).toString()].classList.remove(
+        'iframeTxtColorActive'
+      );
+      Api.stream.stopRecordVideo(ip);
+    } else {
+      /* 녹화 시작 */
+      setTxtChangeState('녹화중');
+      setRecordState((prevState) => ({ ...prevState, [cam]: true }));
+      target.classList.add('txtActive');
+      target.classList.add('hoverCircleActive');
+      recordTxtEl.classList.add('txtColorActive');
+      recordBtnCircleEl.classList.add('spinnerActive');
+      iframeTitleEl[(camTabState - 1).toString()].classList.add(
+        'iframeTxtColorActive'
+      );
+      Api.stream.startRecordVideo(ip);
+    }
   };
 
   const setNewVideoSrcState = (arrIndex: number, newSrc: string) => {
     const newArr = videoFrameState;
     newArr[arrIndex].frameSrc = newSrc;
-    flushSync(() => setVideoFrameState([...newArr]));
+    setVideoFrameState([...newArr]);
   };
 
   /* setVideoFrameState, setGetObserveState */
@@ -277,9 +296,9 @@ const ObservePage = () => {
             <div className="bottomBtnBox">
               {/* 녹화 버튼 */}
               <div className="recordBtnBox">
-                <button className="recordBtn">
+                <button className="recordBtn" onClick={handleActive}>
                   <div className="recordBtnCircle" />
-                  <div className="hoverCircle" onClick={handleActive} />
+                  <div className="hoverCircle" />
                 </button>
                 <span className="recordTxt">{txtChangeState}</span>
               </div>

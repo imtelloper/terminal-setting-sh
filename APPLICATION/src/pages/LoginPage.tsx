@@ -22,6 +22,7 @@ const LoginPage = () => {
     useState(false);
   const [isNewCamRegisterPopupState, setIsNewCamRegisterPopupState] =
     useState(false);
+  const [loadingState, setLoadingState] = useState(false);
 
   const { data: swrState, mutate: setSwrState } = useSWRState();
 
@@ -32,14 +33,11 @@ const LoginPage = () => {
     pwValid: false,
   });
 
-  const changePwdPopup = () => {
+  const changePwdPopup = () =>
     setIsChangePwdPopupOpenState(!isChangePwdPopupOpenState);
-  };
 
-  const forgetPwdPopup = () => {
+  const forgetPwdPopup = () =>
     setIsForgetPwdPopupOpenState(!isForgetPwdPopupOpenState);
-  };
-
 
   const checkEmail = (e: FormEvent<HTMLInputElement>) => {
     const email = e.currentTarget.value;
@@ -128,7 +126,6 @@ const LoginPage = () => {
 
   // if (loading) return <Loading />;
   // if (error) alert(error);
-
   return (
     <div className="loginContainer">
       <div className="loginBox">
