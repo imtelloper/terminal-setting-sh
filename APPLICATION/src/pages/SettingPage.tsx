@@ -9,11 +9,12 @@ import '../style/pages/SettingPage.scss';
 import '../style/DesignSystem.scss';
 import Api from '../api/Api';
 import {
+  ArrowDropDown,
   Folder,
   Memory,
   PermMedia,
   PhotoCamera,
-  Textsms,
+  Textsms
 } from '@material-ui/icons';
 import { MdViewInAr, MdWorkspaces } from 'react-icons/md';
 import KakaoIcon from '../images/kakao_icon.png';
@@ -261,7 +262,7 @@ const SettingPage = () => {
           </div>
           <div className="content">
             <MdViewInAr style={{ fontSize: '24px' }} />
-            <span>감지모델</span>
+            <span className="contentName">감지모델</span>
             <select
               onChange={handleChangeValue}
               defaultValue={data.sensingModel}
@@ -271,11 +272,12 @@ const SettingPage = () => {
               <option>small</option>
               <option>medium</option>
             </select>
+            <span className="arrowIcon"><ArrowDropDown/></span>
           </div>
           <div className="content">
             {/* <DataThresholdingIcon /> */}
             <img src={Datathresholding} alt="" />
-            <span>Threshold</span>
+            <span className="contentName">Threshold</span>
             <select
               onChange={handleChangeValue}
               defaultValue={data.threshold}
@@ -292,6 +294,7 @@ const SettingPage = () => {
               <option>90</option>
               <option>100</option>
             </select>
+            <span className="arrowIcon"><ArrowDropDown/></span>
           </div>
           <div className="content">
             <PermMedia style={{ fontSize: '24px' }} />
@@ -389,7 +392,7 @@ const SettingPage = () => {
             <span id="settingAreaTitle" />
           </div>
           <div className="titleRight">
-            <span>구역 선택</span>
+            <span className="titleRightName">구역 선택</span>
             <select
               id="settingCamAreaSelect"
               onChange={handleSelectCamArea}
@@ -399,6 +402,7 @@ const SettingPage = () => {
                 <option key={key}>{area}</option>
               ))}
             </select>
+            <span className="arrowIcon"><ArrowDropDown/></span>
           </div>
         </div>
         <div className="settingBox">

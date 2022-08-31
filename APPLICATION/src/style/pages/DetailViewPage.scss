@@ -93,13 +93,26 @@ div.detailViewContainer {
           }
 
           select {
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
             width: calc(100% - 48px);
             height: 40px;
             border: 1px solid #d4d4d4;
+            background: transparent;
             border-radius: 8px;
             padding: 0 12px;
             margin: 24px;
             cursor: pointer;
+            position: relative;
+            z-index: 1;
+          }
+
+          span.arrowIcon{
+            position: absolute;
+            top: 84px;
+            right: 32px;
+            z-index: 0;
           }
 
           div.tabContent {

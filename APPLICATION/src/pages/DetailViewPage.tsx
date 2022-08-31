@@ -4,7 +4,7 @@ import '../style/pages/DetailViewPage.scss';
 import DangerZonePopup from '../components/DangerZonePopup';
 import CalibrationPopup from '../components/CalibrationPopup';
 import { MdDangerous, MdModeEdit, MdOutlineTaskAlt } from 'react-icons/md';
-import { Autorenew, Feedback, Tune } from '@material-ui/icons';
+import { ArrowDropDown, Autorenew, Feedback, Tune } from '@material-ui/icons';
 import Api from '../api/Api';
 import { useSWRState } from '../fetcher/useSWRState';
 import { useNavigate } from 'react-router-dom';
@@ -423,7 +423,7 @@ const DetailViewPage = () => {
 
   useEffect(() => {
     // console.log('😇swrState',swrState);
-    if (swrState.curGroup1Coordinates.length > 0) {
+    if (swrState?.curGroup1Coordinates.length > 0) {
       // console.log('🥹videoFrameState', videoFrameState);
       document.querySelectorAll('.polygonCanvas').forEach((ele) => {
         console.log('ele', ele);
@@ -538,6 +538,7 @@ const DetailViewPage = () => {
                 <option value={1}>Group 1</option>
                 <option value={2}>Group 2</option>
               </select>
+              <span className="arrowIcon"><ArrowDropDown/></span>
 
               {/* 실시간 영상 TAB */}
               <div className="tabContent realTimeBox">
