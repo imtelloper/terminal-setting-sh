@@ -3,4 +3,6 @@
 ######################################
 
 cd /opt
-sudo tar -xvzf
+sudo tar -xvzf ~/Downloads/jetbrains-toolbox-1.25.12627
+sudo mv jetbrains-toolbox-1.25.12627 jetbrains
+jetbrains/jetbrains-toolbox

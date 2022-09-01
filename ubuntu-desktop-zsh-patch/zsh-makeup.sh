@@ -12,3 +12,5 @@ git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
 ~/.fzf/install
 
 # plugins=(git sudo colored-man-pages zsh-autosuggestions zsh-syntax-highlighting fzf)
+sed -n -i -e '/^plugins=(git)/c\plugins=(git sudo colored-man-pages zsh-autosuggestions zsh-syntax-highlighting fzf)' -e '1,$p' ~/.zshrc
+
