@@ -1,4 +1,3 @@
-#sudo sh /home/ubuntu/terminal-setting-sh/library/zsh-makeup.sh
 sudo sh /home/ubuntu/terminal-setting-sh/library/hosting-tools-set.sh
 sudo sh /home/ubuntu/terminal-setting-sh/library/brew-install.sh
 sudo sh /home/ubuntu/terminal-setting-sh/library/nvm-install.sh

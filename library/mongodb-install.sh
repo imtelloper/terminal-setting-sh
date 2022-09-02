@@ -6,3 +6,5 @@ wget http://archive.ubuntu.com/ubuntu/pool/main/o/openssl/libssl1.1_1.1.1f-1ubun
 sudo dpkg -i libssl1.1_1.1.1f-1ubuntu2_amd64.deb
 sudo apt install mongodb-org -y
 sudo systemctl start mongod
+sudo systemctl enable mongod.service
+sudo systemctl daemon-reload
