@@ -10,3 +10,4 @@ sh /home/interx/terminal-setting-sh/library/anaconda-install.sh
 sudo sh /home/interx/terminal-setting-sh/library/mongodb-install.sh
 sudo sh /home/interx/terminal-setting-sh/library/appimagelauncher-install.sh
 sudo systemctl status mongod
+sudo sed -n -i -e '/^PermitRootLogin/c\PermitRootLogin yes' -e '1,$p' /etc/ssh/sshd_config
