@@ -8,6 +8,7 @@ sudo apt upgrade -y
 sudo apt install zsh -y
 sudo apt install git -y
 sudo apt install curl
+sudo apt install vim
 # git config 업데이트
 git config --global credential.helper store
 sudo sed -n -i -e '/^pam_shells/c\#auth required pam_shells.so' -e '1,$p' /etc/pam.d/chsh
