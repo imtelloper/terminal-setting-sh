@@ -11,3 +11,7 @@ sudo sh /home/ubuntu/terminal-setting-sh/library/mongodb-install.sh
 sudo systemctl status mongod
 sudo systemctl status mysql
 sudo update-alternatives --install /usr/bin/python python /home/ubuntu/anaconda3/bin/python 1
+sudo chmod 777 /var/www -R
+sudo apt install gunicorn
+
+
