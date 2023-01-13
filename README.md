@@ -1,7 +1,6 @@
 # aws-terminal-setting-sh
 
 ## step1
-zsh-patch -> zsh-injection.sh
 sh /home/ubuntu/terminal-setting-sh/aws-zsh-patch/zsh-injection.sh
 
 ## step2
@@ -9,14 +8,11 @@ sudo reboot
 
 ## step3
 ### !!sudo(X) 빼고 sh로 해야함!!
-zsh-patch -> oh-my-zsh-install.sh
-. /home/ubuntu/terminal-setting-sh/aws-zsh-patch/oh-my-zsh-install.sh
+sh /home/ubuntu/terminal-setting-sh/aws-zsh-patch/oh-my-zsh-install.sh
 
 ## step4
 ### !!sudo(X) 빼고 sh로 해야함!!
 ### plugins=(git sudo colored-man-pages zsh-autosuggestions zsh-syntax-highlighting fzf)
-zsh-patch -> zsh-makeup.sh
-
 . /home/ubuntu/terminal-setting-sh/aws-zsh-patch/zsh-makeup.sh
 
 
@@ -24,7 +20,7 @@ zsh-patch -> zsh-makeup.sh
 #### sudo chsh -s $(which zsh) $(whoami)
 
 ## step6
-aws-terminal-makeup.sh
+. /home/ubuntu/terminal-setting-sh/aws-terminal-makeup.sh
 
 <br>🫧🫧🫧🫧🫧🫧🫧🫧🫧🫧🫧🫧🫧🫧🫧🫧🫧🫧🫧🫧🫧🫧🫧🫧🫧🫧🫧🫧🫧🫧🫧🫧🫧🫧🫧🫧🫧🫧🫧<br>
 
