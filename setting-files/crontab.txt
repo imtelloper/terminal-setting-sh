@@ -1,0 +1,59 @@
+@reboot /home/interx/SAFETY-AI/BACKEND/reviver/safety-autostart.sh > safety-autostart.sh.log 2>&1
+* * * * * sh /home/interx/SAFETY-AI/BACKEND/reviver/portcromancer.sh
+* * * * * sleep 10; sh /home/interx/SAFETY-AI/BACKEND/reviver/portcromancer.sh
+* * * * * sleep 20; sh /home/interx/SAFETY-AI/BACKEND/reviver/portcromancer.sh
+* * * * * sleep 30; sh /home/interx/SAFETY-AI/BACKEND/reviver/portcromancer.sh
+* * * * * sleep 40; sh /home/interx/SAFETY-AI/BACKEND/reviver/portcromancer.sh
+* * * * * sleep 50; sh /home/interx/SAFETY-AI/BACKEND/reviver/portcromancer.sh
+
+* * * * * sh /home/interx/SAFETY-AI/BACKEND/reviver/zombie-killer.sh
+* * * * * sleep 10; sh /home/interx/SAFETY-AI/BACKEND/reviver/zombie-killer.sh
+* * * * * sleep 20; sh /home/interx/SAFETY-AI/BACKEND/reviver/zombie-killer.sh
+* * * * * sleep 30; sh /home/interx/SAFETY-AI/BACKEND/reviver/zombie-killer.sh
+* * * * * sleep 40; sh /home/interx/SAFETY-AI/BACKEND/reviver/zombie-killer.sh
+* * * * * sleep 50; sh /home/interx/SAFETY-AI/BACKEND/reviver/zombie-killer.sh
+
+* * * * * sh /home/interx/SAFETY-AI/BACKEND/reviver/ip/ipcromancer.sh
+* * * * * sleep 10; sh /home/interx/SAFETY-AI/BACKEND/reviver/ip/ipcromancer.sh
+* * * * * sleep 20; sh /home/interx/SAFETY-AI/BACKEND/reviver/ip/ipcromancer.sh
+* * * * * sleep 30; sh /home/interx/SAFETY-AI/BACKEND/reviver/ip/ipcromancer.sh
+* * * * * sleep 40; sh /home/interx/SAFETY-AI/BACKEND/reviver/ip/ipcromancer.sh
+* * * * * sleep 50; sh /home/interx/SAFETY-AI/BACKEND/reviver/ip/ipcromancer.sh
+
+# For only mini pc
+* * * * * sh /home/interx/SAFETY-AI/BACKEND/reviver/auto-stream-cromancer.sh > auto-stream-cromancer.sh.log 2>&1
+* * * * * sleep 10; sh /home/interx/SAFETY-AI/BACKEND/reviver/auto-stream-cromancer.sh > auto-stream-cromancer.sh.log 2>&1
+* * * * * sleep 20; sh /home/interx/SAFETY-AI/BACKEND/reviver/auto-stream-cromancer.sh > auto-stream-cromancer.sh.log 2>&1
+* * * * * sleep 30; sh /home/interx/SAFETY-AI/BACKEND/reviver/auto-stream-cromancer.sh > auto-stream-cromancer.sh.log 2>&1
+* * * * * sleep 40; sh /home/interx/SAFETY-AI/BACKEND/reviver/auto-stream-cromancer.sh > auto-stream-cromancer.sh.log 2>&1
+* * * * * sleep 50; sh /home/interx/SAFETY-AI/BACKEND/reviver/auto-stream-cromancer.sh > auto-stream-cromancer.sh.log 2>&1
+
+# For only mini pc
+* * * * * sh /home/interx/SAFETY-AI/BACKEND/reviver/memory-controller/memory-watcher-cromancer.sh
+* * * * * sleep 10; sh /home/interx/SAFETY-AI/BACKEND/reviver/memory-controller/memory-watcher-cromancer.sh
+* * * * * sleep 20; sh /home/interx/SAFETY-AI/BACKEND/reviver/memory-controller/memory-watcher-cromancer.sh
+* * * * * sleep 30; sh /home/interx/SAFETY-AI/BACKEND/reviver/memory-controller/memory-watcher-cromancer.sh
+* * * * * sleep 40; sh /home/interx/SAFETY-AI/BACKEND/reviver/memory-controller/memory-watcher-cromancer.sh
+* * * * * sleep 50; sh /home/interx/SAFETY-AI/BACKEND/reviver/memory-controller/memory-watcher-cromancer.sh
+
+# For only mini pc
+* * * * * python /home/interx/SAFETY-AI/BACKEND/modules/fileSender.py
+* * * * * sleep 10; python /home/interx/SAFETY-AI/BACKEND/modules/fileSender.py
+* * * * * sleep 20; python /home/interx/SAFETY-AI/BACKEND/modules/fileSender.py
+* * * * * sleep 30; python /home/interx/SAFETY-AI/BACKEND/modules/fileSender.py
+* * * * * sleep 40; python /home/interx/SAFETY-AI/BACKEND/modules/fileSender.py
+* * * * * sleep 50; python /home/interx/SAFETY-AI/BACKEND/modules/fileSender.py
+
+#For only control tower pc
+* * * * * export DISPLAY=:0;sh /home/interx/SAFETY-AI/BACKEND/reviver/appcromancer.sh > appcromancer.sh.log 2>&1
+* * * * * sleep 10; export DISPLAY=:0;sh /home/interx/SAFETY-AI/BACKEND/reviver/appcromancer.sh > appcromancer.sh.log 2>&1
+* * * * * sleep 20; export DISPLAY=:0;sh /home/interx/SAFETY-AI/BACKEND/reviver/appcromancer.sh > appcromancer.sh.log 2>&1
+* * * * * sleep 30; export DISPLAY=:0;sh /home/interx/SAFETY-AI/BACKEND/reviver/appcromancer.sh > appcromancer.sh.log 2>&1
+* * * * * sleep 40; export DISPLAY=:0;sh /home/interx/SAFETY-AI/BACKEND/reviver/appcromancer.sh > appcromancer.sh.log 2>&1
+* * * * * sleep 50; export DISPLAY=:0;sh /home/interx/SAFETY-AI/BACKEND/reviver/appcromancer.sh > appcromancer.sh.log 2>&1
+
+# For only control tower pc 
+0 */12 * * * sudo reboot
+
+# For only control tower pc 
+*/5 * * * * sh /home/interx/SAFETY-AI/BACKEND/reviver/memory-controller/archive-memory-cleaner.sh
