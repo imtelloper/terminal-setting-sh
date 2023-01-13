@@ -2,6 +2,7 @@
 
 ## step1
 zsh-patch -> zsh-injection.sh
+sh /home/ubuntu/terminal-setting-sh/aws-zsh-patch/zsh-injection.sh
 
 ## step2
 sudo reboot
